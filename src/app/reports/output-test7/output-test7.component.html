@@ -1,0 +1,443 @@
+<div>
+    <div fxLayout="column" style="width: 99%;">
+        <form [formGroup]="faultReport">
+            <div fxLayout="column" style="width:100%;">
+                <div fxLayout="row" style="width: 50%;padding: 1%;" fxLayoutAlign="space-around start" fxFlex="95">
+
+                    <!-- <mat-form-field appearance="fill" fxFlex="35">
+                        <mat-label>Month and Year</mat-label>
+                        <input matInput [matDatepicker]="dp" [formControl]="date">
+                        <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+                        <mat-datepicker #dp startView="year" (yearSelected)="chosenYearHandler($event)"
+                            (monthSelected)="chosenMonthHandler($event, dp)" panelClass="example-month-picker">
+                        </mat-datepicker>
+                    </mat-form-field> -->
+
+                    <mat-form-field appearance="fill" fxFlex="35">
+                        <mat-label>Choose the Date</mat-label>
+                        <input matInput [matDatepicker]="picker" formControlName="date" placeholder="Shift Date">
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+
+                    <!-- <mat-form-field class="form-field" fxFlex="1" class="invisible">
+                        <mat-label>State </mat-label>
+                        <mat-select formControlName="stateid">
+                            <mat-option *ngFor="let m of State;let i=index" [value]="m[1]">
+                                {{m[2]}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field> -->
+
+                    <button [disabled]="faultReport.invalid" mat-raised-button color="primary" fxFlex="20"
+                        (click)="getSearchData()">
+                        Submit
+                    </button>
+                    <!-- <div *ngIf="!gotData" fxLayoutAlign="center center" style="width: 100%; height:100%; ">
+                        <mat-spinner diameter="30"></mat-spinner>
+                    </div> -->
+
+                </div>
+
+            </div>
+        </form>
+        <!-- <pre>
+            {{filtersForm.value|json}}
+        </pre> -->
+    </div>
+</div>
+
+<div fxLayout="column" style="width: 99%;" fxLayoutAlign="center">
+
+    <tabs class="gb" (currentTabChange)="waterfallMonthTimelineTabClick($event.tabTitle)">
+        <tab tabTitle="Combined">
+            <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap
+                fxLayoutAlign="space-around center" fxFlex="90">
+                <div id="higchartcontainer-waterfall-linewise-combined"
+                    style="height:400px; padding-top:1px;background: url('/../../../assets/images/chartLoader.gif')  no-repeat center ;background-size: 70px 70px;"
+                    fxFlex="100">
+                </div>
+            </div>
+        </tab>
+
+        <tab [tabTitle]="line" *ngFor="let line of lines | slice:0">
+            <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap
+                fxLayoutAlign="space-around center" fxFlex="90">
+                <div [id]="'higchartcontainer-waterfall-' + line" style="height:400px; padding-top:1px;" fxFlex="100">
+                </div>
+            </div>
+
+        </tab>|
+
+    </tabs>
+    <tabs class="gb" (currentTabChange)="lineWiseKpiTabClick('Lines-combined',$event.tabTitle)">
+        <tab tabTitle="OEE">
+            <tabs class="gb" (currentTabChange)="lineWiseKpiTabClick($event.tabTitle,'OEE')">
+                <tab tabTitle="Lines-combined">
+                    <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap
+                        fxLayoutAlign="space-around center" fxFlex="99">
+
+                        <div id="higchartcontainer-oee-linecombined"
+                            style="height:400px; padding-top:1px;background: url('/../../../assets/images/chartLoader.gif')  no-repeat center ;background-size: 70px 70px;"
+                            fxFlex="100">
+                        </div>
+                    </div>
+                </tab>
+
+
+                <tab [tabTitle]="line" *ngFor="let line of lines">
+
+                    <mat-form-field appearance="fill" id="filterdropdown">
+                        <mat-select [(ngModel)]="selected2" (selectionChange)="getFilterValueOee($event.value,line)"
+                            id="select">
+                            <mat-option *ngFor="let filter of filters" [value]="filter.value">
+                                {{filter.viewValue}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap
+                        fxLayoutAlign="space-around center" fxFlex="100">
+
+                        <div [id]="'higchartcontainer-control-oee-'+line" style="height:400px; padding-top:1px;"
+                            fxFlex="100">
+                        </div>
+                    </div>
+
+                </tab>
+
+            </tabs>
+
+
+        </tab>
+        <tab tabTitle="Performance">
+            <tabs class="gb" (currentTabChange)="lineWiseKpiTabClick($event.tabTitle,'Performance')">
+
+                <tab tabTitle="Lines-combined">
+                    <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap
+                        fxLayoutAlign="space-around center" fxFlex="99">
+
+                        <div id="higchartcontainer-performance-linecombined" style="height:400px; padding-top:1px;"
+                            fxFlex="100">
+                        </div>
+                    </div>
+                </tab>
+                <tab [tabTitle]="line" *ngFor="let line of lines">
+
+                    <mat-form-field appearance="fill" id="filterdropdown">
+                        <mat-select [(ngModel)]="selected2"
+                            (selectionChange)="getFilterValuePerformance($event.value,line)">
+                            <mat-option *ngFor="let filter of filters" [value]="filter.value">
+                                {{filter.viewValue}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap
+                        fxLayoutAlign="space-around center" fxFlex="100">
+
+                        <div [id]="'higchartcontainer-control-performance-'+line" style="height:400px; padding-top:1px;"
+                            fxFlex="100">
+                        </div>
+                    </div>
+
+                </tab>
+            </tabs>
+        </tab>
+
+        <tab tabTitle="Quality">
+            <tabs class="gb" (currentTabChange)="lineWiseKpiTabClick($event.tabTitle,'Quality')">
+
+                <tab tabTitle="Lines-combined">
+                    <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap
+                        fxLayoutAlign="space-around center" fxFlex="99">
+
+                        <div id="higchartcontainer-quality-linecombined" style="height:400px; padding-top:1px;"
+                            fxFlex="100">
+                        </div>
+                    </div>
+                </tab>
+                <tab [tabTitle]="line" *ngFor="let line of lines">
+
+                    <mat-form-field appearance="fill" id="filterdropdown">
+                        <mat-select [(ngModel)]="selected2"
+                            (selectionChange)="getFilterValueQuality($event.value,line)">
+                            <mat-option *ngFor="let filter of filters" [value]="filter.value">
+                                {{filter.viewValue}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap
+                        fxLayoutAlign="space-around center" fxFlex="100">
+
+                        <div [id]="'higchartcontainer-control-quality-'+line" style="height:400px; padding-top:1px;"
+                            fxFlex="100">
+                        </div>
+                    </div>
+
+                </tab>
+            </tabs>
+
+
+        </tab>
+
+        <tab tabTitle="Availability">
+            <tabs class="gb" (currentTabChange)="lineWiseKpiTabClick($event.tabTitle,'Availability')">
+
+                <tab tabTitle="Lines-combined">
+                    <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap
+                        fxLayoutAlign="space-around center" fxFlex="99">
+
+                        <div id="higchartcontainer-availability-linecombined" style="height:400px; padding-top:1px;"
+                            fxFlex="100">
+                        </div>
+                    </div>
+                </tab>
+                <tab [tabTitle]="line" *ngFor="let line of lines">
+
+                    <mat-form-field appearance="fill" id="filterdropdown">
+                        <mat-select [(ngModel)]="selected2"
+                            (selectionChange)="getFilterValueAvailability($event.value,line)">
+                            <mat-option *ngFor="let filter of filters" [value]="filter.value">
+                                {{filter.viewValue}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap
+                        fxLayoutAlign="space-around center" fxFlex="100">
+
+                        <div [id]="'higchartcontainer-control-availability-'+line"
+                            style="height:400px; padding-top:1px;" fxFlex="100">
+                        </div>
+                    </div>
+
+                </tab>
+            </tabs>
+
+
+        </tab>
+
+        <tab tabTitle="Speed Loss">
+            <tabs class="gb" (currentTabChange)="lineWiseKpiTabClick($event.tabTitle,'Speed Loss')">
+
+                <tab tabTitle="Lines-combined">
+                    <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap
+                        fxLayoutAlign="space-around center" fxFlex="99">
+
+                        <div id="higchartcontainer-speedloss-linecombined" style="height:400px; padding-top:1px;"
+                            fxFlex="100">
+                        </div>
+                    </div>
+                </tab>
+                <tab [tabTitle]="line" *ngFor="let line of lines">
+
+                    <mat-form-field appearance="fill" id="filterdropdown">
+                        <mat-select [(ngModel)]="selected2"
+                            (selectionChange)="getFilterValueSpeedloss($event.value,line)">
+                            <mat-option *ngFor="let filter of filters" [value]="filter.value">
+                                {{filter.viewValue}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap
+                        fxLayoutAlign="space-around center" fxFlex="100">
+
+                        <div [id]="'higchartcontainer-control-speedloss-'+line" style="height:400px; padding-top:1px;"
+                            fxFlex="100">
+                        </div>
+                    </div>
+
+                </tab>
+            </tabs>
+
+
+        </tab>
+        <tab tabTitle="Idle Time">
+            <tabs class="gb" (currentTabChange)="lineWiseKpiTabClick($event.tabTitle,'Idle Time')">
+
+                <tab tabTitle="Lines-combined">
+                    <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap
+                        fxLayoutAlign="space-around center" fxFlex="99">
+
+                        <div id="higchartcontainer-idletime-linecombined" style="height:400px; padding-top:1px;"
+                            fxFlex="100">
+                        </div>
+                    </div>
+                </tab>
+                <tab [tabTitle]="line" *ngFor="let line of lines">
+
+                    <mat-form-field appearance="fill" id="filterdropdown">
+                        <mat-select [(ngModel)]="selected2"
+                            (selectionChange)="getFilterValueIdletime($event.value,line)">
+                            <mat-option *ngFor="let filter of filters" [value]="filter.value">
+                                {{filter.viewValue}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap
+                        fxLayoutAlign="space-around center" fxFlex="100">
+
+                        <div [id]="'higchartcontainer-control-idletime-'+line" style="height:400px; padding-top:1px;"
+                            fxFlex="100">
+                        </div>
+                    </div>
+
+                </tab>
+            </tabs>
+
+
+        </tab>
+
+
+    </tabs>
+
+
+    <tabs class="gb" (currentTabChange)="categoryWiseKpiTabClick('Operator wise',$event.tabTitle)">
+        <tab tabTitle="OEE">
+            <tabs class="gb" (currentTabChange)="categoryWiseKpiTabClick($event.tabTitle,'OEE')">
+                <tab tabTitle="Operator wise">
+                    <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap
+                        fxLayoutAlign="space-around center" fxFlex="90">
+                        <div id="higchartcontainer-operator-oee-linewise"
+                            style="height:300px; padding-top:1px;background: url('/../../../assets/images/chartLoader.gif')  no-repeat center ;background-size: 70px 70px;"
+                            fxFlex="100">
+                        </div>
+                    </div>
+                </tab>
+                <tab tabTitle="Product wise">
+                    <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap
+                        fxLayoutAlign="space-around center" fxFlex="90">
+                        <div id="higchartcontainer-product-oee-linewise" style="height:300px; padding-top:1px;"
+                            fxFlex="100">
+                        </div>
+                    </div>
+                </tab>
+
+            </tabs>
+        </tab>
+        <tab tabTitle="Performance">
+            <tabs class="gb" (currentTabChange)="categoryWiseKpiTabClick($event.tabTitle,'Performance')">
+                <tab tabTitle="Operator wise">
+                    <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap
+                        fxLayoutAlign="space-around center" fxFlex="90">
+                        <div id="higchartcontainer-operator-performance-linewise" style="height:300px; padding-top:1px;"
+                            fxFlex="100">
+                        </div>
+                    </div>
+                </tab>
+                <tab tabTitle="Product wise">
+                    <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap
+                        fxLayoutAlign="space-around center" fxFlex="90">
+                        <div id="higchartcontainer-product-performance-linewise" style="height:300px; padding-top:1px;"
+                            fxFlex="100">
+                        </div>
+                    </div>
+                </tab>
+
+            </tabs>
+        </tab>
+        <tab tabTitle="Speed Loss">
+            <tabs class="gb" (currentTabChange)="categoryWiseKpiTabClick($event.tabTitle,'Speed Loss')">
+                <tab tabTitle="Operator wise">
+                    <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap
+                        fxLayoutAlign="space-around center" fxFlex="90">
+                        <div id="higchartcontainer-operator-speedloss-linewise" style="height:300px; padding-top:1px;"
+                            fxFlex="100">
+                        </div>
+                    </div>
+                </tab>
+                <tab tabTitle="Product wise">
+                    <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap
+                        fxLayoutAlign="space-around center" fxFlex="90">
+                        <div id="higchartcontainer-product-speedloss-linewise" style="height:300px; padding-top:1px;"
+                            fxFlex="100">
+                        </div>
+                    </div>
+                </tab>
+
+            </tabs>
+        </tab>
+        <tab tabTitle="Idle Time">
+            <tabs class="gb" (currentTabChange)="categoryWiseKpiTabClick($event.tabTitle,'Idle Time')">
+                <tab tabTitle="Operator wise">
+                    <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap
+                        fxLayoutAlign="space-around center" fxFlex="90">
+                        <div id="higchartcontainer-operator-idletime-linewise" style="height:300px; padding-top:1px;"
+                            fxFlex="100">
+                        </div>
+                    </div>
+                </tab>
+
+                <tab tabTitle="Product wise">
+                    <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap
+                        fxLayoutAlign="space-around center" fxFlex="90">
+                        <div id="higchartcontainer-product-idletime-linewise" style="height:300px; padding-top:1px;"
+                            fxFlex="100">
+                        </div>
+                    </div>
+                </tab>
+
+            </tabs>
+        </tab>
+    </tabs>
+
+
+    <tabs tabTitle="Event History" class="gb" (currentTabChange)="eventHistoryTabClick($event.tabTitle)">
+        <tab tabTitle="Combined">
+            <div fxLayout="row" style="width: 50%;" fxLayout.xs="column" fxLayoutWrap
+                fxLayoutAlign="space-around center" fxFlex="99">
+                <div id="highChartContainer-Combined-EventHistory"
+                    style="height:400px; padding-top:1px;background: url('/../../../assets/images/chartLoader.gif')  no-repeat center ;background-size: 70px 70px;"
+                    fxFlex="100">
+                </div>
+            </div>
+
+            <div fxLayout="row" style="width: 50%;" fxLayout.xs="column" fxLayoutWrap
+                fxLayoutAlign="space-around center" fxFlex="99">
+                <div id="highChartContainer-Combined-EventHistory-Pie"
+                    style="height:400px; padding-top:1px;background: url('/../../../assets/images/chartLoader.gif')  no-repeat center ;background-size: 70px 70px;;"
+                    fxFlex="100">
+                </div>
+            </div>
+        </tab>
+        <tab tabTitle="Lines-combined">
+            <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap
+                fxLayoutAlign="space-around center" fxFlex="99">
+
+                <div id="higchartcontainer-lines-combined-eventhistory" style="height:400px; padding-top:1px;"
+                    fxFlex="100">
+                </div>
+            </div>
+        </tab>
+
+        <tab [tabTitle]="line" *ngFor="let line of lines">
+            <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap
+                fxLayoutAlign="space-around center" fxFlex="99">
+
+                <div [id]="'higchartcontainer-eventhistory-'+line" style="height:400px; padding-top:1px;" fxFlex="100">
+                </div>
+            </div>
+        </tab>
+    </tabs>
+
+
+    <div>
+        <button (click)="Export_Excel()" class="btn">Export to Excel</button>&nbsp;
+        <button (click)="Export_PDF()" class="btn">Export to PDF</button>
+    </div>
+
+    <div *ngIf="Fault?.length > 0" fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap
+        fxLayoutGap="0.1%" fxLayoutAlign="space-around center" fxFlex="100">
+        <wbr-pivot #pivot1 [toolbar]="true" [width]="'100%'" [height]="700" fxFlex="99"
+            (beforetoolbarcreated)="customizeToolbar($event)" (reportcomplete)="onReportComplete()"
+            [licenseKey]="licenseKey">
+        </wbr-pivot>
+    </div>
+    <div *ngIf="Fault?.length > 0" fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap
+        fxLayoutGap="0.1%" fxLayoutAlign="space-around center" fxFlex="10" style="position: absolute;
+        z-index: -10;margin-bottom: 36%;">
+        <wbr-pivot #pivot2 [toolbar]="true" [width]="'10%'" [height]="7" fxFlex="10"
+            (beforetoolbarcreated)="customizeToolbar($event)" (reportcomplete)="onReportComplete_2()"
+            [licenseKey]="licenseKey">
+        </wbr-pivot>
+    </div>
+    <!-- <pre>{{lines|json}}</pre> -->
+</div>

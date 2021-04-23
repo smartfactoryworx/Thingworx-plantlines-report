@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ReportsComponent } from './reports.component';
 import { OutputReportComponent } from './output-report/output-report.component';
+import { OutputTest7Component } from './output-test7/output-test7.component';
 const routes: Routes = [
  
   {
@@ -17,6 +18,11 @@ const routes: Routes = [
       {
         path: 'output-report',
         component: OutputReportComponent ,
+        pathMatch: 'full'
+      },
+      {
+        path: 'multiline-output-report',
+        component: OutputTest7Component ,
         pathMatch: 'full'
       },
     ]

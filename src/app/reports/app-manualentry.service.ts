@@ -10,10 +10,10 @@ export class ManualEntryService {
     constructor(private httpClient: HttpClient) {
     }
 
-    GetServerAPIPath(): Observable<object> {
+    // GetServerAPIPath(): Observable<object> {
 
-        return this.httpClient.get('./api/api_server.json');
-    }
+    //     return this.httpClient.get('./api/api_server.json');
+    // }
 
     //GetShiftDetails(URL, lineid): Observable<object> {
     GetShiftDetails(): Observable<any> {
