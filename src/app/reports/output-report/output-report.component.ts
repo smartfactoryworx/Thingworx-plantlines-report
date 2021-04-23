@@ -459,7 +459,7 @@ export class OutputReportComponent implements OnInit {
     //this.dataSourceService.GetServerAPIPath().subscribe((apipath: any) => {
     // console.log('https://int91mat11.smartfactoryworx.tech' + '/api/report/chart?startDate=' + moment(D.start).format("yyyy-MM-DD") + '&endDate=' + moment(D.end).format("yyyy-MM-DD") + '&line_id=' + line_Id);
     console.log('/api/report/chart?startDate=' + moment(D.start).format("yyyy-MM-DD") + '&endDate=' + moment(D.end).format("yyyy-MM-DD"),"AMBER" );
-    this.httpClient.get('/api/report/chart?startDate=' + moment(D.start).format("yyyy-MM-DD") + '&endDate=' + moment(D.end).format("yyyy-MM-DD") ).subscribe((data: any) => {
+    this.httpClient.get('/api/report/chart?startDate=' + moment(D.start).format("yyyy-MM-DD") + '&endDate=' + moment(D.end).format("yyyy-MM-DD")  ).subscribe((data: any) => {
       console.log('/api/report/chart?startDate=' + moment(D.start).format("yyyy-MM-DD") + '&endDate=' + moment(D.end).format("yyyy-MM-DD"),"AMBER" );
       console.log(data,"AMBER")
 

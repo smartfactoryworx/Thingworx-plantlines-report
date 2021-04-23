@@ -32,7 +32,9 @@ export class LineHandlingInterceptor implements HttpInterceptor {
     }
     console.log(exactLineRoute,'Final')
     
-    const lineHandellingRoute = !request.url.includes('line_id') ? request.url.includes('?')? request.url + '&' + 'line_id=' + this.lineViewService.path2LineID(exactLineRoute): request.url + '?' + 'line_id=' + this.lineViewService.path2LineID(exactLineRoute) : request.url;
+    // const lineHandellingRoute = !request.url.includes('line_id') ? request.url.includes('?')? request.url + '&' + 'line_id=' + this.lineViewService.path2LineID(exactLineRoute): request.url + '?' + 'line_id=' + this.lineViewService.path2LineID(exactLineRoute) : request.url;
+
+    const lineHandellingRoute = request.url;
 
     const req = request.clone({
       url: lineHandellingRoute  ,
