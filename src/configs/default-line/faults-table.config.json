@@ -1,0 +1,49 @@
+{
+  "title": {
+    "styles": ""
+  },
+  "header": {
+    "columns": {
+      "stopName": {
+        "displayName": "Stop Name",
+        "width": "300px",
+        "styles": "font-weight: bold; font-size: 13px;"
+      },
+      "from": {
+        "displayName": "From",
+        "styles": "font-weight: bold; font-size: 13px;",
+        "pipe": { "name": "date", "arg": ["dd/MM/yyyy HH:mm:ss", "UTC +530"]}
+      },
+      "to": {
+        "displayName": "To",
+        "styles": "font-weight: bold; font-size: 13px;",
+        "pipe": { "name": "date", "arg": ["dd/MM/yyyy HH:mm:ss", "UTC +530"] }
+      },
+      "duration": {
+        "displayName": "Duration",
+        "styles": "font-weight: bold; font-size: 13px;",
+        "pipe": { "name": "duration2Time", "arg": "HH:MM:SS" }
+      },
+      "stopCause": {
+        "displayName": "Select Stop Cause",
+        "styless": "font-weight: bold; font-size: 13px;",
+        "control": {
+          "name": "dropDown",
+          "list": [
+            "https://dashboard.testing.smartfactoryworx.net/api/manual/faultcause?line_id=5f0809fdc2b1ce30cc53eb8d",
+            "https://dashboard.testing.smartfactoryworx.net/api/manual/faultcause?line_id=5f0809fdc2b1ce30cc53eb8d&machine_state=fault"
+          ]
+        }
+      },
+      "Comment": {
+        "displayName": "",
+        "styless": "font-weight: bold; font-size: 13px;",
+        "control": {
+          "name": "popup"
+        }
+      }
+    }
+  },
+  "updateOn": "https://dashboard.testing.smartfactoryworx.net/api/manual/comment",
+  "updateAfter": 5
+}
