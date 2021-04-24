@@ -38,38 +38,43 @@ const moment = _rollupMoment || _moment;
 // };
 
 
-
-interface fault {
+interface output {
   _id: string;
   line_id: string;
-  line_name: string;
+  plant_id: string;
   shift: string;
   machine_name: string;
+  case_count: number;
+  roll_changeover: number;
   operator_name: string;
   peak_speed: number;
   layout: string;
   product: string;
   batch_name: string;
   batch_size: number;
+  t200Use: boolean;
+  changeover_type: string;
+  cause: string;
+  remark: string;
+  mechanical_changeover: number;
+  setup_changeover: number;
+  batch_end_type: string;
   rated_speed: number;
   month: string;
   blocked_count: number;
   waiting_count: number;
-
-  pdt_count: number;
+  break_pdt: number;
+  co_pdt: number;
   updt_count: number;
-
-  no_production_planned: number;
-
   changeover_count: number;
-
   major_fault_count: number;
   minor_fault_count: number;
-
   major_manual_stop_count: number;
   minor_manual_stop_count: number;
-  goodCount: number;
+  co_pdt_count: number;
+  break_pdt_count: number;
   reject_count: number;
+  pdt_count: number;
   avg_speed: number;
   performance_time: number;
   reject_time: number;
@@ -79,55 +84,34 @@ interface fault {
   fgex: string;
   total_idle_time: number;
   total_idle_count: number;
-
   idle_time: number;
-
   idle_count: number;
   date: string;
   batch_start: DatePipe;
   batch_end: DatePipe;
   changeover_wastage: number;
   planed_production_time: number;
-
+  goodCount: number;
+  nmx_count: number;
   blocked_time: number;
   waiting_time: number;
-
-  total_sum_idle_time: number;
-
   major_manual_stop_time: number;
   minor_manual_stop_time: number;
-
-  total_manual_stop_time: number;
-
   pdt_time: number;
   updt_time: number;
   changeover_time: number;
   gross_operating_time: number;
   theoretical_time: number;
-
   major_fault_time: number;
   minor_fault_time: number;
-
-  total_fault_time: number;
-
+  good_count_machine: string;
   executing: number;
-  executing1: number;
   productive_time: number;
-
-  break_time: number;
-  std_changeover_time: number;
+  cleaning_part_fixing: number;
+  no_production_planned: number;
   excess_changeover_time: number;
-  early_batch_end: string;
-  goodCount_T200: number;
-  goodCount_NMX: number;
-  b2b_cleaning_time: number;
-  b2b_setup_time: number;
-  p2p_cleaning_time: number;
-  p2p_setup_time: number;
-  fgex_cleaning_time: number;
-  fgex_setup_time: number;
-  roll_change: number;
 }
+
 interface Filter {
   value: string;
   viewValue: string;
@@ -137,33 +121,37 @@ var HighCharts_ColorsType2 = ["#32cd32", "rgb(254,1,1)", "rgb(163, 163, 117)", "
 var HighCharts_yAxisOptions1 = {
   labels: { formatter: undefined },
   plotLines: [{
-    color: 'blue',
-    width: 2,
-    value: 25,
-    zIndex: 5,
-    label: {
-      text: "Average",
-      align: 'left'
-    }
-  },
-  {
-    color: 'blue',
-    width: 2,
-    value: 15,
-    zIndex: 5,
-    label: {
-      text: "Till Date",
-      align: 'left'
-    }
+    //   color: 'blue',
+    //   width: 2,
+    //   value: 25,
+    //   zIndex: 5,
+    //   label: {
+    //     text: "Average",
+    //     align: 'left'
+    //   }
+    // },
+    // {
+    //   color: 'blue',
+    //   width: 2,
+    //   value: 15,
+    //   zIndex: 5,
+    //   label: {
+    //     text: "Till Date",
+    //     align: 'left'
+    //   }
   }]
 }
 var HighCharts_yAxisOptions2 = {
+  title: {
+    enabled: false
+  },
   labels: {
-
+    enabled: true,
     formatter: function () {
       let value = (this.value) / 3600;
       return value.toFixed(0);
     },
+
 
   },
 
@@ -188,24 +176,24 @@ var HighCharts_yAxisOptions5 = {
 
   },
   plotLines: [{
-    color: 'blue',
-    width: 2,
-    value: 25,
-    zIndex: 5,
-    label: {
-      text: "label1",
-      align: 'left'
-    }
-  },
-  {
-    color: 'blue',
-    width: 2,
-    value: 15,
-    zIndex: 5,
-    label: {
-      text: "label1",
-      align: 'left'
-    }
+    //   color: 'blue',
+    //   width: 2,
+    //   value: 25,
+    //   zIndex: 5,
+    //   label: {
+    //     text: "label1",
+    //     align: 'left'
+    //   }
+    // },
+    // {
+    //   color: 'blue',
+    //   width: 2,
+    //   value: 15,
+    //   zIndex: 5,
+    //   label: {
+    //     text: "label1",
+    //     align: 'left'
+    //   }
   }]
 }
 var HighCharts_xAxisOptions2 = {
@@ -249,7 +237,7 @@ var HighCharts_PlotOptions2 = {
       allowOverlap: false,
       formatter: function () {
         let value = (this.y) / 3600;
-        return '' + value.toFixed(1);
+        return '' + value.toFixed(0);
       }
 
     } // set colors of the series
@@ -285,11 +273,11 @@ var HighCharts_PlotOptions4 = {
     borderWidth: 0,
     stacking: 'normal',
     dataLabels: {
-      enabled: false,
+      enabled: true,
       allowOverlap: false,
       formatter: function () {
         let value = (this.y) / 3600;
-        return this.key + '<br>' + '' + value.toFixed(1);
+        return '' + value.toFixed(0);
       }
     },
     dataSorting: {
@@ -317,17 +305,18 @@ export class OutputTest7Component implements OnInit {
   @ViewChild("pivot1") child: WebDataRocksPivot;
   @ViewChild("pivot2") child2: WebDataRocksPivot;
 
-  public Fault: fault[] = [];
+  public OutputData: output[] = [];
+  errormsg;
   licenseKey;
   //public multiLineData = [];
   gotData: boolean = false;
   gotLines: boolean = false;
 
-  faultReport: FormGroup;
+  outputReport: FormGroup;
   lines = [];
   filters: Filter[] = [
     { value: 'operatorwise', viewValue: 'Operator wise' },
-   // { value: 'datewise', viewValue: 'Date wise' },
+    // { value: 'datewise', viewValue: 'Date wise' },
     { value: 'batchwise', viewValue: 'Batch wise' },
     { value: 'shiftwise', viewValue: 'Shift wise' },
     { value: 'productwise', viewValue: 'Product wise' }
@@ -352,6 +341,24 @@ export class OutputTest7Component implements OnInit {
     this.date.setValue(ctrlValue);
     datepicker.close();
   }
+
+
+
+  createFormFilters() {
+    this.date = new FormControl('', Validators.required);
+  }
+  createFiltersForm() {
+    this.outputReport = new FormGroup({
+      date: this.date,
+    });
+  }
+
+  public DataWithStructure = [];
+  constructor(private httpClient: HttpClient, protected datePipe: DatePipe,
+    protected dataSourceService: ManualEntryService) { }
+  public pivotReport = {
+  };
+
   //--------------------------------------------------------------
   getMonthDateRange(year, month) {
     console.log(year, month)
@@ -372,253 +379,237 @@ export class OutputTest7Component implements OnInit {
   }
 
   getFilterValueOee(value, line) {
-  
+
     console.log(value)
 
     if (value === "operatorwise") {
       //oee_operatorwise
 
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_name", "Line Name", "operator_name", ["line_name." + line], false, [], false,
+      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_id", "Line Name", "operator_name", ["line_id." + line], false, [], false,
         [{ uniqueName: "OEE", formula: "((\"productive_time\")/(\"planed_production_time\"))*100", caption: "OEE (%)", format: "44mvcoma", },], "column", false,
-        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-oee-" + line, false, false, false, "");
+        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-oee-" + line, false, false, true, "OEE Operatorwise");
     }
     else if (value === "datewise") {
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "date", "Date", "line_name", [], false, ["line_name." + line], false,
+      this.createGoogleBarChart2(HighCharts_ColorsType1, "date", "Date", "line_id", [], false, ["line_id." + line], false,
         [{ uniqueName: "OEE", formula: "((\"productive_time\")/(\"planed_production_time\"))*100", caption: "OEE (%)", format: "44mvcoma", },], "line", false,
-        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions3, "higchartcontainer-control-oee-" + line, false, false, false, "");
+        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions3, "higchartcontainer-control-oee-" + line, false, false, true, "OEE Datewise");
     }
     else if (value === "batchwise") {
       //oee_batchwise
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_name", "Line Name", "batch_name", ["line_name." + line], false, [], false,
+      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_id", "Line Name", "batch_name", ["line_id." + line], false, [], false,
         [{ uniqueName: "OEE", formula: "((\"productive_time\")/(\"planed_production_time\"))*100", caption: "OEE (%)", format: "44mvcoma", },], "column", false,
-        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-oee-" + line, false, false, false, "");
+        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-oee-" + line, false, false, true, "OEE Batchwise");
     }
     else if (value === "shiftwise") {
       //oee_shiftwise
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_name", "Line Name", "shift", ["line_name." + line], false, [], false,
+      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_id", "Line Name", "shift", ["line_id." + line], false, [], false,
         [{ uniqueName: "OEE", formula: "((\"productive_time\")/(\"planed_production_time\"))*100", caption: "OEE (%)", format: "44mvcoma", },], "column", false,
-        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-oee-" + line, false, false, false, "");
+        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-oee-" + line, false, false, true, "OEE Shiftwise");
     }
     else if (value === "productwise") {
       //oee_productwise
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_name", "Line Name", "product", ["line_name." + line], false, [], false,
+      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_id", "Line Name", "product", ["line_id." + line], false, [], false,
         [{ uniqueName: "OEE", formula: "((\"productive_time\")/(\"planed_production_time\"))*100", caption: "OEE (%)", format: "44mvcoma", },], "column", false,
-        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-oee-" + line, false, false, false, "");
+        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-oee-" + line, false, false, true, "OEE Productwise");
     }
   }
 
   getFilterValuePerformance(value, line) {
-   
+
     console.log(value)
 
     if (value === "operatorwise") {
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_name", "Line Name", "operator_name", ["line_name." + line], false, [], false,
-        [{ uniqueName: "Performance", formula: "((\"net_operating_time\") / (\"gross_operating_time\"))*100", caption: "Performance (%)", format: "44mvcoma", },], "column", false,
-        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-performance-" + line, false, false, false, "");
+      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_id", "Line Name", "operator_name", ["line_id." + line], false, [], false,
+        [{ uniqueName: "Performance", formula: "((\"net_operating_time\") / (\"gross_operating_time\"))*100", caption: "P (%)", format: "44mvcoma", },], "column", false,
+        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-performance-" + line, false, false, true, "Performance Operatorwise");
     }
     else if (value === "datewise") {
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "date", "Date", "line_name", [], false, ["line_name." + line], false,
-        [{ uniqueName: "Performance", formula: "((\"net_operating_time\") / (\"gross_operating_time\"))*100", caption: "Performance (%)", format: "44mvcoma", },], "line", false,
-        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions3, "higchartcontainer-control-performance-" + line, false, false, false, "");
+      this.createGoogleBarChart2(HighCharts_ColorsType1, "date", "Date", "line_id", [], false, ["line_id." + line], false,
+        [{ uniqueName: "Performance", formula: "((\"net_operating_time\") / (\"gross_operating_time\"))*100", caption: "P (%)", format: "44mvcoma", },], "line", false,
+        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions3, "higchartcontainer-control-performance-" + line, false, false, true, "Performance Datewise");
     }
     else if (value === "batchwise") {
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_name", "Line Name", "batch_name", ["line_name." + line], false, [], false,
-        [{ uniqueName: "Performance", formula: "((\"net_operating_time\") / (\"gross_operating_time\"))*100", caption: "Performance (%)", format: "44mvcoma", },], "column", false,
-        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-performance-" + line, false, false, false, "");
+      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_id", "Line Name", "batch_name", ["line_id." + line], false, [], false,
+        [{ uniqueName: "Performance", formula: "((\"net_operating_time\") / (\"gross_operating_time\"))*100", caption: "P (%)", format: "44mvcoma", },], "column", false,
+        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-performance-" + line, false, false, true, "Performance Batchwise");
     }
     else if (value === "shiftwise") {
 
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_name", "Line Name", "shift", ["line_name." + line], false, [], false,
-        [{ uniqueName: "Performance", formula: "((\"net_operating_time\") / (\"gross_operating_time\"))*100", caption: "Performance (%)", format: "44mvcoma", },], "column", false,
-        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-performance-" + line, false, false, false, "");
+      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_id", "Line Name", "shift", ["line_id." + line], false, [], false,
+        [{ uniqueName: "Performance", formula: "((\"net_operating_time\") / (\"gross_operating_time\"))*100", caption: "P (%)", format: "44mvcoma", },], "column", false,
+        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-performance-" + line, false, false, true, "Performance Shiftwise");
     }
     else if (value === "productwise") {
 
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_name", "Line Name", "product", ["line_name." + line], false, [], false,
-        [{ uniqueName: "Performance", formula: "((\"net_operating_time\") / (\"gross_operating_time\"))*100", caption: "Performance (%)", format: "44mvcoma", },], "column", false,
-        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-performance-" + line, false, false, false, "");
+      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_id", "Line Name", "product", ["line_id." + line], false, [], false,
+        [{ uniqueName: "Performance", formula: "((\"net_operating_time\") / (\"gross_operating_time\"))*100", caption: "P (%)", format: "44mvcoma", },], "column", false,
+        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-performance-" + line, false, false, true, "Performance Productwise");
     }
   }
 
   getFilterValueQuality(value, line) {
-   
+
     console.log(value)
 
     if (value === "operatorwise") {
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_name", "Line Name", "operator_name", ["line_name." + line], false, [], false,
-          [{ uniqueName: "Quality", formula: "((\"productive_time\"/60) / (\"net_operating_time\"/60))*100", caption: "Quality (%)",
-          format: "44mvcoma",}], "column", false,
-        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-quality-" + line, false, false, false, "");
+      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_id", "Line Name", "operator_name", ["line_id." + line], false, [], false,
+        [{
+          uniqueName: "Quality", formula: "((\"productive_time\"/60) / (\"net_operating_time\"/60))*100", caption: "Q (%)",
+          format: "44mvcoma",
+        }], "column", false,
+        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-quality-" + line, false, false, true, "Quality Operatorwise");
     }
     else if (value === "datewise") {
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "date", "Date", "line_name", [], false, ["line_name." + line], false,
+      this.createGoogleBarChart2(HighCharts_ColorsType1, "date", "Date", "line_id", [], false, ["line_id." + line], false,
         [{
-          uniqueName: "Performance_Graph", formula: "((\"net_operating_time\"/60) / (\"gross_operating_time\"/60))*100", caption: "Performance (%)",
-
+          uniqueName: "Quality", formula: "((\"productive_time\"/60) / (\"net_operating_time\"/60))*100", caption: "Q (%)",
+          format: "44mvcoma",
         }], "line", false,
-        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions3, "higchartcontainer-control-quality-" + line, false, false, false, "");
+        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions3, "higchartcontainer-control-quality-" + line, false, false, true, "Quality Datewise");
     }
     else if (value === "batchwise") {
 
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_name", "Line Name", "batch_name", ["line_name." + line], false, [], false,
+      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_id", "Line Name", "batch_name", ["line_id." + line], false, [], false,
         [{
-          uniqueName: "Performance_Graph", formula: "((\"net_operating_time\"/60) / (\"gross_operating_time\"/60))*100", caption: "Performance (%)",
-
+          uniqueName: "Quality", formula: "((\"productive_time\"/60) / (\"net_operating_time\"/60))*100", caption: "Q (%)",
+          format: "44mvcoma",
         }], "column", false,
-        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-quality-" + line, false, false, false, "");
+        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-quality-" + line, false, false, true, "Quality Batchwise");
 
     }
     else if (value === "shiftwise") {
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_name", "Line Name", "shift", ["line_name." + line], false, [], false,
+      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_id", "Line Name", "shift", ["line_id." + line], false, [], false,
         [{
-          uniqueName: "Performance_Graph", formula: "((\"net_operating_time\"/60) / (\"gross_operating_time\"/60))*100", caption: "Performance (%)",
-
+          uniqueName: "Quality", formula: "((\"productive_time\"/60) / (\"net_operating_time\"/60))*100", caption: "Q (%)",
+          format: "44mvcoma",
         }], "column", false,
-        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-quality-" + line, false, false, false, "");
+        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-quality-" + line, false, false, true, "Quality Shiftwise");
 
     }
     else if (value === "productwise") {
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_name", "Line Name", "product", ["line_name." + line], false, [], false,
-          [{ uniqueName: "Quality", formula: "((\"productive_time\"/60) / (\"net_operating_time\"/60))*100", caption: "Quality (%)",
-          format: "44mvcoma",}], "column", false,
-        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-quality-" + line, false, false, false, "");
+      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_id", "Line Name", "product", ["line_id." + line], false, [], false,
+        [{
+          uniqueName: "Quality", formula: "((\"productive_time\"/60) / (\"net_operating_time\"/60))*100", caption: "Q (%)",
+          format: "44mvcoma",
+        }], "column", false,
+        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-quality-" + line, false, false, true, "Quality Productwise");
     }
   }
   getFilterValueAvailability(value, line) {
-   
+
     console.log(value)
 
     if (value === "operatorwise") {
 
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_name", "Line Name", "operator_name", ["line_name." + line], false, [], false,
-        [{ uniqueName: "Availability", formula: "(\"gross_operating_time\") / (\"planed_production_time\"))*100", caption: "Availability (%)", format: "44mvcoma", },], "column", false,
-        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-availability-" + line, false, false, false, "");
+      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_id", "Line Name", "operator_name", ["line_id." + line], false, [], false,
+        [{ uniqueName: "Availability", formula: "((\"gross_operating_time\") / (\"planed_production_time\"))*100", caption: "A (%)", format: "44mvcoma", },], "column", false,
+        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-availability-" + line, false, false, true, "Availability Operatorwise");
     }
     else if (value === "datewise") {
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "date", "Date", "line_name", [], false, ["line_name." + line], false,
-        [{ uniqueName: "Availability", formula: "(\"gross_operating_time\") / (\"planed_production_time\"))*100", caption: "Availability (%)", format: "44mvcoma", },], "line", false,
-        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions3, "higchartcontainer-control-availability-" + line, false, false, false, "");
+      this.createGoogleBarChart2(HighCharts_ColorsType1, "date", "Date", "line_id", [], false, ["line_id." + line], false,
+        [{ uniqueName: "Availability", formula: "((\"gross_operating_time\") / (\"planed_production_time\"))*100", caption: "A (%)", format: "44mvcoma", },], "line", false,
+        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions3, "higchartcontainer-control-availability-" + line, false, false, true, "Availability Datewise");
     }
     else if (value === "batchwise") {
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_name", "Line Name", "batch_name", ["line_name." + line], false, [], false,
-        [{ uniqueName: "Availability", formula: "(\"gross_operating_time\") / (\"planed_production_time\"))*100", caption: "Availability (%)", format: "44mvcoma", },], "column", false,
-        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-availability-" + line, false, false, false, "");
+      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_id", "Line Name", "batch_name", ["line_id." + line], false, [], false,
+        [{ uniqueName: "Availability", formula: "((\"gross_operating_time\") / (\"planed_production_time\"))*100", caption: "A (%)", format: "44mvcoma", },], "column", false,
+        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-availability-" + line, false, false, true, "Availability Batchwise");
     }
     else if (value === "shiftwise") {
 
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_name", "Line Name", "shift", ["line_name." + line], false, [], false,
-        [{ uniqueName: "Availability", formula: "(\"gross_operating_time\") / (\"planed_production_time\"))*100", caption: "Availability (%)", format: "44mvcoma", },], "column", false,
-        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-availability-" + line, false, false, false, "");
+      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_id", "Line Name", "shift", ["line_id." + line], false, [], false,
+        [{ uniqueName: "Availability", formula: "((\"gross_operating_time\") / (\"planed_production_time\"))*100", caption: "A (%)", format: "44mvcoma", },], "column", false,
+        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-availability-" + line, false, false, true, "Availability Shiftwise");
 
     }
     else if (value === "productwise") {
 
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_name", "Line Name", "product", ["line_name." + line], false, [], false,
-        [{ uniqueName: "Availability", formula: "(\"gross_operating_time\") / (\"planed_production_time\"))*100", caption: "Availability (%)", format: "44mvcoma", },], "column", false,
-        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-availability-" + line, false, false, false, "");
+      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_id", "Line Name", "product", ["line_id." + line], false, [], false,
+        [{ uniqueName: "Availability", formula: "((\"gross_operating_time\") / (\"planed_production_time\"))*100", caption: "A (%)", format: "44mvcoma", },], "column", false,
+        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-availability-" + line, false, false, true, "Availability Productwise");
 
     }
 
 
   }
   getFilterValueSpeedloss(value, line) {
-   
+
     console.log(value)
 
     if (value === "operatorwise") {
 
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_name", "Line Name", "operator_name", ["line_name." + line], false, [], false,
-        [{ uniqueName: "speedloss", formula: "((\"net_operating_time\") / (\"gross_operating_time\"))*100", caption: "speedloss (Hrs)", format: "decimal2", },], "column", false,
-        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-speedloss-" + line, false, false, false, "");
+      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_id", "Line Name", "operator_name", ["line_id." + line], false, [], false,
+        [{ uniqueName: "speed_loss", formula: "((\"speed_loss\"))", caption: "Speed Loss (Hrs)", format: "decimal2", },], "column", false,
+        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-speedloss-" + line, false, false, true, "Speed Loss Operatorwise");
     }
     else if (value === "datewise") {
 
 
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "date", "Date", "line_name", [], false, ["line_name." + line], false,
-        [{ uniqueName: "speedloss", formula: "((\"net_operating_time\") / (\"gross_operating_time\"))*100", caption: "speedloss (Hrs)", format: "decimal2", },], "line", false,
-        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions3, "higchartcontainer-control-speedloss-" + line, false, false, false, "");
+      this.createGoogleBarChart2(HighCharts_ColorsType1, "date", "Date", "line_id", [], false, ["line_id." + line], false,
+        [{ uniqueName: "speed_loss", formula: "((\"speed_loss\"))", caption: "Speed Loss (Hrs)", format: "decimal2", },], "line", false,
+        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions3, "higchartcontainer-control-speedloss-" + line, false, false, true, "Speed Loss Datewise");
 
     }
     else if (value === "batchwise") {
 
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_name", "Line Name", "batch_name", ["line_name." + line], false, [], false,
-        [{ uniqueName: "speedloss", formula: "((\"net_operating_time\") / (\"gross_operating_time\"))*100", caption: "speedloss (Hrs)", format: "decimal2", },], "column", false,
-        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-speedloss-" + line, false, false, false, "");
+      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_id", "Line Name", "batch_name", ["line_id." + line], false, [], false,
+        [{ uniqueName: "speed_loss", formula: "((\"speed_loss\"))", caption: "Speed Loss (Hrs)", format: "decimal2", },], "column", false,
+        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-speedloss-" + line, false, false, true, "Speed Loss Batchwise");
 
     }
     else if (value === "shiftwise") {
 
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_name", "Line Name", "shift", ["line_name." + line], false, [], false,
-        [{ uniqueName: "speedloss", formula: "((\"net_operating_time\") / (\"gross_operating_time\"))*100", caption: "speedloss (Hrs)", format: "decimal2", },], "column", false,
-        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-speedloss-" + line, false, false, false, "");
+      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_id", "Line Name", "shift", ["line_id." + line], false, [], false,
+        [{ uniqueName: "speed_loss", formula: "((\"speed_loss\"))", caption: "Speed Loss (Hrs)", format: "decimal2", },], "column", false,
+        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-speedloss-" + line, false, false, true, "Speed Loss Shiftwise");
 
     }
     else if (value === "productwise") {
 
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_name", "Line Name", "product", ["line_name." + line], false, [], false,
-        [{ uniqueName: "speedloss", formula: "((\"net_operating_time\") / (\"gross_operating_time\"))*100", caption: "speedloss (Hrs)", format: "decimal2", },], "column", false,
-        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-speedloss-" + line, false, false, false, "");
+      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_id", "Line Name", "product", ["line_id." + line], false, [], false,
+        [{ uniqueName: "speed_loss", formula: "((\"speed_loss\"))", caption: "Speed Loss (Hrs)", format: "decimal2", },], "column", false,
+        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-speedloss-" + line, false, false, true, "Speed Loss Productwise");
 
     }
   }
   getFilterValueIdletime(value, line) {
-   
+
     console.log(value)
 
     if (value === "operatorwise") {
 
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_name", "Line Name", "operator_name", ["line_name." + line], false, [], false,
+      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_id", "Line Name", "operator_name", ["line_id." + line], false, [], false,
         [{ uniqueName: "idle_time", formula: "((\"idle_time\"))", caption: "Idle Time(Hrs)", format: "decimal2", },], "column", false,
-        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-idletime-" + line, false, false, false, "");
+        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-idletime-" + line, false, false, true, "Idle Time Operatorwise");
 
     }
     else if (value === "datewise") {
 
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "date", "Date", "line_name", [], false, ["line_name." + line], false,
+      this.createGoogleBarChart2(HighCharts_ColorsType1, "date", "Date", "line_id", [], false, ["line_id." + line], false,
         [{ uniqueName: "idle_time", formula: "((\"idle_time\"))", caption: "Idle Time(Hrs)", format: "decimal2", },], "line", false,
-        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions3, "higchartcontainer-control-idletime-" + line, false, false, false, "");
+        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions3, "higchartcontainer-control-idletime-" + line, false, false, true, "Idle Time Datewise");
 
     }
     else if (value === "batchwise") {
 
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_name", "Line Name", "batch_name", ["line_name." + line], false, [], false,
+      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_id", "Line Name", "batch_name", ["line_id." + line], false, [], false,
         [{ uniqueName: "idle_time", formula: "((\"idle_time\"))", caption: "Idle Time(Hrs)", format: "decimal2", },], "column", false,
-        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-idletime-" + line, false, false, false, "");
+        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-idletime-" + line, false, false, true, "Idle Time Batchwise");
 
     }
     else if (value === "shiftwise") {
 
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_name", "Line Name", "shift", ["line_name." + line], false, [], false,
+      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_id", "Line Name", "shift", ["line_id." + line], false, [], false,
         [{ uniqueName: "idle_time", formula: "((\"idle_time\"))", caption: "Idle Time(Hrs)", format: "decimal2", },], "column", false,
-        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-idletime-" + line, false, false, false, "");
-
+        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-idletime-" + line, false, false, true, "Idle Time Shiftwise");
     }
     else if (value === "productwise") {
 
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_name", "Line Name", "product", ["line_name." + line], false, [], false,
+      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_id", "Line Name", "product", ["line_id." + line], false, [], false,
         [{ uniqueName: "idle_time", formula: "((\"idle_time\"))", caption: "Idle Time(Hrs)", format: "decimal2", },], "column", false,
-        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-idletime-" + line, false, false, false, "");
-
+        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-idletime-" + line, false, false, true, "Idle Time Productwise");
     }
-
-
   }
-  createFormFilters() {
-    this.date = new FormControl('', Validators.required);
-  }
-  createFiltersForm() {
-    this.faultReport = new FormGroup({
-      date: this.date,
-    });
-  }
-
-  public DataWithStructure = [];
-  constructor(private httpClient: HttpClient, protected datePipe: DatePipe,
-    protected dataSourceService: ManualEntryService) { }
-  public pivotReport = {
-  };
-
-
 
   customizeToolbar(toolbar) {
     let tabs = toolbar.getTabs();
@@ -636,7 +627,6 @@ export class OutputTest7Component implements OnInit {
   }
   //Simply adding header to PIVOT table.
 
-
   SearchStateData(data) {
     console.log('*************************1050*******************');
     console.log(data, 'SearchStateData');
@@ -648,14 +638,21 @@ export class OutputTest7Component implements OnInit {
         line_id: {
           type: "string"
         },
-        line_name: {
+        plant_id: {
           type: "string"
         },
+
         shift: {
           type: "string"
         },
         machine_name: {
           type: "string"
+        },
+        case_count: {
+          type: "number"
+        },
+        roll_changeover: {
+          type: "time"
         },
         operator_name: {
           type: "string"
@@ -664,9 +661,6 @@ export class OutputTest7Component implements OnInit {
           type: "number"
         },
         layout: {
-          type: "string"
-        },
-        format: {
           type: "string"
         },
         product: {
@@ -678,8 +672,32 @@ export class OutputTest7Component implements OnInit {
         batch_size: {
           type: "number"
         },
+        t200Use: {
+          type: "boolean"
+        },
+        changeover_type: {
+          type: "string"
+        },
+        cause: {
+          type: "string"
+        },
+        remark: {
+          type: "string"
+        },
+        mechanical_changeover: {
+          type: "number"
+        },
+        setup_changeover: {
+          type: "time"
+        },
+        batch_end_type: {
+          type: "string"
+        },
         rated_speed: {
           type: "number"
+        },
+        month: {
+          type: "string"
         },
         blocked_count: {
           type: "number"
@@ -687,19 +705,16 @@ export class OutputTest7Component implements OnInit {
         waiting_count: {
           type: "number"
         },
-        pdt_count: {
-          type: "number"
+        break_pdt: {
+          type: "time"
+        },
+        co_pdt: {
+          type: "time"
         },
         updt_count: {
           type: "number"
         },
         changeover_count: {
-          type: "number"
-        },
-        executing: {
-          type: "time"
-        },
-        executing1: {
           type: "number"
         },
         major_fault_count: {
@@ -714,10 +729,16 @@ export class OutputTest7Component implements OnInit {
         minor_manual_stop_count: {
           type: "number"
         },
-        goodCount: {
+        co_pdt_count: {
+          type: "number"
+        },
+        break_pdt_count: {
           type: "number"
         },
         reject_count: {
+          type: "number"
+        },
+        pdt_count: {
           type: "number"
         },
         avg_speed: {
@@ -768,27 +789,23 @@ export class OutputTest7Component implements OnInit {
         planed_production_time: {
           type: "time"
         },
+        goodCount: {
+          type: "number"
+        },
+        nmx_count: {
+          type: "number"
+        },
         blocked_time: {
           type: "time"
         },
         waiting_time: {
           type: "time"
         },
-        total_sum_idle_time: {
-          type: "time"
-        },
-
         major_manual_stop_time: {
           type: "time"
         },
         minor_manual_stop_time: {
           type: "time"
-        },
-        total_manual_stop_time: {
-          type: "time"
-        },
-        total_manual_stop_time1: {
-          type: "number"
         },
         pdt_time: {
           type: "time"
@@ -796,10 +813,10 @@ export class OutputTest7Component implements OnInit {
         updt_time: {
           type: "time"
         },
-        no_production_planned: {
+        changeover_time: {
           type: "time"
         },
-        changeover_time: {
+        excess_changeover_time: {
           type: "time"
         },
         gross_operating_time: {
@@ -814,55 +831,33 @@ export class OutputTest7Component implements OnInit {
         minor_fault_time: {
           type: "time"
         },
-        total_fault_time: {
+        good_count_machine: {
+          type: "string"
+        },
+        executing: {
           type: "time"
         },
         productive_time: {
           type: "time"
         },
-        month: {
-          type: "string"
-        },
-        break_time: {
+        total_sum_idle_time: {
           type: "time"
         },
-        std_changeover_time: {
+        total_manual_stop_time: {
           type: "time"
         },
-        excess_changeover_time: {
-          type: "time"
-        },
-        early_batch_end: {
-          type: "string"
-        },
-        goodCount_T200: {
+        total_manual_stop_time1: {
           type: "number"
         },
-        goodCount_NMX: {
-          type: "number"
-        },
-        b2b_cleaning_time: {
+        no_production_planned: {
           type: "time"
         },
-        b2b_setup_time: {
+        total_fault_time: {
           type: "time"
         },
-        p2p_cleaning_time: {
+        cleaning_part_fixing: {
           type: "time"
-        },
-        p2p_setup_time: {
-          type: "time"
-        },
-        fgex_cleaning_time: {
-          type: "time"
-        },
-        fgex_setup_time: {
-          type: "time"
-        },
-        roll_change: {
-          type: "time"
-        },
-
+        }
       }
     ]
     this.DataWithStructure = this.DataWithStructure.concat(data);
@@ -911,15 +906,24 @@ export class OutputTest7Component implements OnInit {
             uniqueName: "fgex"
           },
           {
-            uniqueName: "early_batch_end",
+            uniqueName: "cause",
+            caption: "early batch end",
           },
           {
             uniqueName: "product"
           },
+          {
+            uniqueName: "good_count_machine",
+            caption: "Machine Name",
+          },
+          {
+            uniqueName: "changeover_type",
+            caption: "Type of CO",
+          },
         ],
         rows: [
           {
-            uniqueName: "line_name"
+            uniqueName: "line_id"
           },
           {
             uniqueName: "batch_name"
@@ -962,31 +966,27 @@ export class OutputTest7Component implements OnInit {
           {
             uniqueName: "Availability",
             formula: "((\"gross_operating_time\") / (\"planed_production_time\"))*100",
-            caption: "Availability",
+            caption: "A",
             format: "44mvcoma",
           },
           {
             uniqueName: "Performance",
             formula: "((\"net_operating_time\") / (\"gross_operating_time\"))*100",
-            caption: "Performance",
+            caption: "P",
             format: "44mvcoma",
           },
           {
             uniqueName: "Quality",
             formula: "((\"productive_time\"/60) / (\"net_operating_time\"/60))*100",
-            caption: "Quality",
+            caption: "Q",
             format: "44mvcoma",
           },
           {
-            uniqueName: "goodCount_T200",
-            formula: "((\"goodCount_T200\"))",
-            caption: "Good count T200"
+            uniqueName: "goodCount",
+            formula: "((\"goodCount\"))",
+            caption: "Good count"
           },
-          {
-            uniqueName: "goodCount_NMX",
-            formula: "((\"goodCount_NMX\"))",
-            caption: "Good count NMX"
-          },
+
           {
             uniqueName: "Reject_Count",
             formula: "(sum(\"reject_count\"))",
@@ -994,15 +994,14 @@ export class OutputTest7Component implements OnInit {
           },
           {
             uniqueName: "theoretical_time",
-            //formula: "(sum((\"theoretical_time\")/60))",
             formula: "((\"theoretical_time\"))",
-            caption: "Total Theoretical time",
+            caption: "Total",
             format: "decimal2",
           },
 
           {
-            uniqueName: "std_changeover_time",
-            formula: "((\"std_changeover_time\"))",
+            uniqueName: "break_pdt",
+            formula: "((\"break_pdt\"))",
             caption: "Standard time",
             format: "decimal2",
           },
@@ -1013,112 +1012,112 @@ export class OutputTest7Component implements OnInit {
             format: "decimal2",
           },
           {
-            uniqueName: "pdt_time",
-            formula: "((\"pdt_time\"))",
-            caption: "PDT",
+            uniqueName: "co_pdt",
+            formula: "((\"co_pdt\"))",
+            caption: "PDT-Std CO",
             format: "decimal2",
           },
 
           {
-            uniqueName: "excess_changeover_time",
-            formula: "(\"excess_changeover_time\")",
-            caption: "Changeover Time Excess",
+            uniqueName: "changeover_time",
+            formula: "(\"changeover_time\")",
+            caption: "Changeover",
             format: "decimal2",
           },
           {
-            uniqueName: "b2b_cleaning_time",
-            formula: "(\"b2b_cleaning_time\")",
-            caption: "B2B Cleaning and part fixing",
+            uniqueName: "cleaning_part_fixing",
+            formula: "(\"cleaning_part_fixing\")",
+            caption: "Clean & part Fixing ",
             format: "decimal2",
           },
           {
-            uniqueName: "b2b_setup_time",
-            formula: "(\"b2b_setup_time\")",
-            caption: "B2B Setup Time",
+            uniqueName: "setup_changeover",
+            formula: "(\"setup_changeover\")",
+            caption: "Setup Time",
             format: "decimal2",
           },
+          // {
+          //   uniqueName: "minor_fault_time",
+          //   formula: "((\"minor_fault_time\"))",
+          //   caption: "Minor Fault",
+          //   format: "decimal2",
+          // },
+          // {
+          //   uniqueName: "major_fault_time",
+          //   formula: "((\"major_fault_time\"))",
+          //   caption: "Major Fault",
+          //   format: "decimal2",
+          // },
           {
-            uniqueName: "p2p_cleaning_time",
-            formula: "(\"p2p_cleaning_time\")",
-            caption: "P2P Cleaning and part fixing",
-            format: "decimal2",
-          },
-          {
-            uniqueName: "p2p_setup_time",
-            formula: "(\"p2p_setup_time\")",
-            caption: "P2P Setup Time",
-            format: "decimal2",
-          },
-          {
-            uniqueName: "fgex_cleaning_time",
-            formula: "(\"fgex_cleaning_time\")",
-            caption: "fgex cleaning and part fixing",
-            format: "decimal2",
-          },
-          {
-            uniqueName: "fgex_setup_time",
-            formula: "(\"fgex_setup_time\")",
-            caption: "fgex setup time",
+            uniqueName: "total_fault_time",
+            formula: "((\"total_fault_time\"))",
+            caption: "Breakdowns",
             format: "decimal2",
           },
 
+          // {
+          //   uniqueName: "minor_fault_time",
+          //   formula: "((\"minor_fault_time\"))",
+          //   caption: "Minor Fault Duration",
+          //   format: "decimal2",
+          // },
           {
-            uniqueName: "major_fault_time",
-            formula: "((\"major_fault_time\"))",
-            //formula: "(sum(\"major_fault_time\"/60))",
-            caption: "Major Fault Duration",
+            uniqueName: "blocked_time",
+            formula: "((\"blocked_time\"))",
+            caption: "Downstream",
             format: "decimal2",
           },
-          {
-            uniqueName: "minor_fault_time",
-            formula: "((\"minor_fault_time\"))",
-            caption: "Minor Fault Duration",
-            format: "decimal2",
-          },
-          {
-            uniqueName: "major_manual_stop_time",
-            formula: "((\"major_manual_stop_time\"))",
-            //formula: "(sum(\"major_manual_stop_time\"/60))",
-            caption: "Major Manual stop Duration",
-            format: "decimal2",
-          },
+
+          // {
+          //   uniqueName: "major_manual_stop_time",
+          //   formula: "((\"major_manual_stop_time\"))",
+          //   //formula: "(sum(\"major_manual_stop_time\"/60))",
+          //   caption: "Major Manual stop Duration",
+          //   format: "decimal2",
+          // },
+          // {
+          //   uniqueName: "minor_manual_stop_time",
+          //   formula: "((\"minor_manual_stop_time\"))",
+          //   caption: "Minor Manual stop Duration",
+          //   format: "decimal2",
+          // },
+          // {
+          //   uniqueName: "waiting_time",
+          //   formula: "((\"waiting_time\"))",
+          //   caption: "Waiting Time",
+          //   format: "decimal2",
+          // },
+          // {
+          //   uniqueName: "idle_time",
+          //   formula: "((\"idle_time\"))",
+          //   caption: "Noraml Idle Time",
+          //   format: "decimal2",
+          // },
+
           {
             uniqueName: "total_manual_stop_time",
             formula: "((\"total_manual_stop_time\"))",
-            //formula: "(sum(\"major_manual_stop_time\"/60))",
             caption: "Idle time",
             format: "decimal2",
           },
+
           {
-            uniqueName: "minor_manual_stop_time",
-            formula: "((\"minor_manual_stop_time\"))",
-            caption: "Minor Manual stop Duration",
-            format: "decimal2",
-          },
-          {
-            uniqueName: "waiting_time",
-            formula: "((\"waiting_time\"))",
-            caption: "Waiting Time",
-            format: "decimal2",
-          },
-          {
-            uniqueName: "roll_change",
-            formula: "((\"roll_change\"))",
-            caption: "Roll Change",
+            uniqueName: "roll_changeover",
+            formula: "((\"roll_changeover\"))",
+            caption: "Roll Change @4min",
             format: "decimal2",
           },
           {
             uniqueName: "speed_loss",
             formula: "((\"speed_loss\"))",
             //formula: "(((100-\"Performance\")*(\"Gross_Operating_Time\"/100)) - ((\"Waiting_Time\" + \"Blocked_Time\" + \"Major_Manual_Stop_Time\" + \"Minor_Fault_Time\" + \"Idle_Time\")))",
-            caption: "Speed Loss TIme",
+            caption: "Speed Loss Time",
             format: "decimal2",
           },
           {
             uniqueName: "reject_time",
             formula: "((\"reject_time\"))",
-            //formula: "((\"Reject_Count\" / \"Rated_Speed\"))",
-            caption: "In Process Reject Time",
+            caption: "Process Reject",
             format: "decimal2",
           },
           {
@@ -1131,7 +1130,6 @@ export class OutputTest7Component implements OnInit {
           {
             uniqueName: "executing",
             formula: "((\"executing\"))",
-            //formula: "((\"Reject_Count\" / \"Rated_Speed\"))",
             caption: "Running Time",
             format: "decimal2",
           },
@@ -1139,14 +1137,14 @@ export class OutputTest7Component implements OnInit {
           {
             uniqueName: "changeover_wastage_time",
             formula: "((\"changeover_wastage_time\"))",
-            caption: "Changeover Wastage Time",
+            caption: "CO Wastage",
             format: "decimal2",
           },
 
           {
             uniqueName: "rated_speed",
             formula: "average(\"rated_speed\")*60",//"(\"rated_speed\"*60)",
-            caption: "Rated speed",
+            caption: "Rated Speed",
             format: "decimal2",
           },
           {
@@ -1167,11 +1165,16 @@ export class OutputTest7Component implements OnInit {
             uniqueName: "planed_production_time",
             formula: "(\"planed_production_time\")",
             //formula: "(sum(\"Theoritical Production Time-PDT-UPDT\"))",
-            caption: "Total Planned Production time",
+            caption: "Planned Production Time",
             format: "decimal2",
           },
-
-
+          {
+            uniqueName: "net_operating_time",
+            formula: "(\"net_operating_time\")",
+            //formula: "(sum(\"Theoritical Production Time-PDT-UPDT\"))",
+            caption: "Net Operating Time",
+            format: "decimal2",
+          },
         ]
       },
 
@@ -1186,7 +1189,6 @@ export class OutputTest7Component implements OnInit {
           decimalPlaces: 1,
           textAlign: "center"
         },
-
         {
           name: "44mvcoma",
           decimalPlaces: 0,
@@ -1215,11 +1217,11 @@ export class OutputTest7Component implements OnInit {
           formula: "#value < 60",
           measure: "OEE",
           format: {
-            backgroundColor: "#ff8080",
+            backgroundColor: "#ffb5ab",
             color: "#000000",
             fontFamily: "Arial",
             fontSize: "12px",
-            
+
           }
         },
         {
@@ -1230,7 +1232,7 @@ export class OutputTest7Component implements OnInit {
             color: "#000000",
             fontFamily: "Arial",
             fontSize: "12px",
-            
+
           }
         },
         {
@@ -1241,18 +1243,17 @@ export class OutputTest7Component implements OnInit {
             color: "#000000",
             fontFamily: "Arial",
             fontSize: "12px",
-            
+
           }
         },
         {
           formula: "#value < 95",
           measure: "Quality",
           format: {
-            backgroundColor: "#ff8080",
+            backgroundColor: "#ffb5ab",
             color: "#000000",
             fontFamily: "Arial",
-            fontSize: "12px",
-            
+            fontSize: "12px"
           }
         },
         {
@@ -1263,7 +1264,7 @@ export class OutputTest7Component implements OnInit {
             color: "#000000",
             fontFamily: "Arial",
             fontSize: "12px",
-            
+
           }
         },
         {
@@ -1274,18 +1275,18 @@ export class OutputTest7Component implements OnInit {
             color: "#000000",
             fontFamily: "Arial",
             fontSize: "12px",
-            
+
           }
         },
         {
           formula: "#value < 80",
           measure: "Availability",
           format: {
-            backgroundColor: "#ff8080",
+            backgroundColor: "#ffb5ab",
             color: "#000000",
             fontFamily: "Arial",
             fontSize: "12px",
-            
+
           }
         },
         {
@@ -1296,7 +1297,7 @@ export class OutputTest7Component implements OnInit {
             color: "#000000",
             fontFamily: "Arial",
             fontSize: "12px",
-            
+
           }
         },
         {
@@ -1307,18 +1308,18 @@ export class OutputTest7Component implements OnInit {
             color: "#000000",
             fontFamily: "Arial",
             fontSize: "12px",
-            
+
           }
         },
         {
           formula: "#value < 70",
           measure: "Performance",
           format: {
-            backgroundColor: "#ff8080",
+            backgroundColor: "#ffb5ab",
             color: "#000000",
             fontFamily: "Arial",
             fontSize: "12px",
-            
+
           }
         },
         {
@@ -1329,7 +1330,7 @@ export class OutputTest7Component implements OnInit {
             color: "#000000",
             fontFamily: "Arial",
             fontSize: "12px",
-            
+
           }
         },
         {
@@ -1340,10 +1341,109 @@ export class OutputTest7Component implements OnInit {
             color: "#000000",
             fontFamily: "Arial",
             fontSize: "12px",
-            
-   
           }
-        }
+        },
+        // {
+        //   formula: "#value >=0",
+        //   measure: "total_fault_time",
+        //   format: {
+        //     backgroundColor: "#33cccc",
+        //     color: "#000000",
+        //     fontFamily: "Arial",
+        //     fontSize: "12px",
+        //   }
+        // },
+        // {
+        //   formula: "#value >=0",
+        //   measure: "blocked_time",
+        //   format: {
+        //     backgroundColor: "#33cccc",
+        //     color: "#000000",
+        //     fontFamily: "Arial",
+        //     fontSize: "12px",
+        //   }
+        // },
+        // {
+        //   formula: "#value >=0",
+        //   measure: "major_manual_stop_time",
+        //   format: {
+        //     backgroundColor: "#c2f0f0",
+        //     color: "#000000",
+        //     fontFamily: "Arial",
+        //     fontSize: "11px",
+        //   }
+        // },
+        // {
+        //   formula: "#value >=0",
+        //   measure: "minor_manual_stop_time",
+        //   format: {
+        //     backgroundColor: "#c2f0f0",
+        //     color: "#000000",
+        //     fontFamily: "Arial",
+        //     fontSize: "11px",
+        //   }
+        // },
+
+        // {
+        //   formula: "#value >=0",
+        //   measure: "waiting_time",
+        //   format: {
+        //     backgroundColor: "#c2f0f0",
+        //     color: "#000000",
+        //     fontFamily: "Arial",
+        //     fontSize: "11px",
+        //   }
+        // },
+        // {
+        //   formula: "#value >=0",
+        //   measure: "idle_time",
+        //   format: {
+        //     backgroundColor: "#c2f0f0",
+        //     color: "#000000",
+        //     fontFamily: "Arial",
+        //     fontSize: "11px",
+        //   }
+        // },
+        // {
+        //   formula: "#value >=0",
+        //   measure: "total_manual_stop_time",
+        //   format: {
+        //     backgroundColor: "#33cccc",
+        //     color: "#000000",
+        //     fontFamily: "Arial",
+        //     fontSize: "12px",
+        //   }
+        // },
+        // {
+        //   formula: "#value >=0",
+        //   measure: "major_fault_time",
+        //   format: {
+        //     backgroundColor: "#c2f0f0",
+        //     color: "#000000",
+        //     fontFamily: "Arial",
+        //     fontSize: "11px",
+        //   }
+        // },
+        // {
+        //   formula: "#value >=0",
+        //   measure: "minor_fault_time",
+        //   format: {
+        //     backgroundColor: "#c2f0f0",
+        //     color: "#000000",
+        //     fontFamily: "Arial",
+        //     fontSize: "11px",
+        //   }
+        // },
+        // {
+        //   formula: "#value >=0",
+        //   measure: "total_fault_time",
+        //   format: {
+        //     backgroundColor: "#33cccc",
+        //     color: "#000000",
+        //     fontFamily: "Arial",
+        //     fontSize: "12px",
+        //   }
+        // },
       ],
 
       // tableSizes: {
@@ -1356,7 +1456,6 @@ export class OutputTest7Component implements OnInit {
       //   ]
       // }
     }
-
     this.child.webDataRocks.setReport(setReportType);
 
     this.child2.webDataRocks.off("reportcomplete");
@@ -1367,8 +1466,8 @@ export class OutputTest7Component implements OnInit {
 
   getSearchData() {
     this.DataWithStructure = [];
-    this.Fault = [];
-    this.lines =[];
+    this.OutputData = [];
+    this.lines = [];
     this.FetchDataFromApi();
   }
 
@@ -1378,120 +1477,117 @@ export class OutputTest7Component implements OnInit {
     this.BindDefaultDates();
     this.FetchDataFromApi();
   }
- 
+
   FetchDataFromApi() {
     this.gotData = false;
-   // this.dataSourceService.GetServerAPIPath().subscribe((apipath: any) => {
-      console.log('http://3.7.253.233:4000/api/report/chart?startDate='+moment(this.date.value).format("yyyy-MM-DD")+'&endDate='+ moment(this.date.value).format("yyyy-MM-DD"));
-      this.httpClient.get('/api/report/chart?startDate=' + moment(this.date.value).format("yyyy-MM-DD") + '&endDate=' + moment(this.date.value).format("yyyy-MM-DD")  ).subscribe((data: any) => {
+    // this.dataSourceService.GetServerAPIPath().subscribe((apipath: any) => {
+    console.log('http://3.7.253.233:4000/api/report/chart?startDate=' + moment(this.date.value).format("yyyy-MM-DD") + '&endDate=' + moment(this.date.value).format("yyyy-MM-DD"));
+    this.httpClient.get('/api/report/chart?startDate=' + moment(this.date.value).format("yyyy-MM-DD") + '&endDate=' + moment(this.date.value).format("yyyy-MM-DD")).subscribe((data: any) => {
 
-        // this.multiLineData = data;
-        // console.log(this.multiLineData);
-        // console.log(data);
+      // this.multiLineData = data;
+      // console.log(this.multiLineData);
+      // console.log(data);
 
-        let line_name = data.map(a => a.line_id);
-        this.lines = this.removeDuplicates(line_name);
-        console.log(this.lines);
+      let line_name = data.map(a => a.line_id);
+      this.lines = this.removeDuplicates(line_name);
+      console.log(this.lines);
 
-        this.DataWithStructure = [];
-        this.Fault = [];
-        var d = data;
-        for (let i = 0; i < d.length; i++) {
-          const a = d[i];
-          const Fault_data = {
-            _id: a._id,
-            line_id: a.line_id,
-            line_name: a.line_id,
-            shift: a.shift,
-            machine_name: a.machine_name,
-            operator_name: a.operator_name,
-            peak_speed: a.peak_speed,
-            layout: a.layout,
-            product: a.product,
-            batch_name: a.batch_name,
-            batch_size: a.batch_size,
-            rated_speed: a.rated_speed,
-            month: 'Dec-2020', //a.month,
-            blocked_count: a.blocked_count,
-            waiting_count: a.waiting_count,
-            pdt_count: a.pdt_count,
-            updt_count: a.updt_count,
-            changeover_count: a.changeover_count,
-            major_fault_count: a.major_fault_count,
-            minor_fault_count: a.minor_fault_count,
-            major_manual_stop_count: a.major_manual_stop_count,
-            minor_manual_stop_count: a.minor_manual_stop_count,
-            goodCount: a.goodCount,
-            reject_count: a.reject_count,
-            avg_speed: a.avg_speed,
-            performance_time: a.performance_time,
-            reject_time: a.reject_time,
-            changeover_wastage_time: a.changeover_wastage_time,
-            speed_loss: a.speed_loss,
-            net_operating_time: a.net_operating_time,
-            fgex: a.fgex,
-            total_idle_time: a.total_idle_time,
-            total_idle_count: a.total_idle_count,
-            idle_time: a.idle_time,
-            idle_count: a.idle_count,
-            date: this.datePipe.transform(a.date, 'yyyy-MM-dd').toString(),
-            batch_start: a.batch_start,
-            batch_end: a.batch_end,
-            changeover_wastage: a.changeover_wastage,
-            planed_production_time: a.planed_production_time,
-            blocked_time: a.blocked_time,
-            waiting_time: a.waiting_time,
-
-            total_sum_idle_time: a.blocked_time + a.waiting_time + a.idle_time + a.major_manual_stop_time + a.minor_manual_stop_time,
-
-            major_manual_stop_time: a.major_manual_stop_time,
-            minor_manual_stop_time: a.minor_manual_stop_time,
-
-            total_manual_stop_time: a.major_manual_stop_time + a.minor_manual_stop_time + a.blocked_time + a.waiting_time + a.idle_time + a.minor_fault_time + a.major_fault_time,
-            total_manual_stop_time1: (a.major_manual_stop_time + a.minor_manual_stop_time + a.blocked_time + a.waiting_time + a.idle_time + a.minor_fault_time + a.major_fault_time) / 3600,
-
-            pdt_time: a.pdt_time,
-            updt_time: a.updt_time,
-
-
-            no_production_planned: a.updt_time,
-            changeover_time: a.changeover_time + a.pdt_time,
-            gross_operating_time: a.gross_operating_time,
-            theoretical_time: a.theoretical_time,
-            major_fault_time: a.major_fault_time,
-            minor_fault_time: a.minor_fault_time,
-
-            total_fault_time: a.minor_fault_time + a.major_fault_time,
-
-            executing: a.executing,
-            executing1: a.executing / 3600,
-            productive_time: a.productive_time,
-
-
-            break_time: a.break_time,
-            std_changeover_time: a.std_changeover_time,
-            excess_changeover_time: a.excess_changeover_time,
-            early_batch_end: a.early_batch_end,
-            goodCount_T200: a.goodCount_T200,
-            goodCount_NMX: a.goodCount_NMX,
-            b2b_cleaning_time: a.b2b_cleaning_time,
-            b2b_setup_time: a.b2b_setup_time,
-            p2p_cleaning_time: a.p2p_cleaning_time,
-            p2p_setup_time: a.p2p_setup_time,
-            fgex_cleaning_time: a.fgex_cleaning_time,
-            fgex_setup_time: a.fgex_setup_time,
-            roll_change: a.roll_change
-          }
-          this.Fault.push(Fault_data);
-
-
+      this.DataWithStructure = [];
+      this.OutputData = [];
+      var d = data;
+      for (let i = 0; i < d.length; i++) {
+        const a = d[i];
+        const output_data = {
+          _id: a._id,
+          line_id: a.line_id,
+          plant_id: a.plant_id,
+          shift: a.shift,
+          machine_name: a.machine_name,
+          case_count: a.case_count,
+          roll_changeover: a.roll_changeover,
+          operator_name: a.operator_name,
+          peak_speed: a.peak_speed,
+          layout: a.layout,
+          product: a.product,
+          batch_name: a.batch_name,
+          batch_size: a.batch_size,
+          t200Use: a.t200Use,
+          changeover_type: a.changeover_type,
+          cause: a.cause,
+          remark: a.remark,
+          mechanical_changeover: a.mechanical_changeover,
+          setup_changeover: a.setup_changeover,
+          batch_end_type: a.batch_end_type,
+          rated_speed: a.rated_speed,
+          month: a.month,
+          blocked_count: a.blocked_count,
+          waiting_count: a.waiting_count,
+          break_pdt: a.break_pdt,
+          co_pdt: a.co_pdt,
+          updt_count: a.updt_count,
+          changeover_count: a.changeover_count,
+          major_fault_count: a.major_fault_count,
+          minor_fault_count: a.minor_fault_count,
+          major_manual_stop_count: a.major_manual_stop_count,
+          minor_manual_stop_count: a.minor_manual_stop_count,
+          co_pdt_count: a.co_pdt_count,
+          break_pdt_count: a.break_pdt_count,
+          reject_count: a.reject_count,
+          pdt_count: a.pdt_count,
+          avg_speed: a.avg_speed,
+          performance_time: a.performance_time,
+          reject_time: a.reject_time,
+          changeover_wastage_time: a.changeover_wastage_time,
+          speed_loss: a.speed_loss,
+          net_operating_time: a.net_operating_time,
+          fgex: a.fgex,
+          total_idle_time: a.total_idle_time,
+          total_idle_count: a.total_idle_count,
+          idle_time: a.idle_time,
+          idle_count: a.idle_count,
+          date: this.datePipe.transform(a.date, 'yyyy-MM-dd').toString(),
+          batch_start: a.batch_start,
+          batch_end: a.batch_end,
+          changeover_wastage: a.changeover_wastage,
+          planed_production_time: a.planed_production_time,
+          goodCount: a.goodCount,
+          nmx_count: a.nmx_count,
+          blocked_time: a.blocked_time,
+          waiting_time: a.waiting_time,
+          major_manual_stop_time: a.major_manual_stop_time,
+          minor_manual_stop_time: a.minor_manual_stop_time,
+          pdt_time: a.pdt_time,
+          updt_time: a.updt_time,
+          changeover_time: a.changeover_time + a.co_pdt,
+          excess_changeover_time: a.changeover_time,
+          gross_operating_time: a.gross_operating_time,
+          theoretical_time: a.theoretical_time,
+          major_fault_time: a.major_fault_time,
+          minor_fault_time: a.minor_fault_time,
+          good_count_machine: a.good_count_machine,
+          executing: a.executing,
+          productive_time: a.productive_time,
+          total_manual_stop_time: a.waiting_time + a.idle_time + a.major_manual_stop_time + a.minor_manual_stop_time,
+          total_manual_stop_time1: (a.waiting_time + a.idle_time + a.major_manual_stop_time + a.minor_manual_stop_time) / 3600,
+          total_fault_time: a.minor_fault_time + a.major_fault_time,
+          total_sum_idle_time: a.waiting_time + a.idle_time + a.major_manual_stop_time + a.minor_manual_stop_time + a.blocked_time + a.major_fault_time + a.minor_fault_time,
+          cleaning_part_fixing: a.co_pdt + a.changeover_time - a.setup_changeover,
+          no_production_planned: a.updt_time + a.break_pdt
         }
-        console.log(this.Fault);
-        this.gotData = true;
-       // this.licenseKey = apipath['pivot_license_key'];
+        this.OutputData.push(output_data);
 
+
+      }
+      console.log(this.OutputData);
+      this.gotData = true;
+      // this.licenseKey = apipath['pivot_license_key'];
+
+    },
+      error => {
+        console.log('oops', error.error);
+        this.errormsg = error.error.error;
       });
-   // });
+    // });
   }
 
   BindDefaultDates() {
@@ -1517,7 +1613,7 @@ export class OutputTest7Component implements OnInit {
 
   onReportComplete(): void {
     console.log("*****************************onReportComplete****************************");
-    this.SearchStateData(this.Fault);
+    this.SearchStateData(this.OutputData);
     this.child.webDataRocks.off("reportcomplete");
     this.pivotTableReportComplete = true;
   }
@@ -1531,22 +1627,20 @@ export class OutputTest7Component implements OnInit {
 
     console.log("**************************2105***************")
     //oee_linecombined
-    this.createGoogleBarChart(HighCharts_ColorsType1, "line_name", "Line Name", "line_name",
+    this.createGoogleBarChart(HighCharts_ColorsType1, "line_id", "Line Name", "line_id",
       [{ uniqueName: "OEE", formula: "((\"productive_time\")/(\"planed_production_time\"))*100", caption: "OEE (%)", format: "44mvcoma", },], "column", false,
-      true, HighCharts_xAxisOptions2, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-oee-linecombined", false, false, false, "");
+      true, HighCharts_xAxisOptions2, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-oee-linecombined", false, false, true, "OEE LineCombined");
     console.log("**************************2110***************")
-    //operator_oee
-    this.createGoogleBarChart(HighCharts_ColorsType1, "operator_name", "Operator Name", "line_name",
-      [{ uniqueName: "OEE", formula: "((\"productive_time\")/(\"planed_production_time\"))*100", caption: "OEE (%)", format: "44mvcoma", },],
-      "column", true, true, HighCharts_xAxisOptions1, HighCharts_yAxisOptions4, HighCharts_PlotOptions1, 'higchartcontainer-operator-oee-linewise', false, false, false, "");
-    console.log("**************************2115***************")
-    //combined_eventHistory
-    this.createGoogleBarChart(HighCharts_ColorsType2, "month", "Month", "",
+
+    //LineCombined_eventHistory
+    this.createGoogleBarChart(HighCharts_ColorsType2, "date", "Date", "",
       [{ uniqueName: "executing", formula: "((\"executing\"))", caption: "Running Time", format: "decimal2", },
-      { uniqueName: "total_manual_stop_time", formula: "((\"total_manual_stop_time\"))", caption: "Idle time", format: "decimal2", },
-      { uniqueName: "changeover_time", formula: "((\"changeover_time\"))", caption: "Changeover Time", format: "decimal2", },
+      { uniqueName: "total_sum_idle_time", formula: "((\"total_sum_idle_time\"))", caption: "Idle time", format: "decimal2", },
+      { uniqueName: "excess_changeover_time", formula: "((\"excess_changeover_time\"))", caption: "Excess Changeover", format: "decimal2", },
       { uniqueName: "no_production_planned", formula: "(\"no_production_planned\")", caption: "No Production Planned", format: "decimal2", },],
-      "column", false, true, HighCharts_xAxisOptions1, HighCharts_yAxisOptions2, HighCharts_PlotOptions4, "highChartContainer-Combined-EventHistory", true, true, true, "Event History(in Hours)");
+      "column", false, true, HighCharts_xAxisOptions1, HighCharts_yAxisOptions2, HighCharts_PlotOptions4, "higchartcontainer-lines-combined-eventhistory", true, true, true, "Event History (in Hours)");
+
+
     console.log("**************************2123***************")
     this.createGoogleBarChart_Combined_eventHistory_Pie();
 
@@ -1554,10 +1648,10 @@ export class OutputTest7Component implements OnInit {
 
   createAndUpdateChart_eventHistory_linewise(line, controlname) {
     console.log(controlname);
-    console.log(this.Fault);
+    console.log(this.OutputData);
 
-    var eventHistoryLineData = this.Fault.filter(function (value) {
-      return value.line_name === line
+    var eventHistoryLineData = this.OutputData.filter(function (value) {
+      return value.line_id === line
     })
     console.log(eventHistoryLineData);
 
@@ -1574,9 +1668,11 @@ export class OutputTest7Component implements OnInit {
 
     let xAxisData = line_running_time.map(a => a.date);
     let running_time_data = line_running_time.map(a => a.executing);
-    let idle_time_data = line_idle_time.map(a => a.total_manual_stop_time);
-    let changerover_data = line_changerover_time.map(a => a.changeover_time);
+    let idle_time_data = line_idle_time.map(a => a.total_sum_idle_time);
+    let changerover_data = line_changerover_time.map(a => a.excess_changeover_time);
     let no_prod_planned_data = line_no_prod_planned_time.map(a => a.no_production_planned);
+
+
 
     console.log(xAxisData)
     console.log(running_time_data);
@@ -1626,7 +1722,7 @@ export class OutputTest7Component implements OnInit {
             enabled: false
           },
           dataLabels: {
-            enabled: false,
+            enabled: true,
             formatter: function () {
               let value = (this.y);
               return '' + value.toFixed(1);
@@ -1657,14 +1753,14 @@ export class OutputTest7Component implements OnInit {
 
   createAndUpdateChart_waterfall_linewise(line, controlname) {
     console.log(controlname);
-    console.log(this.Fault);
-    var WaterFallData = this.Fault.filter(function (value) {
-      return line == 'all' ? value : value.line_name === line
+    console.log(this.OutputData);
+    var WaterFallData = this.OutputData.filter(function (value) {
+      return line == 'all' ? value : value.line_id === line
     })
     console.log(WaterFallData);
     let w_total_time = this.SumOfArrayByProperty(WaterFallData, 'theoretical_time') / 3600;
     let w_no_prod_planned = this.SumOfArrayByProperty(WaterFallData, 'no_production_planned') / 3600;
-    let w_idle_time = this.SumOfArrayByProperty(WaterFallData, 'total_manual_stop_time') / 3600;
+    let w_idle_time = this.SumOfArrayByProperty(WaterFallData, 'total_sum_idle_time') / 3600;
     let w_changeover_time = this.SumOfArrayByProperty(WaterFallData, 'changeover_time') / 3600;
     let w_in_process_reject_time = this.SumOfArrayByProperty(WaterFallData, 'reject_time') / 3600;
     let w_speedLosstime = this.SumOfArrayByProperty(WaterFallData, 'speed_loss') / 3600;
@@ -1675,20 +1771,20 @@ export class OutputTest7Component implements OnInit {
       chart: {
         type: 'waterfall',
         inverted: true,
-        events: {
-          load: function () {
-            document.getElementById(controlname).style.background = 'none';
-          }
-        }
+        // events: {
+        //   load: function () {
+        //     document.getElementById(controlname).style.background = 'none';
+        //   }
+        // }
       },
       title: {
-        text: 'Month Timeline in Hours'
+        text: 'Daywise Timeline in Hours'
       },
       tooltip: {
         shared: true
       },
       xAxis: {
-        categories: ['Total Time ', 'No Production Planned', 'Changeover', 'Planned Production Time', 'Idle Time', 'Speed Loss Time',
+        categories: ['Total Time ', 'No Production Planned', 'Changeover', 'Idle Time', 'Running Time', 'Speed Loss Time',
           'Reject Time', 'Productive Time']
       },
       yAxis: {
@@ -1700,7 +1796,7 @@ export class OutputTest7Component implements OnInit {
           align: 'left',
         },
         title: {
-          text: 'Month'
+          text: ''
         }
       },
 
@@ -1735,8 +1831,8 @@ export class OutputTest7Component implements OnInit {
           data: [{ name: 'Total Time', y: w_total_time, color: 'rgb(255, 205, 60)' },
           { name: 'No production Planned', y: -1 * w_no_prod_planned, color: 'rgb(255, 51, 204)' },
           { name: 'Changeover Time', y: -1 * w_changeover_time, color: 'rgb(163, 163, 117)' },
-          { isIntermediateSum: true, color: 'rgb(24, 176, 176)' },
           { name: 'Idle Time', y: -1 * w_idle_time, color: 'rgb(254, 1, 1)' },
+          { isIntermediateSum: true, color: 'rgb(24, 176, 176)' },
           { name: 'Speed Loss Time', y: -1 * w_speedLosstime, color: 'rgb(255, 150, 85)' },
           { name: 'Reject Time', y: -1 * w_in_process_reject_time, color: 'rgb(78, 205, 196)' },
           { isSum: true, color: 'rgb(173, 255, 47)' }]
@@ -1774,8 +1870,8 @@ export class OutputTest7Component implements OnInit {
           slice: {
             rows: [
               {
-                uniqueName: "month",
-                caption: "Month"
+                uniqueName: "date",
+                caption: "Date"
               },
             ],
 
@@ -1787,15 +1883,15 @@ export class OutputTest7Component implements OnInit {
                 format: "decimal2",
               },
               {
-                uniqueName: "total_manual_stop_time",
-                formula: "((\"total_manual_stop_time\"))",
+                uniqueName: "total_sum_idle_time",
+                formula: "((\"total_sum_idle_time\"))",
                 caption: "Idle time",
                 format: "decimal2",
               },
               {
-                uniqueName: "changeover_time",
-                formula: "((\"changeover_time\"))",
-                caption: "Changeover Time",
+                uniqueName: "excess_changeover_time",
+                formula: "((\"excess_changeover_time\"))",
+                caption: "Excess Changeover",
                 format: "decimal2",
               },
               {
@@ -1803,8 +1899,7 @@ export class OutputTest7Component implements OnInit {
                 formula: "(\"no_production_planned\")",
                 caption: "No Production Planned",
                 format: "decimal2",
-              },
-
+              }
             ]
           },
 
@@ -1885,12 +1980,16 @@ export class OutputTest7Component implements OnInit {
             allowPointSelect: true,
             cursor: 'pointer',
             dataLabels: {
-              enabled: false,
-              format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+              distance: -30,
+              color: 'white',
+              format: '{point.percentage:.1f} %'
             },
+            // dataLabels: {
+            //   enabled: false,
+            //   format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+            // },
             showInLegend: true
           }
-
         },
         series: [
           {
@@ -1935,139 +2034,94 @@ export class OutputTest7Component implements OnInit {
     console.log(tabName, parentTabName, "TAB NAME - lineWiseKpiTabClick");
     if (tabName === 'Lines-combined' && parentTabName === 'OEE') {
       //oee_linecombined
-      this.createGoogleBarChart(HighCharts_ColorsType1, "line_name", "Line Name", "line_name",
+      this.createGoogleBarChart(HighCharts_ColorsType1, "line_id", "Line Name", "line_id",
         [{ uniqueName: "OEE", formula: "((\"productive_time\")/(\"planed_production_time\"))*100", caption: "OEE (%)", format: "44mvcoma", },], "column", false,
-        true, HighCharts_xAxisOptions2, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-oee-linecombined", false, false, false, "");
+        true, HighCharts_xAxisOptions2, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-oee-linecombined", false, false, true, "OEE Linecombined");
 
     } else if (tabName === 'Lines-combined' && parentTabName === 'Performance') {
       //performance-linecombined
-      this.createGoogleBarChart(HighCharts_ColorsType1, "line_name", "Line Name", "line_name",
-        [{ uniqueName: "Performance", formula: "((\"net_operating_time\") / (\"gross_operating_time\"))*100", caption: "Performance (%)", format: "decimal2", },],
-        "column", false, true, HighCharts_xAxisOptions2, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-performance-linecombined", false, false, false, "");
+      this.createGoogleBarChart(HighCharts_ColorsType1, "line_id", "Line Name", "line_id",
+        [{ uniqueName: "Performance", formula: "((\"net_operating_time\") / (\"gross_operating_time\"))*100", caption: "P (%)", format: "decimal2", },],
+        "column", false, true, HighCharts_xAxisOptions2, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-performance-linecombined", false, false, true, "Performance Linecombined");
 
     } else if (tabName === 'Lines-combined' && parentTabName === 'Availability') {
       //availability-linecombined
-      this.createGoogleBarChart(HighCharts_ColorsType1, "line_name", "Line Name", "line_name",
-        [{ uniqueName: "Availability", formula: "(\"gross_operating_time\") / (\"planed_production_time\"))*100", caption: "Availability (%)", format: "decimal2", },],
-        "column", false, true, HighCharts_xAxisOptions2, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-availability-linecombined", false, false, false, "");
+      this.createGoogleBarChart(HighCharts_ColorsType1, "line_id", "Line Name", "line_id",
+        [{ uniqueName: "Availability", formula: "(\"gross_operating_time\") / (\"planed_production_time\"))*100", caption: "A (%)", format: "decimal2", },],
+        "column", false, true, HighCharts_xAxisOptions2, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-availability-linecombined", false, false, true, "Availability Linecombined");
 
     } else if (tabName === 'Lines-combined' && parentTabName === 'Speed Loss') {
       //speedloss_linecombined
-      this.createGoogleBarChart(HighCharts_ColorsType1, "line_name", "Line Name", "line_name",
+      this.createGoogleBarChart(HighCharts_ColorsType1, "line_id", "Line Name", "line_id",
         [{ uniqueName: "speed_loss", formula: "((\"speed_loss\"))", caption: "Speed Loss (Hrs)", format: "decimal2", },], "column", false,
-        true, HighCharts_xAxisOptions2, HighCharts_yAxisOptions5, HighCharts_PlotOptions2, "higchartcontainer-speedloss-linecombined", false, false, false, "");
+        true, HighCharts_xAxisOptions2, HighCharts_yAxisOptions5, HighCharts_PlotOptions2, "higchartcontainer-speedloss-linecombined", false, false, true, "Speedloss Linecombined");
 
     } else if (tabName === 'Lines-combined' && parentTabName === 'Idle Time') {
       //idletime_linecombined
-      this.createGoogleBarChart(HighCharts_ColorsType1, "line_name", "Line Name", "line_name",
+      this.createGoogleBarChart(HighCharts_ColorsType1, "line_id", "Line Name", "line_id",
         [{ uniqueName: "idle_time", formula: "((\"idle_time\"))", caption: "Idle Time", format: "decimal2", },], "column", false,
-        true, HighCharts_xAxisOptions2, HighCharts_yAxisOptions5, HighCharts_PlotOptions2, "higchartcontainer-idletime-linecombined", false, false, false, "");
+        true, HighCharts_xAxisOptions2, HighCharts_yAxisOptions5, HighCharts_PlotOptions2, "higchartcontainer-idletime-linecombined", false, false, true, "Idletime Linecombined");
 
     } else if (tabName === 'Lines-combined' && parentTabName === 'Quality') {
       //quality-linecombined
-      this.createGoogleBarChart(HighCharts_ColorsType1, "line_name", "Line Name", "line_name",
-          [{ uniqueName: "Quality", formula: "((\"productive_time\"/60) / (\"net_operating_time\"/60))*100", caption: "Quality (%)",
-          format: "44mvcoma",}], "column", false, true, HighCharts_xAxisOptions2, HighCharts_yAxisOptions3, HighCharts_PlotOptions3, 'higchartcontainer-quality-linecombined', false, false, true, "Performance comparison");
+      this.createGoogleBarChart(HighCharts_ColorsType1, "line_id", "Line Name", "line_id",
+        [{
+          uniqueName: "Quality", formula: "((\"productive_time\"/60) / (\"net_operating_time\"/60))*100", caption: "Q (%)",
+          format: "44mvcoma",
+        }], "column", false, true, HighCharts_xAxisOptions2, HighCharts_yAxisOptions3, HighCharts_PlotOptions3, 'higchartcontainer-quality-linecombined', false, false, true, "Quality Linecombined");
 
     } else if (parentTabName === 'OEE') {
       //oee_operatorwise
 
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_name", "Line Name", "operator_name", ["line_name." + tabName], false, [], false,
+      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_id", "Line Name", "operator_name", ["line_id." + tabName], false, [], false,
         [{ uniqueName: "OEE", formula: "((\"productive_time\")/(\"planed_production_time\"))*100", caption: "OEE (%)", format: "44mvcoma", },], "column", false,
-        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-oee-" + tabName, false, false, false, "");
+        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-oee-" + tabName, false, false, true, "OEE Operatorwise");
 
     }
     else if (parentTabName === 'Performance') {
       //performance_operatorwise
 
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_name", "Line Name", "operator_name", ["line_name." + tabName], false, [], false,
-        [{ uniqueName: "Performance", formula: "((\"net_operating_time\") / (\"gross_operating_time\"))*100", caption: "Performance (%)", format: "44mvcoma", },], "column", false,
-        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-performance-" + tabName, false, false, false, "");
+      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_id", "Line Name", "operator_name", ["line_id." + tabName], false, [], false,
+        [{ uniqueName: "Performance", formula: "((\"net_operating_time\") / (\"gross_operating_time\"))*100", caption: "P (%)", format: "44mvcoma", },], "column", false,
+        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-performance-" + tabName, false, false, true, "Performance Operatorwise");
 
 
     }
     else if (parentTabName === 'Quality') {
       //quality_operatorwise
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_name", "Line Name", "operator_name", ["line_name." + tabName], false, [], false,
-          [{ uniqueName: "Quality", formula: "((\"productive_time\"/60) / (\"net_operating_time\"/60))*100", caption: "Quality (%)",
-          format: "44mvcoma",}], "column", false, true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-quality-" + tabName, false, false, false, "");
+      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_id", "Line Name", "operator_name", ["line_id." + tabName], false, [], false,
+        [{
+          uniqueName: "Quality", formula: "((\"productive_time\"/60) / (\"net_operating_time\"/60))*100", caption: "Q (%)",
+          format: "44mvcoma",
+        }], "column", false, true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-quality-" + tabName, false, false, true, "Quality Operatorwise");
 
 
     }
     else if (parentTabName === 'Availability') {
       //availability_operatorwise
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_name", "Line Name", "operator_name", ["line_name." + tabName], false, [], false,
-        [{ uniqueName: "Availability", formula: "(\"gross_operating_time\") / (\"planed_production_time\"))*100", caption: "Availability (%)", format: "44mvcoma", },],
-        "column", false, true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-availability-" + tabName, false, false, false, "");
+      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_id", "Line Name", "operator_name", ["line_id." + tabName], false, [], false,
+        [{ uniqueName: "Availability", formula: "((\"gross_operating_time\") / (\"planed_production_time\"))*100", caption: "A (%)", format: "44mvcoma", },],
+        "column", false, true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-availability-" + tabName, false, false, true, "Availability Operatorwise");
     }
     else if (parentTabName === 'Speed Loss') {
       //speedloss_operatorwise
 
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_name", "Line Name", "operator_name", ["line_name." + tabName], false, [], false,
+      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_id", "Line Name", "operator_name", ["line_id." + tabName], false, [], false,
         [{ uniqueName: "speed_loss", formula: "((\"speed_loss\"))", caption: "Speed Loss (Hrs)", format: "decimal2", },], "column", false,
-        true, HighCharts_yAxisOptions5, HighCharts_PlotOptions2, "higchartcontainer-control-speedloss-" + tabName, false, false, false, "");
+        true, HighCharts_yAxisOptions5, HighCharts_PlotOptions2, "higchartcontainer-control-speedloss-" + tabName, false, false, true, "Speedloss Operatorwise");
 
 
     } else if (parentTabName === 'Idle Time') {
       //idletime_operatorwise
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_name", "Line Name", "operator_name", ["line_name." + tabName], false, [], false,
+      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_id", "Line Name", "operator_name", ["line_id." + tabName], false, [], false,
         [{ uniqueName: "idle_time", formula: "((\"idle_time\"))", caption: "Idle Time(Hrs)", format: "decimal2", },], "column", false,
-        true, HighCharts_yAxisOptions5, HighCharts_PlotOptions2, "higchartcontainer-control-idletime-" + tabName, false, false, false, "");
+        true, HighCharts_yAxisOptions5, HighCharts_PlotOptions2, "higchartcontainer-control-idletime-" + tabName, false, false, true, "Idletime Operatorwise");
 
 
     }
   }
 
-  categoryWiseKpiTabClick(tabName, parentTabName) {
-    console.log(tabName, parentTabName, "TAB NAME - categoryWiseKpiTabClick");
-    if (tabName === 'Operator wise' && parentTabName === 'OEE') {
-      //operator_oee
-      this.createGoogleBarChart(HighCharts_ColorsType1, "operator_name", "Operator Name", "line_name",
-        [{ uniqueName: "OEE", formula: "((\"productive_time\")/(\"planed_production_time\"))*100", caption: "OEE (%)", format: "44mvcoma", },],
-        "column", true, true, HighCharts_xAxisOptions1, HighCharts_yAxisOptions4, HighCharts_PlotOptions1, 'higchartcontainer-operator-oee-linewise', false, false, false, "");
-    } else if (tabName === 'Product wise' && parentTabName === 'OEE') {
-      //product_oee
-      this.createGoogleBarChart(HighCharts_ColorsType1, "product", "Product", "line_name",
-        [{ uniqueName: "OEE", formula: "((\"productive_time\")/(\"planed_production_time\"))*100", caption: "OEE (%)", format: "44mvcoma", },],
-        "column", true, true, HighCharts_xAxisOptions1, HighCharts_yAxisOptions4, HighCharts_PlotOptions1, 'higchartcontainer-product-oee-linewise', false, false, false, "");
 
-    } else if (tabName === 'Operator wise' && parentTabName === 'Performance') {
-      //operator_performance
-      this.createGoogleBarChart(HighCharts_ColorsType1, "operator_name", "Operator Name", "line_name",
-        [{ uniqueName: "Performance", formula: "((\"net_operating_time\") / (\"gross_operating_time\"))*100", caption: "Performance (%)", format: "decimal2", },],
-        "column", true, true, HighCharts_xAxisOptions1, HighCharts_yAxisOptions4, HighCharts_PlotOptions1, "higchartcontainer-operator-performance-linewise", false, false, false, "");
-    } else if (tabName === 'Product wise' && parentTabName === 'Performance') {
-      //product_performance
-      this.createGoogleBarChart(HighCharts_ColorsType1, "product", "Product", "line_name",
-        [{ uniqueName: "Performance", formula: "((\"net_operating_time\") / (\"gross_operating_time\"))*100", caption: "Performance (%)", format: "decimal2", },],
-        "column", true, true, HighCharts_xAxisOptions1, HighCharts_yAxisOptions4, HighCharts_PlotOptions1, "higchartcontainer-product-performance-linewise", false, false, false, "");
-    }
-    else if (tabName === 'Operator wise' && parentTabName === 'Speed Loss') {
-      //operator_speedloss
-      this.createGoogleBarChart(HighCharts_ColorsType1, "operator_name", "Operator Name", "line_name",
-        [{ uniqueName: "speed_loss", formula: "((\"speed_loss\"))", caption: "Speed Loss (Hrs)", format: "decimal2", },], "column", true,
-        true, HighCharts_xAxisOptions1, HighCharts_yAxisOptions4, HighCharts_PlotOptions2, "higchartcontainer-operator-speedloss-linewise", true, false, false, "");
-    } else if (tabName === 'Product wise' && parentTabName === 'Speed Loss') {
-
-      //product_speedloss
-      this.createGoogleBarChart(HighCharts_ColorsType1, "product", "", "line_name",
-        [{ uniqueName: "speed_loss", formula: "((\"speed_loss\"))", caption: "Speed Loss (Hrs)", format: "decimal2", },], "column", true,
-        true, HighCharts_xAxisOptions1, HighCharts_yAxisOptions4, HighCharts_PlotOptions2, "higchartcontainer-product-speedloss-linewise", true, false, false, "");
-    }
-    else if (tabName === 'Operator wise' && parentTabName === 'Idle Time') {
-      //operator_idletime
-      this.createGoogleBarChart(HighCharts_ColorsType1, "operator_name", "Operator Name", "line_name",
-        [{ uniqueName: "idle_time", formula: "((\"idle_time\"))", caption: "Idle Time", format: "decimal2", },], "column", true,
-        true, HighCharts_xAxisOptions1, HighCharts_yAxisOptions4, HighCharts_PlotOptions2, "higchartcontainer-operator-idletime-linewise", true, false, false, "");
-    } else if (tabName === 'Product wise' && parentTabName === 'Idle Time') {
-      //product_idletime
-      this.createGoogleBarChart(HighCharts_ColorsType1, "product", "Product", "line_name",
-        [{ uniqueName: "idle_time", formula: "((\"idle_time\"))", caption: "Idle Time", format: "decimal2", },], "column", true,
-        true, HighCharts_xAxisOptions1, HighCharts_yAxisOptions4, HighCharts_PlotOptions2, "higchartcontainer-product-idletime-linewise", true, false, false, "");
-
-    }
-
-  }
   eventHistoryTabClick(tabName) {
     console.log(tabName, "TAB NAME -eventHistoryTabClick");
 
@@ -2081,16 +2135,7 @@ export class OutputTest7Component implements OnInit {
         "column", false, true, HighCharts_xAxisOptions1, HighCharts_yAxisOptions2, HighCharts_PlotOptions4, "higchartcontainer-lines-combined-eventhistory", true, true, true, "Event History (in Hours)");
 
     }
-    else if (tabName === 'Combined') {
-      //combined_eventHistory
-      this.createGoogleBarChart(HighCharts_ColorsType2, "month", "Month", "",
-        [{ uniqueName: "executing", formula: "((\"executing\"))", caption: "Running Time", format: "decimal2", },
-        { uniqueName: "total_manual_stop_time", formula: "((\"total_manual_stop_time\"))", caption: "Idle time", format: "decimal2", },
-        { uniqueName: "changeover_time", formula: "((\"changeover_time\"))", caption: "Changeover Time", format: "decimal2", },
-        { uniqueName: "no_production_planned", formula: "(\"no_production_planned\")", caption: "No Production Planned", format: "decimal2", },],
-        "column", false, true, HighCharts_xAxisOptions1, HighCharts_yAxisOptions2, HighCharts_PlotOptions4, "highChartContainer-Combined-EventHistory", true, true, true, "Event History(in Hours)");
-        this.createGoogleBarChart_Combined_eventHistory_Pie();
-    } else {
+    else {
       this.createAndUpdateChart_eventHistory_linewise(tabName, 'higchartcontainer-eventhistory-' + tabName);
     }
   }
@@ -2220,11 +2265,11 @@ export class OutputTest7Component implements OnInit {
   //  yAxis_obj : Y Axis Object
   //  plotOptions_obj : plot options object
   // colors_array : Required colors in the chart
-  //  control_name : Highchart ID which described at HTML Page 
+  //  control_name : Highchart ID which described at HTML Page
   //  secToHrBit   : convert seconds into hours bit (it's value may be true or false)
   //  yAxisBit     : convert multiple Y axis into one or common axis bit (it's value may be true or false)
   //  titleTextBit : Highchart title text bit (it's value may be true or false)
-  //  titleText    : Highchart title text 
+  //  titleText    : Highchart title text
 
 
   createGoogleBarChart(colors_array: string[], rowsUniqueName: string, rowsCaption: string, columnsUniqueName: string, measures_array: Measure[], chartType: string, withDrilldown_bit: boolean, exporting_bit: boolean,
@@ -2397,7 +2442,7 @@ export class OutputTest7Component implements OnInit {
   //<------------------- paramerters required for below function ---------------------->
   //data : data of the Highcharts
   //colors_array : Required colors in the chart
-  //control_name : Highchart ID which described at HTML Page 
+  //control_name : Highchart ID which described at HTML Page
   //secToHrBit   : convert seconds into hours bit (it's value may be true or false)
   //yAxisBit     : convert multiple Y axis into one or common axis bit (it's value may be true or false)
   //titleTextBit : Highchart title text bit (it's value may be true or false)
@@ -2443,7 +2488,7 @@ export class OutputTest7Component implements OnInit {
       let drilDownData: string[];
       for (let i = 0; i < data.drilldown.series.length; i++) {
         drilDownData = data.drilldown.series[i].data
-        //filter the null array  
+        //filter the null array
         const filter = null;
         const filteredResult = drilDownData.filter((item) => {
           return (item.indexOf(filter) >= 0);

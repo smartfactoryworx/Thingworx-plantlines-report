@@ -441,7 +441,7 @@ export class OutputReportComponent implements OnInit {
     var date = new Date();
 
     this.date.setValue(this.datePipe.transform(this.addDays(new Date(), -5), 'yyyy-MM-dd'));
-    this.line_id.setValue('5f0809fdc2b1ce30cc53eb8d');
+    this.line_id.setValue('607d03a32b6c0b48e4ece009');
 
     //this.start_date.setValue(this.datePipe.transform(new Date(date.getFullYear(), date.getMonth(), 1), 'yyyy-MM-dd'));
   }
@@ -459,7 +459,7 @@ export class OutputReportComponent implements OnInit {
     //this.dataSourceService.GetServerAPIPath().subscribe((apipath: any) => {
     // console.log('https://int91mat11.smartfactoryworx.tech' + '/api/report/chart?startDate=' + moment(D.start).format("yyyy-MM-DD") + '&endDate=' + moment(D.end).format("yyyy-MM-DD") + '&line_id=' + line_Id);
     console.log('/api/report/chart?startDate=' + moment(D.start).format("yyyy-MM-DD") + '&endDate=' + moment(D.end).format("yyyy-MM-DD"),"AMBER" );
-    this.httpClient.get('/api/report/chart?startDate=' + moment(D.start).format("yyyy-MM-DD") + '&endDate=' + moment(D.end).format("yyyy-MM-DD")  ).subscribe((data: any) => {
+    this.httpClient.get('/api/report/chart?startDate=' + moment(D.start).format("yyyy-MM-DD") + '&endDate=' + moment(D.end).format("yyyy-MM-DD")+'&line_id=' + line_Id  ).subscribe((data: any) => {
       console.log('/api/report/chart?startDate=' + moment(D.start).format("yyyy-MM-DD") + '&endDate=' + moment(D.end).format("yyyy-MM-DD"),"AMBER" );
       console.log(data,"AMBER")
 
