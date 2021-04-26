@@ -1465,9 +1465,8 @@ export class OutputTest7Component implements OnInit {
   }
 
   getSearchData() {
-    this.DataWithStructure = [];
-    this.OutputData = [];
-    this.lines = [];
+
+    //this.lines = [];
     this.FetchDataFromApi();
   }
 
@@ -1480,6 +1479,8 @@ export class OutputTest7Component implements OnInit {
 
   FetchDataFromApi() {
     this.gotData = false;
+    this.DataWithStructure = [];
+    this.OutputData = [];
     // this.dataSourceService.GetServerAPIPath().subscribe((apipath: any) => {
     console.log('http://3.7.253.233:4000/api/report/chart?startDate=' + moment(this.date.value).format("yyyy-MM-DD") + '&endDate=' + moment(this.date.value).format("yyyy-MM-DD"));
     this.httpClient.get('/api/report/chart?startDate=' + moment(this.date.value).format("yyyy-MM-DD") + '&endDate=' + moment(this.date.value).format("yyyy-MM-DD")).subscribe((data: any) => {
@@ -1487,10 +1488,13 @@ export class OutputTest7Component implements OnInit {
       // this.multiLineData = data;
       // console.log(this.multiLineData);
       // console.log(data);
-     
-      let line_name = data.map(a => a.line_id);
-      this.lines = this.removeDuplicates(line_name);
-      console.log(this.lines);
+      this.lines = [];
+      this.lines.length = 0;
+      this.lines = [...new Set(data.map(item => item.line_id))]
+
+      // let line_name = data.map(a => a.line_id);
+      // this.lines = this.removeDuplicates(line_name);
+      // console.log(this.lines);
 
       this.DataWithStructure = [];
       this.OutputData = [];
@@ -1558,8 +1562,8 @@ export class OutputTest7Component implements OnInit {
           minor_manual_stop_time: a.minor_manual_stop_time,
           pdt_time: a.pdt_time,
           updt_time: a.updt_time,
-          changeover_time: a.changeover_time + a.co_pdt,
-          excess_changeover_time: a.changeover_time,
+          changeover_time: a.changeover_time + a.co_pdt,//Total changeover time
+          excess_changeover_time: a.changeover_time,//backend is giving excess changeover time in changeover time
           gross_operating_time: a.gross_operating_time,
           theoretical_time: a.theoretical_time,
           major_fault_time: a.major_fault_time,
@@ -1636,7 +1640,7 @@ export class OutputTest7Component implements OnInit {
     this.createGoogleBarChart(HighCharts_ColorsType2, "date", "Date", "",
       [{ uniqueName: "executing", formula: "((\"executing\"))", caption: "Running Time", format: "decimal2", },
       { uniqueName: "total_sum_idle_time", formula: "((\"total_sum_idle_time\"))", caption: "Idle time", format: "decimal2", },
-      { uniqueName: "excess_changeover_time", formula: "((\"excess_changeover_time\"))", caption: "Excess Changeover", format: "decimal2", },
+      { uniqueName: "changeover_time", formula: "((\"changeover_time\"))", caption: "Changeover", format: "decimal2", },
       { uniqueName: "no_production_planned", formula: "(\"no_production_planned\")", caption: "No Production Planned", format: "decimal2", },],
       "column", false, true, HighCharts_xAxisOptions1, HighCharts_yAxisOptions2, HighCharts_PlotOptions4, "higchartcontainer-lines-combined-eventhistory", true, true, true, "Event History (in Hours)");
 
@@ -1669,7 +1673,7 @@ export class OutputTest7Component implements OnInit {
     let xAxisData = line_running_time.map(a => a.date);
     let running_time_data = line_running_time.map(a => a.executing);
     let idle_time_data = line_idle_time.map(a => a.total_sum_idle_time);
-    let changerover_data = line_changerover_time.map(a => a.excess_changeover_time);
+    let changerover_data = line_changerover_time.map(a => a.changeover_time);
     let no_prod_planned_data = line_no_prod_planned_time.map(a => a.no_production_planned);
 
 
@@ -1889,9 +1893,9 @@ export class OutputTest7Component implements OnInit {
                 format: "decimal2",
               },
               {
-                uniqueName: "excess_changeover_time",
-                formula: "((\"excess_changeover_time\"))",
-                caption: "Excess Changeover",
+                uniqueName: "changeover_time",
+                formula: "((\"changeover_time\"))",
+                caption: "Changeover",
                 format: "decimal2",
               },
               {
@@ -2029,7 +2033,7 @@ export class OutputTest7Component implements OnInit {
     }
   }
 
-  
+
   lineWiseKpiTabClick(tabName, parentTabName) {
 
     this.selected2 = this.filters[0].value;
@@ -2069,8 +2073,10 @@ export class OutputTest7Component implements OnInit {
     } if (tabName === 'Lines-combined' && parentTabName === 'Quality') {
       //quality-linecombined
       this.createGoogleBarChart(HighCharts_ColorsType1, "line_id", "Line Name", "line_id",
-          [{ uniqueName: "Quality", formula: "((\"productive_time\"/60) / (\"net_operating_time\"/60))*100", caption: "Quality (%)",
-          format: "44mvcoma",}], "column", false, true, HighCharts_xAxisOptions2, HighCharts_yAxisOptions3, HighCharts_PlotOptions3, 'higchartcontainer-quality-linecombined', false, false, true, "Performance comparison");
+        [{
+          uniqueName: "Quality", formula: "((\"productive_time\"/60) / (\"net_operating_time\"/60))*100", caption: "Quality (%)",
+          format: "44mvcoma",
+        }], "column", false, true, HighCharts_xAxisOptions2, HighCharts_yAxisOptions3, HighCharts_PlotOptions3, 'higchartcontainer-quality-linecombined', false, false, true, "Performance comparison");
 
     } if (parentTabName === 'OEE') {
       //oee_operatorwise
@@ -2092,8 +2098,10 @@ export class OutputTest7Component implements OnInit {
     if (parentTabName === 'Quality') {
       //quality_operatorwise
       this.createGoogleBarChart2(HighCharts_ColorsType1, "line_id", "Line Name", "operator_name", ["line_id." + tabName], false, [], false,
-          [{ uniqueName: "Quality", formula: "((\"productive_time\"/60) / (\"net_operating_time\"/60))*100", caption: "Quality (%)",
-          format: "44mvcoma",}], "column", false, true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-quality-" + tabName, false, false, false, "");
+        [{
+          uniqueName: "Quality", formula: "((\"productive_time\"/60) / (\"net_operating_time\"/60))*100", caption: "Quality (%)",
+          format: "44mvcoma",
+        }], "column", false, true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-quality-" + tabName, false, false, false, "");
 
 
     }
@@ -2131,7 +2139,7 @@ export class OutputTest7Component implements OnInit {
       //LineCombined_eventHistory
       this.createGoogleBarChart(HighCharts_ColorsType2, "date", "Date", "",
         [{ uniqueName: "executing", formula: "((\"executing\"))", caption: "Running Time", format: "decimal2", },
-        { uniqueName: "total_manual_stop_time", formula: "((\"total_manual_stop_time\"))", caption: "Idle time", format: "decimal2", },
+        { uniqueName: "total_sum_idle_time", formula: "((\"total_sum_idle_time\"))", caption: "Idle time", format: "decimal2", },
         { uniqueName: "changeover_time", formula: "((\"changeover_time\"))", caption: "Changeover Time", format: "decimal2", },
         { uniqueName: "no_production_planned", formula: "(\"no_production_planned\")", caption: "No Production Planned", format: "decimal2", },],
         "column", false, true, HighCharts_xAxisOptions1, HighCharts_yAxisOptions2, HighCharts_PlotOptions4, "higchartcontainer-lines-combined-eventhistory", true, true, true, "Event History (in Hours)");
@@ -2225,10 +2233,10 @@ export class OutputTest7Component implements OnInit {
 
     data.reduce(function (res, value) {
       if (!res[value.date]) {
-        res[value.date] = { date: value.date, excess_changeover_time: 0 };
+        res[value.date] = { date: value.date, changeover_time: 0 };
         result.push(res[value.date])
       }
-      res[value.date].excess_changeover_time += (value.excess_changeover_time / 3600);
+      res[value.date].changeover_time += (value.changeover_time / 3600);
       return res;
     }, {});
 
