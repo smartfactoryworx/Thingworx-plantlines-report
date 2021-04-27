@@ -920,20 +920,25 @@ export class OutputTest7Component implements OnInit {
             uniqueName: "changeover_type",
             caption: "Type of CO",
           },
+          
         ],
         rows: [
           {
-            uniqueName: "line_id"
+            uniqueName: "plant_id",
+            caption:"Hall"
           },
+          {
+            uniqueName: "line_id",
+            caption:"Line name"
+          },
+          
           {
             uniqueName: "batch_name"
           },
           {
             uniqueName: "date"
           },
-          {
-            uniqueName: "operator_name"
-          },
+        
 
           {
             uniqueName: "shift"
@@ -1149,7 +1154,7 @@ export class OutputTest7Component implements OnInit {
           },
           {
             uniqueName: "avg_Speed",
-            formula: "(\"goodCount\" + \"reject_count\")/((\"gross_operating_time\"-(\"idle_time\" + \"blocked_time\" + \"waiting_time\" + \"minor_fault_time\"))/60)",
+            formula: "(\"goodCount\" + \"reject_count\")/((\"gross_operating_time\"-(\"idle_time\" + \"blocked_time\" + \"waiting_time\" + \"minor_fault_time\"+ \"minor_manual_stop_time\"))/60)",
             caption: "Average Speed",
             format: "44mvcoma1",
           },
@@ -1744,7 +1749,7 @@ export class OutputTest7Component implements OnInit {
         name: 'Changeover Time',
         data: changerover_data
       }, {
-        name: 'Np Production Planned',
+        name: 'No Production Planned',
         data: no_prod_planned_data
       }],
       credits: {
