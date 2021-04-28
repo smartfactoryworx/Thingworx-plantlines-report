@@ -46,14 +46,17 @@
         </pre> -->
     </div>
 </div>
-
-<div fxLayout="column" style="width: 99%;" fxLayoutAlign="center">
+<div *ngIf="OutputData?.length == 0" style="color: red;text-align: center;">
+    <mat-label >No Records Found</mat-label>
+</div>
+<div *ngIf="OutputData?.length > 0"fxLayout="column" style="width: 99%;" fxLayoutAlign="center">
 
     <tabs class="gb" (currentTabChange)="waterfallMonthTimelineTabClick($event.tabTitle)">
         <tab tabTitle="Combined">
             <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap
                 fxLayoutAlign="space-around center" fxFlex="90">
-                <div id="higchartcontainer-waterfall-linewise-combined" style="height:400px; padding-top:1px;background: url('/../../../assets/images/chartLoader.gif')  no-repeat center ;background-size: 70px 70px;" fxFlex="100">
+                <div id="higchartcontainer-waterfall-linewise-combined"  style="height:400px; padding-top:1px;background: url('/../../../assets/images/chartLoader.gif')  no-repeat center ;background-size: 70px 70px;"
+                fxFlex="100">
                 </div>
             </div>
         </tab>
@@ -325,7 +328,7 @@
         </tab>
     </tabs>
 </div>
-<div fxLayout="column" style="width: 99%;" fxLayoutAlign="center">
+<div *ngIf="OutputData?.length > 0" fxLayout="column" style="width: 99%;" fxLayoutAlign="center">
     <div>
         <button mat-raised-button color="primary" (click)="Export_Excel()" class="btn">Export to Excel</button>&nbsp;
         <button mat-raised-button color="primary" (click)="Export_PDF()" class="btn">Export to PDF</button>
