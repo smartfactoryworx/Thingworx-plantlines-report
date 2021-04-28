@@ -51,30 +51,31 @@
 </div>
 <div *ngIf="OutputData?.length > 0"fxLayout="column" style="width: 99%;" fxLayoutAlign="center">
 
-    <tabs class="gb" (currentTabChange)="waterfallMonthTimelineTabClick($event.tabTitle)">
-        <tab tabTitle="Combined">
+   
+    <mat-tab-group backgroundColor="primary" class="gb" (selectedTabChange)="waterfallMonthTimelineTabClick($event.tab.textLabel)" mat-align-tabs="center"  >
+        <mat-tab label="Combined" >
             <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap
                 fxLayoutAlign="space-around center" fxFlex="90">
                 <div id="higchartcontainer-waterfall-linewise-combined"  style="height:400px; padding-top:1px;background: url('/../../../assets/images/chartLoader.gif')  no-repeat center ;background-size: 70px 70px;"
                 fxFlex="100">
                 </div>
             </div>
-        </tab>
+        </mat-tab>
 
-        <tab [tabTitle]="line" *ngFor="let line of lines | slice:0">
+        <mat-tab [label]="line" *ngFor="let line of lines">
             <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap
                 fxLayoutAlign="space-around center" fxFlex="90">
                 <div [id]="'higchartcontainer-waterfall-' + line" style="height:400px; padding-top:1px;" fxFlex="100">
                 </div>
             </div>
 
-        </tab>|
+        </mat-tab>|
 
-    </tabs>
-    <tabs class="gb" (currentTabChange)="lineWiseKpiTabClick('Lines-combined',$event.tabTitle)">
-        <tab tabTitle="OEE">
-            <tabs class="gb" (currentTabChange)="lineWiseKpiTabClick($event.tabTitle,'OEE')">
-                <tab tabTitle="Lines-combined">
+    </mat-tab-group>
+    <mat-tab-group backgroundColor="primary" class="gb" mat-align-tabs="center" (selectedTabChange)="lineWiseKpiTabClick('Lines-combined',$event.tab.textLabel)">
+         <mat-tab label="OEE">
+            <mat-tab-group mat-align-tabs="center" class="gb" (selectedTabChange)="lineWiseKpiTabClick($event.tab.textLabel,'OEE')">
+                 <mat-tab label="Lines-combined">
                     <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap
                         fxLayoutAlign="space-around center" fxFlex="99">
 
@@ -83,10 +84,10 @@
                             fxFlex="100">
                         </div>
                     </div>
-                </tab>
+                  </mat-tab>
 
 
-                <tab [tabTitle]="line" *ngFor="let line of lines">
+                <mat-tab [label]="line" *ngFor="let line of lines">
 
                     <mat-form-field appearance="fill" id="filterdropdown">
                         <mat-select [(ngModel)]="selected2" (selectionChange)="getFilterValueOee($event.value,line)"
@@ -104,16 +105,16 @@
                         </div>
                     </div>
 
-                </tab>
+                  </mat-tab>
 
-            </tabs>
+            </mat-tab-group>
 
 
-        </tab>
-        <tab tabTitle="Performance">
-            <tabs class="gb" (currentTabChange)="lineWiseKpiTabClick($event.tabTitle,'Performance')">
+          </mat-tab>
+         <mat-tab label="Performance">
+            <mat-tab-group mat-align-tabs="center" class="gb" (selectedTabChange)="lineWiseKpiTabClick($event.tab.textLabel,'Performance')">
 
-                <tab tabTitle="Lines-combined">
+                 <mat-tab label="Lines-combined">
                     <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap
                         fxLayoutAlign="space-around center" fxFlex="99">
 
@@ -121,8 +122,8 @@
                             fxFlex="100">
                         </div>
                     </div>
-                </tab>
-                <tab [tabTitle]="line" *ngFor="let line of lines">
+                  </mat-tab>
+                <mat-tab [label]="line" *ngFor="let line of lines">
 
                     <mat-form-field appearance="fill" id="filterdropdown">
                         <mat-select [(ngModel)]="selected2"
@@ -140,14 +141,14 @@
                         </div>
                     </div>
 
-                </tab>
-            </tabs>
-        </tab>
+                  </mat-tab>
+            </mat-tab-group>
+          </mat-tab>
 
-        <tab tabTitle="Quality">
-            <tabs class="gb" (currentTabChange)="lineWiseKpiTabClick($event.tabTitle,'Quality')">
+         <mat-tab label="Quality">
+            <mat-tab-group mat-align-tabs="center" class="gb" (selectedTabChange)="lineWiseKpiTabClick($event.tab.textLabel,'Quality')">
 
-                <tab tabTitle="Lines-combined">
+                 <mat-tab label="Lines-combined">
                     <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap
                         fxLayoutAlign="space-around center" fxFlex="99">
 
@@ -155,8 +156,8 @@
                             fxFlex="100">
                         </div>
                     </div>
-                </tab>
-                <tab [tabTitle]="line" *ngFor="let line of lines">
+                  </mat-tab>
+                <mat-tab [label]="line" *ngFor="let line of lines">
 
                     <mat-form-field appearance="fill" id="filterdropdown">
                         <mat-select [(ngModel)]="selected2"
@@ -174,16 +175,16 @@
                         </div>
                     </div>
 
-                </tab>
-            </tabs>
+                  </mat-tab>
+            </mat-tab-group>
 
 
-        </tab>
+          </mat-tab>
 
-        <tab tabTitle="Availability">
-            <tabs class="gb" (currentTabChange)="lineWiseKpiTabClick($event.tabTitle,'Availability')">
+         <mat-tab label="Availability">
+            <mat-tab-group mat-align-tabs="center" class="gb" (selectedTabChange)="lineWiseKpiTabClick($event.tab.textLabel,'Availability')">
 
-                <tab tabTitle="Lines-combined">
+                 <mat-tab label="Lines-combined">
                     <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap
                         fxLayoutAlign="space-around center" fxFlex="99">
 
@@ -191,8 +192,8 @@
                             fxFlex="100">
                         </div>
                     </div>
-                </tab>
-                <tab [tabTitle]="line" *ngFor="let line of lines">
+                  </mat-tab>
+                <mat-tab [label]="line" *ngFor="let line of lines">
 
                     <mat-form-field appearance="fill" id="filterdropdown">
                         <mat-select [(ngModel)]="selected2"
@@ -210,16 +211,16 @@
                         </div>
                     </div>
 
-                </tab>
-            </tabs>
+                  </mat-tab>
+            </mat-tab-group>
 
 
-        </tab>
+          </mat-tab>
 
-        <tab tabTitle="Speed Loss">
-            <tabs class="gb" (currentTabChange)="lineWiseKpiTabClick($event.tabTitle,'Speed Loss')">
+         <mat-tab label="Speed Loss">
+            <mat-tab-group mat-align-tabs="center" class="gb" (selectedTabChange)="lineWiseKpiTabClick($event.tab.textLabel,'Speed Loss')">
 
-                <tab tabTitle="Lines-combined">
+                 <mat-tab label="Lines-combined">
                     <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap
                         fxLayoutAlign="space-around center" fxFlex="99">
 
@@ -227,8 +228,8 @@
                             fxFlex="100">
                         </div>
                     </div>
-                </tab>
-                <tab [tabTitle]="line" *ngFor="let line of lines">
+                  </mat-tab>
+                <mat-tab [label]="line" *ngFor="let line of lines">
 
                     <mat-form-field appearance="fill" id="filterdropdown">
                         <mat-select [(ngModel)]="selected2"
@@ -246,15 +247,15 @@
                         </div>
                     </div>
 
-                </tab>
-            </tabs>
+                  </mat-tab>
+            </mat-tab-group>
 
 
-        </tab>
-        <tab tabTitle="Idle Time">
-            <tabs class="gb" (currentTabChange)="lineWiseKpiTabClick($event.tabTitle,'Idle Time')">
+          </mat-tab>
+         <mat-tab label="Idle Time">
+            <mat-tab-group mat-align-tabs="center" class="gb" (selectedTabChange)="lineWiseKpiTabClick($event.tab.textLabel,'Idle Time')">
 
-                <tab tabTitle="Lines-combined">
+                 <mat-tab label="Lines-combined">
                     <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap
                         fxLayoutAlign="space-around center" fxFlex="99">
 
@@ -262,8 +263,8 @@
                             fxFlex="100">
                         </div>
                     </div>
-                </tab>
-                <tab [tabTitle]="line" *ngFor="let line of lines">
+                  </mat-tab>
+                <mat-tab [label]="line" *ngFor="let line of lines">
 
                     <mat-form-field appearance="fill" id="filterdropdown">
                         <mat-select [(ngModel)]="selected2"
@@ -281,24 +282,24 @@
                         </div>
                     </div>
 
-                </tab>
-            </tabs>
+                  </mat-tab>
+            </mat-tab-group>
 
 
-        </tab>
+          </mat-tab>
 
 
-    </tabs>
-    <tabs tabTitle="Event History" class="gb" (currentTabChange)="eventHistoryTabClick($event.tabTitle)">
-        <tab tabTitle="Combined">
+    </mat-tab-group>
+    <mat-tab-group backgroundColor="primary" mat-align-tabs="center" label="Event History" class="gb" (selectedTabChange)="eventHistoryTabClick($event.tab.textLabel)">
+         <mat-tab label="Combined">
            
-                <div fxLayout="row" style="width: 50%;" fxLayout.xs="column" fxLayoutWrap
+                <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap
                     fxLayoutAlign="space-around center" fxFlex="99">
     
                     <div id="higchartcontainer-lines-combined-eventhistory" style="height:400px; padding-top:1px;background: url('/../../../assets/images/chartLoader.gif')  no-repeat center ;background-size: 70px 70px;"
-                    fxFlex="100">
+                    fxFlex="50">
                     </div>
-                </div>
+                
          
             <!-- <div fxLayout="row" style="width: 50%;" fxLayout.xs="column" fxLayoutWrap
                 fxLayoutAlign="space-around center" fxFlex="99">
@@ -308,25 +309,24 @@
                 </div>
             </div> -->
 
-            <div fxLayout="row" style="width: 50%;" fxLayout.xs="column" fxLayoutWrap
-                fxLayoutAlign="space-around center" fxFlex="99">
+            
                 <div id="highChartContainer-Combined-EventHistory-Pie"
                     style="height:400px; padding-top:1px;background: url('/../../../assets/images/chartLoader.gif')  no-repeat center ;background-size: 70px 70px;"
-                    fxFlex="100">
+                    fxFlex="50">
                 </div>
             </div>
-        </tab>
+          </mat-tab>
 
 
-        <tab [tabTitle]="line" *ngFor="let line of lines">
+        <mat-tab [label]="line" *ngFor="let line of lines">
             <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap
                 fxLayoutAlign="space-around center" fxFlex="99">
 
                 <div [id]="'higchartcontainer-eventhistory-'+line" style="height:400px; padding-top:1px;" fxFlex="100">
                 </div>
             </div>
-        </tab>
-    </tabs>
+          </mat-tab>
+    </mat-tab-group>
 </div>
 <div *ngIf="OutputData?.length > 0" fxLayout="column" style="width: 99%;" fxLayoutAlign="center">
     <div>
