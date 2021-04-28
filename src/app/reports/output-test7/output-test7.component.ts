@@ -1488,11 +1488,9 @@ export class OutputTest7Component implements OnInit {
     this.OutputData = [];
     // this.dataSourceService.GetServerAPIPath().subscribe((apipath: any) => {
     console.log('http://3.7.253.233:4000/api/report/chart?startDate=' + moment(this.date.value).format("yyyy-MM-DD") + '&endDate=' + moment(this.date.value).format("yyyy-MM-DD"));
-    this.httpClient.get('/api/report/chart?startDate=' + moment(this.date.value).format("yyyy-MM-DD") + '&endDate=' + moment(this.date.value).format("yyyy-MM-DD")).subscribe((data: any) => {
+    this.dataSourceService.GetOutputMultilinesData(moment(this.date.value).format("yyyy-MM-DD"),moment(this.date.value).format("yyyy-MM-DD")).subscribe((data: any) => {
 
-      // this.multiLineData = data;
-      // console.log(this.multiLineData);
-      // console.log(data);
+
       this.lines = [];
       this.lines.length = 0;
       this.lines = [...new Set(data.map(item => item.line_id))]
@@ -1589,6 +1587,7 @@ export class OutputTest7Component implements OnInit {
       }
       console.log(this.OutputData);
       this.gotData = true;
+   
       // this.licenseKey = apipath['pivot_license_key'];
 
     },
@@ -1780,11 +1779,11 @@ export class OutputTest7Component implements OnInit {
       chart: {
         type: 'waterfall',
         inverted: true,
-        // events: {
-        //   load: function () {
-        //     document.getElementById(controlname).style.background = 'none';
-        //   }
-        // }
+        events: {
+          load: function () {
+            document.getElementById(controlname).style.background = 'none';
+          }
+        }
       },
       title: {
         text: 'Daywise Timeline in Hours'
