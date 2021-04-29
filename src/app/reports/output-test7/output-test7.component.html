@@ -52,7 +52,7 @@
 <div *ngIf="OutputData?.length > 0"fxLayout="column" style="width: 99%;" fxLayoutAlign="center">
 
    
-    <mat-tab-group backgroundColor="primary" class="gb" (selectedTabChange)="waterfallMonthTimelineTabClick($event.tab.textLabel)" mat-align-tabs="center"  >
+    <mat-tab-group backgroundColor="" class="gb" (selectedTabChange)="waterfallMonthTimelineTabClick($event.tab.textLabel)" mat-align-tabs="center"  >
         <mat-tab label="Combined" >
             <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap
                 fxLayoutAlign="space-around center" fxFlex="90">
@@ -72,7 +72,7 @@
         </mat-tab>|
 
     </mat-tab-group>
-    <mat-tab-group backgroundColor="primary" class="gb" mat-align-tabs="center" (selectedTabChange)="lineWiseKpiTabClick('Lines-combined',$event.tab.textLabel)">
+    <mat-tab-group backgroundColor="" class="gb" mat-align-tabs="center" (selectedTabChange)="lineWiseKpiTabClick('Lines-combined',$event.tab.textLabel)">
          <mat-tab label="OEE">
             <mat-tab-group mat-align-tabs="center" class="gb" (selectedTabChange)="lineWiseKpiTabClick($event.tab.textLabel,'OEE')">
                  <mat-tab label="Lines-combined">
@@ -290,7 +290,7 @@
 
 
     </mat-tab-group>
-    <mat-tab-group backgroundColor="primary" mat-align-tabs="center" label="Event History" class="gb" (selectedTabChange)="eventHistoryTabClick($event.tab.textLabel)">
+    <mat-tab-group backgroundColor="" mat-align-tabs="center" label="Event History" class="gb" (selectedTabChange)="eventHistoryTabClick($event.tab.textLabel)">
          <mat-tab label="Combined">
            
                 <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap
