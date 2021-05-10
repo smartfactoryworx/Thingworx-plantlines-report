@@ -9,6 +9,7 @@ import { ReportsComponent } from './reports.component';
 import { SharedModule } from '../shared/shared.module';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { OutputTest7Module } from './output-test7/output-test7.module';
+import { ManagementReportModule } from './management-report/management-report.module';
 
 
 
@@ -20,8 +21,8 @@ import { OutputTest7Module } from './output-test7/output-test7.module';
     SharedModule,
     GoogleChartsModule.forRoot(),
     OutputReportModule,
-    OutputTest7Module
-   
+    OutputTest7Module,
+    ManagementReportModule
   ],
   providers:[
     { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },

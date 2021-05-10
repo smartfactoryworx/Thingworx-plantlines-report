@@ -300,9 +300,9 @@ series: {
 }
 }
 @Component({
-  selector: 'app-output-report',
-  templateUrl: './output-report.component.html',
-  styleUrls: ['./output-report.component.scss'],
+  selector: 'app-management-report',
+  templateUrl: './management-report.component.html',
+  styleUrls: ['./management-report.component.scss'],
   providers: [
     {
       provide: DateAdapter,
@@ -312,7 +312,7 @@ series: {
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
   ]
 })
-export class OutputReportComponent implements OnInit {
+export class ManagementReportComponent implements OnInit {
   //@ViewChild("pivot1") child: FlexmonsterPivot;
   @ViewChild("pivot1") child: WebDataRocksPivot;
 
@@ -1231,233 +1231,233 @@ export class OutputReportComponent implements OnInit {
     this.DataWithStructure = [
       {
         _id: {
-          type: "string"
+          type: "string",
         },
         line_id: {
-          type: "string"
+          type: "string",
         },
         plant_id: {
-          type: "string"
+          type: "string",
         },
 
         shift: {
-          type: "string"
+          type: "string",
         },
         machine_name: {
-          type: "string"
+          type: "string",
         },
         case_count: {
-          type: "number"
+          type: "number",
         },
         roll_changeover: {
-          type: "time"
+          type: "time",
         },
         operator_name: {
-          type: "string"
+          type: "string",
         },
         peak_speed: {
-          type: "number"
+          type: "number",
         },
         layout: {
-          type: "string"
+          type: "string",
         },
         product: {
-          type: "string"
+          type: "string",
         },
         batch_name: {
-          type: "string"
+          type: "string",
         },
         batch_size: {
-          type: "number"
+          type: "number",
         },
         t200Use: {
-          type: "boolean"
+          type: "boolean",
         },
         changeover_type: {
-          type: "string"
+          type: "string",
         },
         cause: {
-          type: "string"
+          type: "string",
         },
         remark: {
-          type: "string"
+          type: "string",
         },
         mechanical_changeover: {
-          type: "number"
+          type: "number",
         },
         setup_changeover: {
-          type: "time"
+          type: "time",
         },
         batch_end_type: {
-          type: "string"
+          type: "string",
         },
         rated_speed: {
-          type: "number"
+          type: "number",
         },
         month: {
-          type: "string"
+          type: "string",
         },
         blocked_count: {
-          type: "number"
+          type: "number",
         },
         waiting_count: {
-          type: "number"
+          type: "number",
         },
         break_pdt: {
-          type: "time"
+          type: "time",
         },
         co_pdt: {
-          type: "time"
+          type: "time",
         },
         updt_count: {
-          type: "number"
+          type: "number",
         },
         changeover_count: {
-          type: "number"
+          type: "number",
         },
         major_fault_count: {
-          type: "number"
+          type: "number",
         },
         minor_fault_count: {
-          type: "number"
+          type: "number",
         },
         major_manual_stop_count: {
-          type: "number"
+          type: "number",
         },
         minor_manual_stop_count: {
-          type: "number"
+          type: "number",
         },
         co_pdt_count: {
-          type: "number"
+          type: "number",
         },
         break_pdt_count: {
-          type: "number"
+          type: "number",
         },
         reject_count: {
-          type: "number"
+          type: "number",
         },
         pdt_count: {
-          type: "number"
+          type: "number",
         },
         avg_speed: {
-          type: "number"
+          type: "number",
         },
         performance_time: {
-          type: "time"
+          type: "time",
         },
         reject_time: {
-          type: "time"
+          type: "time",
         },
         changeover_wastage_time: {
-          type: "time"
+          type: "time",
         },
         speed_loss: {
-          type: "time"
+          type: "time",
         },
         net_operating_time: {
-          type: "time"
+          type: "time",
         },
         fgex: {
-          type: "string"
+          type: "string",
         },
         total_idle_time: {
-          type: "time"
+          type: "time",
         },
         total_idle_count: {
-          type: "number"
+          type: "number",
         },
         idle_time: {
-          type: "time"
+          type: "time",
         },
         idle_count: {
-          type: "number"
+          type: "number",
         },
         date: {
-          type: "string"
+          type: "string",
         },
         batch_start: {
-          type: "datetime"
+          type: "datetime",
         },
         batch_end: {
-          type: "datetime"
+          type: "datetime",
         },
         changeover_watage: {
-          type: "time"
+          type: "time",
         },
         planed_production_time: {
-          type: "time"
+          type: "time",
         },
         goodCount: {
-          type: "number"
+          type: "number",
         },
         nmx_count: {
-          type: "number"
+          type: "number",
         },
         blocked_time: {
-          type: "time"
+          type: "time",
         },
         waiting_time: {
-          type: "time"
+          type: "time",
         },
         major_manual_stop_time: {
-          type: "time"
+          type: "time",
         },
         minor_manual_stop_time: {
-          type: "time"
+          type: "time",
         },
         pdt_time: {
-          type: "time"
+          type: "time",
         },
         updt_time: {
-          type: "time"
+          type: "time",
         },
         changeover_time: {
-          type: "time"
+          type: "time",
         },
         excess_changeover_time: {
-          type: "time"
+          type: "time",
         },
         gross_operating_time: {
-          type: "time"
+          type: "time",
         },
         theoretical_time: {
-          type: "time"
+          type: "time",
         },
         major_fault_time: {
-          type: "time"
+          type: "time",
         },
         minor_fault_time: {
-          type: "time"
+          type: "time",
         },
         good_count_machine: {
-          type: "string"
+          type: "string",
         },
         executing: {
-          type: "time"
+          type: "time",
         },
         productive_time: {
-          type: "time"
+          type: "time",
         },
         total_sum_idle_time: {
-          type: "time"
+          type: "time",
         },
         total_manual_stop_time: {
-          type: "time"
+          type: "time",
         },
         total_manual_stop_time1: {
-          type: "number"
+          type: "number",
         },
         no_production_planned: {
-          type: "time"
+          type: "time",
         },
         total_fault_time: {
-          type: "time"
+          type: "time",
         },
         cleaning_part_fixing: {
-          type: "time"
-        }
-      }
-    ]
+          type: "time",
+        },
+      },
+    ];
     this.DataWithStructure = this.DataWithStructure.concat(data);
     console.log(this.DataWithStructure, "DataWithStructure");
     console.log(this.child, "this.child");
@@ -1466,7 +1466,39 @@ export class OutputReportComponent implements OnInit {
     var setReportType;
     setReportType = {
       dataSource: {
-        data: this.DataWithStructure
+        data: this.DataWithStructure,
+      },
+      tableSizes: {
+        columns: [
+          {
+            idx: 0,
+            width: 100
+          },
+          {
+            idx: 1,
+            width: 200
+          },
+          {
+            idx: 2,
+            width: 80
+          },
+          {
+            idx: 3,
+            width: 80
+          },
+          {
+            idx: 4,
+            width: 90
+          },
+          {
+            idx: 5,
+            width: 90
+          },
+          {
+            idx: 6,
+            width: 90
+          }
+        ]
       },
       options: {
         grid: {
@@ -1479,15 +1511,16 @@ export class OutputReportComponent implements OnInit {
         dateTimePattern: "yyyy-MM-dd HH:mm:ss",
         defaultHierarchySortName: "desc",
         configuratorButton: false,
-        showAggregationLabels: false
+        showAggregationLabels: false,
       },
+      
       slice: {
         reportFilters: [
           {
-            uniqueName: "batch_name"
+            uniqueName: "batch_name",
           },
           {
-            uniqueName: "operator_name"
+            uniqueName: "operator_name",
           },
           {
             uniqueName: "date",
@@ -1501,14 +1534,14 @@ export class OutputReportComponent implements OnInit {
             uniqueName: "layout",
           },
           {
-            uniqueName: "fgex"
+            uniqueName: "fgex",
           },
           {
             uniqueName: "cause",
             caption: "early batch end",
           },
           {
-            uniqueName: "product"
+            uniqueName: "product",
           },
           {
             uniqueName: "good_count_machine",
@@ -1519,269 +1552,283 @@ export class OutputReportComponent implements OnInit {
             caption: "Type of CO",
           },
         ],
+      
         rows: [
+          // {
+          //   uniqueName: "line_id",
+          // },
+          // {
+          //   uniqueName: "batch_name",
+          // },
           {
-            uniqueName: "line_id"
+            uniqueName: "date",
+            caption:"Date",
+          
           },
           {
-            uniqueName: "batch_name"
+            uniqueName: "product",
+            caption:"Product"
           },
-          {
-            uniqueName: "date"
-          },
-          {
-            uniqueName: "shift"
-          },
-          {
-            uniqueName: "fgex"
-          },
+          // {
+          //   uniqueName: "operator_name"
+          // },
 
-
+          // {
+          //   uniqueName: "shift",
+          // },
+          // {
+          //   uniqueName: "fgex",
+          // },
         ],
         drills: {
-          drillAll: true
+          drillAll: true,
         },
         expands: {
           expandAll: true,
         },
+        
         columns: [
           {
             uniqueName: "Measures",
-
-          }
+          },
         ],
         measures: [
-          {
-            uniqueName: "OEE",
-            formula: "((\"productive_time\")/(\"planed_production_time\"))*100",
-            caption: "OEE",
-            format: "44mvcoma",
-          },
-          {
-            uniqueName: "Availability",
-            formula: "((\"gross_operating_time\") / (\"planed_production_time\"))*100",
-            caption:"A" ,
-            format: "44mvcoma",
-          },
-          {
-            uniqueName: "Performance",
-            formula: "((\"net_operating_time\") / (\"gross_operating_time\"))*100",
-            caption: "P",
-            format: "44mvcoma",
-          },
-          {
-            uniqueName: "Quality",
-            formula: "((\"productive_time\"/60) / (\"net_operating_time\"/60))*100",
-            caption: "Q",
-            format: "44mvcoma",
-          },
+          // {
+          //   uniqueName: "OEE",
+          //   formula: '(("productive_time")/("planed_production_time"))*100',
+          //   caption: "OEE",
+          //   format: "44mvcoma",
+          // },
+          // {
+          //   uniqueName: "Availability",
+          //   formula:
+          //     '(("gross_operating_time") / ("planed_production_time"))*100',
+          //   caption: "A",
+          //   format: "44mvcoma",
+          // },
+          // {
+          //   uniqueName: "Performance",
+          //   formula: '(("net_operating_time") / ("gross_operating_time"))*100',
+          //   caption: "P",
+          //   format: "44mvcoma",
+          // },
+          // {
+          //   uniqueName: "Quality",
+          //   formula: '(("productive_time"/60) / ("net_operating_time"/60))*100',
+          //   caption: "Q",
+          //   format: "44mvcoma",
+          // },
           {
             uniqueName: "goodCount",
-            formula: "((\"goodCount\"))",
-            caption: "Good count"
+            formula: '(("goodCount"))',
+            caption: "Good count",
           },
 
-          {
-            uniqueName: "Reject_Count",
-            formula: "(sum(\"reject_count\"))",
-            caption: "Reject count"
-          },
-          {
-            uniqueName: "theoretical_time",
-            formula: "((\"theoretical_time\"))",
-            caption: "Total",
-            format: "decimal2",
-          },
+          // {
+          //   uniqueName: "Reject_Count",
+          //   formula: '(sum("reject_count"))',
+          //   caption: "Reject count",
+          // },
+          // {
+          //   uniqueName: "theoretical_time",
+          //   formula: '(("theoretical_time"))',
+          //   caption: "Total",
+          //   format: "decimal2",
+          // },
 
+          // {
+          //   uniqueName: "break_pdt",
+          //   formula: '(("break_pdt"))',
+          //   caption: "Standard time",
+          //   format: "decimal2",
+          // },
+         
+          // {
+          //   uniqueName: "co_pdt",
+          //   formula: '(("co_pdt"))',
+          //   caption: "PDT-Std CO",
+          //   format: "decimal2",
+          // },
           {
-            uniqueName: "break_pdt",
-            formula: "((\"break_pdt\"))",
-            caption: "Standard time",
+            uniqueName: "executing",
+            formula: '(("executing"))',
+            caption: "Running",
             format: "decimal2",
           },
           {
-            uniqueName: "updt_time",
-            formula: "(\"updt_time\")",
-            caption: "Power Off",
+            uniqueName: "total_sum_idle_time",
+            formula: '(("total_sum_idle_time"))',
+            caption: "Idle",
             format: "decimal2",
           },
-          {
-            uniqueName: "co_pdt",
-            formula: "((\"co_pdt\"))",
-            caption: "PDT-Std CO",
-            format: "decimal2",
-          },
-
           {
             uniqueName: "changeover_time",
-            formula: "(\"changeover_time\")",
+            formula: '("changeover_time")',
             caption: "Changeover",
             format: "decimal2",
           },
           {
-            uniqueName: "cleaning_part_fixing",
-            formula: "(\"cleaning_part_fixing\")",
-            caption: "Clean & part Fixing ",
-            format: "decimal2",
-          },
-          {
-            uniqueName: "setup_changeover",
-            formula: "(\"setup_changeover\")",
-            caption: "Setup Time",
+            uniqueName: "no_production_planned",
+            formula: '("no_production_planned")',
+            caption: "No Production Planned",
             format: "decimal2",
           },
           // {
+          //   uniqueName: "cleaning_part_fixing",
+          //   formula: '("cleaning_part_fixing")',
+          //   caption: "Clean & part Fixing ",
+          //   format: "decimal2",
+          // },
+          // {
+          //   uniqueName: "setup_changeover",
+          //   formula: '("setup_changeover")',
+          //   caption: "Setup Time",
+          //   format: "decimal2",
+          // },
+          // {
           //   uniqueName: "minor_fault_time",
-          //   formula: "((\"minor_fault_time\"))",
+          //   formula: '(("minor_fault_time"))',
           //   caption: "Minor Fault",
           //   format: "decimal2",
           // },
           // {
           //   uniqueName: "major_fault_time",
-          //   formula: "((\"major_fault_time\"))",
+          //   formula: '(("major_fault_time"))',
           //   caption: "Major Fault",
           //   format: "decimal2",
           // },
-          {
-            uniqueName: "total_fault_time",
-            formula: "((\"total_fault_time\"))",
-            caption: "Breakdowns",
-            format: "decimal2",
-          },
-
           // {
-          //   uniqueName: "minor_fault_time",
-          //   formula: "((\"minor_fault_time\"))",
-          //   caption: "Minor Fault Duration",
+          //   uniqueName: "total_fault_time",
+          //   formula: '(("total_fault_time"))',
+          //   caption: "Breakdowns",
           //   format: "decimal2",
           // },
-          {
-            uniqueName: "blocked_time",
-            formula: "((\"blocked_time\"))",
-            caption: "Downstream",
-            format: "decimal2",
-          },
+
+          // // {
+          // //   uniqueName: "minor_fault_time",
+          // //   formula: "((\"minor_fault_time\"))",
+          // //   caption: "Minor Fault Duration",
+          // //   format: "decimal2",
+          // // },
+          // {
+          //   uniqueName: "blocked_time",
+          //   formula: '(("blocked_time"))',
+          //   caption: "Downstream",
+          //   format: "decimal2",
+          // },
 
           // {
           //   uniqueName: "major_manual_stop_time",
-          //   formula: "((\"major_manual_stop_time\"))",
+          //   formula: '(("major_manual_stop_time"))',
           //   //formula: "(sum(\"major_manual_stop_time\"/60))",
           //   caption: "Major Manual stop Duration",
           //   format: "decimal2",
           // },
           // {
           //   uniqueName: "minor_manual_stop_time",
-          //   formula: "((\"minor_manual_stop_time\"))",
+          //   formula: '(("minor_manual_stop_time"))',
           //   caption: "Minor Manual stop Duration",
           //   format: "decimal2",
           // },
           // {
           //   uniqueName: "waiting_time",
-          //   formula: "((\"waiting_time\"))",
+          //   formula: '(("waiting_time"))',
           //   caption: "Waiting Time",
           //   format: "decimal2",
           // },
           // {
           //   uniqueName: "idle_time",
-          //   formula: "((\"idle_time\"))",
-          //   caption: "Noraml Idle Time",
+          //   formula: '(("idle_time"))',
+          //   caption: "Normal Idle Time",
           //   format: "decimal2",
           // },
 
-          {
-            uniqueName: "total_manual_stop_time",
-            formula: "((\"total_manual_stop_time\"))",
-            caption: "Idle time",
-            format: "decimal2",
-          },
+        
 
-          {
-            uniqueName: "roll_changeover",
-            formula: "((\"roll_changeover\"))",
-            caption: "Roll Change @4min",
-            format: "decimal2",
-          },
-          {
-            uniqueName: "speed_loss",
-            formula: "((\"speed_loss\"))",
-            //formula: "(((100-\"Performance\")*(\"Gross_Operating_Time\"/100)) - ((\"Waiting_Time\" + \"Blocked_Time\" + \"Major_Manual_Stop_Time\" + \"Minor_Fault_Time\" + \"Idle_Time\")))",
-            caption: "Speed Loss Time",
-            format: "decimal2",
-          },
-          {
-            uniqueName: "reject_time",
-            formula: "((\"reject_time\"))",
-            caption: "Process Reject",
-            format: "decimal2",
-          },
-          {
-            uniqueName: "productive_time",
-            formula: "((\"productive_time\"))",
-            //formula: "((\"Net_Operating_Time\") - (\"In_Process_Reject_Time\"))",
-            caption: "Productive Time",
-            format: "decimal2",
-          },
-          {
-            uniqueName: "executing",
-            formula: "((\"executing\"))",
-            caption: "Running Time",
-            format: "decimal2",
-          },
+          // {
+          //   uniqueName: "roll_changeover",
+          //   formula: '(("roll_changeover"))',
+          //   caption: "Roll Change @4min",
+          //   format: "decimal2",
+          // },
+          // {
+          //   uniqueName: "speed_loss",
+          //   formula: '(("speed_loss"))',
+          //   //formula: "(((100-\"Performance\")*(\"Gross_Operating_Time\"/100)) - ((\"Waiting_Time\" + \"Blocked_Time\" + \"Major_Manual_Stop_Time\" + \"Minor_Fault_Time\" + \"Idle_Time\")))",
+          //   caption: "Speed Loss Time",
+          //   format: "decimal2",
+          // },
+          // {
+          //   uniqueName: "reject_time",
+          //   formula: '(("reject_time"))',
+          //   caption: "Process Reject",
+          //   format: "decimal2",
+          // },
+          // {
+          //   uniqueName: "productive_time",
+          //   formula: '(("productive_time"))',
+          //   //formula: "((\"Net_Operating_Time\") - (\"In_Process_Reject_Time\"))",
+          //   caption: "Productive Time",
+          //   format: "decimal2",
+          // },
+         
 
-          {
-            uniqueName: "changeover_wastage_time",
-            formula: "((\"changeover_wastage_time\"))",
-            caption: "CO Wastage",
-            format: "decimal2",
-          },
+          // {
+          //   uniqueName: "changeover_wastage_time",
+          //   formula: '(("changeover_wastage_time"))',
+          //   caption: "CO Wastage",
+          //   format: "decimal2",
+          // },
 
-          {
-            uniqueName: "rated_speed",
-            formula: "average(\"rated_speed\")*60",//"(\"rated_speed\"*60)",
-            caption: "Rated Speed",
-            format: "decimal2",
-          },
-          {
-            uniqueName: "avg_Speed",
-            formula: "(\"goodCount\" + \"reject_count\")/((\"gross_operating_time\"-(\"idle_time\" + \"blocked_time\" + \"waiting_time\" + \"minor_fault_time\"+ \"minor_manual_stop_time\"))/60)",
-            caption: "Average Speed",
-            format: "44mvcoma1",
-          },
-          {
-            uniqueName: "gross_operating_time",
-            formula: "((\"gross_operating_time\"))",
-            //formula: "((\"Planned_Production_Time\") - (\"Changeover_Time\" -\"Major_Fault_Time\"))",
-            //aggregation:"sum",
-            caption: "Gross Operating Time",
-            format: "decimal2",
-          },
-          {
-            uniqueName: "planed_production_time",
-            formula: "(\"planed_production_time\")",
-            //formula: "(sum(\"Theoritical Production Time-PDT-UPDT\"))",
-            caption: "Planned Production Time",
-            format: "decimal2",
-          },
-          {
-            uniqueName: "net_operating_time",
-            formula: "(\"net_operating_time\")",
-            //formula: "(sum(\"Theoritical Production Time-PDT-UPDT\"))",
-            caption: "Net Operating Time",
-            format: "decimal2",
-          },
-        ]
+          // {
+          //   uniqueName: "rated_speed",
+          //   formula: 'average("rated_speed")*60', //"(\"rated_speed\"*60)",
+          //   caption: "Rated Speed",
+          //   format: "decimal2",
+          // },
+          // {
+          //   uniqueName: "avg_Speed",
+          //   formula:
+          //     '("goodCount" + "reject_count")/(("gross_operating_time"-("idle_time" + "blocked_time" + "waiting_time" + "minor_fault_time"))/60)',
+          //   caption: "Average Speed",
+          //   format: "44mvcoma1",
+          // },
+          // {
+          //   uniqueName: "gross_operating_time",
+          //   formula: '(("gross_operating_time"))',
+          //   //formula: "((\"Planned_Production_Time\") - (\"Changeover_Time\" -\"Major_Fault_Time\"))",
+          //   //aggregation:"sum",
+          //   caption: "Gross Operating Time",
+          //   format: "decimal2",
+          // },
+          // {
+          //   uniqueName: "planed_production_time",
+          //   formula: '("planed_production_time")',
+          //   //formula: "(sum(\"Theoritical Production Time-PDT-UPDT\"))",
+          //   caption: "Planned Production Time",
+          //   format: "decimal2",
+          // },
+          // {
+          //   uniqueName: "net_operating_time",
+          //   formula: '("net_operating_time")',
+          //   //formula: "(sum(\"Theoritical Production Time-PDT-UPDT\"))",
+          //   caption: "Net Operating Time",
+          //   format: "decimal2",
+          // },
+        ],
+        
       },
 
       formats: [
         {
           name: "decimal2",
           decimalPlaces: 2,
-          textAlign: "center"
+          textAlign: "center",
         },
         {
           name: "decimal0",
           decimalPlaces: 1,
-          textAlign: "center"
+          textAlign: "center",
         },
         {
           name: "44mvcoma",
@@ -1791,7 +1838,7 @@ export class OutputReportComponent implements OnInit {
           nullValue: "0",
           textAlign: "center",
           infinityValue: "0",
-          divideByZeroValue: "0"
+          divideByZeroValue: "0",
         },
         {
           name: "44mvcoma1",
@@ -1803,8 +1850,8 @@ export class OutputReportComponent implements OnInit {
           nullValue: "",
           textAlign: "center",
           infinityValue: "0",
-          divideByZeroValue: "0"
-        }
+          divideByZeroValue: "0",
+        },
       ],
       conditions: [
         {
@@ -1815,8 +1862,7 @@ export class OutputReportComponent implements OnInit {
             color: "#000000",
             fontFamily: "Arial",
             fontSize: "12px",
-
-          }
+          },
         },
         {
           formula: "#value > 75",
@@ -1826,8 +1872,7 @@ export class OutputReportComponent implements OnInit {
             color: "#000000",
             fontFamily: "Arial",
             fontSize: "12px",
-
-          }
+          },
         },
         {
           formula: "AND(#value >= 60, #value <= 75)",
@@ -1837,8 +1882,7 @@ export class OutputReportComponent implements OnInit {
             color: "#000000",
             fontFamily: "Arial",
             fontSize: "12px",
-
-          }
+          },
         },
         {
           formula: "#value < 95",
@@ -1847,8 +1891,8 @@ export class OutputReportComponent implements OnInit {
             backgroundColor: "#ffb5ab",
             color: "#000000",
             fontFamily: "Arial",
-            fontSize: "12px"
-          }
+            fontSize: "12px",
+          },
         },
         {
           formula: "#value > 98",
@@ -1858,8 +1902,7 @@ export class OutputReportComponent implements OnInit {
             color: "#000000",
             fontFamily: "Arial",
             fontSize: "12px",
-
-          }
+          },
         },
         {
           formula: "AND(#value >= 95, #value <= 98)",
@@ -1869,8 +1912,7 @@ export class OutputReportComponent implements OnInit {
             color: "#000000",
             fontFamily: "Arial",
             fontSize: "12px",
-
-          }
+          },
         },
         {
           formula: "#value < 80",
@@ -1880,8 +1922,7 @@ export class OutputReportComponent implements OnInit {
             color: "#000000",
             fontFamily: "Arial",
             fontSize: "12px",
-
-          }
+          },
         },
         {
           formula: "#value > 90",
@@ -1891,8 +1932,7 @@ export class OutputReportComponent implements OnInit {
             color: "#000000",
             fontFamily: "Arial",
             fontSize: "12px",
-
-          }
+          },
         },
         {
           formula: "AND(#value >= 80, #value <= 90)",
@@ -1902,8 +1942,7 @@ export class OutputReportComponent implements OnInit {
             color: "#000000",
             fontFamily: "Arial",
             fontSize: "12px",
-
-          }
+          },
         },
         {
           formula: "#value < 70",
@@ -1913,8 +1952,7 @@ export class OutputReportComponent implements OnInit {
             color: "#000000",
             fontFamily: "Arial",
             fontSize: "12px",
-
-          }
+          },
         },
         {
           formula: "#value > 80",
@@ -1924,8 +1962,7 @@ export class OutputReportComponent implements OnInit {
             color: "#000000",
             fontFamily: "Arial",
             fontSize: "12px",
-
-          }
+          },
         },
         {
           formula: "AND(#value >= 70, #value <= 80)",
@@ -1935,109 +1972,153 @@ export class OutputReportComponent implements OnInit {
             color: "#000000",
             fontFamily: "Arial",
             fontSize: "12px",
-          }
+          },
         },
-        // {
-        //   formula: "#value >=0",
-        //   measure: "total_fault_time",
-        //   format: {
-        //     backgroundColor: "#33cccc",
-        //     color: "#000000",
-        //     fontFamily: "Arial",
-        //     fontSize: "12px",
-        //   }
-        // },
-        // {
-        //   formula: "#value >=0",
-        //   measure: "blocked_time",
-        //   format: {
-        //     backgroundColor: "#33cccc",
-        //     color: "#000000",
-        //     fontFamily: "Arial",
-        //     fontSize: "12px",
-        //   }
-        // },
-        // {
-        //   formula: "#value >=0",
-        //   measure: "major_manual_stop_time",
-        //   format: {
-        //     backgroundColor: "#c2f0f0",
-        //     color: "#000000",
-        //     fontFamily: "Arial",
-        //     fontSize: "11px",
-        //   }
-        // },
-        // {
-        //   formula: "#value >=0",
-        //   measure: "minor_manual_stop_time",
-        //   format: {
-        //     backgroundColor: "#c2f0f0",
-        //     color: "#000000",
-        //     fontFamily: "Arial",
-        //     fontSize: "11px",
-        //   }
-        // },
 
-        // {
-        //   formula: "#value >=0",
-        //   measure: "waiting_time",
-        //   format: {
-        //     backgroundColor: "#c2f0f0",
-        //     color: "#000000",
-        //     fontFamily: "Arial",
-        //     fontSize: "11px",
-        //   }
-        // },
-        // {
-        //   formula: "#value >=0",
-        //   measure: "idle_time",
-        //   format: {
-        //     backgroundColor: "#c2f0f0",
-        //     color: "#000000",
-        //     fontFamily: "Arial",
-        //     fontSize: "11px",
-        //   }
-        // },
-        // {
-        //   formula: "#value >=0",
-        //   measure: "total_manual_stop_time",
-        //   format: {
-        //     backgroundColor: "#33cccc",
-        //     color: "#000000",
-        //     fontFamily: "Arial",
-        //     fontSize: "12px",
-        //   }
-        // },
-        // {
-        //   formula: "#value >=0",
-        //   measure: "major_fault_time",
-        //   format: {
-        //     backgroundColor: "#c2f0f0",
-        //     color: "#000000",
-        //     fontFamily: "Arial",
-        //     fontSize: "11px",
-        //   }
-        // },
-        // {
-        //   formula: "#value >=0",
-        //   measure: "minor_fault_time",
-        //   format: {
-        //     backgroundColor: "#c2f0f0",
-        //     color: "#000000",
-        //     fontFamily: "Arial",
-        //     fontSize: "11px",
-        //   }
-        // },
-        // {
-        //   formula: "#value >=0",
-        //   measure: "total_fault_time",
-        //   format: {
-        //     backgroundColor: "#33cccc",
-        //     color: "#000000",
-        //     fontFamily: "Arial",
-        //     fontSize: "12px",
-        //   }
-        // },
+        {
+          formula: "#value >=0",
+          measure: "blocked_time",
+          format: {
+            backgroundColor: "#ffc95e",
+            color: "#000000",
+            fontFamily: "Arial",
+            fontSize: "12px",
+          },
+        },
+        {
+          formula: "#value >=0",
+          measure: "major_manual_stop_time",
+          format: {
+            backgroundColor: "#ffd1d1",
+            color: "#000000",
+            fontFamily: "Arial",
+            fontSize: "11px",
+          },
+        },
+        {
+          formula: "#value >=0",
+          measure: "minor_manual_stop_time",
+          format: {
+            backgroundColor: "#ffd1d1",
+            color: "#000000",
+            fontFamily: "Arial",
+            fontSize: "11px",
+          },
+        },
+
+        {
+          formula: "#value >=0",
+          measure: "waiting_time",
+          format: {
+            backgroundColor: "#ffd1d1",
+            color: "#000000",
+            fontFamily: "Arial",
+            fontSize: "11px",
+          },
+        },
+        {
+          formula: "#value >=0",
+          measure: "idle_time",
+          format: {
+            backgroundColor: "#ffd1d1",
+            color: "#000000",
+            fontFamily: "Arial",
+            fontSize: "11px",
+          },
+        },
+        {
+          formula: "#value >=0",
+          measure: "total_sum_idle_time",
+          format: {
+            backgroundColor: "#faacac",
+            color: "#000000",
+            fontFamily: "Arial",
+            fontSize: "12px",
+          },
+        },
+        {
+          formula: "#value >=0",
+          measure: "major_fault_time",
+          format: {
+            backgroundColor: "#c2f0f0",
+            color: "#000000",
+            fontFamily: "Arial",
+            fontSize: "11px",
+          },
+        },
+        {
+          formula: "#value >=0",
+          measure: "minor_fault_time",
+          format: {
+            backgroundColor: "#c2f0f0",
+            color: "#000000",
+            fontFamily: "Arial",
+            fontSize: "11px",
+          },
+        },
+        {
+          formula: "#value >=0",
+          measure: "total_fault_time",
+          format: {
+            backgroundColor: "#33cccc",
+            color: "#000000",
+            fontFamily: "Arial",
+            fontSize: "12px",
+          },
+        },
+
+        /// Changeover
+
+        {
+          formula: "#value >=-10000",
+          measure: "cleaning_part_fixing",
+          format: {
+            backgroundColor: "#d6d6b6",
+            color: "#000000",
+            fontFamily: "Arial",
+            fontSize: "11px",
+          },
+        },
+        {
+          formula: "#value >=-10000",
+          measure: "setup_changeover",
+          format: {
+            backgroundColor: "#d6d6b6",
+            color: "#000000",
+            fontFamily: "Arial",
+            fontSize: "11px",
+          },
+        },
+        {
+          formula: "#value >=0",
+          measure: "changeover_time",
+          format: {
+            backgroundColor: "#c2c29b",
+            color: "#000000",
+            fontFamily: "Arial",
+            fontSize: "12px",
+          },
+        },
+        {
+          formula: "#value >=0",
+          measure: "no_production_planned",
+          format: {
+            backgroundColor: "#f5baef",
+            color: "#000000",
+            fontFamily: "Arial",
+            fontSize: "12px",
+          },
+        },
+        {
+          formula: "#value >=0",
+          measure: "executing",
+          format: {
+            backgroundColor: "#b9fa98",
+            color: "#000000",
+            fontFamily: "Arial",
+            fontSize: "12px",
+          },
+        },
       ],
 
       // tableSizes: {
@@ -2049,7 +2130,7 @@ export class OutputReportComponent implements OnInit {
       //     }
       //   ]
       // }
-    }
+    };
 
     this.child.webDataRocks.setReport(setReportType);
     this.createAndUpdateChart_waterfall_linewise('higchartcontainer-waterfall');
@@ -2075,8 +2156,8 @@ export class OutputReportComponent implements OnInit {
 
     this.child.webDataRocks.exportTo(
       "Excel", {
-      filename: "Output" + moment(D.start).format("yyyy-MM"),
-      excelSheetName: "Output Report",
+      filename: "Management" + moment(D.start).format("yyyy-MM"),
+      excelSheetName: "Management Report",
       destinationType: "file",
       url: "URL to server script saving the file"
 
@@ -2091,8 +2172,8 @@ export class OutputReportComponent implements OnInit {
 
     this.child.webDataRocks.exportTo(
       "pdf", {
-      filename: "Output" + moment(D.start).format("yyyy-MM"),
-      header: "Output Report",
+      filename: "Management" + moment(D.start).format("yyyy-MM"),
+      header: "Management Report",
       destinationType: "file",
       url: "URL to server script saving the file"
 

@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { ReportsComponent } from './reports.component';
 import { OutputReportComponent } from './output-report/output-report.component';
 import { OutputTest7Component } from './output-test7/output-test7.component';
+import { ManagementReportComponent } from './management-report/management-report.component';
 const routes: Routes = [
  
   {
@@ -25,6 +26,12 @@ const routes: Routes = [
         component: OutputTest7Component ,
         pathMatch: 'full'
       },
+      {
+        path: 'management-report',
+        component: ManagementReportComponent ,
+        pathMatch: 'full'
+      },
+      
     ]
   }
 ];
