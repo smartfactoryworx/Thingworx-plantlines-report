@@ -289,19 +289,11 @@ var HighCharts_PlotOptions4 = {
 
 
 @Component({
-  selector: 'app-output-test7',
-  templateUrl: './output-test7.component.html',
-  styleUrls: ['./output-test7.component.scss'],
-  // providers: [
-  //   {
-  //     provide: DateAdapter,
-  //     useClass: MomentDateAdapter,
-  //     deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
-  //   },
-  //   { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
-  // ]
+  selector: 'app-daywise-report',
+  templateUrl: './daywise-report.component.html',
+  styleUrls: ['./daywise-report.component.scss']
 })
-export class OutputTest7Component implements OnInit {
+export class DaywiseReportComponent implements OnInit{
   @ViewChild("pivot1") child: WebDataRocksPivot;
   @ViewChild("pivot2") child2: WebDataRocksPivot;
 
@@ -2168,12 +2160,12 @@ export class OutputTest7Component implements OnInit {
     }
   }
   Export_Excel() {
-    var D = this.getMonthDateRange(moment(this.date.value).format("YYYY"), moment(this.date.value).format("MM"));
-
+   
+    var lineName = this.dataSourceService.lineName.split("/");
     this.child.webDataRocks.exportTo(
       "Excel", {
-      filename: "Output" + moment(D.start).format("yyyy-MM"),
-      excelSheetName: "Output Report",
+      filename: "Daywise Output Report_" + moment(this.date.value).format("yyyy-MM-DD")+  "_" + lineName[0],
+      excelSheetName: moment(this.date.value).format("yyyy-MM-DD") +  " / " + this.dataSourceService.lineName, 
       destinationType: "file",
       url: "URL to server script saving the file"
 
@@ -2184,12 +2176,12 @@ export class OutputTest7Component implements OnInit {
     );
   }
   Export_PDF() {
-    var D = this.getMonthDateRange(moment(this.date.value).format("YYYY"), moment(this.date.value).format("MM"));
-
+  
+    var lineName = this.dataSourceService.lineName.split("/");
     this.child.webDataRocks.exportTo(
       "pdf", {
-      filename: "Fault" + moment(D.start).format("yyyy-MM"),
-      header: "Fault Report",
+      filename: "Daywise Output Report_" + moment(this.date.value).format("yyyy-MM-DD")+  "_" + lineName[0],
+      header: "Daywise Output Report" +" / " + moment(this.date.value).format("yyyy-MM-DD") +  " / " + this.dataSourceService.lineName, 
       destinationType: "file",
       url: "URL to server script saving the file"
 
@@ -2584,4 +2576,3 @@ export class OutputTest7Component implements OnInit {
 
 
 }
-

@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { OutputTest7Component } from './output-test7.component';
+import { DaywiseReportComponent } from './daywise-report.component';
 
-describe('OutputTest7Component', () => {
-  let component: OutputTest7Component;
-  let fixture: ComponentFixture<OutputTest7Component>;
+describe('DaywiseReportComponent', () => {
+  let component: DaywiseReportComponent;
+  let fixture: ComponentFixture<DaywiseReportComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ OutputTest7Component ]
+      declarations: [ DaywiseReportComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(OutputTest7Component);
+    fixture = TestBed.createComponent(DaywiseReportComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

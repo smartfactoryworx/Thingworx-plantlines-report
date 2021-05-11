@@ -2072,11 +2072,11 @@ export class OutputReportComponent implements OnInit {
 
   Export_Excel() {
     var D = this.getMonthDateRange(moment(this.date.value).format("YYYY"), moment(this.date.value).format("MM"));
-
+    var lineName = this.dataSourceService.lineName.split("/");
     this.child.webDataRocks.exportTo(
       "Excel", {
-      filename: "Output" + moment(D.start).format("yyyy-MM"),
-      excelSheetName: "Output Report",
+      filename: "Output_" + moment(D.start).format("yyyy-MM") + "_" + lineName[0],
+      excelSheetName:  moment(D.start).format("yyyy-MM") + " / " + this.dataSourceService.lineName,
       destinationType: "file",
       url: "URL to server script saving the file"
 
@@ -2088,11 +2088,11 @@ export class OutputReportComponent implements OnInit {
   }
   Export_PDF() {
     var D = this.getMonthDateRange(moment(this.date.value).format("YYYY"), moment(this.date.value).format("MM"));
-
+    var lineName = this.dataSourceService.lineName.split("/");
     this.child.webDataRocks.exportTo(
       "pdf", {
-      filename: "Output" + moment(D.start).format("yyyy-MM"),
-      header: "Output Report",
+      filename: "Output_" + moment(D.start).format("yyyy-MM") + "_" + lineName[0],
+      header: "Output Report /" + moment(D.start).format("yyyy-MM")  + " / " + this.dataSourceService.lineName,
       destinationType: "file",
       url: "URL to server script saving the file"
 

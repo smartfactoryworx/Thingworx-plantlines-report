@@ -8,8 +8,9 @@ import { ReportsRoutingModule } from './reports-routing.module';
 import { ReportsComponent } from './reports.component';
 import { SharedModule } from '../shared/shared.module';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
-import { OutputTest7Module } from './output-test7/output-test7.module';
+
 import { ManagementReportModule } from './management-report/management-report.module';
+import { DaywiseReportModule } from './daywise-report/daywise-report.module';
 
 
 
@@ -21,8 +22,8 @@ import { ManagementReportModule } from './management-report/management-report.mo
     SharedModule,
     GoogleChartsModule.forRoot(),
     OutputReportModule,
-    OutputTest7Module,
-    ManagementReportModule
+    ManagementReportModule,
+    DaywiseReportModule
   ],
   providers:[
     { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },

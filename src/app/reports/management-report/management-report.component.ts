@@ -2153,11 +2153,11 @@ export class ManagementReportComponent implements OnInit {
 
   Export_Excel() {
     var D = this.getMonthDateRange(moment(this.date.value).format("YYYY"), moment(this.date.value).format("MM"));
-
+    var lineName = this.dataSourceService.lineName.split("/");
     this.child.webDataRocks.exportTo(
       "Excel", {
-      filename: "Management" + moment(D.start).format("yyyy-MM"),
-      excelSheetName: "Management Report",
+      filename: "Management"  + "_"  + moment(D.start).format("yyyy-MM") + "_" + lineName[0],
+      excelSheetName:   moment(D.start).format("yyyy-MM") + " / " + this.dataSourceService.lineName,
       destinationType: "file",
       url: "URL to server script saving the file"
 
@@ -2169,11 +2169,11 @@ export class ManagementReportComponent implements OnInit {
   }
   Export_PDF() {
     var D = this.getMonthDateRange(moment(this.date.value).format("YYYY"), moment(this.date.value).format("MM"));
-
+    var lineName = this.dataSourceService.lineName.split("/");
     this.child.webDataRocks.exportTo(
       "pdf", {
-      filename: "Management" + moment(D.start).format("yyyy-MM"),
-      header: "Management Report",
+      filename: "Management"  + "_"  + moment(D.start).format("yyyy-MM") + "_" + lineName[0],
+      header: "Management Report" + " / " +  moment(D.start).format("yyyy-MM") + " / " + this.dataSourceService.lineName,
       destinationType: "file",
       url: "URL to server script saving the file"
 

@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ReportsComponent } from './reports.component';
 import { OutputReportComponent } from './output-report/output-report.component';
-import { OutputTest7Component } from './output-test7/output-test7.component';
+import { DaywiseReportComponent } from './daywise-report/daywise-report.component';
 import { ManagementReportComponent } from './management-report/management-report.component';
 const routes: Routes = [
  
@@ -23,7 +23,7 @@ const routes: Routes = [
       },
       {
         path: 'multiline-output-report',
-        component: OutputTest7Component ,
+        component: DaywiseReportComponent ,
         pathMatch: 'full'
       },
       {

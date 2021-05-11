@@ -10,17 +10,19 @@ import { Router } from '@angular/router';
 export class ManualEntryService {
     path;
     public lineId;
+    public lineName;
     constructor(private httpClient: HttpClient, private lineViewService: LineViewService,    private router: Router) {
         this.path = this.getLineId();
         this.lineId = this.lineViewService.path2LineID(this.path);
-        console.log(this.lineId, 'ghostly')
-    
+        this.lineName = this.lineViewService.path2LineName(this.path);
+        console.log(this.lineId, 'ghostly');
+        console.log(this.lineName, 'ABXXX');
     }
 
     getLineId() {
         let exactLineRoute = '';
         const lineRoute = this.router.url.split('/');
-        // console.log(lineRoute, lineRoute.length, "Novo")
+        console.log(lineRoute, lineRoute.length, "Novoppppppp")
         for (let i = 1; i < 6; i++) {
           exactLineRoute += '/' + lineRoute[i]
     

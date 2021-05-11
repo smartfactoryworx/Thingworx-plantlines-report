@@ -13,7 +13,8 @@ export class LineViewService {
   line: string;
   lineQuery = 'line_id=5f0809fdc2b1ce30cc53eb8d';
   lines: any = {};
-  dataLoaded= false;
+  linesNames: any = {};
+  dataLoaded = false;
 
   constructor(
     public httpClient: HttpClient,
@@ -54,7 +55,9 @@ export class LineViewService {
                 plant.lines.forEach((line: any) => {
                   const route = route5 + '/' + line.line_code.toLowerCase()
                   this.lines[route] = line._id;
-                  // console.log(this.lines[route], 'Final')
+                  this.linesNames[route] = line.line_name + ' / ' + plant.plant_name + ' / ' + location.location_name;
+                  console.log(this.linesNames);
+                  console.log(this.lines[route], 'Final');
                 });
               });
             });
@@ -69,7 +72,7 @@ export class LineViewService {
     })
   }
 
-  getData () {
+  getData() {
     this.httpClient.get('https://abc.smartfactoryworx.tech/v1/api').subscribe(d => {
       console.log(d);
     })
@@ -77,14 +80,26 @@ export class LineViewService {
 
 
   path2LineID(path) {
-    // console.log(path,'final')
-    console.log(this.lines, this.lines[path],'Final')
-    if(this.lines && this.lines[path]) {
-      // console.log(this.lines,"path2LineID");
+    console.log(path, 'final')
+    console.log(this.lines, this.lines[path], 'Final')
+    if (this.lines && this.lines[path]) {
+      console.log(this.lines, "path2LineID");
       return this.lines[path];
-     
+
     } else {
       this.router.navigate['/404']
     }
   }
+
+  path2LineName(path) {
+    console.log(path, 'final')
+    console.log(this.linesNames, this.linesNames[path], 'Final')
+    if (this.linesNames && this.linesNames[path]) {
+      console.log(this.linesNames, "path2LineID");
+      return this.linesNames[path];
+    } else {
+      this.router.navigate['/404']
+    }
+  }
+
 }
