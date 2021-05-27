@@ -330,8 +330,8 @@
 </div>
 <div *ngIf="OutputData?.length > 0" fxLayout="column" style="width: 99%;" fxLayoutAlign="center">
     <div>
-        <button mat-raised-button color="primary" (click)="Export_Excel()" class="btn">Export to Excel</button>&nbsp;
-        <button mat-raised-button color="primary" (click)="Export_PDF()" class="btn">Export to PDF</button>
+        <button mat-raised-button color="primary" (click)="Export_Excel()">Export to Excel</button>&nbsp;
+        <button mat-raised-button color="primary" (click)="Export_PDF()" >Export to PDF</button>
     </div>
 
     <div *ngIf="OutputData?.length > 0" fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap

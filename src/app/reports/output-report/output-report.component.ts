@@ -117,7 +117,7 @@ interface Filter {
 var HighCharts_ColorsType1 = ['#FFE66D', '#4ECDC4', '#1A535C', '#FF6B6B', '#64E572', '#FF9655', '#FFF263', '#6AF9C4']
 var HighCharts_ColorsType2 = ["#32cd32", "rgb(254,1,1)", "rgb(163, 163, 117)", "rgb(255, 51, 204)",]
 
-var HighCharts_ColorsType3 =  ['#4ECDC4', '#1A535C', '#FF6B6B', '#64E572', '#FF9655', '#FFF263', '#6AF9C4']
+var HighCharts_ColorsType3 = ['#4ECDC4', '#1A535C', '#FF6B6B', '#64E572', '#FF9655', '#FFF263', '#6AF9C4']
 var HighCharts_yAxisOptions1 = {
   labels: { formatter: undefined },
   plotLines: [{}]
@@ -160,6 +160,9 @@ var HighCharts_yAxisOptions4 = {
 }
 
 var HighCharts_yAxisOptions5 = {
+  title: {
+    enabled: false
+  },
   labels: {
 
     formatter: function () {
@@ -167,7 +170,7 @@ var HighCharts_yAxisOptions5 = {
       return value.toFixed(0);
     },
   },
-  plotLines: [{ }]
+  plotLines: [{}]
 }
 var HighCharts_xAxisOptions2 = {
   labels: {
@@ -257,9 +260,19 @@ var HighCharts_PlotOptions4 = {
   // column: {
   //   stacking: 'normal',
   //   dataLabels: {
-  //     enabled: true
-  //   }
-  // },
+  //     enabled: true,
+  //     allowOverlap: false,
+  //     formatter: function () {
+  //       let value = (this.y) / 3600;
+  //       return '' + value.toFixed(0);
+  //     }
+  //   },
+  //   dataSorting: {
+  //     enabled: false,
+  //   },
+  //   tooltip: { valueDecimals: 0 },
+
+  //  },
   series: {
 
     borderWidth: 0,
@@ -279,21 +292,21 @@ var HighCharts_PlotOptions4 = {
   }
 }
 var HighCharts_PlotOptions6 = {
-series: {
-  stacking: undefined,
-  borderWidth: 0,
-  dataLabels: {
-    enabled: true,
-    formatter: function () {
-      let value = (this.y);
-      return '' + value.toFixed(0);
-    }
-  },
-  dataSorting: {
-    enabled: false, matchByName: true, sortKey: 'OEE'
-  },
- 
-}
+  series: {
+    stacking: undefined,
+    dataLabels: {
+      enabled: true,
+      formatter: function () {
+        let value = (this.y);
+        return '' + value.toFixed(0);
+      },
+     
+    },
+    dataSorting: {
+      enabled: false, matchByName: true, sortKey: 'OEE'
+    },
+
+  }
 }
 @Component({
   selector: 'app-output-report',
@@ -455,10 +468,10 @@ export class OutputReportComponent implements OnInit {
     var D = this.getMonthDateRange(moment(this.date.value).format("YYYY"), moment(this.date.value).format("MM"));
     //this.dataSourceService.GetServerAPIPath().subscribe((apipath: any) => {
     // console.log('https://int91mat11.smartfactoryworx.tech' + '/api/report/chart?startDate=' + moment(D.start).format("yyyy-MM-DD") + '&endDate=' + moment(D.end).format("yyyy-MM-DD") + '&line_id=' + line_Id);
-    console.log('/api/report/chart?startDate=' + moment(D.start).format("yyyy-MM-DD") + '&endDate=' + moment(D.end).format("yyyy-MM-DD"),"AMBER" );
-    this.dataSourceService.GetOutputData(moment(D.start).format("yyyy-MM-DD"),moment(D.end).format("yyyy-MM-DD"), line_Id).subscribe((data: any) => {
-     
-      console.log(data,"AMBER")
+    console.log('/api/report/chart?startDate=' + moment(D.start).format("yyyy-MM-DD") + '&endDate=' + moment(D.end).format("yyyy-MM-DD"), "AMBER");
+    this.dataSourceService.GetOutputData(moment(D.start).format("yyyy-MM-DD"), moment(D.end).format("yyyy-MM-DD"), line_Id).subscribe((data: any) => {
+
+      console.log(data, "AMBER")
 
       var d = data;
       for (let i = 0; i < d.length; i++) {
@@ -576,22 +589,25 @@ export class OutputReportComponent implements OnInit {
       [{ uniqueName: "OEE", formula: "((\"productive_time\")/(\"planed_production_time\"))*100", caption: "OEE (%)", format: "44mvcoma", },], "column", false,
       true, HighCharts_xAxisOptions1, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-oee", false, false, false, "");
 
-    //combined_eventHistory
-    this.createGoogleBarChart(HighCharts_ColorsType2, "month", "Month", "",
-      [{ uniqueName: "executing", formula: "((\"executing\"))", caption: "Running Time", format: "decimal2", },
-      { uniqueName: "total_sum_idle_time", formula: "((\"total_sum_idle_time\"))", caption: "Idle time", format: "decimal2", },
-      { uniqueName: "changeover_time", formula: "((\"changeover_time\"))", caption: "Changeover", format: "decimal2", },
-      { uniqueName: "no_production_planned", formula: "(\"no_production_planned\")", caption: "No Production Planned", format: "decimal2", },],
-      "column", false, true, HighCharts_xAxisOptions1, HighCharts_yAxisOptions3, HighCharts_PlotOptions4, "highChartContainer-Combined-EventHistory", true, true, true, "Event History(in Hours)");
-    this.createGoogleBarChart_Combined_eventHistory_Pie();
-    
+    this.createAndUpdateChart_eventHistory('higchartcontainer-eventhistory');
+
+
+
     //batchwise_performance
     this.createGoogleBarChart(HighCharts_ColorsType3, "batch_name", "Batch", "",
-    [{uniqueName: "Availability_Graph",formula: "((\"gross_operating_time\"/60) / (\"planed_production_time\"/60))*100",
-      caption: "A",format: "44mvcoma",},{uniqueName: "Performance_Graph",formula: "((\"net_operating_time\"/60) / (\"gross_operating_time\"/60))*100",
-      caption: "P",format: "44mvcoma",},{uniqueName: "Quality_Graph",formula: "((\"productive_time\"/60) / (\"net_operating_time\"/60))*100",
-      caption: "Q",format: "44mvcoma",},{uniqueName: "OEE",formula: "((\"productive_time\"/60)/(\"planed_production_time\"/60))*100",
-      caption: "OEE",format: "44mvcoma",},], "column", false,true, HighCharts_xAxisOptions1, HighCharts_yAxisOptions5, HighCharts_PlotOptions6, "highchartsContainer-Batchwise-Performance", false, true, true, "Batch Wise Performance (in %)");
+      [{
+        uniqueName: "Availability_Graph", formula: "((\"gross_operating_time\"/60) / (\"planed_production_time\"/60))*100",
+        caption: "A", format: "44mvcoma",
+      }, {
+        uniqueName: "Performance_Graph", formula: "((\"net_operating_time\"/60) / (\"gross_operating_time\"/60))*100",
+        caption: "P", format: "44mvcoma",
+      }, {
+        uniqueName: "Quality_Graph", formula: "((\"productive_time\"/60) / (\"net_operating_time\"/60))*100",
+        caption: "Q", format: "44mvcoma",
+      }, {
+        uniqueName: "OEE", formula: "((\"productive_time\"/60)/(\"planed_production_time\"/60))*100",
+        caption: "OEE", format: "44mvcoma",
+      },], "column", false, true, HighCharts_xAxisOptions1, HighCharts_yAxisOptions5, HighCharts_PlotOptions6, "highchartsContainer-Batchwise-Performance", false, true, true, "Batch Wise Performance (in %)");
 
   }
 
@@ -662,7 +678,7 @@ export class OutputReportComponent implements OnInit {
       console.log("running_time_data" + running_time_data);
       console.log(all_sum);
 
-      let perc_running: number, perc_idle: number, perc_changeover: number,  perc_noproduction: number
+      let perc_running: number, perc_idle: number, perc_changeover: number, perc_noproduction: number
 
       perc_running = (running_time_data / all_sum) * 100;
       perc_idle = (idle_time_data / all_sum) * 100;
@@ -700,7 +716,7 @@ export class OutputReportComponent implements OnInit {
               distance: -30,
               color: 'white',
               format: '{point.percentage:.1f} %'
-          },
+            },
             // dataLabels: {
             //   enabled: false,
             //   format: '<b>{point.name}</b>: {point.percentage:.1f} %'
@@ -1039,10 +1055,10 @@ export class OutputReportComponent implements OnInit {
       this.createGoogleBarChart(HighCharts_ColorsType2, "month", "Month", "",
         [{ uniqueName: "executing", formula: "((\"executing\"))", caption: "Running Time", format: "decimal2", },
         { uniqueName: "total_sum_idle_time", formula: "((\"total_sum_idle_time\"))", caption: "Idle time", format: "decimal2", },
-        { uniqueName: "changeover_time", formula: "((\"changeover_time\"))", caption: "Changeover Time", format: "decimal2", },
+        { uniqueName: "changeover_time", formula: "((\"changeover_time\"))", caption: "Changeover", format: "decimal2", },
         { uniqueName: "no_production_planned", formula: "(\"no_production_planned\")", caption: "No Production Planned", format: "decimal2", },],
-        "column", false, true, HighCharts_xAxisOptions1, HighCharts_yAxisOptions2, HighCharts_PlotOptions4, "highChartContainer-Combined-EventHistory", true, true, true, "Event History(in Hours)");
-
+        "column", false, true, HighCharts_xAxisOptions1, HighCharts_yAxisOptions3, HighCharts_PlotOptions4, "highChartContainer-Combined-EventHistory", true, true, true, "Event History(in Hours)");
+      this.createGoogleBarChart_Combined_eventHistory_Pie();
     } else {
       this.createAndUpdateChart_eventHistory('higchartcontainer-eventhistory');
     }
@@ -1556,7 +1572,7 @@ export class OutputReportComponent implements OnInit {
           {
             uniqueName: "Availability",
             formula: "((\"gross_operating_time\") / (\"planed_production_time\"))*100",
-            caption:"A" ,
+            caption: "A",
             format: "44mvcoma",
           },
           {
@@ -2072,7 +2088,7 @@ export class OutputReportComponent implements OnInit {
     this.child.webDataRocks.exportTo(
       "Excel", {
       filename: "Output_" + moment(D.start).format("yyyy-MM") + "_" + lineName[0],
-      excelSheetName:  moment(D.start).format("yyyy-MM") + " / " + this.dataSourceService.lineName,
+      excelSheetName: moment(D.start).format("yyyy-MM") + " / " + this.dataSourceService.lineName,
       destinationType: "file",
       url: "URL to server script saving the file"
 
@@ -2088,7 +2104,7 @@ export class OutputReportComponent implements OnInit {
     this.child.webDataRocks.exportTo(
       "pdf", {
       filename: "Output_" + moment(D.start).format("yyyy-MM") + "_" + lineName[0],
-      header: "Output Report /" + moment(D.start).format("yyyy-MM")  + " / " + this.dataSourceService.lineName,
+      header: "Output Report /" + moment(D.start).format("yyyy-MM") + " / " + this.dataSourceService.lineName,
       destinationType: "file",
       url: "URL to server script saving the file"
 
@@ -2389,11 +2405,11 @@ export class OutputReportComponent implements OnInit {
   exportHTMLtoPDF() {
     console.log("exportHTMLtoPDF");
     const options = {
-      filename:'myfile.pdf',
-      image:{type: 'jpeg'},
-      html2canvas:{},
-      jsPDF:{unit: 'in', format: 'legal',orientation:'landscape'},
-     
+      filename: 'myfile.pdf',
+      image: { type: 'jpeg' },
+      html2canvas: {},
+      jsPDF: { unit: 'in', format: 'legal', orientation: 'landscape' },
+
     }
 
     var element = document.getElementById('element-to-print');

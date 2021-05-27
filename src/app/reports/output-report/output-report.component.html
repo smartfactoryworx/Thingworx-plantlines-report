@@ -16,7 +16,7 @@
                     <mat-form-field appearance="fill" fxFlex="35" style="margin-right: 5%;">
                         <mat-select (selectionChange)="getLine($event.value)" formControlName="line_id">
                             <mat-option *ngFor="let line of LinesData" [value]="line.lineid">
-                                {{line.linename}}
+                                {{line.linename}}({{line.plantname}}/{{line.locationname}})
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
@@ -163,11 +163,20 @@
     </tabs>
     <div class="html2pdf__page-break"></div>
     <tabs tabTitle="Event History" class="gb" (currentTabChange)="eventHistoryTabClick($event.tabTitle)">
+        <tab [tabTitle]="lineId">
+            <div fxLayout="row" style="width: 100%;" fxLayout.xs="" fxLayoutWrap fxLayoutAlign="space-around center"
+                fxFlex="99">
+
+                <div [id]="'higchartcontainer-eventhistory'" style="height:400px; padding-top:1px;background: url('/../../../assets/images/chartLoader.gif')  no-repeat center ;background-size: 70px 70px;" fxFlex="100">
+                </div>
+            </div>
+
+        </tab>
         <tab tabTitle="Combined">
             <div fxLayout="row" style="width: 50%;" fxLayout.xs="column" fxLayoutWrap
                 fxLayoutAlign="space-around center" fxFlex="99">
                 <div id="highChartContainer-Combined-EventHistory"
-                    style="height:400px; padding-top:1px;background: url('/../../../assets/images/chartLoader.gif')  no-repeat center ;background-size: 70px 70px;"
+                    style="height:400px; padding-top:1px;"
                     fxFlex="100">
                 </div>
             </div>
@@ -175,22 +184,11 @@
             <div fxLayout="row" style="width: 50%;" fxLayout.xs="column" fxLayoutWrap
                 fxLayoutAlign="space-around center" fxFlex="99">
                 <div id="highChartContainer-Combined-EventHistory-Pie"
-                    style="height:400px; padding-top:1px;background: url('/../../../assets/images/chartLoader.gif')  no-repeat center ;background-size: 70px 70px;;"
+                    style="height:400px; padding-top:1px;"
                     fxFlex="100">
                 </div>
             </div>
         </tab>
-
-        <tab [tabTitle]="lineId">
-            <div fxLayout="row" style="width: 100%;" fxLayout.xs="" fxLayoutWrap fxLayoutAlign="space-around center"
-                fxFlex="99">
-
-                <div [id]="'higchartcontainer-eventhistory'" style="height:400px; padding-top:1px;" fxFlex="100">
-                </div>
-            </div>
-
-        </tab>
-
     </tabs>
     <div class="html2pdf__page-break"></div>
     <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap fxLayoutAlign="space-around center"
