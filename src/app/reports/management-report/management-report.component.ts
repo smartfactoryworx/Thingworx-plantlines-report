@@ -2157,7 +2157,7 @@ export class ManagementReportComponent implements OnInit {
     this.child.webDataRocks.exportTo(
       "Excel", {
       filename: "Management"  + "_"  + moment(D.start).format("yyyy-MM") + "_" + lineName[0],
-      excelSheetName:   moment(D.start).format("yyyy-MM") + " / " + this.dataSourceService.lineName,
+      excelSheetName:   moment(D.start).format("yyyy-MM") + "_" +lineName[0],
       destinationType: "file",
       url: "URL to server script saving the file"
 

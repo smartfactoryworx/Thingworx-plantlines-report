@@ -1803,7 +1803,7 @@ export class OutputReport1Component implements OnInit {
           name: "44mvcoma1",
           thousandsSeparator: " ",
           decimalSeparator: ".",
-          decimalPlaces: 2,
+          decimalPlaces: 0,
           // currencySymbol: "%",
           currencySymbolAlign: "right",
           nullValue: "",
@@ -2115,7 +2115,7 @@ export class OutputReport1Component implements OnInit {
     this.child.webDataRocks.exportTo(
       "Excel", {
       filename: "Output_" + moment(D.start).format("yyyy-MM") + "_" + lineName[0],
-      excelSheetName:  moment(D.start).format("yyyy-MM") + " / " + this.dataSourceService.lineName,
+      excelSheetName:  moment(D.start).format("yyyy-MM")+"_"+ lineName[0],
       destinationType: "file",
       url: "URL to server script saving the file"
 

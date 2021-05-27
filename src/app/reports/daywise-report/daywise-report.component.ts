@@ -1206,7 +1206,7 @@ export class DaywiseReportComponent implements OnInit{
           name: "44mvcoma1",
           thousandsSeparator: " ",
           decimalSeparator: ".",
-          decimalPlaces: 2,
+          decimalPlaces: 0,
           // currencySymbol: "%",
           currencySymbolAlign: "right",
           nullValue: "",
@@ -2170,8 +2170,8 @@ export class DaywiseReportComponent implements OnInit{
     var lineName = this.dataSourceService.lineName.split("/");
     this.child.webDataRocks.exportTo(
       "Excel", {
-      filename: "Daywise Output Report_" + moment(this.date.value).format("yyyy-MM-DD")+  "_" + lineName[0],
-      excelSheetName: moment(this.date.value).format("yyyy-MM-DD") +  " / " + this.dataSourceService.lineName, 
+      filename: "Daywise Output Report_" + moment(this.date.value).format("yyyy-MM-DD"),
+      excelSheetName: moment(this.date.value).format("yyyy-MM-DD"), 
       destinationType: "file",
       url: "URL to server script saving the file"
 
