@@ -2114,7 +2114,7 @@ export class OutputReport1Component implements OnInit {
     var lineName = this.dataSourceService.lineName.split("/");
     this.child.webDataRocks.exportTo(
       "Excel", {
-      filename: "Output_" + moment(D.start).format("yyyy-MM") + "_" + lineName[0],
+      filename: "Output_" + moment(D.start).format("yyyy-MM") + "_" + this.dataSourceService.lineName,
       excelSheetName:  moment(D.start).format("yyyy-MM")+"_"+ lineName[0],
       destinationType: "file",
       url: "URL to server script saving the file"

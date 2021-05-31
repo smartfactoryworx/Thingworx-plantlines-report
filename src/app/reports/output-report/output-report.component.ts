@@ -2085,9 +2085,11 @@ export class OutputReportComponent implements OnInit {
   Export_Excel() {
     var D = this.getMonthDateRange(moment(this.date.value).format("YYYY"), moment(this.date.value).format("MM"));
     var lineName = this.dataSourceService.lineName.split("/");
+    console.log(lineName,"lineName........");
     this.child.webDataRocks.exportTo(
       "Excel", {
-      filename: "Output_" + moment(D.start).format("yyyy-MM") + "_" + lineName[0],
+   //     Month / date / line hall Category
+      filename: "Output_" + moment(D.start).format("yyyy-MM") + "_" + this.dataSourceService.lineName,
     
       header:moment(D.start).format("yyyy-MM") + " / " + this.dataSourceService.lineName,
       excelSheetName:  moment(D.start).format("yyyy-MM")+"_"+ lineName[0],
