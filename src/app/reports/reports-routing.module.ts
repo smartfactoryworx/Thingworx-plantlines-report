@@ -15,26 +15,26 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'output-report',
+        redirectTo: 'output-V2',
         pathMatch: 'full'
       },
       {
-        path: 'output-report',
+        path: 'output-V2',
         component: OutputReportComponent ,
         pathMatch: 'full'
       },
       {
-        path: 'multiline-output-report',
+        path: 'multiline-output',
         component: DaywiseReportComponent ,
         pathMatch: 'full'
       },
       {
-        path: 'management-report',
+        path: 'management',
         component: ManagementReportComponent ,
         pathMatch: 'full'
       },
       {
-        path: 'output-report1',
+        path: 'output-V1',
         component: OutputReport1Component ,
         pathMatch: 'full'
       },
