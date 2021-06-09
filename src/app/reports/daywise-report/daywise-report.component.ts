@@ -186,14 +186,14 @@ export class DaywiseReportComponent implements OnInit {
   outputReport: FormGroup;
   lines = [];
   filters: Filter[] = [
-    { value: 'operatorwise', viewValue: 'Operator wise' },
+    { value: 'operator_name', viewValue: 'Operator wise' },
     // { value: 'datewise', viewValue: 'Date wise' },
-    { value: 'batchwise', viewValue: 'Batch wise' },
-    { value: 'shiftwise', viewValue: 'Shift wise' },
-    { value: 'productwise', viewValue: 'Product wise' }
+    { value: 'batch_name', viewValue: 'Batch wise' },
+    { value: 'shift', viewValue: 'Shift wise' },
+    { value: 'product', viewValue: 'Product wise' }
   ];
   public selected2 = this.filters[0].value;
-
+  public selected = this.filters[0].value;
   pivotTableReportComplete: boolean = false;
   Highcharts: typeof Highcharts = Highcharts;
 
@@ -248,45 +248,13 @@ export class DaywiseReportComponent implements OnInit {
 
   getFilterValue(value, line,) {
     console.log(value);
-
-    if (value === "operatorwise") {
-      //oee_operatorwise
-      this.createChart_kpi_linewise(line, 'higchartcontainer-control-' + line, 'operator_name', value, 'APQOEE');
-    }
-    else if (value === "batchwise") {
-      //oee_batchwise
-      this.createChart_kpi_linewise(line, 'higchartcontainer-control-' + line, 'batch_name', value, 'APQOEE');
-    }
-    else if (value === "shiftwise") {
-      //oee_shiftwise
-      this.createChart_kpi_linewise(line, 'higchartcontainer-control-' + line, 'shift', value, 'APQOEE');
-    }
-    else if (value === "productwise") {
-      //oee_productwise
-      this.createChart_kpi_linewise(line, 'higchartcontainer-control-' + line, 'product', value, 'APQOEE');
-    }
+      this.createChart_kpi_linewise(line, 'higchartcontainer-control-' + line, value, value, 'APQOEE');
   }
 
   getFilterSpeedIdleValue(value, line,) {
-
     console.log(value);
+      this.createChart_kpi_linewise(line, 'higchartcontainer-control-speedidle-' + line, value, value, 'speedidle');
 
-    if (value === "operatorwise") {
-      //oee_operatorwise
-      this.createChart_kpi_linewise(line, 'higchartcontainer-control-' + line, 'operator_name', value, '');
-    }
-    else if (value === "batchwise") {
-      //oee_batchwise
-      this.createChart_kpi_linewise(line, 'higchartcontainer-control-' + line, 'batch_name', value, '');
-    }
-    else if (value === "shiftwise") {
-      //oee_shiftwise
-      this.createChart_kpi_linewise(line, 'higchartcontainer-control-' + line, 'shift', value, '');
-    }
-    else if (value === "productwise") {
-      //oee_productwise
-      this.createChart_kpi_linewise(line, 'higchartcontainer-control-' + line, 'product', value, '');
-    }
   }
 
   customizeToolbar(toolbar) {
@@ -602,22 +570,15 @@ export class DaywiseReportComponent implements OnInit {
         ],
         rows: [
           {
-            uniqueName: "plant_id",
-            caption: "Hall"
-          },
-          {
             uniqueName: "line_id",
             caption: "Line name"
           },
-
           {
             uniqueName: "batch_name"
           },
           {
             uniqueName: "date"
           },
-
-
           {
             uniqueName: "shift"
           },
@@ -772,8 +733,8 @@ export class DaywiseReportComponent implements OnInit {
           //   format: "decimal2",
           // },
           {
-            uniqueName: "total_manual_stop_time",
-            formula: "((\"total_manual_stop_time\"))",
+            uniqueName: "total_sum_idle_time",
+            formula: "((\"total_sum_idle_time\"))",
             caption: "Idle time",
             format: "decimal2",
           },
@@ -902,8 +863,7 @@ export class DaywiseReportComponent implements OnInit {
             backgroundColor: "#ffb5ab",
             color: "#000000",
             fontFamily: "Arial",
-            fontSize: "12px",
-
+            fontSize: "12px"
           }
         },
         {
@@ -964,8 +924,7 @@ export class DaywiseReportComponent implements OnInit {
             backgroundColor: "#ffb5ab",
             color: "#000000",
             fontFamily: "Arial",
-            fontSize: "12px",
-
+            fontSize: "12px"
           }
         },
         {
@@ -975,8 +934,7 @@ export class DaywiseReportComponent implements OnInit {
             backgroundColor: "#c1df9f",
             color: "#000000",
             fontFamily: "Arial",
-            fontSize: "12px",
-
+            fontSize: "12px"
           }
         },
         {
@@ -986,8 +944,7 @@ export class DaywiseReportComponent implements OnInit {
             backgroundColor: "#fff280",
             color: "#000000",
             fontFamily: "Arial",
-            fontSize: "12px",
-
+            fontSize: "12px"
           }
         },
         {
@@ -997,8 +954,7 @@ export class DaywiseReportComponent implements OnInit {
             backgroundColor: "#ffb5ab",
             color: "#000000",
             fontFamily: "Arial",
-            fontSize: "12px",
-
+            fontSize: "12px"
           }
         },
         {
@@ -1008,8 +964,7 @@ export class DaywiseReportComponent implements OnInit {
             backgroundColor: "#c1df9f",
             color: "#000000",
             fontFamily: "Arial",
-            fontSize: "12px",
-
+            fontSize: "12px"
           }
         },
         {
@@ -1019,129 +974,15 @@ export class DaywiseReportComponent implements OnInit {
             backgroundColor: "#fff280",
             color: "#000000",
             fontFamily: "Arial",
-            fontSize: "12px",
+            fontSize: "12px"
           }
-        },
-        // {
-        //   formula: "#value >=0",
-        //   measure: "total_fault_time",
-        //   format: {
-        //     backgroundColor: "#33cccc",
-        //     color: "#000000",
-        //     fontFamily: "Arial",
-        //     fontSize: "12px",
-        //   }
-        // },
-        // {
-        //   formula: "#value >=0",
-        //   measure: "blocked_time",
-        //   format: {
-        //     backgroundColor: "#33cccc",
-        //     color: "#000000",
-        //     fontFamily: "Arial",
-        //     fontSize: "12px",
-        //   }
-        // },
-        // {
-        //   formula: "#value >=0",
-        //   measure: "major_manual_stop_time",
-        //   format: {
-        //     backgroundColor: "#c2f0f0",
-        //     color: "#000000",
-        //     fontFamily: "Arial",
-        //     fontSize: "11px",
-        //   }
-        // },
-        // {
-        //   formula: "#value >=0",
-        //   measure: "minor_manual_stop_time",
-        //   format: {
-        //     backgroundColor: "#c2f0f0",
-        //     color: "#000000",
-        //     fontFamily: "Arial",
-        //     fontSize: "11px",
-        //   }
-        // },
-
-        // {
-        //   formula: "#value >=0",
-        //   measure: "waiting_time",
-        //   format: {
-        //     backgroundColor: "#c2f0f0",
-        //     color: "#000000",
-        //     fontFamily: "Arial",
-        //     fontSize: "11px",
-        //   }
-        // },
-        // {
-        //   formula: "#value >=0",
-        //   measure: "idle_time",
-        //   format: {
-        //     backgroundColor: "#c2f0f0",
-        //     color: "#000000",
-        //     fontFamily: "Arial",
-        //     fontSize: "11px",
-        //   }
-        // },
-        // {
-        //   formula: "#value >=0",
-        //   measure: "total_manual_stop_time",
-        //   format: {
-        //     backgroundColor: "#33cccc",
-        //     color: "#000000",
-        //     fontFamily: "Arial",
-        //     fontSize: "12px",
-        //   }
-        // },
-        // {
-        //   formula: "#value >=0",
-        //   measure: "major_fault_time",
-        //   format: {
-        //     backgroundColor: "#c2f0f0",
-        //     color: "#000000",
-        //     fontFamily: "Arial",
-        //     fontSize: "11px",
-        //   }
-        // },
-        // {
-        //   formula: "#value >=0",
-        //   measure: "minor_fault_time",
-        //   format: {
-        //     backgroundColor: "#c2f0f0",
-        //     color: "#000000",
-        //     fontFamily: "Arial",
-        //     fontSize: "11px",
-        //   }
-        // },
-        // {
-        //   formula: "#value >=0",
-        //   measure: "total_fault_time",
-        //   format: {
-        //     backgroundColor: "#33cccc",
-        //     color: "#000000",
-        //     fontFamily: "Arial",
-        //     fontSize: "12px",
-        //   }
-        // },
-      ],
-
-      // tableSizes: {
-      //   columns: [
-      //     {
-      //       tuple: [],
-      //       measure: "Theoritical Production Time",
-      //       width: 80
-      //     }
-      //   ]
-      // }
+        }
+        ],
     }
     this.child.webDataRocks.setReport(setReportType);
-
-
   }
 
   getSearchData() {
-
     //this.lines = [];
     this.FetchDataFromApi();
   }
@@ -1151,7 +992,6 @@ export class DaywiseReportComponent implements OnInit {
     this.createFiltersForm();
     this.BindDefaultDates();
     this.FetchDataFromApi();
-
   }
 
   FetchDataFromApi() {
@@ -1161,17 +1001,14 @@ export class DaywiseReportComponent implements OnInit {
     // this.dataSourceService.GetServerAPIPath().subscribe((apipath: any) => {
     //console.log('http://3.7.253.233:4000/api/report/chart?startDate=' + moment(this.date.value).format("yyyy-MM-DD") + '&endDate=' + moment(this.date.value).format("yyyy-MM-DD"));
     this.dataSourceService.GetOutputMultilinesData(moment(this.date.value).format("yyyy-MM-DD"), moment(this.date.value).format("yyyy-MM-DD")).subscribe((data: any) => {
-
+      this.DataWithStructure = [];
+      this.OutputData = [];
 
       this.lines = [];
       this.lines.length = 0;
-      this.lines = [...new Set(data.map(item => item.line_id))]
-
-
-
-      this.DataWithStructure = [];
-      this.OutputData = [];
-      var d = data;
+      var d = data.sort(this.utils.dynamicSort('line_id'));
+      this.lines = [...new Set(d.map(item => item.line_id))]
+      
       for (let i = 0; i < d.length; i++) {
         const a = d[i];
         const output_data = {
@@ -1252,8 +1089,6 @@ export class DaywiseReportComponent implements OnInit {
           no_production_planned: a.updt_time + a.break_pdt
         }
         this.OutputData.push(output_data);
-
-
       }
       console.log(this.OutputData);
       this.gotData = true;
@@ -1272,7 +1107,7 @@ export class DaywiseReportComponent implements OnInit {
   BindDefaultDates() {
     var date = new Date();
 
-    this.date.setValue(this.datePipe.transform(this.addDays(new Date(), -5), 'yyyy-MM-dd'));
+    this.date.setValue(this.datePipe.transform(this.addDays(new Date(), -1), 'yyyy-MM-dd'));
 
     //this.start_date.setValue(this.datePipe.transform(new Date(date.getFullYear(), date.getMonth(), 1), 'yyyy-MM-dd'));
   }
@@ -1297,7 +1132,7 @@ export class DaywiseReportComponent implements OnInit {
     this.pivotTableReportComplete = true;
     this.createAndUpdateChart_waterfall_linewise('all', 'higchartcontainer-waterfall-linewise-combined');
     this.createChart_kpi_linewise('all', 'higchartcontainer-control-linecombined', 'line_id', 'Key parameters', 'APQOEE');
-    this.createChart_kpi_linewise('all', 'higchartcontainer-control-speedloss-linecombined', 'line_id', 'Idle Time, Speed Loss', '');
+    this.createChart_kpi_linewise('all', 'higchartcontainer-control-speedloss-linecombined', 'line_id', 'Idle Time', 'speedidle');
     this.createAndUpdateChart_eventHistory_linewise('all', 'higchartcontainer-lines-combined-eventhistory', 'stack');
     this.createAndUpdateChart_eventHistory_linewise('all', 'highChartContainer-Combined-EventHistory-Pie', 'pie');
 
@@ -1792,12 +1627,12 @@ export class DaywiseReportComponent implements OnInit {
 
   lineWiseKpiTabClick(tabName) {
 
-    this.selected2 = this.filters[0].value;
+    
     console.log(tabName, "TAB NAME - lineWiseKpiTabClick");
     if (tabName === 'Lines-combined') {
       this.createChart_kpi_linewise('all', 'higchartcontainer-control-linecombined', 'line_id', 'Key parameters', 'APQOEE');
     } else {
-      this.createChart_kpi_linewise(tabName, 'higchartcontainer-control-' + tabName, 'operator_name', 'Operator wise', 'APQOEE');
+      this.createChart_kpi_linewise(tabName, 'higchartcontainer-control-' + tabName, this.selected, this.selected, 'APQOEE');
     }
 
   }
@@ -1805,13 +1640,13 @@ export class DaywiseReportComponent implements OnInit {
 
 
   lineWiseSpeedIdleTabClick(tabName) {
-    this.selected2 = this.filters[0].value;
+    //this.selected2 = this.filters[0].value;
     console.log(tabName, "TAB NAME - lineWiseSpeedIdleTabClick");
 
     if (tabName === 'Lines-combined') {
-      this.createChart_kpi_linewise('all', 'higchartcontainer-control-speedloss-linecombined', 'line_id', 'Idle Time, Speed Loss', '');
+      this.createChart_kpi_linewise('all', 'higchartcontainer-control-speedloss-linecombined', 'line_id', 'Idle Time', 'speedidle');
     } else {
-      this.createChart_kpi_linewise(tabName, 'higchartcontainer-control-' + tabName, 'operator_name', 'Operator wise', '');
+      this.createChart_kpi_linewise(tabName, 'higchartcontainer-control-speedidle-' + tabName, this.selected2, this.selected2, 'speedidle');
     }
   }
 
@@ -1930,6 +1765,8 @@ export class DaywiseReportComponent implements OnInit {
   createChart_kpi_linewise(line, controlname, category, chartTitle, chartType) {
     console.log(controlname, "controlname");
     console.log(line, "line Name");
+    console.log(this.selected,"DDL");
+    console.log(this.selected2,"DDL");
 
     console.log(category, "category");
 
@@ -1938,7 +1775,7 @@ export class DaywiseReportComponent implements OnInit {
     })
     console.log(KPIData);
 
-    const GroupedData = this.utils.groupAndSum(KPIData, [category], ['planed_production_time', 'productive_time', 'net_operating_time', 'gross_operating_time', 'speed_loss', 'idle_time']);
+    const GroupedData = this.utils.groupAndSum(KPIData, [category], ['planed_production_time', 'productive_time', 'net_operating_time', 'gross_operating_time', 'speed_loss', 'total_sum_idle_time']);
 
     console.log(GroupedData, "GroupedData");
 
@@ -1947,10 +1784,11 @@ export class DaywiseReportComponent implements OnInit {
       itm["Performance"] = this.utils.roundOff((itm["net_operating_time"] / itm["gross_operating_time"]) * 100)
       itm["Availability"] = this.utils.roundOff((itm["gross_operating_time"] / itm["planed_production_time"]) * 100)
       itm["Quality"] = this.utils.roundOff((itm["productive_time"] / itm["net_operating_time"]) * 100)
-      itm["idle_time"] = this.utils.GetTwoDigitDecimalNum(this.utils.ConvertToHours(itm["idle_time"]))
+      itm["total_sum_idle_time"] = this.utils.GetTwoDigitDecimalNum(this.utils.ConvertToHours(itm["total_sum_idle_time"]))
       itm["speed_loss"] = this.utils.GetTwoDigitDecimalNum(this.utils.ConvertToHours(itm["speed_loss"]))
     });
     console.log(GroupedData, "GroupedData");
+    GroupedData.sort(this.utils.dynamicSort('OEE'))
 
     let xAsixData = this.utils.filterMyArr(GroupedData, category);
     let measureDataOEE = this.utils.filterMyArr(GroupedData, "OEE");
@@ -1958,10 +1796,18 @@ export class DaywiseReportComponent implements OnInit {
     let measureDataQuality = this.utils.filterMyArr(GroupedData, "Quality");
     let measureDataAvailability = this.utils.filterMyArr(GroupedData, "Availability");
     let measureDataSpeedLoss = this.utils.filterMyArr(GroupedData, "speed_loss");
-    let measureDataIdleTime = this.utils.filterMyArr(GroupedData, "idle_time");
+
+    GroupedData.sort(this.utils.dynamicSort('total_sum_idle_time'));
+    let measureDataIdleTime = this.utils.filterMyArr(GroupedData, "total_sum_idle_time");
+
+    let chartTitleName;
+    let toolTipEnd;
+    let seriesData;
+    
     if (chartType === 'APQOEE') {
-     var chartTitleName = chartTitle + '(%)'
-      var seriesData = [
+      chartTitleName = chartTitle + '(%)'
+      toolTipEnd = '%'
+       seriesData = [
         {
           name: "Availability",
           data: measureDataAvailability,
@@ -1984,14 +1830,15 @@ export class DaywiseReportComponent implements OnInit {
         },
 
       ]
-    } else {
-      var chartTitleName = chartTitle + '(in Hours)'
-      var seriesData = [
-        {
-          name: "Speed Loss",
-          data: measureDataSpeedLoss,
-          color: '#ffe66d'
-        },
+    } else if(chartType === 'speedidle') {
+       chartTitleName = chartTitle + '(in Hours)'
+       toolTipEnd = ''
+       seriesData = [
+        // {
+        //   name: "Speed Loss",
+        //   data: measureDataSpeedLoss,
+        //   color: '#ffe66d'
+        // },
         {
           name: "Idle Time",
           data: measureDataIdleTime,
@@ -2038,7 +1885,7 @@ export class DaywiseReportComponent implements OnInit {
       tooltip: {
         formatter: function () {
           let value = (this.y);
-          return this.key + '<br>' + '' + value + '%';
+          return this.key + '<br>' + '' + value + toolTipEnd;
         }
       },
       plotOptions: {
@@ -2061,11 +1908,9 @@ export class DaywiseReportComponent implements OnInit {
       series: seriesData,
       credits: {
         enabled: false
-      },
+      }
     }
     console.log(JSON.stringify(ChartData));
     Highcharts.chart(controlname, ChartData);
   }
-
-
 }

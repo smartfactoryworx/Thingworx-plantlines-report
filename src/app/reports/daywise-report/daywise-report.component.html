@@ -90,10 +90,9 @@
 
 
         <mat-tab [label]="line" *ngFor="let line of lines">
-
-            <mat-form-field appearance="fill" id="filterdropdown">
-                <mat-select [(ngModel)]="selected2"
-                    (selectionChange)="getFilterValue($event.value,line)" id="select">
+            <mat-form-field appearance="fill" class="filterdropdown">
+                <mat-select [(ngModel)]="selected"
+                    (selectionChange)="getFilterValue($event.value,line)" id="select1">
                     <mat-option *ngFor="let filter of filters" [value]="filter.value">
                         {{filter.viewValue}}
                     </mat-option>
@@ -122,11 +121,9 @@
                 </div>
             </div>
         </mat-tab>
-
-
         <mat-tab [label]="line" *ngFor="let line of lines">
 
-            <mat-form-field appearance="fill" id="filterdropdown">
+            <mat-form-field appearance="fill" class="filterdropdown">
                 <mat-select [(ngModel)]="selected2"
                     (selectionChange)="getFilterSpeedIdleValue($event.value,line)" id="select">
                     <mat-option *ngFor="let filter of filters" [value]="filter.value">
@@ -137,7 +134,7 @@
             <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap
                 fxLayoutAlign="space-around center" fxFlex="100">
 
-                <div [id]="'higchartcontainer-control-'+line" style="height:400px; padding-top:1px;" fxFlex="100">
+                <div [id]="'higchartcontainer-control-speedidle-'+line" style="height:400px; padding-top:1px;" fxFlex="100">
                 </div>
             </div>
 
