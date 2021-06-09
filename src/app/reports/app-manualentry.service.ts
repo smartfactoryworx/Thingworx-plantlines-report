@@ -107,6 +107,7 @@ export class ManualEntryService {
       }
 
       GetOutputMultilinesData(startDate,endDate):Observable<object>{
+          console.log('/api/report/chart?startDate=' + startDate + '&endDate=' + endDate);
         return this.httpClient.get('/api/report/chart?startDate=' + startDate + '&endDate=' + endDate );
     }
 

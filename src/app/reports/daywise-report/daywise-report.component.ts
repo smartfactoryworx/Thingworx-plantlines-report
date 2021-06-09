@@ -13,6 +13,7 @@ import { default as _rollupMoment, Moment } from 'moment';
 import Highcharts, { seriesType } from 'highcharts';
 import HighchartsMore from "highcharts/highcharts-more";
 HighchartsMore(Highcharts)
+import { UtilService } from 'src/app/util.service';
 import exporting from 'highcharts/modules/exporting';
 // import { SliceMeasure } from 'flexmonster';
 // import * as Flexmonster from 'flexmonster';
@@ -20,6 +21,7 @@ import exporting from 'highcharts/modules/exporting';
 import { CdkColumnDef } from "@angular/cdk/table";
 import { WebDataRocksPivot } from "../@webdatarocks/webdatarocks.angular4";
 import { Measure } from 'webdatarocks';
+import { LeftPadPipe } from "ngx-pipes";
 
 exporting(Highcharts)
 
@@ -116,31 +118,7 @@ interface Filter {
   value: string;
   viewValue: string;
 }
-var HighCharts_ColorsType1 = ['#FFE66D', '#4ECDC4', '#1A535C', '#FF6B6B', '#64E572', '#FF9655', '#FFF263', '#6AF9C4']
 var HighCharts_ColorsType2 = ["#32cd32", "rgb(254,1,1)", "rgb(163, 163, 117)", "rgb(255, 51, 204)",]
-var HighCharts_yAxisOptions1 = {
-  labels: { formatter: undefined },
-  plotLines: [{
-    //   color: 'blue',
-    //   width: 2,
-    //   value: 25,
-    //   zIndex: 5,
-    //   label: {
-    //     text: "Average",
-    //     align: 'left'
-    //   }
-    // },
-    // {
-    //   color: 'blue',
-    //   width: 2,
-    //   value: 15,
-    //   zIndex: 5,
-    //   label: {
-    //     text: "Till Date",
-    //     align: 'left'
-    //   }
-  }]
-}
 var HighCharts_yAxisOptions2 = {
   title: {
     enabled: false
@@ -156,110 +134,11 @@ var HighCharts_yAxisOptions2 = {
   },
 
 }
-var HighCharts_yAxisOptions3 = {
-
-}
-var HighCharts_yAxisOptions4 = {
-  labels: { formatter: undefined },
-  plotLines: [{
-
-  }]
-}
-
-var HighCharts_yAxisOptions5 = {
-  labels: {
-
-    formatter: function () {
-      let value = (this.value) / 3600;
-      return value.toFixed(0);
-    },
-
-  },
-  plotLines: [{
-    //   color: 'blue',
-    //   width: 2,
-    //   value: 25,
-    //   zIndex: 5,
-    //   label: {
-    //     text: "label1",
-    //     align: 'left'
-    //   }
-    // },
-    // {
-    //   color: 'blue',
-    //   width: 2,
-    //   value: 15,
-    //   zIndex: 5,
-    //   label: {
-    //     text: "label1",
-    //     align: 'left'
-    //   }
-  }]
-}
-var HighCharts_xAxisOptions2 = {
-  labels: {
-    enabled: false,
-  },
-  plotLines: [{}]
-}
 var HighCharts_xAxisOptions1 = {
   labels: {
     enabled: true,
   },
   plotLines: [{}]
-}
-var HighCharts_PlotOptions1 = {
-  series: {
-    stacking: undefined,
-    borderWidth: 0,
-    dataSorting: {
-      enabled: true,
-    },
-    dataLabels: {
-      allowOverlap: false,
-      enabled: true,
-      formatter: function () {
-        let value = (this.y);
-        return '' + value.toFixed(1);
-      }
-
-    },
-  }
-}
-var HighCharts_PlotOptions2 = {
-  series: {
-    borderWidth: 0,
-    dataSorting: {
-      enabled: true,
-    },
-    dataLabels: {
-      enabled: true,
-      allowOverlap: false,
-      formatter: function () {
-        let value = (this.y) / 3600;
-        return '' + value.toFixed(0);
-      }
-
-    } // set colors of the series
-  },
-}
-var HighCharts_PlotOptions3 = {
-  series: {
-    borderWidth: 0,
-    connectNulls: true,
-    dataSorting: {
-      enabled: false,
-    },
-    dataLabels: {
-      enabled: true,
-
-      formatter: function () {
-        let value = (this.y);
-        return '' + value.toFixed(1);
-      }
-
-    },
-  }
 }
 var HighCharts_PlotOptions4 = {
   // column: {
@@ -293,9 +172,9 @@ var HighCharts_PlotOptions4 = {
   templateUrl: './daywise-report.component.html',
   styleUrls: ['./daywise-report.component.scss']
 })
-export class DaywiseReportComponent implements OnInit{
+export class DaywiseReportComponent implements OnInit {
   @ViewChild("pivot1") child: WebDataRocksPivot;
-  @ViewChild("pivot2") child2: WebDataRocksPivot;
+
 
   public OutputData: output[] = [];
   errormsg;
@@ -314,7 +193,6 @@ export class DaywiseReportComponent implements OnInit{
     { value: 'productwise', viewValue: 'Product wise' }
   ];
   public selected2 = this.filters[0].value;
-  //lines = ["line-1", "line-2", "line-3", "line-4", "line-5"];
 
   pivotTableReportComplete: boolean = false;
   Highcharts: typeof Highcharts = Highcharts;
@@ -334,8 +212,6 @@ export class DaywiseReportComponent implements OnInit{
     datepicker.close();
   }
 
-
-
   createFormFilters() {
     this.date = new FormControl('', Validators.required);
   }
@@ -347,7 +223,7 @@ export class DaywiseReportComponent implements OnInit{
 
   public DataWithStructure = [];
   constructor(private httpClient: HttpClient, protected datePipe: DatePipe,
-    protected dataSourceService: ManualEntryService) { }
+    protected dataSourceService: ManualEntryService, private utils: UtilService) { }
   public pivotReport = {
   };
 
@@ -370,236 +246,46 @@ export class DaywiseReportComponent implements OnInit{
     return { start: this.datePipe.transform(monthStartDay, 'yyyy-MM-dd'), end: this.datePipe.transform(monthEndDay, 'yyyy-MM-dd') };
   }
 
-  getFilterValueOee(value, line) {
-
-    console.log(value)
+  getFilterValue(value, line,) {
+    console.log(value);
 
     if (value === "operatorwise") {
       //oee_operatorwise
-
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_id", "Line Name", "operator_name", ["line_id." + line], false, [], false,
-        [{ uniqueName: "OEE", formula: "((\"productive_time\")/(\"planed_production_time\"))*100", caption: "OEE (%)", format: "44mvcoma", },], "column", false,
-        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-oee-" + line, false, false, true, "OEE Operatorwise");
-    }
-    else if (value === "datewise") {
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "date", "Date", "line_id", [], false, ["line_id." + line], false,
-        [{ uniqueName: "OEE", formula: "((\"productive_time\")/(\"planed_production_time\"))*100", caption: "OEE (%)", format: "44mvcoma", },], "line", false,
-        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions3, "higchartcontainer-control-oee-" + line, false, false, true, "OEE Datewise");
+      this.createChart_kpi_linewise(line, 'higchartcontainer-control-' + line, 'operator_name', value, 'APQOEE');
     }
     else if (value === "batchwise") {
       //oee_batchwise
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_id", "Line Name", "batch_name", ["line_id." + line], false, [], false,
-        [{ uniqueName: "OEE", formula: "((\"productive_time\")/(\"planed_production_time\"))*100", caption: "OEE (%)", format: "44mvcoma", },], "column", false,
-        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-oee-" + line, false, false, true, "OEE Batchwise");
+      this.createChart_kpi_linewise(line, 'higchartcontainer-control-' + line, 'batch_name', value, 'APQOEE');
     }
     else if (value === "shiftwise") {
       //oee_shiftwise
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_id", "Line Name", "shift", ["line_id." + line], false, [], false,
-        [{ uniqueName: "OEE", formula: "((\"productive_time\")/(\"planed_production_time\"))*100", caption: "OEE (%)", format: "44mvcoma", },], "column", false,
-        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-oee-" + line, false, false, true, "OEE Shiftwise");
+      this.createChart_kpi_linewise(line, 'higchartcontainer-control-' + line, 'shift', value, 'APQOEE');
     }
     else if (value === "productwise") {
       //oee_productwise
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_id", "Line Name", "product", ["line_id." + line], false, [], false,
-        [{ uniqueName: "OEE", formula: "((\"productive_time\")/(\"planed_production_time\"))*100", caption: "OEE (%)", format: "44mvcoma", },], "column", false,
-        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-oee-" + line, false, false, true, "OEE Productwise");
+      this.createChart_kpi_linewise(line, 'higchartcontainer-control-' + line, 'product', value, 'APQOEE');
     }
   }
 
-  getFilterValuePerformance(value, line) {
+  getFilterSpeedIdleValue(value, line,) {
 
-    console.log(value)
-
-    if (value === "operatorwise") {
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_id", "Line Name", "operator_name", ["line_id." + line], false, [], false,
-        [{ uniqueName: "Performance", formula: "((\"net_operating_time\") / (\"gross_operating_time\"))*100", caption: "P (%)", format: "44mvcoma", },], "column", false,
-        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-performance-" + line, false, false, true, "Performance Operatorwise");
-    }
-    else if (value === "datewise") {
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "date", "Date", "line_id", [], false, ["line_id." + line], false,
-        [{ uniqueName: "Performance", formula: "((\"net_operating_time\") / (\"gross_operating_time\"))*100", caption: "P (%)", format: "44mvcoma", },], "line", false,
-        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions3, "higchartcontainer-control-performance-" + line, false, false, true, "Performance Datewise");
-    }
-    else if (value === "batchwise") {
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_id", "Line Name", "batch_name", ["line_id." + line], false, [], false,
-        [{ uniqueName: "Performance", formula: "((\"net_operating_time\") / (\"gross_operating_time\"))*100", caption: "P (%)", format: "44mvcoma", },], "column", false,
-        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-performance-" + line, false, false, true, "Performance Batchwise");
-    }
-    else if (value === "shiftwise") {
-
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_id", "Line Name", "shift", ["line_id." + line], false, [], false,
-        [{ uniqueName: "Performance", formula: "((\"net_operating_time\") / (\"gross_operating_time\"))*100", caption: "P (%)", format: "44mvcoma", },], "column", false,
-        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-performance-" + line, false, false, true, "Performance Shiftwise");
-    }
-    else if (value === "productwise") {
-
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_id", "Line Name", "product", ["line_id." + line], false, [], false,
-        [{ uniqueName: "Performance", formula: "((\"net_operating_time\") / (\"gross_operating_time\"))*100", caption: "P (%)", format: "44mvcoma", },], "column", false,
-        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-performance-" + line, false, false, true, "Performance Productwise");
-    }
-  }
-
-  getFilterValueQuality(value, line) {
-
-    console.log(value)
+    console.log(value);
 
     if (value === "operatorwise") {
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_id", "Line Name", "operator_name", ["line_id." + line], false, [], false,
-        [{
-          uniqueName: "Quality", formula: "((\"productive_time\"/60) / (\"net_operating_time\"/60))*100", caption: "Q (%)",
-          format: "44mvcoma",
-        }], "column", false,
-        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-quality-" + line, false, false, true, "Quality Operatorwise");
-    }
-    else if (value === "datewise") {
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "date", "Date", "line_id", [], false, ["line_id." + line], false,
-        [{
-          uniqueName: "Quality", formula: "((\"productive_time\"/60) / (\"net_operating_time\"/60))*100", caption: "Q (%)",
-          format: "44mvcoma",
-        }], "line", false,
-        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions3, "higchartcontainer-control-quality-" + line, false, false, true, "Quality Datewise");
+      //oee_operatorwise
+      this.createChart_kpi_linewise(line, 'higchartcontainer-control-' + line, 'operator_name', value, '');
     }
     else if (value === "batchwise") {
-
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_id", "Line Name", "batch_name", ["line_id." + line], false, [], false,
-        [{
-          uniqueName: "Quality", formula: "((\"productive_time\"/60) / (\"net_operating_time\"/60))*100", caption: "Q (%)",
-          format: "44mvcoma",
-        }], "column", false,
-        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-quality-" + line, false, false, true, "Quality Batchwise");
-
+      //oee_batchwise
+      this.createChart_kpi_linewise(line, 'higchartcontainer-control-' + line, 'batch_name', value, '');
     }
     else if (value === "shiftwise") {
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_id", "Line Name", "shift", ["line_id." + line], false, [], false,
-        [{
-          uniqueName: "Quality", formula: "((\"productive_time\"/60) / (\"net_operating_time\"/60))*100", caption: "Q (%)",
-          format: "44mvcoma",
-        }], "column", false,
-        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-quality-" + line, false, false, true, "Quality Shiftwise");
-
+      //oee_shiftwise
+      this.createChart_kpi_linewise(line, 'higchartcontainer-control-' + line, 'shift', value, '');
     }
     else if (value === "productwise") {
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_id", "Line Name", "product", ["line_id." + line], false, [], false,
-        [{
-          uniqueName: "Quality", formula: "((\"productive_time\"/60) / (\"net_operating_time\"/60))*100", caption: "Q (%)",
-          format: "44mvcoma",
-        }], "column", false,
-        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-quality-" + line, false, false, true, "Quality Productwise");
-    }
-  }
-  getFilterValueAvailability(value, line) {
-
-    console.log(value)
-
-    if (value === "operatorwise") {
-
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_id", "Line Name", "operator_name", ["line_id." + line], false, [], false,
-        [{ uniqueName: "Availability", formula: "((\"gross_operating_time\") / (\"planed_production_time\"))*100", caption: "A (%)", format: "44mvcoma", },], "column", false,
-        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-availability-" + line, false, false, true, "Availability Operatorwise");
-    }
-    else if (value === "datewise") {
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "date", "Date", "line_id", [], false, ["line_id." + line], false,
-        [{ uniqueName: "Availability", formula: "((\"gross_operating_time\") / (\"planed_production_time\"))*100", caption: "A (%)", format: "44mvcoma", },], "line", false,
-        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions3, "higchartcontainer-control-availability-" + line, false, false, true, "Availability Datewise");
-    }
-    else if (value === "batchwise") {
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_id", "Line Name", "batch_name", ["line_id." + line], false, [], false,
-        [{ uniqueName: "Availability", formula: "((\"gross_operating_time\") / (\"planed_production_time\"))*100", caption: "A (%)", format: "44mvcoma", },], "column", false,
-        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-availability-" + line, false, false, true, "Availability Batchwise");
-    }
-    else if (value === "shiftwise") {
-
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_id", "Line Name", "shift", ["line_id." + line], false, [], false,
-        [{ uniqueName: "Availability", formula: "((\"gross_operating_time\") / (\"planed_production_time\"))*100", caption: "A (%)", format: "44mvcoma", },], "column", false,
-        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-availability-" + line, false, false, true, "Availability Shiftwise");
-
-    }
-    else if (value === "productwise") {
-
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_id", "Line Name", "product", ["line_id." + line], false, [], false,
-        [{ uniqueName: "Availability", formula: "((\"gross_operating_time\") / (\"planed_production_time\"))*100", caption: "A (%)", format: "44mvcoma", },], "column", false,
-        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-availability-" + line, false, false, true, "Availability Productwise");
-
-    }
-
-
-  }
-  getFilterValueSpeedloss(value, line) {
-
-    console.log(value)
-
-    if (value === "operatorwise") {
-
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_id", "Line Name", "operator_name", ["line_id." + line], false, [], false,
-        [{ uniqueName: "speed_loss", formula: "((\"speed_loss\"))", caption: "Speed Loss (Hrs)", format: "decimal2", },], "column", false,
-        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-speedloss-" + line, false, false, true, "Speed Loss Operatorwise");
-    }
-    else if (value === "datewise") {
-
-
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "date", "Date", "line_id", [], false, ["line_id." + line], false,
-        [{ uniqueName: "speed_loss", formula: "((\"speed_loss\"))", caption: "Speed Loss (Hrs)", format: "decimal2", },], "line", false,
-        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions3, "higchartcontainer-control-speedloss-" + line, false, false, true, "Speed Loss Datewise");
-
-    }
-    else if (value === "batchwise") {
-
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_id", "Line Name", "batch_name", ["line_id." + line], false, [], false,
-        [{ uniqueName: "speed_loss", formula: "((\"speed_loss\"))", caption: "Speed Loss (Hrs)", format: "decimal2", },], "column", false,
-        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-speedloss-" + line, false, false, true, "Speed Loss Batchwise");
-
-    }
-    else if (value === "shiftwise") {
-
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_id", "Line Name", "shift", ["line_id." + line], false, [], false,
-        [{ uniqueName: "speed_loss", formula: "((\"speed_loss\"))", caption: "Speed Loss (Hrs)", format: "decimal2", },], "column", false,
-        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-speedloss-" + line, false, false, true, "Speed Loss Shiftwise");
-
-    }
-    else if (value === "productwise") {
-
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_id", "Line Name", "product", ["line_id." + line], false, [], false,
-        [{ uniqueName: "speed_loss", formula: "((\"speed_loss\"))", caption: "Speed Loss (Hrs)", format: "decimal2", },], "column", false,
-        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-speedloss-" + line, false, false, true, "Speed Loss Productwise");
-
-    }
-  }
-  getFilterValueIdletime(value, line) {
-
-    console.log(value)
-
-    if (value === "operatorwise") {
-
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_id", "Line Name", "operator_name", ["line_id." + line], false, [], false,
-        [{ uniqueName: "idle_time", formula: "((\"idle_time\"))", caption: "Idle Time(Hrs)", format: "decimal2", },], "column", false,
-        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-idletime-" + line, false, false, true, "Idle Time Operatorwise");
-
-    }
-    else if (value === "datewise") {
-
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "date", "Date", "line_id", [], false, ["line_id." + line], false,
-        [{ uniqueName: "idle_time", formula: "((\"idle_time\"))", caption: "Idle Time(Hrs)", format: "decimal2", },], "line", false,
-        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions3, "higchartcontainer-control-idletime-" + line, false, false, true, "Idle Time Datewise");
-
-    }
-    else if (value === "batchwise") {
-
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_id", "Line Name", "batch_name", ["line_id." + line], false, [], false,
-        [{ uniqueName: "idle_time", formula: "((\"idle_time\"))", caption: "Idle Time(Hrs)", format: "decimal2", },], "column", false,
-        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-idletime-" + line, false, false, true, "Idle Time Batchwise");
-
-    }
-    else if (value === "shiftwise") {
-
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_id", "Line Name", "shift", ["line_id." + line], false, [], false,
-        [{ uniqueName: "idle_time", formula: "((\"idle_time\"))", caption: "Idle Time(Hrs)", format: "decimal2", },], "column", false,
-        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-idletime-" + line, false, false, true, "Idle Time Shiftwise");
-    }
-    else if (value === "productwise") {
-
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_id", "Line Name", "product", ["line_id." + line], false, [], false,
-        [{ uniqueName: "idle_time", formula: "((\"idle_time\"))", caption: "Idle Time(Hrs)", format: "decimal2", },], "column", false,
-        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-idletime-" + line, false, false, true, "Idle Time Productwise");
+      //oee_productwise
+      this.createChart_kpi_linewise(line, 'higchartcontainer-control-' + line, 'product', value, '');
     }
   }
 
@@ -912,34 +598,32 @@ export class DaywiseReportComponent implements OnInit{
             uniqueName: "changeover_type",
             caption: "Type of CO",
           },
-          
+
         ],
         rows: [
           {
             uniqueName: "plant_id",
-            caption:"Hall"
+            caption: "Hall"
           },
           {
             uniqueName: "line_id",
-            caption:"Line name"
+            caption: "Line name"
           },
-          
+
           {
             uniqueName: "batch_name"
           },
           {
             uniqueName: "date"
           },
-        
+
 
           {
             uniqueName: "shift"
           },
           {
             uniqueName: "fgex"
-          },
-
-
+          }
         ],
         drills: {
           drillAll: true
@@ -950,7 +634,6 @@ export class DaywiseReportComponent implements OnInit{
         columns: [
           {
             uniqueName: "Measures",
-
           }
         ],
         measures: [
@@ -983,7 +666,6 @@ export class DaywiseReportComponent implements OnInit{
             formula: "((\"goodCount\"))",
             caption: "Good count"
           },
-
           {
             uniqueName: "Reject_Count",
             formula: "(sum(\"reject_count\"))",
@@ -995,7 +677,6 @@ export class DaywiseReportComponent implements OnInit{
             caption: "Total",
             format: "decimal2",
           },
-
           {
             uniqueName: "break_pdt",
             formula: "((\"break_pdt\"))",
@@ -1090,14 +771,12 @@ export class DaywiseReportComponent implements OnInit{
           //   caption: "Noraml Idle Time",
           //   format: "decimal2",
           // },
-
           {
             uniqueName: "total_manual_stop_time",
             formula: "((\"total_manual_stop_time\"))",
             caption: "Idle time",
             format: "decimal2",
           },
-
           {
             uniqueName: "roll_changeover",
             formula: "((\"roll_changeover\"))",
@@ -1235,7 +914,6 @@ export class DaywiseReportComponent implements OnInit{
             color: "#000000",
             fontFamily: "Arial",
             fontSize: "12px",
-
           }
         },
         {
@@ -1246,7 +924,6 @@ export class DaywiseReportComponent implements OnInit{
             color: "#000000",
             fontFamily: "Arial",
             fontSize: "12px",
-
           }
         },
         {
@@ -1267,7 +944,6 @@ export class DaywiseReportComponent implements OnInit{
             color: "#000000",
             fontFamily: "Arial",
             fontSize: "12px",
-
           }
         },
         {
@@ -1461,10 +1137,7 @@ export class DaywiseReportComponent implements OnInit{
     }
     this.child.webDataRocks.setReport(setReportType);
 
-    this.child2.webDataRocks.off("reportcomplete");
-    this.child2.webDataRocks.setReport(setReportType);
-    this.createAndUpdateChart_waterfall_linewise('all', 'higchartcontainer-waterfall-linewise-combined');
-    console.log('*************************1528*******************');
+
   }
 
   getSearchData() {
@@ -1478,6 +1151,7 @@ export class DaywiseReportComponent implements OnInit{
     this.createFiltersForm();
     this.BindDefaultDates();
     this.FetchDataFromApi();
+
   }
 
   FetchDataFromApi() {
@@ -1485,17 +1159,15 @@ export class DaywiseReportComponent implements OnInit{
     this.DataWithStructure = [];
     this.OutputData = [];
     // this.dataSourceService.GetServerAPIPath().subscribe((apipath: any) => {
-    console.log('http://3.7.253.233:4000/api/report/chart?startDate=' + moment(this.date.value).format("yyyy-MM-DD") + '&endDate=' + moment(this.date.value).format("yyyy-MM-DD"));
-    this.dataSourceService.GetOutputMultilinesData(moment(this.date.value).format("yyyy-MM-DD"),moment(this.date.value).format("yyyy-MM-DD")).subscribe((data: any) => {
+    //console.log('http://3.7.253.233:4000/api/report/chart?startDate=' + moment(this.date.value).format("yyyy-MM-DD") + '&endDate=' + moment(this.date.value).format("yyyy-MM-DD"));
+    this.dataSourceService.GetOutputMultilinesData(moment(this.date.value).format("yyyy-MM-DD"), moment(this.date.value).format("yyyy-MM-DD")).subscribe((data: any) => {
 
 
       this.lines = [];
       this.lines.length = 0;
       this.lines = [...new Set(data.map(item => item.line_id))]
 
-      // let line_name = data.map(a => a.line_id);
-      // this.lines = this.removeDuplicates(line_name);
-      // console.log(this.lines);
+
 
       this.DataWithStructure = [];
       this.OutputData = [];
@@ -1585,7 +1257,7 @@ export class DaywiseReportComponent implements OnInit{
       }
       console.log(this.OutputData);
       this.gotData = true;
-   
+
       // this.licenseKey = apipath['pivot_license_key'];
 
     },
@@ -1594,12 +1266,13 @@ export class DaywiseReportComponent implements OnInit{
         this.errormsg = error.error.error;
       });
     // });
+
   }
 
   BindDefaultDates() {
     var date = new Date();
 
-    this.date.setValue(this.datePipe.transform(this.addDays(new Date(), -1), 'yyyy-MM-dd'));
+    this.date.setValue(this.datePipe.transform(this.addDays(new Date(), -5), 'yyyy-MM-dd'));
 
     //this.start_date.setValue(this.datePipe.transform(new Date(date.getFullYear(), date.getMonth(), 1), 'yyyy-MM-dd'));
   }
@@ -1622,42 +1295,22 @@ export class DaywiseReportComponent implements OnInit{
     this.SearchStateData(this.OutputData);
     this.child.webDataRocks.off("reportcomplete");
     this.pivotTableReportComplete = true;
-  }
-
-  onReportComplete_2(): void {
-
-    console.log("*****************************onReportComplete_2****************************");
-    this.child2.webDataRocks.off("reportcomplete");
-
-
-
-    console.log("**************************2105***************")
-    //oee_linecombined
-    this.createGoogleBarChart(HighCharts_ColorsType1, "line_id", "Line Name", "line_id",
-      [{ uniqueName: "OEE", formula: "((\"productive_time\")/(\"planed_production_time\"))*100", caption: "OEE (%)", format: "44mvcoma", },], "column", false,
-      true, HighCharts_xAxisOptions2, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-oee-linecombined", false, false, true, "OEE LineCombined");
-    console.log("**************************2110***************")
-
-    //LineCombined_eventHistory
-    this.createGoogleBarChart(HighCharts_ColorsType2, "date", "Date", "",
-      [{ uniqueName: "executing", formula: "((\"executing\"))", caption: "Running Time", format: "decimal2", },
-      { uniqueName: "total_sum_idle_time", formula: "((\"total_sum_idle_time\"))", caption: "Idle time", format: "decimal2", },
-      { uniqueName: "changeover_time", formula: "((\"changeover_time\"))", caption: "Changeover", format: "decimal2", },
-      { uniqueName: "no_production_planned", formula: "(\"no_production_planned\")", caption: "No Production Planned", format: "decimal2", },],
-      "column", false, true, HighCharts_xAxisOptions1, HighCharts_yAxisOptions2, HighCharts_PlotOptions4, "higchartcontainer-lines-combined-eventhistory", true, true, true, "Event History (in Hours)");
-
-
-    console.log("**************************2123***************")
-    this.createGoogleBarChart_Combined_eventHistory_Pie();
+    this.createAndUpdateChart_waterfall_linewise('all', 'higchartcontainer-waterfall-linewise-combined');
+    this.createChart_kpi_linewise('all', 'higchartcontainer-control-linecombined', 'line_id', 'Key parameters', 'APQOEE');
+    this.createChart_kpi_linewise('all', 'higchartcontainer-control-speedloss-linecombined', 'line_id', 'Idle Time, Speed Loss', '');
+    this.createAndUpdateChart_eventHistory_linewise('all', 'higchartcontainer-lines-combined-eventhistory', 'stack');
+    this.createAndUpdateChart_eventHistory_linewise('all', 'highChartContainer-Combined-EventHistory-Pie', 'pie');
 
   }
 
-  createAndUpdateChart_eventHistory_linewise(line, controlname) {
+
+
+  createAndUpdateChart_eventHistory_linewise(line, controlname, chartType) {
     console.log(controlname);
     console.log(this.OutputData);
 
     var eventHistoryLineData = this.OutputData.filter(function (value) {
-      return value.line_id === line
+      return line == 'all' ? value : value.line_id === line
     })
     console.log(eventHistoryLineData);
 
@@ -1685,75 +1338,166 @@ export class DaywiseReportComponent implements OnInit{
     console.log(idle_time_data);
     console.log(changerover_data);
     console.log(no_prod_planned_data);
+    if (chartType === 'pie') {
 
-    var data2: any;
-    data2 = {
-      colors: ["#32cd32", "rgb(254,1,1)", "rgb(163, 163, 117)", "rgb(255, 51, 204)",],
-      chart: {
-        type: 'column'
-      },
-      title: {
-        text: 'Event History'
-      },
-      xAxis: {
-        categories: xAxisData
-      },
-      yAxis: {
-        //min: 0,
-        plotLines: [{}],
-        labels: {
+      let all_sum = running_time_data[0] + idle_time_data[0] + changerover_data[0] + no_prod_planned_data[0]
+
+
+      console.log(all_sum);
+
+      var perc_running: number
+      var perc_idle: number
+      var perc_changeover: number
+      var perc_noproduction: number
+
+      perc_running = (running_time_data[0] / all_sum) * 100;
+      perc_idle = (idle_time_data[0] / all_sum) * 100;
+      perc_changeover = (changerover_data[0] / all_sum) * 100;
+      perc_noproduction = (no_prod_planned_data[0] / all_sum) * 100;
+
+      var pieChartData: any
+      pieChartData = {
+        chart: {
+          type: 'pie',
+          plotBackgroundColor: null,
+          plotBorderWidth: null,
+          plotShadow: false,
+          events: {
+            load: function () {
+              document.getElementById('highChartContainer-Combined-EventHistory-Pie').style.background = 'none';
+            }
+          }
+        },
+        title: {
+          text: 'Event History(%)',
+          align: 'left',
+          style: {
+            fontWeight: 'bold'
+          }
+        },
+        tooltip: {
 
           formatter: function () {
-            let value = (this.value);
-            return value.toFixed(0);
+            let value = this.y;
+            return this.key + '<br>' + '' + value.toFixed(2) + '%';
+          }
+        },
+        accessibility: {
+          point: {
+            valueSuffix: '%'
+          }
+        },
+        plotOptions: {
+          pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {
+              distance: -30,
+              color: 'white',
+              format: '{point.percentage:.1f} %'
+            },
+            // dataLabels: {
+            //   enabled: false,
+            //   format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+            // },
+            showInLegend: true
+          }
+        },
+        series: [
+          {
+            name: 'Brands',
+            colorByPoint: true,
+
+            data: [
+              { name: 'Running Time', y: perc_running },
+              { name: 'Idle Time', y: perc_idle },
+              { name: 'Changeover Time', y: perc_changeover },
+              { name: 'No Production Planned', y: perc_noproduction }]
+          }],
+        credits: {
+          enabled: false
+        },
+        colors: ["#32cd32", "rgb(254,1,1)", "rgb(163, 163, 117)", "rgb(255, 51, 204)"]
+
+      }
+
+      Highcharts.chart(controlname, pieChartData);
+    }
+    else {
+      var stackChartData: any;
+      stackChartData = {
+        colors: ["#32cd32", "rgb(254,1,1)", "rgb(163, 163, 117)", "rgb(255, 51, 204)",],
+        chart: {
+          type: 'column'
+        },
+        title: {
+          text: 'Event History(in Hours)',
+          align: 'left',
+          style: {
+            fontWeight: 'bold'
+          }
+        },
+        xAxis: {
+          categories: xAxisData
+        },
+        yAxis: {
+          //min: 0,
+
+          labels: {
+
+            formatter: function () {
+              let value = (this.value);
+              return value.toFixed(0);
+            },
+
           },
 
         },
 
-      },
+        tooltip: {
+          // headerFormat: '<b>{point.x}</b><br/>',
+          // pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}',
+          formatter: function () {
+            let value = (this.y);
+            return this.key + '<br>' + '' + value.toFixed(1);
+          }
+        },
+        plotOptions: {
 
-      tooltip: {
-        // headerFormat: '<b>{point.x}</b><br/>',
-        // pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}',
-        formatter: function () {
-          let value = (this.y);
-          return this.key + '<br>' + '' + value.toFixed(1);
-        }
-      },
-      plotOptions: {
-
-        column: {
-          stacking: 'normal',
-          dataSorting: {
-            enabled: false
-          },
-          dataLabels: {
-            enabled: true,
-            formatter: function () {
-              let value = (this.y);
-              return '' + value.toFixed(1);
+          column: {
+            stacking: 'normal',
+            dataSorting: {
+              enabled: false
+            },
+            dataLabels: {
+              enabled: true,
+              formatter: function () {
+                let value = (this.y);
+                return '' + value.toFixed(1);
+              }
             }
           }
-        }
-      },
-      series: [{
-        name: 'Running Time',
-        data: running_time_data
-      }, {
-        name: 'Idle Time',
-        data: idle_time_data
-      }, {
-        name: 'Changeover Time',
-        data: changerover_data
-      }, {
-        name: 'No Production Planned',
-        data: no_prod_planned_data
-      }],
-      credits: {
-        enabled: false
-      },
+        },
+        series: [{
+          name: 'Running Time',
+          data: running_time_data
+        }, {
+          name: 'Idle Time',
+          data: idle_time_data
+        }, {
+          name: 'Changeover Time',
+          data: changerover_data
+        }, {
+          name: 'No Production Planned',
+          data: no_prod_planned_data
+        }],
+        credits: {
+          enabled: false
+        },
+      }
+      Highcharts.chart(controlname, stackChartData);
     }
-    Highcharts.chart(controlname, data2);
+
   }
 
 
@@ -1764,12 +1508,12 @@ export class DaywiseReportComponent implements OnInit{
       return line == 'all' ? value : value.line_id === line
     })
     console.log(WaterFallData);
-    let w_total_time = this.SumOfArrayByProperty(WaterFallData, 'theoretical_time') / 3600;
-    let w_no_prod_planned = this.SumOfArrayByProperty(WaterFallData, 'no_production_planned') / 3600;
-    let w_idle_time = this.SumOfArrayByProperty(WaterFallData, 'total_sum_idle_time') / 3600;
-    let w_changeover_time = this.SumOfArrayByProperty(WaterFallData, 'changeover_time') / 3600;
-    let w_in_process_reject_time = this.SumOfArrayByProperty(WaterFallData, 'reject_time') / 3600;
-    let w_speedLosstime = this.SumOfArrayByProperty(WaterFallData, 'speed_loss') / 3600;
+    let w_total_time = this.utils.SumOfArrayByProperty(WaterFallData, 'theoretical_time') / 3600;
+    let w_no_prod_planned = this.utils.SumOfArrayByProperty(WaterFallData, 'no_production_planned') / 3600;
+    let w_idle_time = this.utils.SumOfArrayByProperty(WaterFallData, 'total_sum_idle_time') / 3600;
+    let w_changeover_time = this.utils.SumOfArrayByProperty(WaterFallData, 'changeover_time') / 3600;
+    let w_in_process_reject_time = this.utils.SumOfArrayByProperty(WaterFallData, 'reject_time') / 3600;
+    let w_speedLosstime = this.utils.SumOfArrayByProperty(WaterFallData, 'speed_loss') / 3600;
 
     var data1: any
     data1 = {
@@ -1784,7 +1528,13 @@ export class DaywiseReportComponent implements OnInit{
         }
       },
       title: {
-        text: 'Daywise Timeline in Hours'
+        text: 'Daywise Timeline in Hours',
+        align: 'left',
+        style: {
+          fontWeight: 'bold'
+        }
+
+
       },
       tooltip: {
         shared: true
@@ -1869,162 +1619,166 @@ export class DaywiseReportComponent implements OnInit{
     Highcharts.chart(controlname, data1);
   }
 
-  createGoogleBarChart_Combined_eventHistory_Pie() {
-    try {
-      this.child2.webDataRocks.highcharts.getData(
-        {
-          slice: {
-            rows: [
-              {
-                uniqueName: "date",
-                caption: "Date"
-              },
-            ],
+  // createGoogleBarChart_Combined_eventHistory_Pie() {
+  //   try {
+  //     this.child.webDataRocks.highcharts.getData(
+  //       {
+  //         slice: {
+  //           rows: [
+  //             {
+  //               uniqueName: "date",
+  //               caption: "Date"
+  //             },
+  //           ],
 
-            measures: [
-              {
-                uniqueName: "executing",
-                formula: "((\"executing\"))",
-                caption: "Running Time",
-                format: "decimal2",
-              },
-              {
-                uniqueName: "total_sum_idle_time",
-                formula: "((\"total_sum_idle_time\"))",
-                caption: "Idle time",
-                format: "decimal2",
-              },
-              {
-                uniqueName: "changeover_time",
-                formula: "((\"changeover_time\"))",
-                caption: "Changeover",
-                format: "decimal2",
-              },
-              {
-                uniqueName: "no_production_planned",
-                formula: "(\"no_production_planned\")",
-                caption: "No Production Planned",
-                format: "decimal2",
-              }
-            ]
-          },
+  //           measures: [
+  //             {
+  //               uniqueName: "executing",
+  //               formula: "((\"executing\"))",
+  //               caption: "Running Time",
+  //               format: "decimal2",
+  //             },
+  //             {
+  //               uniqueName: "total_sum_idle_time",
+  //               formula: "((\"total_sum_idle_time\"))",
+  //               caption: "Idle time",
+  //               format: "decimal2",
+  //             },
+  //             {
+  //               uniqueName: "changeover_time",
+  //               formula: "((\"changeover_time\"))",
+  //               caption: "Changeover",
+  //               format: "decimal2",
+  //             },
+  //             {
+  //               uniqueName: "no_production_planned",
+  //               formula: "(\"no_production_planned\")",
+  //               caption: "No Production Planned",
+  //               format: "decimal2",
+  //             }
+  //           ]
+  //         },
 
-        },
-        data => {
-          this.Highcharts.setOptions({
+  //       },
+  //       data => {
+  //         this.Highcharts.setOptions({
 
-          });
-          createAndUpdateChartCombined_EventHistoryPie(data);
-        },
-        data => {
-          this.Highcharts.setOptions({
-
-
-          });
-
-          createAndUpdateChartCombined_EventHistoryPie(data);
-        }
-      );
-
-    } catch (error) {
-
-    }
+  //         });
+  //         createAndUpdateChartCombined_EventHistoryPie(data);
+  //       },
+  //       data => {
+  //         this.Highcharts.setOptions({
 
 
-    function createAndUpdateChartCombined_EventHistoryPie(data) {
-      console.log("pie..." + JSON.stringify(data));
+  //         });
 
-      let running_time_data = data.series[0].data[0];
-      let idle_time_data = data.series[1].data[0];
-      let changeover_time_data = data.series[2].data[0];
-      let no_production_time_data = data.series[3].data[0];
-      let all_sum = running_time_data + idle_time_data + changeover_time_data + no_production_time_data
+  //         createAndUpdateChartCombined_EventHistoryPie(data);
+  //       }
+  //     );
 
-      console.log("running_time_data" + running_time_data);
-      console.log(all_sum);
+  //   } catch (error) {
 
-      var perc_running: number
-      var perc_idle: number
-      var perc_changeover: number
-      var perc_noproduction: number
-
-      perc_running = (running_time_data / all_sum) * 100;
-      perc_idle = (idle_time_data / all_sum) * 100;
-      perc_changeover = (changeover_time_data / all_sum) * 100;
-      perc_noproduction = (no_production_time_data / all_sum) * 100;
-
-      var data2: any
-      data2 = {
-        chart: {
-          type: 'pie',
-          plotBackgroundColor: null,
-          plotBorderWidth: null,
-          plotShadow: false,
-          events: {
-            load: function () {
-              document.getElementById('highChartContainer-Combined-EventHistory-Pie').style.background = 'none';
-            }
-          }
-        },
-        title: {
-          text: 'Event History'
-        },
-        tooltip: {
-
-          formatter: function () {
-            let value = this.y;
-            return this.key + '<br>' + '' + value.toFixed(2) + '%';
-          }
-        },
-        accessibility: {
-          point: {
-            valueSuffix: '%'
-          }
-        },
-        plotOptions: {
-          pie: {
-            allowPointSelect: true,
-            cursor: 'pointer',
-            dataLabels: {
-              distance: -30,
-              color: 'white',
-              format: '{point.percentage:.1f} %'
-            },
-            // dataLabels: {
-            //   enabled: false,
-            //   format: '<b>{point.name}</b>: {point.percentage:.1f} %'
-            // },
-            showInLegend: true
-          }
-        },
-        series: [
-          {
-            name: 'Brands',
-            colorByPoint: true,
-
-            data: [
-              { name: 'Running Time', y: perc_running },
-              { name: 'Idle Time', y: perc_idle },
-              { name: 'Changeover Time', y: perc_changeover },
-              { name: 'No Production Planned', y: perc_noproduction }]
-          }],
-      }
+  //   }
 
 
-      console.log(data2);
+  //   function createAndUpdateChartCombined_EventHistoryPie(data) {
+  //     console.log("pie..." + JSON.stringify(data));
+
+  //     let running_time_data = data.series[0].data[0];
+  //     let idle_time_data = data.series[1].data[0];
+  //     let changeover_time_data = data.series[2].data[0];
+  //     let no_production_time_data = data.series[3].data[0];
+  //     let all_sum = running_time_data + idle_time_data + changeover_time_data + no_production_time_data
+
+  //     console.log("running_time_data" + running_time_data);
+  //     console.log(all_sum);
+
+  //     var perc_running: number
+  //     var perc_idle: number
+  //     var perc_changeover: number
+  //     var perc_noproduction: number
+
+  //     perc_running = (running_time_data / all_sum) * 100;
+  //     perc_idle = (idle_time_data / all_sum) * 100;
+  //     perc_changeover = (changeover_time_data / all_sum) * 100;
+  //     perc_noproduction = (no_production_time_data / all_sum) * 100;
+
+  //     var data2: any
+  //     data2 = {
+  //       chart: {
+  //         type: 'pie',
+  //         plotBackgroundColor: null,
+  //         plotBorderWidth: null,
+  //         plotShadow: false,
+  //         events: {
+  //           load: function () {
+  //             document.getElementById('highChartContainer-Combined-EventHistory-Pie').style.background = 'none';
+  //           }
+  //         }
+  //       },
+  //       title: {
+  //         text: 'Event History(%)',
+  //         align: 'left',
+  //         style: {
+  //           fontWeight: 'bold'
+  //         }
+  //       },
+  //       tooltip: {
+
+  //         formatter: function () {
+  //           let value = this.y;
+  //           return this.key + '<br>' + '' + value.toFixed(2) + '%';
+  //         }
+  //       },
+  //       accessibility: {
+  //         point: {
+  //           valueSuffix: '%'
+  //         }
+  //       },
+  //       plotOptions: {
+  //         pie: {
+  //           allowPointSelect: true,
+  //           cursor: 'pointer',
+  //           dataLabels: {
+  //             distance: -30,
+  //             color: 'white',
+  //             format: '{point.percentage:.1f} %'
+  //           },
+  //           // dataLabels: {
+  //           //   enabled: false,
+  //           //   format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+  //           // },
+  //           showInLegend: true
+  //         }
+  //       },
+  //       series: [
+  //         {
+  //           name: 'Brands',
+  //           colorByPoint: true,
+
+  //           data: [
+  //             { name: 'Running Time', y: perc_running },
+  //             { name: 'Idle Time', y: perc_idle },
+  //             { name: 'Changeover Time', y: perc_changeover },
+  //             { name: 'No Production Planned', y: perc_noproduction }]
+  //         }],
+  //     }
 
 
-      Highcharts.setOptions({
+  //     console.log(data2);
 
-        credits: {
-          enabled: false
-        },
-        colors: ["#32cd32", "rgb(254,1,1)", "rgb(163, 163, 117)", "rgb(255, 51, 204)"]
 
-      });
-      Highcharts.chart('highChartContainer-Combined-EventHistory-Pie', data2);
-    }
-  }
+  //     Highcharts.setOptions({
+
+  //       credits: {
+  //         enabled: false
+  //       },
+  //       colors: ["#32cd32", "rgb(254,1,1)", "rgb(163, 163, 117)", "rgb(255, 51, 204)"]
+
+  //     });
+  //     Highcharts.chart('highChartContainer-Combined-EventHistory-Pie', data2);
+  //   }
+  // }
 
   waterfallMonthTimelineTabClick(tabName) {
     console.log(tabName, "TAB NAME - waterfallMonthTimelineTabClick");
@@ -2036,142 +1790,53 @@ export class DaywiseReportComponent implements OnInit{
   }
 
 
-  lineWiseKpiTabClick(tabName, parentTabName) {
+  lineWiseKpiTabClick(tabName) {
 
     this.selected2 = this.filters[0].value;
-    console.log(tabName, parentTabName, "TAB NAME - lineWiseKpiTabClick");
-    if (tabName === 'Lines-combined' && parentTabName === 'OEE') {
-
-
-      //oee_linecombined
-      this.createGoogleBarChart(HighCharts_ColorsType1, "line_id", "Line Name", "line_id",
-        [{ uniqueName: "OEE", formula: "((\"productive_time\")/(\"planed_production_time\"))*100", caption: "OEE (%)", format: "44mvcoma", },], "column", false,
-        true, HighCharts_xAxisOptions2, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-oee-linecombined", false, false, false, "");
-
-    } if (tabName === 'Lines-combined' && parentTabName === 'Performance') {
-      //performance-linecombined
-      this.createGoogleBarChart(HighCharts_ColorsType1, "line_id", "Line Name", "line_id",
-        [{ uniqueName: "Performance", formula: "((\"net_operating_time\") / (\"gross_operating_time\"))*100", caption: "Performance (%)", format: "decimal2", },],
-        "column", false, true, HighCharts_xAxisOptions2, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-performance-linecombined", false, false, false, "");
-
-    } if (tabName === 'Lines-combined' && parentTabName === 'Availability') {
-      //availability-linecombined
-      this.createGoogleBarChart(HighCharts_ColorsType1, "line_id", "Line Name", "line_id",
-        [{ uniqueName: "Availability", formula: "(\"gross_operating_time\") / (\"planed_production_time\"))*100", caption: "Availability (%)", format: "decimal2", },],
-        "column", false, true, HighCharts_xAxisOptions2, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-availability-linecombined", false, false, false, "");
-
-    } if (tabName === 'Lines-combined' && parentTabName === 'Speed Loss') {
-      //speedloss_linecombined
-      this.createGoogleBarChart(HighCharts_ColorsType1, "line_id", "Line Name", "line_id",
-        [{ uniqueName: "speed_loss", formula: "((\"speed_loss\"))", caption: "Speed Loss (Hrs)", format: "decimal2", },], "column", false,
-        true, HighCharts_xAxisOptions2, HighCharts_yAxisOptions5, HighCharts_PlotOptions2, "higchartcontainer-speedloss-linecombined", false, false, false, "");
-
-    } if (tabName === 'Lines-combined' && parentTabName === 'Idle Time') {
-      //idletime_linecombined
-      this.createGoogleBarChart(HighCharts_ColorsType1, "line_id", "Line Name", "line_id",
-        [{ uniqueName: "idle_time", formula: "((\"idle_time\"))", caption: "Idle Time", format: "decimal2", },], "column", false,
-        true, HighCharts_xAxisOptions2, HighCharts_yAxisOptions5, HighCharts_PlotOptions2, "higchartcontainer-idletime-linecombined", false, false, false, "");
-
-    } if (tabName === 'Lines-combined' && parentTabName === 'Quality') {
-      //quality-linecombined
-      this.createGoogleBarChart(HighCharts_ColorsType1, "line_id", "Line Name", "line_id",
-        [{
-          uniqueName: "Quality", formula: "((\"productive_time\"/60) / (\"net_operating_time\"/60))*100", caption: "Quality (%)",
-          format: "44mvcoma",
-        }], "column", false, true, HighCharts_xAxisOptions2, HighCharts_yAxisOptions3, HighCharts_PlotOptions3, 'higchartcontainer-quality-linecombined', false, false, true, "Performance comparison");
-
-    } if (parentTabName === 'OEE') {
-      //oee_operatorwise
-
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_id", "Line Name", "operator_name", ["line_id." + tabName], false, [], false,
-        [{ uniqueName: "OEE", formula: "((\"productive_time\")/(\"planed_production_time\"))*100", caption: "OEE (%)", format: "44mvcoma", },], "column", false,
-        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-oee-" + tabName, false, false, false, "");
-
+    console.log(tabName, "TAB NAME - lineWiseKpiTabClick");
+    if (tabName === 'Lines-combined') {
+      this.createChart_kpi_linewise('all', 'higchartcontainer-control-linecombined', 'line_id', 'Key parameters', 'APQOEE');
+    } else {
+      this.createChart_kpi_linewise(tabName, 'higchartcontainer-control-' + tabName, 'operator_name', 'Operator wise', 'APQOEE');
     }
-    if (parentTabName === 'Performance') {
-      //performance_operatorwise
 
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_id", "Line Name", "operator_name", ["line_id." + tabName], false, [], false,
-        [{ uniqueName: "Performance", formula: "((\"net_operating_time\") / (\"gross_operating_time\"))*100", caption: "Performance (%)", format: "44mvcoma", },], "column", false,
-        true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-performance-" + tabName, false, false, false, "");
-
-
-    }
-    if (parentTabName === 'Quality') {
-      //quality_operatorwise
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_id", "Line Name", "operator_name", ["line_id." + tabName], false, [], false,
-        [{
-          uniqueName: "Quality", formula: "((\"productive_time\"/60) / (\"net_operating_time\"/60))*100", caption: "Quality (%)",
-          format: "44mvcoma",
-        }], "column", false, true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-quality-" + tabName, false, false, false, "");
-
-
-    }
-    if (parentTabName === 'Availability') {
-      //availability_operatorwise
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_id", "Line Name", "operator_name", ["line_id." + tabName], false, [], false,
-        [{ uniqueName: "Availability", formula: "(\"gross_operating_time\") / (\"planed_production_time\"))*100", caption: "Availability (%)", format: "44mvcoma", },],
-        "column", false, true, HighCharts_yAxisOptions1, HighCharts_PlotOptions1, "higchartcontainer-control-availability-" + tabName, false, false, false, "");
-    }
-    if (parentTabName === 'Speed Loss') {
-      //speedloss_operatorwise
-
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_id", "Line Name", "operator_name", ["line_id." + tabName], false, [], false,
-        [{ uniqueName: "speed_loss", formula: "((\"speed_loss\"))", caption: "Speed Loss (Hrs)", format: "decimal2", },], "column", false,
-        true, HighCharts_yAxisOptions5, HighCharts_PlotOptions2, "higchartcontainer-control-speedloss-" + tabName, false, false, false, "");
-
-
-    } if (parentTabName === 'Idle Time') {
-      //idletime_operatorwise
-      this.createGoogleBarChart2(HighCharts_ColorsType1, "line_id", "Line Name", "operator_name", ["line_id." + tabName], false, [], false,
-        [{ uniqueName: "idle_time", formula: "((\"idle_time\"))", caption: "Idle Time(Hrs)", format: "decimal2", },], "column", false,
-        true, HighCharts_yAxisOptions5, HighCharts_PlotOptions2, "higchartcontainer-control-idletime-" + tabName, false, false, false, "");
-
-
-    }
   }
 
 
+
+  lineWiseSpeedIdleTabClick(tabName) {
+    this.selected2 = this.filters[0].value;
+    console.log(tabName, "TAB NAME - lineWiseSpeedIdleTabClick");
+
+    if (tabName === 'Lines-combined') {
+      this.createChart_kpi_linewise('all', 'higchartcontainer-control-speedloss-linecombined', 'line_id', 'Idle Time, Speed Loss', '');
+    } else {
+      this.createChart_kpi_linewise(tabName, 'higchartcontainer-control-' + tabName, 'operator_name', 'Operator wise', '');
+    }
+  }
 
 
   eventHistoryTabClick(tabName) {
     console.log(tabName, "TAB NAME -eventHistoryTabClick");
 
-    if (tabName === 'Lines-combined') {
-      //LineCombined_eventHistory
-      this.createGoogleBarChart(HighCharts_ColorsType2, "date", "Date", "",
-        [{ uniqueName: "executing", formula: "((\"executing\"))", caption: "Running Time", format: "decimal2", },
-        { uniqueName: "total_sum_idle_time", formula: "((\"total_sum_idle_time\"))", caption: "Idle time", format: "decimal2", },
-        { uniqueName: "changeover_time", formula: "((\"changeover_time\"))", caption: "Changeover Time", format: "decimal2", },
-        { uniqueName: "no_production_planned", formula: "(\"no_production_planned\")", caption: "No Production Planned", format: "decimal2", },],
-        "column", false, true, HighCharts_xAxisOptions1, HighCharts_yAxisOptions2, HighCharts_PlotOptions4, "higchartcontainer-lines-combined-eventhistory", true, true, true, "Event History (in Hours)");
-
+    if (tabName === 'Combined') {
+      this.createAndUpdateChart_eventHistory_linewise('all', 'higchartcontainer-lines-combined-eventhistory', 'stack');
+      this.createAndUpdateChart_eventHistory_linewise('all', 'highChartContainer-Combined-EventHistory-Pie', 'pie');
     }
     else {
-      this.createAndUpdateChart_eventHistory_linewise(tabName, 'higchartcontainer-eventhistory-' + tabName);
+      this.createAndUpdateChart_eventHistory_linewise(tabName, 'higchartcontainer-eventhistory-' + tabName, 'stack');
     }
   }
 
 
-  ConvertArrayDataToHour(data) {
-    try {
-      data.forEach(function (sa, index) {
-        data[index] = sa.map(function (each_element) {
-          if (typeof each_element === "number") { return Number((each_element / 3600).toFixed(1)); } else { return each_element }
-        });
-      });
-      return data;
-    } catch (error) {
-      return data;
-    }
-  }
+
   Export_Excel() {
-   
+
     var lineName = this.dataSourceService.lineName.split("/");
     this.child.webDataRocks.exportTo(
       "Excel", {
       filename: "Daywise Output Report_" + moment(this.date.value).format("yyyy-MM-DD"),
-      excelSheetName: moment(this.date.value).format("yyyy-MM-DD"), 
+      excelSheetName: moment(this.date.value).format("yyyy-MM-DD"),
       destinationType: "file",
       url: "URL to server script saving the file"
 
@@ -2182,12 +1847,12 @@ export class DaywiseReportComponent implements OnInit{
     );
   }
   Export_PDF() {
-  
+
     var lineName = this.dataSourceService.lineName.split("/");
     this.child.webDataRocks.exportTo(
       "pdf", {
-      filename: "Daywise Output Report_" + moment(this.date.value).format("yyyy-MM-DD")+  "_" + lineName[0],
-      header: "Daywise Output Report" +" / " + moment(this.date.value).format("yyyy-MM-DD") +  " / " + this.dataSourceService.lineName, 
+      filename: "Daywise Output Report_" + moment(this.date.value).format("yyyy-MM-DD") + "_" + lineName[0],
+      header: "Daywise Output Report" + " / " + moment(this.date.value).format("yyyy-MM-DD") + " / " + this.dataSourceService.lineName,
       destinationType: "file",
       url: "URL to server script saving the file"
 
@@ -2262,322 +1927,144 @@ export class DaywiseReportComponent implements OnInit{
     return result;
   }
 
+  createChart_kpi_linewise(line, controlname, category, chartTitle, chartType) {
+    console.log(controlname, "controlname");
+    console.log(line, "line Name");
 
+    console.log(category, "category");
 
+    var KPIData = this.OutputData.filter(function (value) {
+      return line == 'all' ? value : value.line_id === line
+    })
+    console.log(KPIData);
 
-  //<---------------------- paramerters required for below function -------------->
+    const GroupedData = this.utils.groupAndSum(KPIData, [category], ['planed_production_time', 'productive_time', 'net_operating_time', 'gross_operating_time', 'speed_loss', 'idle_time']);
 
-  //  rowsUniqueName : uniqueName of rows
-  //  rowscaption : caption for the rows
-  //  columnsUniqueName : uniqueName of columns
-  //  measures_array : Array of measures
-  //  chartType : Type of chart
-  //  withDrilldown_bit : Value of withDrilldown_bit may be true or false
-  //  exporting_obj : Export object for charts to export
-  //  yAxis_obj : Y Axis Object
-  //  plotOptions_obj : plot options object
-  // colors_array : Required colors in the chart
-  //  control_name : Highchart ID which described at HTML Page
-  //  secToHrBit   : convert seconds into hours bit (it's value may be true or false)
-  //  yAxisBit     : convert multiple Y axis into one or common axis bit (it's value may be true or false)
-  //  titleTextBit : Highchart title text bit (it's value may be true or false)
-  //  titleText    : Highchart title text
+    console.log(GroupedData, "GroupedData");
 
+    GroupedData.forEach((itm) => {
+      itm["OEE"] = this.utils.roundOff((itm["productive_time"] / itm["planed_production_time"]) * 100)
+      itm["Performance"] = this.utils.roundOff((itm["net_operating_time"] / itm["gross_operating_time"]) * 100)
+      itm["Availability"] = this.utils.roundOff((itm["gross_operating_time"] / itm["planed_production_time"]) * 100)
+      itm["Quality"] = this.utils.roundOff((itm["productive_time"] / itm["net_operating_time"]) * 100)
+      itm["idle_time"] = this.utils.GetTwoDigitDecimalNum(this.utils.ConvertToHours(itm["idle_time"]))
+      itm["speed_loss"] = this.utils.GetTwoDigitDecimalNum(this.utils.ConvertToHours(itm["speed_loss"]))
+    });
+    console.log(GroupedData, "GroupedData");
 
-  createGoogleBarChart(colors_array: string[], rowsUniqueName: string, rowsCaption: string, columnsUniqueName: string, measures_array: Measure[], chartType: string, withDrilldown_bit: boolean, exporting_bit: boolean,
-    xAxis_obj: object, yAxis_obj: object, plotOptions_obj: object, control_name: string, secToHrBit: boolean, yAxisBit: boolean, titleTextBit: boolean, titleText: string) {
-    try {
-      // console.log(colors_array),
-      //   console.log(rowsUniqueName),
-      //   console.log(rowsCaption),
-      //   console.log(columnsUniqueName),
-      //   console.log(measures_array),
-      //   console.log(chartType),
-      //   console.log("withDrilldown_bit:"+withDrilldown_bit),
-      //   console.log(exporting_bit),
-      //   console.log(yAxis_obj),
-      //   console.log(plotOptions_obj),
-      //   console.log(control_name),
-      //   console.log(secToHrBit),
-      //   console.log(yAxisBit),
-      //   console.log(titleTextBit),
-      //   console.log(titleText),
-
-
-      this.child.webDataRocks.highcharts.getData(
-
+    let xAsixData = this.utils.filterMyArr(GroupedData, category);
+    let measureDataOEE = this.utils.filterMyArr(GroupedData, "OEE");
+    let measureDataPerformace = this.utils.filterMyArr(GroupedData, "Performance");
+    let measureDataQuality = this.utils.filterMyArr(GroupedData, "Quality");
+    let measureDataAvailability = this.utils.filterMyArr(GroupedData, "Availability");
+    let measureDataSpeedLoss = this.utils.filterMyArr(GroupedData, "speed_loss");
+    let measureDataIdleTime = this.utils.filterMyArr(GroupedData, "idle_time");
+    if (chartType === 'APQOEE') {
+     var chartTitleName = chartTitle + '(%)'
+      var seriesData = [
         {
-          slice: {
-            rows: [
-              {
-                uniqueName: rowsUniqueName,
-                caption: rowsCaption,
-              },
-            ],
-            columns: [
-              {
-                uniqueName: columnsUniqueName,
-              }
-            ],
-            measures: measures_array
-          },
-          type: chartType,
-          withDrilldown: withDrilldown_bit,
+          name: "Availability",
+          data: measureDataAvailability,
+          color: '#ffe66d'
         },
-        data => {
-          this.Highcharts.setOptions({
-            exporting: {
-              enabled: exporting_bit,
-            },
-            xAxis: xAxis_obj,
-            yAxis: yAxis_obj,
-            plotOptions: plotOptions_obj
-          });
-          this.createAndUpdateChart(data, colors_array, control_name, secToHrBit, yAxisBit, titleTextBit, titleText, withDrilldown_bit);
-
-        },
-        data => {
-          this.Highcharts.setOptions({
-            exporting: {
-              enabled: exporting_bit,
-            },
-            xAxis: xAxis_obj,
-            yAxis: yAxis_obj,
-            plotOptions: plotOptions_obj
-          });
-          this.createAndUpdateChart(data, colors_array, control_name, secToHrBit, yAxisBit, titleTextBit, titleText, withDrilldown_bit);
-        },
-      );
-    } catch (error) {
-
-    }
-
-  }
-
-  createGoogleBarChart2(colors_array: string[], rowsUniqueName: string, rowsCaption: string, columnsUniqueName: string, filterMembersArray: string[], filterNegationBit: boolean, filterMembersColArray: string[], filterNegationColBit: boolean, measures_array: Measure[], chartType: string, withDrilldown_bit: boolean, exporting_bit: boolean,
-    yAxis_obj: object, plotOptions_obj: object, control_name: string, secToHrBit: boolean, yAxisBit: boolean, titleTextBit: boolean, titleText: string) {
-    try {
-      // console.log(colors_array),
-      //   console.log(rowsUniqueName),
-      //   console.log(rowsCaption),
-      //   console.log(columnsUniqueName),
-      //   console.log(measures_array),
-      //   console.log(chartType),
-      //   console.log("withDrilldown_bit:"+withDrilldown_bit),
-      //   console.log(exporting_bit),
-      //   console.log(yAxis_obj),
-      //   console.log(plotOptions_obj),
-      //   console.log(control_name),
-      //   console.log(secToHrBit),
-      //   console.log(yAxisBit),
-      //   console.log(titleTextBit),
-      //   console.log(titleText),
-
-      this.child2.webDataRocks.highcharts.getData(
         {
-          slice: {
-            rows: [
-              {
-                uniqueName: rowsUniqueName,
-                caption: rowsCaption,
-                filter: {
-                  members: filterMembersArray,
-                  //negation: filterNegationBit,
-                }
-              },
-            ],
-            columns: [
-              {
-                uniqueName: columnsUniqueName,
-                filter: {
-                  members: filterMembersColArray,
-                  //negation: filterNegationColBit,
-                }
-              }
-            ],
-            measures: measures_array,
-          },
-          type: chartType,
-          withDrilldown: withDrilldown_bit,
+          name: "Performance",
+          data: measureDataPerformace,
+          color: '#4ecdc4'
         },
-        data => {
-          this.Highcharts.setOptions({
-            exporting: {
-              enabled: exporting_bit,
-            },
-            yAxis: yAxis_obj,
-
-            plotOptions: plotOptions_obj
-          });
-          this.createAndUpdateChart(data, colors_array, control_name, secToHrBit, yAxisBit, titleTextBit, titleText, withDrilldown_bit);
-
+        {
+          name: "Quality",
+          data: measureDataQuality,
+          color: '#1a535c'
         },
-        data => {
-          this.Highcharts.setOptions({
-            exporting: {
-              enabled: exporting_bit,
-            },
-            yAxis: yAxis_obj,
-            plotOptions: plotOptions_obj
-          });
-          this.createAndUpdateChart(data, colors_array, control_name, secToHrBit, yAxisBit, titleTextBit, titleText, withDrilldown_bit);
+        {
+          name: "OEE",
+          data: measureDataOEE,
+          color: '#ff6b6b'
         },
-      );
-    } catch (error) {
 
+      ]
+    } else {
+      var chartTitleName = chartTitle + '(in Hours)'
+      var seriesData = [
+        {
+          name: "Speed Loss",
+          data: measureDataSpeedLoss,
+          color: '#ffe66d'
+        },
+        {
+          name: "Idle Time",
+          data: measureDataIdleTime,
+          color: '#4ecdc4'
+        },
+
+
+      ]
     }
+    var ChartData: any;
+    ChartData = {
 
-  }
-
-
-  GenerateRunningTotals(data) {
-    let temp = 0;
-    let final = data.map(v => ({
-      executing: temp += v.executing,
-      date: v.date
-    }));
-    console.log(final)
-    return final;
-  }
-  SumOfArrayByProperty(data, prop) {
-    return data.reduce(function (a, b) {
-      return a + b[prop];
-    }, 0);
-  }
-
-  setTime(data) {
-    data = data / 3600;
-    return data;
-  }
-
-
-  //<------------------- paramerters required for below function ---------------------->
-  //data : data of the Highcharts
-  //colors_array : Required colors in the chart
-  //control_name : Highchart ID which described at HTML Page
-  //secToHrBit   : convert seconds into hours bit (it's value may be true or false)
-  //yAxisBit     : convert multiple Y axis into one or common axis bit (it's value may be true or false)
-  //titleTextBit : Highchart title text bit (it's value may be true or false)
-  //titleText    : Highchart title text
-
-  createAndUpdateChart(data: any, colors_array: string[], control_name: string, secToHrBit: boolean, yAxisBit: boolean, titleTextBit: boolean, titleText: string, withDrilldown_bit: boolean) {
-    console.log(data);
-
-    // console.log(withDrilldown_bit);
-    console.log(control_name);
-    for (let i = 0; i <= this.lines.length; i++) {
-      if (control_name === "higchartcontainer-control-oee-" + this.lines[i] || control_name === "higchartcontainer-control-performance-" + this.lines[i] || control_name === "higchartcontainer-control-quality-" + this.lines[i] || control_name === "higchartcontainer-control-availability-" + this.lines[i] || control_name === "higchartcontainer-control-speedloss-" + this.lines[i] || control_name === "higchartcontainer-control-quality-" + this.lines[i] || control_name === "higchartcontainer-control-availability-" + this.lines[i] || control_name === "higchartcontainer-control-idletime-" + this.lines[i]) {
-        console.log(data.series);
-        var sortedArray = data.series.sort(function (a, b) { return b.data - a.data });
-
-        console.log(sortedArray);
-        data.series = sortedArray;
-
-      }
-    }
-
-    if (control_name === "higchartcontainer-oee-linecombined" || control_name === "higchartcontainer-performance-linecombined" || control_name === "higchartcontainer-quality-linecombined" || control_name === "higchartcontainer-availability-linecombined" || control_name === "higchartcontainer-speedloss-linecombined" || control_name === "higchartcontainer-idletime-linecombined") {
-
-      for (let i = 0; i < data.series.length; i++) {
-        //console.log(data.series[i].data);
-
-        var filtered = data.series[i].data.filter(function (el) {
-          return el != null;
-        });
-
-        data.series[i].data = filtered;
-
-      }
-
-      var sortedArray = data.series.sort(function (a, b) { return b.data - a.data });
-
-      console.log(sortedArray);
-      data.series = sortedArray;
-      console.log(data.series);
-
-    }
-    if (withDrilldown_bit == true) {
-      let drilDownData: string[];
-      for (let i = 0; i < data.drilldown.series.length; i++) {
-        drilDownData = data.drilldown.series[i].data
-        //filter the null array
-        const filter = null;
-        const filteredResult = drilDownData.filter((item) => {
-          return (item.indexOf(filter) >= 0);
-        });
-        // console.log(filteredResult);
-
-        //remove the common data between two arrays
-        drilDownData = drilDownData.filter(val => !filteredResult.includes(val));
-        //console.log(drilDownData);
-        data.drilldown.series[i].data = drilDownData;
-
-
-        if (control_name === "higchartcontainer-oee-datewise" || control_name === "higchartcontainer-performance-datewise" || control_name === "higchartcontainer-availability-datewise" || control_name === "higchartcontainer-speedloss-datewise" || control_name === "higchartcontainer-idletime-datewise") {
-          // console.log(drilDownData[0])
-          for (let i = 0; i < data.drilldown.series.length; i++) {
-            data.drilldown.series[i].type = "line"
-
-          }
-          drilDownData.sort(function (a, b) {
-            var keyA = new Date(a),
-              keyB = new Date(b);
-            // Compare the 2 dates
-            if (keyA < keyB) return 1;
-            if (keyA > keyB) return -1;
-            return 0;
-          });
-
-          console.log(drilDownData);
-          data.drilldown.series[i].data = drilDownData;
-        }
-      }
-    }
-
-    if (yAxisBit == true) {
-      for (let d of data.series) {
-        d.yAxis = 1;
-      }
-    }
-    if (titleTextBit == true) {
-      data.title.text = titleText;
-    }
-
-
-
-    Highcharts.setOptions({
-      tooltip: {
-        enabled: true,
-        formatter: function () {
-          let value
-          if (secToHrBit == true) {
-
-            value = (this.y) / 3600;
-          } else {
-
-            value = (this.y);
-          }
-          return this.key + '<br>' + '' + value.toFixed(1);
-        }
+      chart: {
+        type: 'column'
       },
       title: {
+        text: chartTitleName,
         align: 'left',
         style: {
           fontWeight: 'bold'
         }
       },
+      xAxis: {
+        title: {
+          text: category
+        },
+        categories: xAsixData
+      },
+      yAxis: [
+        {
+          title: {
+            text: "Key Parameters"
+          },
+          opposite: false,
+          labels: {
+            enabled: true,
+            formatter: function () {
+              let value = (this.value);
+              return value;
+            },
+          },
+        },
+      ],
+      tooltip: {
+        formatter: function () {
+          let value = (this.y);
+          return this.key + '<br>' + '' + value + '%';
+        }
+      },
+      plotOptions: {
+        column: {
+          stacking: undefined,
+          dataLabels: {
+            enabled: true,
+            style: {
+              fontWeight: 'bold',
+              color: '#000000'
+            },
+            formatter: function () {
+              let value = (this.y);
+              return '' + value;
+            }
+          }
+        }
+      },
+
+      series: seriesData,
       credits: {
         enabled: false
       },
-      colors: colors_array
-    });
-
-    Highcharts.chart(control_name, data);
-
-  }
-  removeDuplicates(data) {
-    return [...new Set(data)]
-
+    }
+    console.log(JSON.stringify(ChartData));
+    Highcharts.chart(controlname, ChartData);
   }
 
 
