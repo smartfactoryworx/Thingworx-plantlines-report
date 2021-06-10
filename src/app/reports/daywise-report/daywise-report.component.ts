@@ -118,53 +118,7 @@ interface Filter {
   value: string;
   viewValue: string;
 }
-var HighCharts_ColorsType2 = ["#32cd32", "rgb(254,1,1)", "rgb(163, 163, 117)", "rgb(255, 51, 204)",]
-var HighCharts_yAxisOptions2 = {
-  title: {
-    enabled: false
-  },
-  labels: {
-    enabled: true,
-    formatter: function () {
-      let value = (this.value) / 3600;
-      return value.toFixed(0);
-    },
 
-
-  },
-
-}
-var HighCharts_xAxisOptions1 = {
-  labels: {
-    enabled: true,
-  },
-  plotLines: [{}]
-}
-var HighCharts_PlotOptions4 = {
-  // column: {
-  //   stacking: 'normal',
-  //   dataLabels: {
-  //     enabled: true
-  //   }
-  // },
-  series: {
-
-    borderWidth: 0,
-    stacking: 'normal',
-    dataLabels: {
-      enabled: true,
-      allowOverlap: false,
-      formatter: function () {
-        let value = (this.y) / 3600;
-        return '' + value.toFixed(0);
-      }
-    },
-    dataSorting: {
-      enabled: false,
-    },
-    tooltip: { valueDecimals: 0 },
-  }
-}
 
 
 @Component({
