@@ -1149,30 +1149,33 @@ export class DaywiseReportComponent implements OnInit {
     })
     console.log(eventHistoryLineData);
 
-    let line_running_time = this.GroupByAndSumHour(eventHistoryLineData);
-    let line_idle_time = this.GroupByAndSumIdelTime(eventHistoryLineData);
-    let line_changerover_time = this.GroupByAndSumChangeoverTime(eventHistoryLineData);
-    let line_no_prod_planned_time = this.GroupByAndSumNoProductionPlan(eventHistoryLineData);
+    const eventHistoryGroupedData = this.utils.groupAndSum(eventHistoryLineData,['date'],['executing','total_sum_idle_time','changeover_time','no_production_planned']);
+    
+    console.log(eventHistoryGroupedData,"eventHistoryGroupedData");
 
-    console.log(line_running_time);
-    console.log(line_idle_time);
-    console.log(line_changerover_time);
-    console.log(line_no_prod_planned_time);
+    eventHistoryGroupedData.forEach((itm) => {
+      itm["executing"] = this.utils.GetDigitDecimalNum(this.utils.ConvertToHours(itm["executing"]),'1e1')
+      itm["total_sum_idle_time"] = this.utils.GetDigitDecimalNum(this.utils.ConvertToHours(itm["total_sum_idle_time"]),'1e1')
+      itm["changeover_time"] = this.utils.GetDigitDecimalNum(this.utils.ConvertToHours(itm["changeover_time"]),'1e1')
+      itm["no_production_planned"] = this.utils.GetDigitDecimalNum(this.utils.ConvertToHours(itm["no_production_planned"]),'1e1')
+    });
 
-
-    let xAxisData = line_running_time.map(a => a.date);
-    let running_time_data = line_running_time.map(a => a.executing);
-    let idle_time_data = line_idle_time.map(a => a.total_sum_idle_time);
-    let changerover_data = line_changerover_time.map(a => a.changeover_time);
-    let no_prod_planned_data = line_no_prod_planned_time.map(a => a.no_production_planned);
+     console.log(eventHistoryGroupedData,"eventHistoryGroupedData");
 
 
+     let xAxisData = this.utils.filterMyArr(eventHistoryGroupedData, 'date');
+     let running_time_data = this.utils.filterMyArr(eventHistoryGroupedData, "executing");
+     let idle_time_data = this.utils.filterMyArr(eventHistoryGroupedData, "total_sum_idle_time");
+     let changerover_data = this.utils.filterMyArr(eventHistoryGroupedData, "changeover_time");
+     let no_prod_planned_data = this.utils.filterMyArr(eventHistoryGroupedData, "no_production_planned");
+  
 
-    console.log(xAxisData)
+    console.log(xAxisData);
     console.log(running_time_data);
     console.log(idle_time_data);
     console.log(changerover_data);
     console.log(no_prod_planned_data);
+
     if (chartType === 'pie') {
 
       let all_sum = running_time_data[0] + idle_time_data[0] + changerover_data[0] + no_prod_planned_data[0]
@@ -1454,166 +1457,7 @@ export class DaywiseReportComponent implements OnInit {
     Highcharts.chart(controlname, data1);
   }
 
-  // createGoogleBarChart_Combined_eventHistory_Pie() {
-  //   try {
-  //     this.child.webDataRocks.highcharts.getData(
-  //       {
-  //         slice: {
-  //           rows: [
-  //             {
-  //               uniqueName: "date",
-  //               caption: "Date"
-  //             },
-  //           ],
 
-  //           measures: [
-  //             {
-  //               uniqueName: "executing",
-  //               formula: "((\"executing\"))",
-  //               caption: "Running Time",
-  //               format: "decimal2",
-  //             },
-  //             {
-  //               uniqueName: "total_sum_idle_time",
-  //               formula: "((\"total_sum_idle_time\"))",
-  //               caption: "Idle time",
-  //               format: "decimal2",
-  //             },
-  //             {
-  //               uniqueName: "changeover_time",
-  //               formula: "((\"changeover_time\"))",
-  //               caption: "Changeover",
-  //               format: "decimal2",
-  //             },
-  //             {
-  //               uniqueName: "no_production_planned",
-  //               formula: "(\"no_production_planned\")",
-  //               caption: "No Production Planned",
-  //               format: "decimal2",
-  //             }
-  //           ]
-  //         },
-
-  //       },
-  //       data => {
-  //         this.Highcharts.setOptions({
-
-  //         });
-  //         createAndUpdateChartCombined_EventHistoryPie(data);
-  //       },
-  //       data => {
-  //         this.Highcharts.setOptions({
-
-
-  //         });
-
-  //         createAndUpdateChartCombined_EventHistoryPie(data);
-  //       }
-  //     );
-
-  //   } catch (error) {
-
-  //   }
-
-
-  //   function createAndUpdateChartCombined_EventHistoryPie(data) {
-  //     console.log("pie..." + JSON.stringify(data));
-
-  //     let running_time_data = data.series[0].data[0];
-  //     let idle_time_data = data.series[1].data[0];
-  //     let changeover_time_data = data.series[2].data[0];
-  //     let no_production_time_data = data.series[3].data[0];
-  //     let all_sum = running_time_data + idle_time_data + changeover_time_data + no_production_time_data
-
-  //     console.log("running_time_data" + running_time_data);
-  //     console.log(all_sum);
-
-  //     var perc_running: number
-  //     var perc_idle: number
-  //     var perc_changeover: number
-  //     var perc_noproduction: number
-
-  //     perc_running = (running_time_data / all_sum) * 100;
-  //     perc_idle = (idle_time_data / all_sum) * 100;
-  //     perc_changeover = (changeover_time_data / all_sum) * 100;
-  //     perc_noproduction = (no_production_time_data / all_sum) * 100;
-
-  //     var data2: any
-  //     data2 = {
-  //       chart: {
-  //         type: 'pie',
-  //         plotBackgroundColor: null,
-  //         plotBorderWidth: null,
-  //         plotShadow: false,
-  //         events: {
-  //           load: function () {
-  //             document.getElementById('highChartContainer-Combined-EventHistory-Pie').style.background = 'none';
-  //           }
-  //         }
-  //       },
-  //       title: {
-  //         text: 'Event History(%)',
-  //         align: 'left',
-  //         style: {
-  //           fontWeight: 'bold'
-  //         }
-  //       },
-  //       tooltip: {
-
-  //         formatter: function () {
-  //           let value = this.y;
-  //           return this.key + '<br>' + '' + value.toFixed(2) + '%';
-  //         }
-  //       },
-  //       accessibility: {
-  //         point: {
-  //           valueSuffix: '%'
-  //         }
-  //       },
-  //       plotOptions: {
-  //         pie: {
-  //           allowPointSelect: true,
-  //           cursor: 'pointer',
-  //           dataLabels: {
-  //             distance: -30,
-  //             color: 'white',
-  //             format: '{point.percentage:.1f} %'
-  //           },
-  //           // dataLabels: {
-  //           //   enabled: false,
-  //           //   format: '<b>{point.name}</b>: {point.percentage:.1f} %'
-  //           // },
-  //           showInLegend: true
-  //         }
-  //       },
-  //       series: [
-  //         {
-  //           name: 'Brands',
-  //           colorByPoint: true,
-
-  //           data: [
-  //             { name: 'Running Time', y: perc_running },
-  //             { name: 'Idle Time', y: perc_idle },
-  //             { name: 'Changeover Time', y: perc_changeover },
-  //             { name: 'No Production Planned', y: perc_noproduction }]
-  //         }],
-  //     }
-
-
-  //     console.log(data2);
-
-
-  //     Highcharts.setOptions({
-
-  //       credits: {
-  //         enabled: false
-  //       },
-  //       colors: ["#32cd32", "rgb(254,1,1)", "rgb(163, 163, 117)", "rgb(255, 51, 204)"]
-
-  //     });
-  //     Highcharts.chart('highChartContainer-Combined-EventHistory-Pie', data2);
-  //   }
-  // }
 
   waterfallMonthTimelineTabClick(tabName) {
     console.log(tabName, "TAB NAME - waterfallMonthTimelineTabClick");
@@ -1698,69 +1542,7 @@ export class DaywiseReportComponent implements OnInit {
     );
   }
 
-  GroupByAndSumHour(data) {
-    var result = [];
-
-    data.reduce(function (res, value) {
-      if (!res[value.date]) {
-        res[value.date] = { date: value.date, executing: 0 };
-        result.push(res[value.date])
-      }
-      res[value.date].executing += (value.executing / 3600);
-      return res;
-    }, {});
-
-    console.log(result)
-    return result;
-  }
-
-  GroupByAndSumIdelTime(data) {
-    var result = [];
-
-    data.reduce(function (res, value) {
-      if (!res[value.date]) {
-        res[value.date] = { date: value.date, total_sum_idle_time: 0 };
-        result.push(res[value.date])
-      }
-      res[value.date].total_sum_idle_time += (value.total_sum_idle_time / 3600);
-      return res;
-    }, {});
-
-    console.log(result)
-    return result;
-  }
-
-  GroupByAndSumChangeoverTime(data) {
-    var result = [];
-
-    data.reduce(function (res, value) {
-      if (!res[value.date]) {
-        res[value.date] = { date: value.date, changeover_time: 0 };
-        result.push(res[value.date])
-      }
-      res[value.date].changeover_time += (value.changeover_time / 3600);
-      return res;
-    }, {});
-
-    console.log(result)
-    return result;
-  }
-
-  GroupByAndSumNoProductionPlan(data) {
-    var result = [];
-
-    data.reduce(function (res, value) {
-      if (!res[value.date]) {
-        res[value.date] = { date: value.date, no_production_planned: 0 };
-        result.push(res[value.date])
-      }
-      res[value.date].no_production_planned += (value.no_production_planned / 3600);
-      return res;
-    }, {});
-
-    console.log(result)
-    return result;
-  }
+ 
 
   createChart_kpi_linewise(line, controlname, category, chartTitle, chartType) {
     console.log(controlname, "controlname");
@@ -1784,13 +1566,13 @@ export class DaywiseReportComponent implements OnInit {
       itm["Performance"] = this.utils.roundOff((itm["net_operating_time"] / itm["gross_operating_time"]) * 100)
       itm["Availability"] = this.utils.roundOff((itm["gross_operating_time"] / itm["planed_production_time"]) * 100)
       itm["Quality"] = this.utils.roundOff((itm["productive_time"] / itm["net_operating_time"]) * 100)
-      itm["total_sum_idle_time"] = this.utils.GetTwoDigitDecimalNum(this.utils.ConvertToHours(itm["total_sum_idle_time"]))
-      itm["speed_loss"] = this.utils.GetTwoDigitDecimalNum(this.utils.ConvertToHours(itm["speed_loss"]))
+      itm["total_sum_idle_time"] = this.utils.GetDigitDecimalNum(this.utils.ConvertToHours(itm["total_sum_idle_time"]),'1e2')
+      itm["speed_loss"] = this.utils.GetDigitDecimalNum(this.utils.ConvertToHours(itm["speed_loss"]),'1e2')
     });
     console.log(GroupedData, "GroupedData");
     GroupedData.sort(this.utils.dynamicSort('OEE'))
 
-    let xAsixData = this.utils.filterMyArr(GroupedData, category);
+    let xAxisData = this.utils.filterMyArr(GroupedData, category);
     let measureDataOEE = this.utils.filterMyArr(GroupedData, "OEE");
     let measureDataPerformace = this.utils.filterMyArr(GroupedData, "Performance");
     let measureDataQuality = this.utils.filterMyArr(GroupedData, "Quality");
@@ -1865,7 +1647,7 @@ export class DaywiseReportComponent implements OnInit {
         title: {
           text: category
         },
-        categories: xAsixData
+        categories: xAxisData
       },
       yAxis: [
         {

@@ -24,9 +24,9 @@ export class UtilService {
     }
   }
 
-  //get 2 digits after decimal 
-  GetTwoDigitDecimalNum(Number) {
-    return Math.round(Number * 1e2) / 1e2;
+  //get digits after decimal for 2 digit use digit as 1e2, for 3 digit use 1e3
+  GetDigitDecimalNum(Number,digit) {
+    return Math.round(Number * digit) / digit;
   }
 
   //dynamically accessing object property
