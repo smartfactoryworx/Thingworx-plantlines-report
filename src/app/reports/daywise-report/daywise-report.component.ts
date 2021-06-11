@@ -112,6 +112,7 @@ interface output {
   cleaning_part_fixing: number;
   no_production_planned: number;
   excess_changeover_time: number;
+  tablet:number;
 }
 
 interface Filter {
@@ -457,6 +458,9 @@ export class DaywiseReportComponent implements OnInit {
         },
         cleaning_part_fixing: {
           type: "time"
+        },
+        tablet:{
+          type:"number"
         }
       }
     ]
@@ -579,12 +583,17 @@ export class DaywiseReportComponent implements OnInit {
           {
             uniqueName: "goodCount",
             formula: "((\"goodCount\"))",
-            caption: "Good count"
+            caption: "Good Blister"
           },
           {
             uniqueName: "Reject_Count",
             formula: "(sum(\"reject_count\"))",
-            caption: "Reject count"
+            caption: "Reject Blister"
+          },
+          {
+            uniqueName: "tablet",
+            formula: "(sum(\"tablet\"))",
+            caption: "Tablets"
           },
           {
             uniqueName: "theoretical_time",
@@ -687,8 +696,8 @@ export class DaywiseReportComponent implements OnInit {
           //   format: "decimal2",
           // },
           {
-            uniqueName: "total_sum_idle_time",
-            formula: "((\"total_sum_idle_time\"))",
+            uniqueName: "total_manual_stop_time",
+            formula: "((\"total_manual_stop_time\"))",
             caption: "Idle time",
             format: "decimal2",
           },
@@ -930,7 +939,47 @@ export class DaywiseReportComponent implements OnInit {
             fontFamily: "Arial",
             fontSize: "12px"
           }
-        }
+        },
+        {
+          formula: "#value >=0",
+          measure: "changeover_time",
+          format: {
+            backgroundColor: "#c2c29b",
+            color: "#000000",
+            fontFamily: "Arial",
+            fontSize: "12px",
+          },
+        },
+        {
+          formula: "#value >=0",
+          measure: "updt_time",
+          format: {
+            backgroundColor: "#f5baef",
+            color: "#000000",
+            fontFamily: "Arial",
+            fontSize: "12px",
+          },
+        },
+        {
+          formula: "#value >=0",
+          measure: "executing",
+          format: {
+            backgroundColor: "#b9fa98",
+            color: "#000000",
+            fontFamily: "Arial",
+            fontSize: "12px",
+          },
+        },
+        {
+          formula: "#value >=0",
+          measure: "total_manual_stop_time",
+          format: {
+            backgroundColor: "#faacac",
+            color: "#000000",
+            fontFamily: "Arial",
+            fontSize: "12px",
+          },
+        },
         ],
     }
     this.child.webDataRocks.setReport(setReportType);
@@ -1040,7 +1089,8 @@ export class DaywiseReportComponent implements OnInit {
           total_fault_time: a.minor_fault_time + a.major_fault_time,
           total_sum_idle_time: a.waiting_time + a.idle_time + a.major_manual_stop_time + a.minor_manual_stop_time + a.blocked_time + a.major_fault_time + a.minor_fault_time,
           cleaning_part_fixing: a.co_pdt + a.changeover_time - a.setup_changeover,
-          no_production_planned: a.updt_time + a.break_pdt
+          no_production_planned: a.updt_time + a.break_pdt,
+          tablet : a.pack * a.goodCount
         }
         this.OutputData.push(output_data);
       }
@@ -1547,7 +1597,8 @@ export class DaywiseReportComponent implements OnInit {
         {
           name: "Availability",
           data: measureDataAvailability,
-          color: '#ffe66d'
+          color: '#ffe66d',
+        
         },
         {
           name: "Performance",
@@ -1626,6 +1677,15 @@ export class DaywiseReportComponent implements OnInit {
       },
       plotOptions: {
         column: {
+          // cursor: 'pointer',
+          // point: {
+          //     events: {
+          //         click: function () {
+          //           console.log(this.category);
+                   
+          //         }
+          //       }
+          //      } ,   
           stacking: undefined,
           dataLabels: {
             enabled: true,

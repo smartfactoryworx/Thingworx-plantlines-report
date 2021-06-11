@@ -14,7 +14,7 @@
                     </mat-form-field>
 
                     <mat-form-field appearance="fill" fxFlex="35" style="margin-right: 5%;">
-                        <mat-select (selectionChange)="getLine($event.value)" formControlName="line_id">
+                        <mat-select formControlName="line_id">
                             <mat-option *ngFor="let line of LinesData" [value]="line.lineid">
                                 {{line.linename}}({{line.plantname}}/{{line.locationname}})
                             </mat-option>
@@ -50,156 +50,65 @@
         </div>
     </div>
     <div class="html2pdf__page-break"></div>
-    <tabs class="gb" (currentTabChange)="lineWiseKpiTabClick($event.tabTitle)">
-        <tab tabTitle="OEE">
-            <mat-form-field appearance="fill" id="filterdropdown">
-                <mat-select [(ngModel)]="selected2" (selectionChange)="getFilterValueOee($event.value)">
-                    <mat-option *ngFor="let filter of filters" [value]="filter.value">
-                        {{filter.viewValue}}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-            <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap
-                fxLayoutAlign="space-around center" fxFlex="100">
 
-                <div [id]="'higchartcontainer-control-oee'"
-                    style="height:400px; padding-top:1px;background: url('/../../assets/images/chartLoader.gif')  no-repeat center ;background-size: 70px 70px;"
-                    fxFlex="100">
-                </div>
-            </div>
-
-
-
-        </tab>
-        <tab tabTitle="Performance">
-            <mat-form-field appearance="fill" id="filterdropdown">
-                <mat-select [(ngModel)]="selected2" (selectionChange)="getFilterValuePerformance($event.value)">
-                    <mat-option *ngFor="let filter of filters" [value]="filter.value">
-                        {{filter.viewValue}}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-            <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap
-                fxLayoutAlign="space-around center" fxFlex="100">
-
-                <div [id]="'higchartcontainer-control-performance'" style="height:400px; padding-top:1px;" fxFlex="100">
-                </div>
-            </div>
-        </tab>
-
-        <tab tabTitle="Quality">
-            <mat-form-field appearance="fill" id="filterdropdown">
-                <mat-select [(ngModel)]="selected2" (selectionChange)="getFilterValueQuality($event.value)">
-                    <mat-option *ngFor="let filter of filters" [value]="filter.value">
-                        {{filter.viewValue}}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-            <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap
-                fxLayoutAlign="space-around center" fxFlex="100">
-
-                <div [id]="'higchartcontainer-control-quality'" style="height:400px; padding-top:1px;" fxFlex="100">
-                </div>
-            </div>
-
-
-        </tab>
-
-        <tab tabTitle="Availability">
-            <mat-form-field appearance="fill" id="filterdropdown">
-                <mat-select [(ngModel)]="selected2" (selectionChange)="getFilterValueAvailability($event.value)">
-                    <mat-option *ngFor="let filter of filters" [value]="filter.value">
-                        {{filter.viewValue}}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-            <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap
-                fxLayoutAlign="space-around center" fxFlex="100">
-
-                <div [id]="'higchartcontainer-control-availability'" style="height:400px; padding-top:1px;"
-                    fxFlex="100">
-                </div>
-            </div>
-
-
-        </tab>
-
-        <tab tabTitle="Speed Loss">
-            <mat-form-field appearance="fill" id="filterdropdown">
-                <mat-select [(ngModel)]="selected2" (selectionChange)="getFilterValueSpeedloss($event.value)">
-                    <mat-option *ngFor="let filter of filters" [value]="filter.value">
-                        {{filter.viewValue}}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-            <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap
-                fxLayoutAlign="space-around center" fxFlex="100">
-
-                <div [id]="'higchartcontainer-control-speedloss'" style="height:400px; padding-top:1px;" fxFlex="100">
-                </div>
-            </div>
-
-
-        </tab>
-        <tab tabTitle="Idle Time">
-            <mat-form-field appearance="fill" id="filterdropdown">
-                <mat-select [(ngModel)]="selected2" (selectionChange)="getFilterValueIdletime($event.value)">
-                    <mat-option *ngFor="let filter of filters" [value]="filter.value">
-                        {{filter.viewValue}}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-            <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap
-                fxLayoutAlign="space-around center" fxFlex="100">
-
-                <div [id]="'higchartcontainer-control-idletime'" style="height:400px; padding-top:1px;" fxFlex="100">
-                </div>
-            </div>
-
-
-        </tab>
-
-
-    </tabs>
-    <div class="html2pdf__page-break"></div>
-    <tabs tabTitle="Event History" class="gb" (currentTabChange)="eventHistoryTabClick($event.tabTitle)">
-        <tab tabTitle="Combined">
-            <div fxLayout="row" style="width: 50%;" fxLayout.xs="column" fxLayoutWrap
-                fxLayoutAlign="space-around center" fxFlex="99">
-                <div id="highChartContainer-Combined-EventHistory"
-                    style="height:400px; padding-top:1px;background: url('/../../../assets/images/chartLoader.gif')  no-repeat center ;background-size: 70px 70px;"
-                    fxFlex="100">
-                </div>
-            </div>
-
-            <div fxLayout="row" style="width: 50%;" fxLayout.xs="column" fxLayoutWrap
-                fxLayoutAlign="space-around center" fxFlex="99">
-                <div id="highChartContainer-Combined-EventHistory-Pie"
-                    style="height:400px; padding-top:1px;background: url('/../../../assets/images/chartLoader.gif')  no-repeat center ;background-size: 70px 70px;;"
-                    fxFlex="100">
-                </div>
-            </div>
-        </tab>
-
-        <tab [tabTitle]="lineId">
-            <div fxLayout="row" style="width: 100%;" fxLayout.xs="" fxLayoutWrap fxLayoutAlign="space-around center"
-                fxFlex="99">
-
-                <div [id]="'higchartcontainer-eventhistory'" style="height:400px; padding-top:1px;" fxFlex="100">
-                </div>
-            </div>
-
-        </tab>
-
-    </tabs>
-    <div class="html2pdf__page-break"></div>
     <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap fxLayoutAlign="space-around center"
-        fxFlex="90">
-        <div id="highchartsContainer-Batchwise-Performance"
+        fxFlex="100">
+        <mat-form-field appearance="fill" id="filterdropdown">
+            <mat-select [(ngModel)]="selected" (selectionChange)="getFilterValue($event.value)" id="select1">
+                <mat-option *ngFor="let filter of filters" [value]="filter.value">
+                    {{filter.viewValue}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <div [id]="'highchartcontainer-control'"
             style="height:400px; padding-top:1px;background: url('/../../../assets/images/chartLoader.gif')  no-repeat center ;background-size: 70px 70px;"
             fxFlex="100">
         </div>
     </div>
+
+    <div class="html2pdf__page-break"></div>
+    <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap fxLayoutAlign="space-around center"
+        fxFlex="100">
+        <mat-form-field appearance="fill" id="filterdropdown1">
+            <mat-select [(ngModel)]="selected2" (selectionChange)="getFilterIdleValue($event.value)" id="select">
+                <mat-option *ngFor="let filter of filters" [value]="filter.value">
+                    {{filter.viewValue}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <div [id]="'highchartcontainer-control-idle'"
+            style="height:400px; padding-top:1px;background: url('/../../../assets/images/chartLoader.gif')  no-repeat center ;background-size: 70px 70px;"
+            fxFlex="100">
+        </div>
+    </div>
+
+    <div class="html2pdf__page-break"></div>
+
+    <mat-tab-group backgroundColor="" mat-align-tabs="center" label="Event History" class="gb"
+        (selectedTabChange)="eventHistoryTabClick($event.tab.textLabel)">
+        <mat-tab label="Combined">
+            <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap
+                fxLayoutAlign="space-around center" fxFlex="99">
+                <div id="higchartcontainer-lines-combined-eventhistory"
+                    style="height:400px; padding-top:1px;background: url('/../../../assets/images/chartLoader.gif')  no-repeat center ;background-size: 70px 70px;"
+                    fxFlex="50">
+                </div>
+                <div id="highChartContainer-Combined-EventHistory-Pie"
+                    style="height:400px; padding-top:1px;background: url('/../../../assets/images/chartLoader.gif')  no-repeat center ;background-size: 70px 70px;"
+                    fxFlex="50">
+                </div>
+            </div>
+        </mat-tab>
+        <mat-tab [label]="lineId">
+            <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap
+                fxLayoutAlign="space-around center" fxFlex="99">
+
+                <div [id]="'higchartcontainer-eventhistory'" style="height:400px; padding-top:1px;" fxFlex="100">
+                </div>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+
 </div>
 
 

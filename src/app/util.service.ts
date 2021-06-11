@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-
+import * as html2pdf from 'html2pdf.js';
 @Injectable({
   providedIn: 'root'
 })
@@ -98,4 +98,10 @@ export class UtilService {
       return result * sortOrder;
     }
   }
+
+  addDays(date: Date, days: number): Date {
+    date.setDate(date.getDate() + days);
+    return date;
+  }
+
 }
