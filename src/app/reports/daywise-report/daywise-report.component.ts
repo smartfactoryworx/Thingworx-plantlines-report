@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit } from "@angular/core";
+import { Component, ViewChild, OnInit, Input } from "@angular/core";
 import { HttpClient } from '@angular/common/http';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { DatePipe } from '@angular/common';
@@ -129,7 +129,7 @@ interface Filter {
 })
 export class DaywiseReportComponent implements OnInit {
   @ViewChild("pivot1") child: WebDataRocksPivot;
-
+//@Input() selectedIndex;
 
   public OutputData: output[] = [];
   errormsg;
@@ -1577,6 +1577,7 @@ export class DaywiseReportComponent implements OnInit {
     GroupedData.sort(this.utils.dynamicSort('OEE'))
 
     let xAxisData = this.utils.filterMyArr(GroupedData, category);
+   
     let measureDataOEE = this.utils.filterMyArr(GroupedData, "OEE");
     let measureDataPerformace = this.utils.filterMyArr(GroupedData, "Performance");
     let measureDataQuality = this.utils.filterMyArr(GroupedData, "Quality");
@@ -1677,15 +1678,15 @@ export class DaywiseReportComponent implements OnInit {
       },
       plotOptions: {
         column: {
-          // cursor: 'pointer',
-          // point: {
-          //     events: {
-          //         click: function () {
-          //           console.log(this.category);
-                   
-          //         }
-          //       }
-          //      } ,   
+          cursor: 'pointer',
+          point: {
+              events: {
+                  click: function () {
+                    console.log(this.category);
+                    console.log(this.x);
+                  }
+                }
+               } ,   
           stacking: undefined,
           dataLabels: {
             enabled: true,

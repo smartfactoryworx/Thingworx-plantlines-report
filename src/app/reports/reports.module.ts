@@ -12,6 +12,7 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { ManagementReportModule } from './management-report/management-report.module';
 import { DaywiseReportModule } from './daywise-report/daywise-report.module';
 import { OutputReport1Module } from './output-report1/output-report1.module';
+import { ManagementReport2Module } from './management-report2/management-report2.module';
 
 
 
@@ -25,7 +26,8 @@ import { OutputReport1Module } from './output-report1/output-report1.module';
     OutputReportModule,
     ManagementReportModule,
     DaywiseReportModule,
-    OutputReport1Module
+    OutputReport1Module,
+    ManagementReport2Module
   ],
   providers:[
     { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },

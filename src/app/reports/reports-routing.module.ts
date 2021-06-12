@@ -6,6 +6,7 @@ import { OutputReportComponent } from './output-report/output-report.component';
 import { DaywiseReportComponent } from './daywise-report/daywise-report.component';
 import { ManagementReportComponent } from './management-report/management-report.component';
 import { OutputReport1Component } from './output-report1/output-report1.component';
+import { ManagementReport2Component } from './management-report2/management-report2.component';
 
 const routes: Routes = [
  
@@ -38,6 +39,12 @@ const routes: Routes = [
         component: OutputReport1Component ,
         pathMatch: 'full'
       },
+      {
+        path: 'management-V2',
+        component: ManagementReport2Component ,
+        pathMatch: 'full'
+      },
+      
       
     ]
   }
