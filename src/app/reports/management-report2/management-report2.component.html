@@ -74,7 +74,7 @@
     </mat-tab-group>
 
 
-    <mat-tab-group mat-align-tabs="center" class="gb" (selectedTabChange)="lineWiseKpiTabClick($event.tab.textLabel)">
+    <mat-tab-group mat-align-tabs="center"  class="matTabChangeAPQ" (selectedTabChange)="lineWiseKpiTabClick($event.tab.textLabel)">
         <mat-tab label="Lines-combined">
             <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap
                 fxLayoutAlign="space-around center" fxFlex="99">
@@ -107,7 +107,7 @@
     </mat-tab-group>
 
 
-    <mat-tab-group mat-align-tabs="center" class="gb"
+    <mat-tab-group mat-align-tabs="center" class="matTabChangeIdle"
         (selectedTabChange)="lineWiseSpeedIdleTabClick($event.tab.textLabel)">
         <mat-tab label="Lines-combined">
             <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap
@@ -141,7 +141,7 @@
 
     </mat-tab-group>
 
-    <mat-tab-group backgroundColor="" mat-align-tabs="center" label="Event History" class="gb"
+    <mat-tab-group backgroundColor="" mat-align-tabs="center" label="Event History"  class="matTabChangeEventHistory"
         (selectedTabChange)="eventHistoryTabClick($event.tab.textLabel)">
         <mat-tab label="Combined">
 

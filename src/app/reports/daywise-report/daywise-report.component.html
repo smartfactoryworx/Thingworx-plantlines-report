@@ -76,7 +76,7 @@
     </mat-tab-group>
 
 
-    <mat-tab-group mat-align-tabs="center" class="gb" (selectedTabChange)="lineWiseKpiTabClick($event.tab.textLabel)">
+    <mat-tab-group mat-align-tabs="center"   class="matTabChangeAPQ" (selectedTabChange)="lineWiseKpiTabClick($event.tab.textLabel)">
         <mat-tab label="Lines-combined">
             <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap
                 fxLayoutAlign="space-around center" fxFlex="99">
@@ -88,8 +88,8 @@
             </div>
         </mat-tab>
 
-
-        <mat-tab [label]="line" *ngFor="let line of lines">
+       
+        <mat-tab [label]="line" *ngFor="let line of lines" >
             <mat-form-field appearance="fill" class="filterdropdown">
                 <mat-select [(ngModel)]="selected"
                     (selectionChange)="getFilterValue($event.value,line)" id="select1">
@@ -110,7 +110,7 @@
     </mat-tab-group>
 
 
-    <mat-tab-group mat-align-tabs="center" class="gb" (selectedTabChange)="lineWiseSpeedIdleTabClick($event.tab.textLabel)">
+    <mat-tab-group mat-align-tabs="center" class="matTabChangeIdle" (selectedTabChange)="lineWiseSpeedIdleTabClick($event.tab.textLabel)">
         <mat-tab label="Lines-combined">
             <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap
                 fxLayoutAlign="space-around center" fxFlex="99">

@@ -1223,6 +1223,7 @@ export class ManagementReport2Component implements OnInit {
       Highcharts.chart(controlname, pieChartData);
     }
     else {
+      let matTabClassName = '.matTabChangeEventHistory';
       var stackChartData: any;
       stackChartData = {
         colors: ["#32cd32", "rgb(254,1,1)", "rgb(163, 163, 117)", "rgb(255, 51, 204)",],
@@ -1264,6 +1265,24 @@ export class ManagementReport2Component implements OnInit {
         plotOptions: {
 
           column: {
+            cursor: 'pointer',
+            point: {
+                events: {
+                  click: function () {
+                    console.log(this.category);
+                    console.log(matTabClassName);
+                    console.log(this.x);
+                    var querySelector1 =''+matTabClassName+ ' .mat-tab-label-content';
+                    var querySelector2 =''+matTabClassName+ ' .mat-tab-label';
+                    console.log(querySelector1,querySelector2)
+                    for (let i = 0; i < document.querySelectorAll(querySelector1).length; i++) {
+                      if ((<HTMLElement>document.querySelectorAll(querySelector1)[i]).innerText == this.category) {
+                        (<HTMLElement>document.querySelectorAll(querySelector2)[i]).click();
+                      }
+                    }
+                  }
+                  }
+                 } , 
             stacking: 'normal',
             dataSorting: {
               enabled: false
@@ -1507,10 +1526,11 @@ export class ManagementReport2Component implements OnInit {
     let chartTitleName;
     let toolTipEnd;
     let seriesData;
-
+    let matTabClassName;
     if (chartType === 'APQOEE') {
       chartTitleName = chartTitle + '(%)'
       toolTipEnd = '%'
+      matTabClassName = '.matTabChangeAPQ'
       seriesData = [
         {
           name: "Availability",
@@ -1538,6 +1558,7 @@ export class ManagementReport2Component implements OnInit {
     } else if (chartType === 'speedidle') {
       chartTitleName = chartTitle + '(in Hours)'
       toolTipEnd = ''
+      matTabClassName = '.matTabChangeIdle'
       seriesData = [
         // {
         //   name: "Speed Loss",
@@ -1595,15 +1616,24 @@ export class ManagementReport2Component implements OnInit {
       },
       plotOptions: {
         column: {
-          // cursor: 'pointer',
-          // point: {
-          //     events: {
-          //         click: function () {
-          //           console.log(this.category);
-
-          //         }
-          //       }
-          //      } ,   
+          cursor: 'pointer',
+          point: {
+              events: {
+                click: function () {
+                  console.log(this.category);
+                  console.log(matTabClassName);
+                  console.log(this.x);
+                  var querySelector1 =''+matTabClassName+ ' .mat-tab-label-content';
+                  var querySelector2 =''+matTabClassName+ ' .mat-tab-label';
+                  console.log(querySelector1,querySelector2)
+                  for (let i = 0; i < document.querySelectorAll(querySelector1).length; i++) {
+                    if ((<HTMLElement>document.querySelectorAll(querySelector1)[i]).innerText == this.category) {
+                      (<HTMLElement>document.querySelectorAll(querySelector2)[i]).click();
+                    }
+                  }
+                }
+                }
+               } ,   
           stacking: undefined,
           dataLabels: {
             enabled: true,
