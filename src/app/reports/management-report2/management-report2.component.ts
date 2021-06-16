@@ -1685,8 +1685,8 @@ export class ManagementReport2Component implements OnInit {
       filename: "Management_" + moment(D.start).format("yyyy-MM") ,
       header: "Management_ Report /" + moment(D.start).format("yyyy-MM"),
       destinationType: "file",
-      url: "URL to server script saving the file"
-
+      url: "URL to server script saving the file",
+      pageOrientation:"landscape"
     },
       function () {
         //console.log("Export process is finished");
