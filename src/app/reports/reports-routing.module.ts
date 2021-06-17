@@ -15,11 +15,11 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'output-V2',
+        redirectTo: 'output-v2',
         pathMatch: 'full'
       },
       {
-        path: 'output-V2',
+        path: 'output-v2',
         component: OutputReportComponent ,
         pathMatch: 'full'
       },
@@ -34,7 +34,7 @@ const routes: Routes = [
         pathMatch: 'full'
       },
       {
-        path: 'output-V1',
+        path: 'output-v1',
         component: OutputReport1Component ,
         pathMatch: 'full'
       },
