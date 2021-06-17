@@ -1,4 +1,3 @@
-
 import { Component, ViewChild, OnInit } from "@angular/core";
 import { HttpClient } from '@angular/common/http';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
@@ -6,6 +5,7 @@ import { DatePipe } from '@angular/common';
 import { ManualEntryService } from '../app-manualentry.service';
 import Drilldown from 'highcharts/modules/drilldown';
 Drilldown(Highcharts);
+import * as html2pdf from 'html2pdf.js';
 import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatDatepicker } from '@angular/material/datepicker';
@@ -14,17 +14,20 @@ import { default as _rollupMoment, Moment } from 'moment';
 import Highcharts, { seriesType } from 'highcharts';
 import HighchartsMore from "highcharts/highcharts-more";
 HighchartsMore(Highcharts)
+import { UtilService } from 'src/app/util.service';
 import exporting from 'highcharts/modules/exporting';
-import * as html2pdf from 'html2pdf.js';
-import { SliceMeasure } from 'flexmonster';
-import * as Flexmonster from 'flexmonster';
-import { FlexmonsterPivot } from 'ng-flexmonster';
-
-import { Measure } from 'webdatarocks';
+// import { SliceMeasure } from 'flexmonster';
+// import * as Flexmonster from 'flexmonster';
+// import { FlexmonsterPivot } from 'ng-flexmonster';
+import { CdkColumnDef } from "@angular/cdk/table";
 import { WebDataRocksPivot } from "../@webdatarocks/webdatarocks.angular4";
-import { UtilService } from "src/app/util.service";
-exporting(Highcharts)
+import { Measure } from 'webdatarocks';
+import { LeftPadPipe } from "ngx-pipes";
+import { MatSort } from "@angular/material/sort";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatTableDataSource } from "@angular/material/table";
 
+exporting(Highcharts)
 
 const moment = _rollupMoment || _moment;
 
@@ -113,7 +116,9 @@ interface output {
   cleaning_part_fixing: number;
   no_production_planned: number;
   excess_changeover_time: number;
+  tablet: number;
 }
+
 
 interface Filter {
   value: string;
@@ -121,10 +126,11 @@ interface Filter {
 }
 
 
+
 @Component({
-  selector: 'app-management-report',
-  templateUrl: './management-report.component.html',
-  styleUrls: ['./management-report.component.scss'],
+  selector: 'app-management-report2',
+  templateUrl: './management-report2.component.html',
+  styleUrls: ['./management-report2.component.scss'],
   providers: [
     {
       provide: DateAdapter,
@@ -134,17 +140,17 @@ interface Filter {
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
   ]
 })
-export class ManagementReportComponent implements OnInit {
-  //@ViewChild("pivot1") child: FlexmonsterPivot;
+export class ManagementReport2Component implements OnInit {
   @ViewChild("pivot1") child: WebDataRocksPivot;
-
   public OutputData: output[] = [];
+
   errormsg;
-  lineId;
-  LinesData;
   licenseKey;
+  //public multiLineData = [];
   gotData: boolean = false;
   gotLines: boolean = false;
+  outputReport: FormGroup;
+  lines = [];
   filters: Filter[] = [
     { value: 'operator_name', viewValue: 'Operator wise' },
     // { value: 'datewise', viewValue: 'Date wise' },
@@ -154,66 +160,12 @@ export class ManagementReportComponent implements OnInit {
   ];
   public selected2 = this.filters[0].value;
   public selected = this.filters[0].value;
-  outputReport: FormGroup;
-  line_id: FormControl;
-  date = new FormControl(moment());
-
   pivotTableReportComplete: boolean = false;
-  Highcharts: typeof Highcharts = Highcharts;
   public DataWithStructure = [];
-  constructor(private httpClient: HttpClient, protected datePipe: DatePipe,
-    protected dataSourceService: ManualEntryService, private utils: UtilService) { }
+  Highcharts: typeof Highcharts = Highcharts;
 
 
-
-
-  createFormFilters() {
-    this.date = new FormControl('', Validators.required);
-    this.line_id = new FormControl('');
-  }
-  createFiltersForm() {
-    this.outputReport = new FormGroup({
-      date: this.date,
-      line_id: this.line_id
-    });
-  }
-
-  GetLinesList() {
-    this.LinesData = [];
-    //this.dataSourceService.GetServerAPIPath().subscribe((apipath: any) => {
-
-    this.dataSourceService.GetLineData().subscribe((data: any) => {
-      for (let i = 0; i < data.length; i++) {
-        const company = data[i];
-        company.countries.forEach((country) => {
-          country.states.forEach((state) => {
-            state.locations.forEach((location) => {
-              location.plants.forEach((plant) => {
-                plant.lines.forEach((line) => {
-                  const ELEMENT_DATA = {
-                    companyname: company.company_name,
-                    countryname: country.country_name,
-                    statename: state.state_name,
-                    locationname: location.location_name,
-                    plantcode: plant.plant_code,
-                    plantname: plant.plant_name,
-                    lineid: line._id,
-                    linecode: line.line_code,
-                    linename: line.line_name,
-                  };
-                  this.LinesData.push(ELEMENT_DATA);
-                });
-              });
-            });
-          });
-        });
-      }
-      console.log(this.LinesData, "LinesData");
-    });
-    //});
-
-  }
-
+  date = new FormControl(moment());
   chosenYearHandler(normalizedYear: Moment) {
     const ctrlValue = new FormControl(moment()).value;
     ctrlValue.year(normalizedYear.year());
@@ -227,6 +179,21 @@ export class ManagementReportComponent implements OnInit {
     this.date.setValue(ctrlValue);
     datepicker.close();
   }
+
+  createFormFilters() {
+    this.date = new FormControl('', Validators.required);
+  }
+  createFiltersForm() {
+    this.outputReport = new FormGroup({
+      date: this.date,
+    });
+  }
+
+  constructor(private httpClient: HttpClient, protected datePipe: DatePipe,
+    protected dataSourceService: ManualEntryService, private utils: UtilService) { }
+  public pivotReport = {
+  };
+
   //--------------------------------------------------------------
   getMonthDateRange(year, month) {
     console.log(year, month)
@@ -235,6 +202,26 @@ export class ManagementReportComponent implements OnInit {
     console.log(startDate, endDate)
 
     return { start: startDate, end: endDate };
+  }
+  getPreviousMonthDateRange(year, month) {
+    console.log(year, month);
+    var date = new Date(year, month, 1);
+    date.setMonth(date.getMonth() - 2);
+    var monthStartDay = new Date(date.getFullYear(), date.getMonth(), 1);
+    var monthEndDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+    console.log(monthStartDay, monthEndDay)
+    return { start: this.datePipe.transform(monthStartDay, 'yyyy-MM-dd'), end: this.datePipe.transform(monthEndDay, 'yyyy-MM-dd') };
+  }
+
+  getFilterValue(value, line,) {
+    console.log(value);
+    this.createChart_kpi_linewise(line, 'highchartcontainer-control-' + line, value, value, 'APQOEE');
+  }
+
+  getFilterSpeedIdleValue(value, line,) {
+    console.log(value);
+    this.createChart_kpi_linewise(line, 'highchartcontainer-control-speedidle-' + line, value, value, 'speedidle');
+
   }
 
   customizeToolbar(toolbar) {
@@ -251,33 +238,40 @@ export class ManagementReportComponent implements OnInit {
       return tabs;
     }
   }
-  ngOnInit(): void {
+  //Simply adding header to PIVOT table.
+
+
+  getSearchData() {
+    //this.lines = [];
+    this.FetchDataFromApi();
+  }
+
+  ngOnInit() {
     this.createFormFilters();
     this.createFiltersForm();
     this.BindDefaultDates();
-    this.GetLinesList();
-    this.getSearchData(this.line_id.value);
+    this.FetchDataFromApi();
+    console.log("*****************************onReportComplete****************************");
+
   }
 
-  BindDefaultDates() {
-    this.date.setValue(this.datePipe.transform(this.utils.addDays(new Date(), -5), 'yyyy-MM-dd'));
-    this.line_id.setValue(this.dataSourceService.lineId);
-  }
-
-  FetchDataFromApi(line_Id) {
+  FetchDataFromApi() {
     this.gotData = false;
 
     this.DataWithStructure = [];
     this.OutputData = [];
     var D = this.getMonthDateRange(moment(this.date.value).format("YYYY"), moment(this.date.value).format("MM"));
-    //this.dataSourceService.GetServerAPIPath().subscribe((apipath: any) => {
-    // console.log('https://int91mat11.smartfactoryworx.tech' + '/api/report/chart?startDate=' + moment(D.start).format("yyyy-MM-DD") + '&endDate=' + moment(D.end).format("yyyy-MM-DD") + '&line_id=' + line_Id);
-    console.log('/api/report/chart?startDate=' + moment(D.start).format("yyyy-MM-DD") + '&endDate=' + moment(D.end).format("yyyy-MM-DD"), "AMBER");
-    this.dataSourceService.GetOutputData(moment(D.start).format("yyyy-MM-DD"), moment(D.end).format("yyyy-MM-DD"), line_Id).subscribe((data: any) => {
 
-      console.log(data, "AMBER")
+    // this.dataSourceService.GetServerAPIPath().subscribe((apipath: any) => {
+    //console.log('http://3.7.253.233:4000/api/report/chart?startDate=' + moment(this.date.value).format("yyyy-MM-DD") + '&endDate=' + moment(this.date.value).format("yyyy-MM-DD"));
+    this.dataSourceService.GetOutputMultilinesData(moment(D.start).format("yyyy-MM-DD"), moment(D.end).format("yyyy-MM-DD")).subscribe((data: any) => {
+      this.OutputData = [];
 
-      var d = data;
+      this.lines = [];
+      this.lines.length = 0;
+      var d = data.sort(this.utils.dynamicSort('line_id'));
+      this.lines = [...new Set(d.map(item => item.line_id))]
+
       for (let i = 0; i < d.length; i++) {
         const a = d[i];
         const output_data = {
@@ -355,33 +349,38 @@ export class ManagementReportComponent implements OnInit {
           total_fault_time: a.minor_fault_time + a.major_fault_time,
           total_sum_idle_time: a.waiting_time + a.idle_time + a.major_manual_stop_time + a.minor_manual_stop_time + a.blocked_time + a.major_fault_time + a.minor_fault_time,
           cleaning_part_fixing: a.co_pdt + a.changeover_time - a.setup_changeover,
-          no_production_planned: a.updt_time + a.break_pdt
+          no_production_planned: a.updt_time + a.break_pdt,
+          tablet: a.pack * a.goodCount
         }
         this.OutputData.push(output_data);
-
-        this.lineId = this.OutputData[0].line_id;
       }
       console.log(this.OutputData);
       this.gotData = true;
-      //this.licenseKey = apipath['pivot_license_key'];
+
+      // this.licenseKey = apipath['pivot_license_key'];
+
     },
       error => {
         console.log('oops', error.error);
         this.errormsg = error.error.error;
       });
-    //});
+    // });
+
+  }
+
+  BindDefaultDates() {
+    this.date.setValue(this.datePipe.transform(this.utils.addDays(new Date(), -5), 'yyyy-MM-dd'));
   }
 
   onCustomizeCell(
     cell,
     data
   ): void {
-    //console.log("[customizeCell] flexmonsterPivot");
+    //console.log("[customizeCell] WebDataRocksPivot");
     if (data.isClassicTotalRow) cell.addClass("fm-total-classic-r");
     if (data.isGrandTotalRow) cell.addClass("fm-grand-total-r");
     if (data.isGrandTotalColumn) cell.addClass("fm-grand-total-c");
   }
-
 
   onReportComplete(): void {
     console.log("*****************************onReportComplete****************************");
@@ -389,249 +388,53 @@ export class ManagementReportComponent implements OnInit {
     this.child.webDataRocks.off("reportcomplete");
     this.pivotTableReportComplete = true;
     console.log(this.selected);
-    this.createAndUpdateChart_waterfall_linewise('higchartcontainer-waterfall');
-    this.createChart_kpi_linewise(this.lineId, 'highchartcontainer-control', this.selected, 'Availability,Performance, Quality,OEE', 'APQOEE');
-    this.createChart_kpi_linewise(this.lineId, 'highchartcontainer-control-idle', this.selected2, 'Idle Time', 'idle');
-    this.createAndUpdateChart_eventHistory_linewise('all', 'higchartcontainer-lines-combined-eventhistory', 'stack');
+    this.createAndUpdateChart_waterfall_linewise('all', 'highchartcontainer-waterfall-linewise-combined');
+    this.createChart_kpi_linewise('all', 'highchartcontainer-control-linecombined', 'line_id', 'Key parameters', 'APQOEE');
+    this.createChart_kpi_linewise('all', 'highchartcontainer-control-speedloss-linecombined', 'line_id', 'Idle Time', 'speedidle');
+    this.createAndUpdateChart_eventHistory_linewise('all', 'highchartcontainer-lines-combined-eventhistory', 'stack');
     this.createAndUpdateChart_eventHistory_linewise('all', 'highChartContainer-Combined-EventHistory-Pie', 'pie');
 
   }
 
-
   SearchStateData(data) {
     console.log('*************************1050*******************');
     console.log(data, 'SearchStateData');
+    var groupedTableData = this.utils.groupAndSum(data, ['line_id', 'date', 'product'], ['goodCount', 'executing', 'total_sum_idle_time', 'changeover_time', 'no_production_planned', 'tablet']);
+    console.log(groupedTableData, "groupedTableData");
+ 
     this.DataWithStructure = [
       {
-        _id: {
-          type: "string",
-        },
         line_id: {
           type: "string",
         },
-        plant_id: {
-          type: "string",
-        },
-
-        shift: {
-          type: "string",
-        },
-        machine_name: {
-          type: "string",
-        },
-        case_count: {
-          type: "number",
-        },
-        roll_changeover: {
-          type: "time",
-        },
-        operator_name: {
-          type: "string",
-        },
-        peak_speed: {
-          type: "number",
-        },
-        layout: {
+        date: {
           type: "string",
         },
         product: {
           type: "string",
         },
-        batch_name: {
-          type: "string",
-        },
-        batch_size: {
-          type: "number",
-        },
-        t200Use: {
-          type: "boolean",
-        },
-        changeover_type: {
-          type: "string",
-        },
-        cause: {
-          type: "string",
-        },
-        remark: {
-          type: "string",
-        },
-        mechanical_changeover: {
-          type: "number",
-        },
-        setup_changeover: {
-          type: "time",
-        },
-        batch_end_type: {
-          type: "string",
-        },
-        rated_speed: {
-          type: "number",
-        },
-        month: {
-          type: "string",
-        },
-        blocked_count: {
-          type: "number",
-        },
-        waiting_count: {
-          type: "number",
-        },
-        break_pdt: {
-          type: "time",
-        },
-        co_pdt: {
-          type: "time",
-        },
-        updt_count: {
-          type: "number",
-        },
-        changeover_count: {
-          type: "number",
-        },
-        major_fault_count: {
-          type: "number",
-        },
-        minor_fault_count: {
-          type: "number",
-        },
-        major_manual_stop_count: {
-          type: "number",
-        },
-        minor_manual_stop_count: {
-          type: "number",
-        },
-        co_pdt_count: {
-          type: "number",
-        },
-        break_pdt_count: {
-          type: "number",
-        },
-        reject_count: {
-          type: "number",
-        },
-        pdt_count: {
-          type: "number",
-        },
-        avg_speed: {
-          type: "number",
-        },
-        performance_time: {
-          type: "time",
-        },
-        reject_time: {
-          type: "time",
-        },
-        changeover_wastage_time: {
-          type: "time",
-        },
-        speed_loss: {
-          type: "time",
-        },
-        net_operating_time: {
-          type: "time",
-        },
-        fgex: {
-          type: "string",
-        },
-        total_idle_time: {
-          type: "time",
-        },
-        total_idle_count: {
-          type: "number",
-        },
-        idle_time: {
-          type: "time",
-        },
-        idle_count: {
-          type: "number",
-        },
-        date: {
-          type: "string",
-        },
-        batch_start: {
-          type: "datetime",
-        },
-        batch_end: {
-          type: "datetime",
-        },
-        changeover_watage: {
-          type: "time",
-        },
-        planed_production_time: {
-          type: "time",
-        },
         goodCount: {
           type: "number",
         },
-        nmx_count: {
-          type: "number",
-        },
-        blocked_time: {
-          type: "time",
-        },
-        waiting_time: {
-          type: "time",
-        },
-        major_manual_stop_time: {
-          type: "time",
-        },
-        minor_manual_stop_time: {
-          type: "time",
-        },
-        pdt_time: {
-          type: "time",
-        },
-        updt_time: {
-          type: "time",
-        },
-        changeover_time: {
-          type: "time",
-        },
-        excess_changeover_time: {
-          type: "time",
-        },
-        gross_operating_time: {
-          type: "time",
-        },
-        theoretical_time: {
-          type: "time",
-        },
-        major_fault_time: {
-          type: "time",
-        },
-        minor_fault_time: {
-          type: "time",
-        },
-        good_count_machine: {
-          type: "string",
-        },
         executing: {
-          type: "time",
-        },
-        productive_time: {
           type: "time",
         },
         total_sum_idle_time: {
           type: "time",
         },
-        total_manual_stop_time: {
+        changeover_time:{
           type: "time",
-        },
-        total_manual_stop_time1: {
-          type: "number",
         },
         no_production_planned: {
           type: "time",
         },
-        total_fault_time: {
-          type: "time",
-        },
-        cleaning_part_fixing: {
-          type: "time",
-        },
+        tablet: {
+          type:"number"
+        }
+        
       },
     ];
-    this.DataWithStructure = this.DataWithStructure.concat(data);
+    this.DataWithStructure = this.DataWithStructure.concat(groupedTableData);
     console.log(this.DataWithStructure, "DataWithStructure");
     console.log(this.child, "this.child");
     this.child.webDataRocks.off("reportcomplete");
@@ -649,15 +452,15 @@ export class ManagementReportComponent implements OnInit {
           },
           {
             idx: 1,
-            width: 200
+            width: 100
           },
           {
             idx: 2,
-            width: 80
+            width: 300
           },
           {
             idx: 3,
-            width: 80
+            width: 90
           },
           {
             idx: 4,
@@ -670,6 +473,14 @@ export class ManagementReportComponent implements OnInit {
           {
             idx: 6,
             width: 90
+          },
+          {
+            idx: 7,
+            width: 100
+          },
+          {
+            idx: 8,
+            width: 80
           }
         ]
       },
@@ -690,46 +501,24 @@ export class ManagementReportComponent implements OnInit {
       slice: {
         reportFilters: [
           {
-            uniqueName: "batch_name",
-          },
-          {
-            uniqueName: "operator_name",
+            uniqueName: "line_id",
           },
           {
             uniqueName: "date",
             //sort: "asc"
           },
-          {
-            uniqueName: "shift",
-            //sort: "asc"
-          },
-          {
-            uniqueName: "layout",
-          },
-          {
-            uniqueName: "fgex",
-          },
-          {
-            uniqueName: "cause",
-            caption: "early batch end",
-          },
+         
           {
             uniqueName: "product",
           },
-          {
-            uniqueName: "good_count_machine",
-            caption: "Machine Name",
-          },
-          {
-            uniqueName: "changeover_type",
-            caption: "Type of CO",
-          },
+        
         ],
 
         rows: [
-          // {
-          //   uniqueName: "line_id",
-          // },
+          {
+            uniqueName: "line_id",
+            caption: "Line Name",
+          },
           // {
           //   uniqueName: "batch_name",
           // },
@@ -796,7 +585,11 @@ export class ManagementReportComponent implements OnInit {
             formula: '(("goodCount"))',
             caption: "Good Blister",
           },
-
+          {
+            uniqueName: "tablet",
+            formula: "(sum(\"tablet\"))",
+            caption: "Tablets"
+          },
           // {
           //   uniqueName: "Reject_Count",
           //   formula: '(sum("reject_count"))',
@@ -846,6 +639,7 @@ export class ManagementReportComponent implements OnInit {
             caption: "No Production Planned",
             format: "decimal2",
           },
+  
           // {
           //   uniqueName: "cleaning_part_fixing",
           //   formula: '("cleaning_part_fixing")',
@@ -1294,318 +1088,12 @@ export class ManagementReportComponent implements OnInit {
         },
       ],
 
-      // tableSizes: {
-      //   columns: [
-      //     {
-      //       tuple: [],
-      //       measure: "Theoritical Production Time",
-      //       width: 80
-      //     }
-      //   ]
-      // }
+     
     };
 
     this.child.webDataRocks.setReport(setReportType);
-    this.createAndUpdateChart_waterfall_linewise('higchartcontainer-waterfall');
-
-    console.log('*************************1528*******************');
   }
 
-  getSearchData(lineid) {
-    var selectedLineId;
-    if (lineid != "") {
-      selectedLineId = lineid;
-    } else {
-      selectedLineId = this.line_id.value;
-    }
-    console.log(this.line_id.value, "line_id");
-
-
-    this.FetchDataFromApi(selectedLineId);
-  }
-  getFilterValue(value) {
-    console.log(value);
-    this.createChart_kpi_linewise(this.lineId, 'highchartcontainer-control', value, 'Availability,Performance, Quality,OEE', 'APQOEE');
-  }
-  getFilterIdleValue(value) {
-    console.log(value);
-    this.createChart_kpi_linewise(this.lineId, 'highchartcontainer-control-idle', value, 'Idle Time', 'idle');
-
-  }
-  eventHistoryTabClick(tabName) {
-    console.log(tabName, "TAB NAME -eventHistoryTabClick");
-
-    if (tabName === 'Combined') {
-      this.createAndUpdateChart_eventHistory_linewise('all', 'higchartcontainer-lines-combined-eventhistory', 'stack');
-      this.createAndUpdateChart_eventHistory_linewise('all', 'highChartContainer-Combined-EventHistory-Pie', 'pie');
-    }
-    else {
-      this.createAndUpdateChart_eventHistory_linewise(this.lineId, 'higchartcontainer-eventhistory', 'stack');
-    }
-  }
-  createAndUpdateChart_waterfall_linewise(controlname) {
-    try {
-      console.log(controlname);
-      console.log(this.OutputData);
-
-      let w_total_time = this.utils.SumOfArrayByProperty(this.OutputData, 'theoretical_time') / 3600;
-      let w_no_prod_planned = this.utils.SumOfArrayByProperty(this.OutputData, 'no_production_planned') / 3600;
-      let w_idle_time = this.utils.SumOfArrayByProperty(this.OutputData, 'total_sum_idle_time') / 3600;
-      let w_changeover_time = this.utils.SumOfArrayByProperty(this.OutputData, 'changeover_time') / 3600;
-      let w_in_process_reject_time = this.utils.SumOfArrayByProperty(this.OutputData, 'reject_time') / 3600;
-      let w_speedLosstime = this.utils.SumOfArrayByProperty(this.OutputData, 'speed_loss') / 3600;
-
-      var data1: any
-      data1 = {
-        colors: ['rgba(124, 181, 236, 0.3)', 'rgba(144, 237, 125, 0.3)'],
-        chart: {
-          type: 'waterfall',
-          inverted: true,
-          events: {
-            load: function () {
-              document.getElementById(controlname).style.background = 'none';
-            }
-          }
-        },
-        title: {
-          text: 'Month Timeline in Hours'
-        },
-        tooltip: {
-          shared: true
-        },
-        xAxis: {
-          categories: ['Total Time ', 'No Production Planned', 'Changeover', 'Idle Time', 'Running Time', 'Speed Loss Time',
-            'Reject Time', 'Productive Time']
-        },
-        yAxis: {
-          plotLines: [{
-
-          }],
-          labels: {
-            formatter: undefined,
-            align: 'left',
-          },
-          title: {
-            text: 'Month'
-          }
-        },
-
-        plotOptions: {
-          series: {
-            //stacking: 'overlap',
-            lineWidth: 1,
-            dataLabels: {
-              enabled: true,
-              formatter: function () {
-                return Highcharts.numberFormat(this.y, 0, ',');
-              },
-            },
-
-            dataSorting: {
-              enabled: false,
-            },
-          }
-        },
-        series: [
-          {
-            //zIndex: 0,
-            dataLabels: {
-              enabled: true,
-              formatter: function () {
-                return Highcharts.numberFormat(this.y, 0, ',');
-              }
-            },
-            //upColor: '#FFE66D',
-
-            //color: 'rgba(0, 136, 255, 0.3)',
-            data: [{ name: 'Total Time', y: w_total_time, color: 'rgb(255, 205, 60)' },
-            { name: 'No production Planned', y: -1 * w_no_prod_planned, color: 'rgb(255, 51, 204)' },
-            { name: 'Changeover', y: -1 * w_changeover_time, color: 'rgb(163, 163, 117)' },
-            { name: 'Idle Time', y: -1 * w_idle_time, color: 'rgb(254, 1, 1)' },
-            { isIntermediateSum: true, color: 'rgb(24, 176, 176)' },
-            { name: 'Speed Loss Time', y: -1 * w_speedLosstime, color: 'rgb(255, 150, 85)' },
-            { name: 'Reject Time', y: -1 * w_in_process_reject_time, color: 'rgb(78, 205, 196)' },
-            { isSum: true, color: 'rgb(173, 255, 47)' }]
-          }]
-      }
-
-      //console.log(data);
-      console.log(data1);
-      console.log(controlname);
-
-      // data.chart = data1.chart;
-      // data.series = data1.series;
-      // data.xAxis = data1.xAxis;
-      // data.title = { text: "Month Timeline in Hours" };
-      // data.plotOptions = data1.plotOptions;
-      // delete data.yAxis;
-      Highcharts.setOptions({
-        exporting: {
-          enabled: true
-        },
-        tooltip: {
-          enabled: true,
-          valueDecimals: 2,
-          formatter: function () {
-            return this.x + '<br>' + this.y.toFixed(2);
-          }
-        },
-        credits: {
-          enabled: false
-        },
-      });
-      Highcharts.chart(controlname, data1);
-
-    } catch (error) { }
-  }
-  createChart_kpi_linewise(line, controlname, category, chartTitle, chartType) {
-    console.log(controlname, "controlname");
-    console.log(line, "line Name");
-    console.log(category, "category");
-
-    var KPIData = this.OutputData.filter(function (value) {
-      return value.line_id === line
-    })
-    console.log(KPIData);
-
-    const GroupedData = this.utils.groupAndSum(KPIData, [category], ['planed_production_time', 'productive_time', 'net_operating_time', 'gross_operating_time', 'speed_loss', 'total_sum_idle_time']);
-
-    console.log(GroupedData, "GroupedData");
-
-    GroupedData.forEach((itm) => {
-      itm["OEE"] = this.utils.roundOff((itm["productive_time"] / itm["planed_production_time"]) * 100)
-      itm["Performance"] = this.utils.roundOff((itm["net_operating_time"] / itm["gross_operating_time"]) * 100)
-      itm["Availability"] = this.utils.roundOff((itm["gross_operating_time"] / itm["planed_production_time"]) * 100)
-      itm["Quality"] = this.utils.roundOff((itm["productive_time"] / itm["net_operating_time"]) * 100)
-      itm["total_sum_idle_time"] = this.utils.GetDigitDecimalNum(this.utils.ConvertToHours(itm["total_sum_idle_time"]), '1e2')
-      itm["speed_loss"] = this.utils.GetDigitDecimalNum(this.utils.ConvertToHours(itm["speed_loss"]), '1e2')
-    });
-    console.log(GroupedData, "GroupedData");
-    GroupedData.sort(this.utils.dynamicSort('OEE'))
-
-    let xAxisData = this.utils.filterMyArr(GroupedData, category);
-    let measureDataOEE = this.utils.filterMyArr(GroupedData, "OEE");
-    let measureDataPerformace = this.utils.filterMyArr(GroupedData, "Performance");
-    let measureDataQuality = this.utils.filterMyArr(GroupedData, "Quality");
-    let measureDataAvailability = this.utils.filterMyArr(GroupedData, "Availability");
-    let measureDataSpeedLoss = this.utils.filterMyArr(GroupedData, "speed_loss");
-
-    GroupedData.sort(this.utils.dynamicSort('total_sum_idle_time'));
-    let measureDataIdleTime = this.utils.filterMyArr(GroupedData, "total_sum_idle_time");
-
-    let chartTitleName;
-    let toolTipEnd;
-    let seriesData;
-
-    if (chartType === 'APQOEE') {
-      chartTitleName = chartTitle + '(%)'
-      toolTipEnd = '%'
-      seriesData = [
-        {
-          name: "A",
-          data: measureDataAvailability,
-          color: '#ffe66d'
-        },
-        {
-          name: "P",
-          data: measureDataPerformace,
-          color: '#4ecdc4'
-        },
-        {
-          name: "Q",
-          data: measureDataQuality,
-          color: '#1a535c'
-        },
-        {
-          name: "OEE",
-          data: measureDataOEE,
-          color: '#ff6b6b'
-        },
-
-      ]
-    } else if (chartType === 'idle') {
-      chartTitleName = chartTitle + '(in Hours)'
-      toolTipEnd = ''
-      seriesData = [
-        // {
-        //   name: "Speed Loss",
-        //   data: measureDataSpeedLoss,
-        //   color: '#ffe66d'
-        // },
-        {
-          name: "Idle Time",
-          data: measureDataIdleTime,
-          color: '#4ecdc4'
-        },
-
-
-      ]
-    }
-    var ChartData: any;
-    ChartData = {
-
-      chart: {
-        type: 'column'
-      },
-      title: {
-        text: chartTitleName,
-        align: 'left',
-        style: {
-          fontWeight: 'bold'
-        }
-      },
-      xAxis: {
-        title: {
-          text: category
-        },
-        categories: xAxisData
-      },
-      yAxis: [
-        {
-          title: {
-            text: "Key Parameters"
-          },
-          opposite: false,
-          labels: {
-            enabled: true,
-            formatter: function () {
-              let value = (this.value);
-              return value;
-            },
-          },
-        },
-      ],
-      tooltip: {
-        formatter: function () {
-          let value = (this.y);
-          return this.key + '<br>' + '' + value + toolTipEnd;
-        }
-      },
-      plotOptions: {
-        column: {
-          stacking: undefined,
-          dataLabels: {
-            enabled: true,
-            style: {
-              fontWeight: 'bold',
-              color: '#000000'
-            },
-            formatter: function () {
-              let value = (this.y);
-              return '' + value;
-            }
-          }
-        }
-      },
-
-      series: seriesData,
-      credits: {
-        enabled: false
-      }
-    }
-    console.log(JSON.stringify(ChartData));
-    Highcharts.chart(controlname, ChartData);
-  }
   createAndUpdateChart_eventHistory_linewise(line, controlname, chartType) {
     console.log(controlname);
     console.log(this.OutputData);
@@ -1619,19 +1107,17 @@ export class ManagementReportComponent implements OnInit {
       eventHistoryGroupedData = this.utils.groupAndSum(eventHistoryLineData, ['line_id'], ['executing', 'total_sum_idle_time', 'changeover_time', 'no_production_planned']);
     } else {
       eventHistoryGroupedData = this.utils.groupAndSum(eventHistoryLineData, ['date'], ['executing', 'total_sum_idle_time', 'changeover_time', 'no_production_planned']);
-
     }
     console.log(eventHistoryGroupedData, "eventHistoryGroupedData");
 
     eventHistoryGroupedData.forEach((itm) => {
-      itm["executing"] = this.utils.GetDigitDecimalNum(this.utils.ConvertToHours(itm["executing"]), '1e1')
-      itm["total_sum_idle_time"] = this.utils.GetDigitDecimalNum(this.utils.ConvertToHours(itm["total_sum_idle_time"]), '1e1')
-      itm["changeover_time"] = this.utils.GetDigitDecimalNum(this.utils.ConvertToHours(itm["changeover_time"]), '1e1')
-      itm["no_production_planned"] = this.utils.GetDigitDecimalNum(this.utils.ConvertToHours(itm["no_production_planned"]), '1e1')
+      itm["executing"] = this.utils.roundOff(this.utils.ConvertToHours(itm["executing"]))
+      itm["total_sum_idle_time"] = this.utils.roundOff(this.utils.ConvertToHours(itm["total_sum_idle_time"]))
+      itm["changeover_time"] = this.utils.roundOff(this.utils.ConvertToHours(itm["changeover_time"]))
+      itm["no_production_planned"] = this.utils.roundOff(this.utils.ConvertToHours(itm["no_production_planned"]))
     });
 
     console.log(eventHistoryGroupedData, "eventHistoryGroupedData");
-
     let xAxisData;
     if (line === 'all') {
       xAxisData = this.utils.filterMyArr(eventHistoryGroupedData, 'line_id');
@@ -1692,7 +1178,7 @@ export class ManagementReportComponent implements OnInit {
 
           formatter: function () {
             let value = this.y;
-            return this.key + '<br>' + '' + value.toFixed(2) + '%';
+            return this.key + '<br>' + '' + value.toFixed(0) + '%';
           }
         },
         accessibility: {
@@ -1707,7 +1193,7 @@ export class ManagementReportComponent implements OnInit {
             dataLabels: {
               distance: -30,
               color: 'white',
-              format: '{point.percentage:.1f} %'
+              format: '{point.percentage:.0f} %'
             },
             // dataLabels: {
             //   enabled: false,
@@ -1722,10 +1208,10 @@ export class ManagementReportComponent implements OnInit {
             colorByPoint: true,
 
             data: [
-              { name: 'Running Time', y: perc_running },
-              { name: 'Idle Time', y: perc_idle },
-              { name: 'Changeover Time', y: perc_changeover },
-              { name: 'No Production Planned', y: perc_noproduction }]
+              { name: 'Running Time', y: this.utils.roundOff(perc_running) },
+              { name: 'Idle Time', y: this.utils.roundOff(perc_idle) },
+              { name: 'Changeover Time', y: this.utils.roundOff(perc_changeover) },
+              { name: 'No Production Planned', y: this.utils.roundOff(perc_noproduction) }]
           }],
         credits: {
           enabled: false
@@ -1737,6 +1223,7 @@ export class ManagementReportComponent implements OnInit {
       Highcharts.chart(controlname, pieChartData);
     }
     else {
+      let matTabClassName = '.matTabChangeEventHistory';
       var stackChartData: any;
       stackChartData = {
         colors: ["#32cd32", "rgb(254,1,1)", "rgb(163, 163, 117)", "rgb(255, 51, 204)",],
@@ -1772,12 +1259,30 @@ export class ManagementReportComponent implements OnInit {
           // pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}',
           formatter: function () {
             let value = (this.y);
-            return this.key + '<br>' + '' + value.toFixed(1);
+            return this.key + '<br>' + '' + value.toFixed(0);
           }
         },
         plotOptions: {
 
           column: {
+            cursor: 'pointer',
+            point: {
+                events: {
+                  click: function () {
+                    console.log(this.category);
+                    console.log(matTabClassName);
+                    console.log(this.x);
+                    var querySelector1 =''+matTabClassName+ ' .mat-tab-label-content';
+                    var querySelector2 =''+matTabClassName+ ' .mat-tab-label';
+                    console.log(querySelector1,querySelector2)
+                    for (let i = 0; i < document.querySelectorAll(querySelector1).length; i++) {
+                      if ((<HTMLElement>document.querySelectorAll(querySelector1)[i]).innerText == this.category) {
+                        (<HTMLElement>document.querySelectorAll(querySelector2)[i]).click();
+                      }
+                    }
+                  }
+                  }
+                 } , 
             stacking: 'normal',
             dataSorting: {
               enabled: false
@@ -1786,7 +1291,7 @@ export class ManagementReportComponent implements OnInit {
               enabled: true,
               formatter: function () {
                 let value = (this.y);
-                return '' + value.toFixed(1);
+                return '' + value.toFixed(0);
               }
             }
           }
@@ -1812,17 +1317,358 @@ export class ManagementReportComponent implements OnInit {
     }
 
   }
+
+
+  createAndUpdateChart_waterfall_linewise(line, controlname) {
+    console.log(controlname);
+    console.log(this.OutputData);
+    var WaterFallData = this.OutputData.filter(function (value) {
+      return line == 'all' ? value : value.line_id === line
+    })
+    console.log(WaterFallData);
+    let w_total_time = this.utils.SumOfArrayByProperty(WaterFallData, 'theoretical_time') / 3600;
+    let w_no_prod_planned = this.utils.SumOfArrayByProperty(WaterFallData, 'no_production_planned') / 3600;
+    let w_idle_time = this.utils.SumOfArrayByProperty(WaterFallData, 'total_sum_idle_time') / 3600;
+    let w_changeover_time = this.utils.SumOfArrayByProperty(WaterFallData, 'changeover_time') / 3600;
+    let w_in_process_reject_time = this.utils.SumOfArrayByProperty(WaterFallData, 'reject_time') / 3600;
+    let w_speedLosstime = this.utils.SumOfArrayByProperty(WaterFallData, 'speed_loss') / 3600;
+
+    var data1: any
+    data1 = {
+      colors: ['rgba(124, 181, 236, 0.3)', 'rgba(144, 237, 125, 0.3)'],
+      chart: {
+        type: 'waterfall',
+        inverted: true,
+        events: {
+          load: function () {
+            document.getElementById(controlname).style.background = 'none';
+          }
+        }
+      },
+      title: {
+        text: 'Daywise Timeline in Hours',
+        align: 'left',
+        style: {
+          fontWeight: 'bold'
+        }
+
+
+      },
+      tooltip: {
+        shared: true
+      },
+      xAxis: {
+        categories: ['Total Time ', 'No Production Planned', 'Changeover', 'Idle Time', 'Running Time', 'Speed Loss Time',
+          'Reject Time', 'Productive Time']
+      },
+      yAxis: {
+        plotLines: [{
+
+        }],
+        labels: {
+          formatter: undefined,
+          align: 'left',
+        },
+        title: {
+          text: ''
+        }
+      },
+
+      plotOptions: {
+        series: {
+          //stacking: 'overlap',
+          lineWidth: 1,
+          dataLabels: {
+            enabled: true,
+            formatter: function () {
+              return Highcharts.numberFormat(this.y, 0, ',');
+            },
+          },
+
+          dataSorting: {
+            enabled: false,
+          },
+        }
+      },
+      series: [
+        {
+          //zIndex: 0,
+          dataLabels: {
+            enabled: true,
+            formatter: function () {
+              return Highcharts.numberFormat(this.y, 0, ',');
+            }
+          },
+          //upColor: '#FFE66D',
+
+          //color: 'rgba(0, 136, 255, 0.3)',
+          data: [{ name: 'Total Time', y: w_total_time, color: 'rgb(255, 205, 60)' },
+          { name: 'No production Planned', y: -1 * w_no_prod_planned, color: 'rgb(255, 51, 204)' },
+          { name: 'Changeover Time', y: -1 * w_changeover_time, color: 'rgb(163, 163, 117)' },
+          { name: 'Idle Time', y: -1 * w_idle_time, color: 'rgb(254, 1, 1)' },
+          { isIntermediateSum: true, color: 'rgb(24, 176, 176)' },
+          { name: 'Speed Loss Time', y: -1 * w_speedLosstime, color: 'rgb(255, 150, 85)' },
+          { name: 'Reject Time', y: -1 * w_in_process_reject_time, color: 'rgb(78, 205, 196)' },
+          { isSum: true, color: 'rgb(173, 255, 47)' }]
+        }]
+    }
+
+    //console.log(data);
+    console.log(data1); console.log(controlname);
+
+    Highcharts.setOptions({
+      tooltip: {
+        enabled: true,
+        valueDecimals: 2,
+        formatter: function () {
+          return this.x + '<br>' + this.y.toFixed(0);
+        }
+      },
+      credits: {
+        enabled: false
+      },
+    });
+    Highcharts.chart(controlname, data1);
+  }
+
+
+
+  waterfallMonthTimelineTabClick(tabName) {
+    console.log(tabName, "TAB NAME - waterfallMonthTimelineTabClick");
+    if (tabName === 'Combined') {
+      this.createAndUpdateChart_waterfall_linewise('all', 'highchartcontainer-waterfall-linewise-combined');
+    } else {
+      this.createAndUpdateChart_waterfall_linewise(tabName, 'highchartcontainer-waterfall-' + tabName);
+    }
+  }
+
+
+  lineWiseKpiTabClick(tabName) {
+
+
+    console.log(tabName, "TAB NAME - lineWiseKpiTabClick");
+    if (tabName === 'Lines-combined') {
+      this.createChart_kpi_linewise('all', 'highchartcontainer-control-linecombined', 'line_id', 'Key parameters', 'APQOEE');
+    } else {
+      this.createChart_kpi_linewise(tabName, 'highchartcontainer-control-' + tabName, this.selected, this.selected, 'APQOEE');
+    }
+
+  }
+
+
+
+  lineWiseSpeedIdleTabClick(tabName) {
+    //this.selected2 = this.filters[0].value;
+    console.log(tabName, "TAB NAME - lineWiseSpeedIdleTabClick");
+
+    if (tabName === 'Lines-combined') {
+      this.createChart_kpi_linewise('all', 'highchartcontainer-control-speedloss-linecombined', 'line_id', 'Idle Time', 'speedidle');
+    } else {
+      this.createChart_kpi_linewise(tabName, 'highchartcontainer-control-speedidle-' + tabName, this.selected2, this.selected2, 'speedidle');
+    }
+  }
+
+
+  eventHistoryTabClick(tabName) {
+    console.log(tabName, "TAB NAME -eventHistoryTabClick");
+
+    if (tabName === 'Combined') {
+      this.createAndUpdateChart_eventHistory_linewise('all', 'highchartcontainer-lines-combined-eventhistory', 'stack');
+      this.createAndUpdateChart_eventHistory_linewise('all', 'highChartContainer-Combined-EventHistory-Pie', 'pie');
+    }
+    else {
+      this.createAndUpdateChart_eventHistory_linewise(tabName, 'highchartcontainer-eventhistory-' + tabName, 'stack');
+    }
+  }
+
+
+
+
+
+  createChart_kpi_linewise(line, controlname, category, chartTitle, chartType) {
+    console.log(controlname, "controlname");
+    console.log(line, "line Name");
+    console.log(this.selected, "DDL");
+    console.log(this.selected2, "DDL");
+
+    console.log(category, "category");
+
+    var KPIData = this.OutputData.filter(function (value) {
+      return line == 'all' ? value : value.line_id === line
+    })
+    console.log(KPIData);
+
+    const GroupedData = this.utils.groupAndSum(KPIData, [category], ['planed_production_time', 'productive_time', 'net_operating_time', 'gross_operating_time', 'speed_loss', 'total_sum_idle_time']);
+
+    console.log(GroupedData, "GroupedData");
+
+    GroupedData.forEach((itm) => {
+      itm["OEE"] = this.utils.roundOff((itm["productive_time"] / itm["planed_production_time"]) * 100)
+      itm["Performance"] = this.utils.roundOff((itm["net_operating_time"] / itm["gross_operating_time"]) * 100)
+      itm["Availability"] = this.utils.roundOff((itm["gross_operating_time"] / itm["planed_production_time"]) * 100)
+      itm["Quality"] = this.utils.roundOff((itm["productive_time"] / itm["net_operating_time"]) * 100)
+      itm["total_sum_idle_time"] = this.utils.roundOff(this.utils.ConvertToHours(itm["total_sum_idle_time"]))
+      itm["speed_loss"] = this.utils.roundOff(this.utils.ConvertToHours(itm["speed_loss"]))
+    });
+    console.log(GroupedData, "GroupedData");
+    GroupedData.sort(this.utils.dynamicSort('OEE'))
+
+    let xAxisData = this.utils.filterMyArr(GroupedData, category);
+    let measureDataOEE = this.utils.filterMyArr(GroupedData, "OEE");
+    let measureDataPerformace = this.utils.filterMyArr(GroupedData, "Performance");
+    let measureDataQuality = this.utils.filterMyArr(GroupedData, "Quality");
+    let measureDataAvailability = this.utils.filterMyArr(GroupedData, "Availability");
+    let measureDataSpeedLoss = this.utils.filterMyArr(GroupedData, "speed_loss");
+
+    GroupedData.sort(this.utils.dynamicSort('total_sum_idle_time'));
+    let measureDataIdleTime = this.utils.filterMyArr(GroupedData, "total_sum_idle_time");
+
+    let chartTitleName;
+    let toolTipEnd;
+    let seriesData;
+    let matTabClassName;
+    if (chartType === 'APQOEE') {
+      chartTitleName = chartTitle + '(%)'
+      toolTipEnd = '%'
+      matTabClassName = '.matTabChangeAPQ'
+      seriesData = [
+        {
+          name: "Availability",
+          data: measureDataAvailability,
+          color: '#ffe66d',
+
+        },
+        {
+          name: "Performance",
+          data: measureDataPerformace,
+          color: '#4ecdc4'
+        },
+        {
+          name: "Quality",
+          data: measureDataQuality,
+          color: '#1a535c'
+        },
+        {
+          name: "OEE",
+          data: measureDataOEE,
+          color: '#ff6b6b'
+        },
+
+      ]
+    } else if (chartType === 'speedidle') {
+      chartTitleName = chartTitle + '(in Hours)'
+      toolTipEnd = ''
+      matTabClassName = '.matTabChangeIdle'
+      seriesData = [
+        // {
+        //   name: "Speed Loss",
+        //   data: measureDataSpeedLoss,
+        //   color: '#ffe66d'
+        // },
+        {
+          name: "Idle Time",
+          data: measureDataIdleTime,
+          color: '#4ecdc4'
+        },
+
+
+      ]
+    }
+    var ChartData: any;
+    ChartData = {
+
+      chart: {
+        type: 'column'
+      },
+      title: {
+        text: chartTitleName,
+        align: 'left',
+        style: {
+          fontWeight: 'bold'
+        }
+      },
+      xAxis: {
+        title: {
+          text: category
+        },
+        categories: xAxisData
+      },
+      yAxis: [
+        {
+          title: {
+            text: "Key Parameters"
+          },
+          opposite: false,
+          labels: {
+            enabled: true,
+            formatter: function () {
+              let value = (this.value);
+              return value;
+            },
+          },
+        },
+      ],
+      tooltip: {
+        formatter: function () {
+          let value = (this.y);
+          return this.key + '<br>' + '' + value + toolTipEnd;
+        }
+      },
+      plotOptions: {
+        column: {
+          cursor: 'pointer',
+          point: {
+              events: {
+                click: function () {
+                  console.log(this.category);
+                  console.log(matTabClassName);
+                  console.log(this.x);
+                  var querySelector1 =''+matTabClassName+ ' .mat-tab-label-content';
+                  var querySelector2 =''+matTabClassName+ ' .mat-tab-label';
+                  console.log(querySelector1,querySelector2)
+                  for (let i = 0; i < document.querySelectorAll(querySelector1).length; i++) {
+                    if ((<HTMLElement>document.querySelectorAll(querySelector1)[i]).innerText == this.category) {
+                      (<HTMLElement>document.querySelectorAll(querySelector2)[i]).click();
+                    }
+                  }
+                }
+                }
+               } ,   
+          stacking: undefined,
+          dataLabels: {
+            enabled: true,
+            style: {
+              fontWeight: 'bold',
+              color: '#000000'
+            },
+            formatter: function () {
+              let value = (this.y);
+              return '' + value;
+            }
+          }
+        }
+      },
+
+      series: seriesData,
+      credits: {
+        enabled: false
+      }
+    }
+    console.log(JSON.stringify(ChartData));
+    Highcharts.chart(controlname, ChartData);
+  }
+
+
   Export_Excel() {
     var D = this.getMonthDateRange(moment(this.date.value).format("YYYY"), moment(this.date.value).format("MM"));
-    var lineName = this.dataSourceService.lineName.split("/");
-    console.log(lineName, "lineName........");
+   
     this.child.webDataRocks.exportTo(
       "Excel", {
       //     Month / date / line hall Category
-      filename: "Output_" + moment(D.start).format("yyyy-MM") + "_" + this.dataSourceService.lineName,
+      filename: "Management_" + moment(D.start).format("yyyy-MM"),
 
-      header: moment(D.start).format("yyyy-MM") + " / " + this.dataSourceService.lineName,
-      excelSheetName: moment(D.start).format("yyyy-MM") + "_" + lineName[0],
+      header: "Management_" +moment(D.start).format("yyyy-MM"),
+      excelSheetName: "Management_" +moment(D.start).format("yyyy-MM"),
       destinationType: "file",
       url: "URL to server script saving the file"
     },
@@ -1833,20 +1679,22 @@ export class ManagementReportComponent implements OnInit {
   }
   Export_PDF() {
     var D = this.getMonthDateRange(moment(this.date.value).format("YYYY"), moment(this.date.value).format("MM"));
-    var lineName = this.dataSourceService.lineName.split("/");
+   
     this.child.webDataRocks.exportTo(
       "pdf", {
-      filename: "Output_" + moment(D.start).format("yyyy-MM") + "_" + lineName[0],
-      header: "Output Report /" + moment(D.start).format("yyyy-MM") + " / " + this.dataSourceService.lineName,
+      filename: "Management_" + moment(D.start).format("yyyy-MM") ,
+      header: "Management_ Report /" + moment(D.start).format("yyyy-MM"),
       destinationType: "file",
-      url: "URL to server script saving the file"
-
+      url: "URL to server script saving the file",
+      pageOrientation:"landscape"
     },
       function () {
         //console.log("Export process is finished");
       }
     );
   }
+
+
   exportHTMLtoPDF() {
     console.log("exportHTMLtoPDF");
     const options = {

@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit } from "@angular/core";
+import { Component, ViewChild, OnInit, Input } from "@angular/core";
 import { HttpClient } from '@angular/common/http';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { DatePipe } from '@angular/common';
@@ -112,7 +112,7 @@ interface output {
   cleaning_part_fixing: number;
   no_production_planned: number;
   excess_changeover_time: number;
-  tablet:number;
+  tablet: number;
 }
 
 interface Filter {
@@ -129,7 +129,7 @@ interface Filter {
 })
 export class DaywiseReportComponent implements OnInit {
   @ViewChild("pivot1") child: WebDataRocksPivot;
-
+  //@Input() selectedIndex;
 
   public OutputData: output[] = [];
   errormsg;
@@ -203,12 +203,12 @@ export class DaywiseReportComponent implements OnInit {
 
   getFilterValue(value, line,) {
     console.log(value);
-      this.createChart_kpi_linewise(line, 'higchartcontainer-control-' + line, value, value, 'APQOEE');
+    this.createChart_kpi_linewise(line, 'higchartcontainer-control-' + line, value, value, 'APQOEE');
   }
 
   getFilterSpeedIdleValue(value, line,) {
     console.log(value);
-      this.createChart_kpi_linewise(line, 'higchartcontainer-control-speedidle-' + line, value, value, 'speedidle');
+    this.createChart_kpi_linewise(line, 'higchartcontainer-control-speedidle-' + line, value, value, 'speedidle');
 
   }
 
@@ -459,8 +459,8 @@ export class DaywiseReportComponent implements OnInit {
         cleaning_part_fixing: {
           type: "time"
         },
-        tablet:{
-          type:"number"
+        tablet: {
+          type: "number"
         }
       }
     ]
@@ -980,7 +980,7 @@ export class DaywiseReportComponent implements OnInit {
             fontSize: "12px",
           },
         },
-        ],
+      ],
     }
     this.child.webDataRocks.setReport(setReportType);
   }
@@ -1011,7 +1011,7 @@ export class DaywiseReportComponent implements OnInit {
       this.lines.length = 0;
       var d = data.sort(this.utils.dynamicSort('line_id'));
       this.lines = [...new Set(d.map(item => item.line_id))]
-      
+
       for (let i = 0; i < d.length; i++) {
         const a = d[i];
         const output_data = {
@@ -1090,7 +1090,7 @@ export class DaywiseReportComponent implements OnInit {
           total_sum_idle_time: a.waiting_time + a.idle_time + a.major_manual_stop_time + a.minor_manual_stop_time + a.blocked_time + a.major_fault_time + a.minor_fault_time,
           cleaning_part_fixing: a.co_pdt + a.changeover_time - a.setup_changeover,
           no_production_planned: a.updt_time + a.break_pdt,
-          tablet : a.pack * a.goodCount
+          tablet: a.pack * a.goodCount
         }
         this.OutputData.push(output_data);
       }
@@ -1111,14 +1111,11 @@ export class DaywiseReportComponent implements OnInit {
   BindDefaultDates() {
     var date = new Date();
 
-    this.date.setValue(this.datePipe.transform(this.addDays(new Date(), -1), 'yyyy-MM-dd'));
+    this.date.setValue(this.datePipe.transform(this.utils.addDays(new Date(), -1), 'yyyy-MM-dd'));
 
     //this.start_date.setValue(this.datePipe.transform(new Date(date.getFullYear(), date.getMonth(), 1), 'yyyy-MM-dd'));
   }
-  addDays(date: Date, days: number): Date {
-    date.setDate(date.getDate() + days);
-    return date;
-  }
+
   onCustomizeCell(
     cell,
     data
@@ -1153,26 +1150,26 @@ export class DaywiseReportComponent implements OnInit {
     })
     console.log(eventHistoryLineData);
 
-    const eventHistoryGroupedData = this.utils.groupAndSum(eventHistoryLineData,['date'],['executing','total_sum_idle_time','changeover_time','no_production_planned']);
-    
-    console.log(eventHistoryGroupedData,"eventHistoryGroupedData");
+    const eventHistoryGroupedData = this.utils.groupAndSum(eventHistoryLineData, ['date'], ['executing', 'total_sum_idle_time', 'changeover_time', 'no_production_planned']);
+
+    console.log(eventHistoryGroupedData, "eventHistoryGroupedData");
 
     eventHistoryGroupedData.forEach((itm) => {
-      itm["executing"] = this.utils.GetDigitDecimalNum(this.utils.ConvertToHours(itm["executing"]),'1e1')
-      itm["total_sum_idle_time"] = this.utils.GetDigitDecimalNum(this.utils.ConvertToHours(itm["total_sum_idle_time"]),'1e1')
-      itm["changeover_time"] = this.utils.GetDigitDecimalNum(this.utils.ConvertToHours(itm["changeover_time"]),'1e1')
-      itm["no_production_planned"] = this.utils.GetDigitDecimalNum(this.utils.ConvertToHours(itm["no_production_planned"]),'1e1')
+      itm["executing"] = this.utils.GetDigitDecimalNum(this.utils.ConvertToHours(itm["executing"]), '1e1')
+      itm["total_sum_idle_time"] = this.utils.GetDigitDecimalNum(this.utils.ConvertToHours(itm["total_sum_idle_time"]), '1e1')
+      itm["changeover_time"] = this.utils.GetDigitDecimalNum(this.utils.ConvertToHours(itm["changeover_time"]), '1e1')
+      itm["no_production_planned"] = this.utils.GetDigitDecimalNum(this.utils.ConvertToHours(itm["no_production_planned"]), '1e1')
     });
 
-     console.log(eventHistoryGroupedData,"eventHistoryGroupedData");
+    console.log(eventHistoryGroupedData, "eventHistoryGroupedData");
 
 
-     let xAxisData = this.utils.filterMyArr(eventHistoryGroupedData, 'date');
-     let running_time_data = this.utils.filterMyArr(eventHistoryGroupedData, "executing");
-     let idle_time_data = this.utils.filterMyArr(eventHistoryGroupedData, "total_sum_idle_time");
-     let changerover_data = this.utils.filterMyArr(eventHistoryGroupedData, "changeover_time");
-     let no_prod_planned_data = this.utils.filterMyArr(eventHistoryGroupedData, "no_production_planned");
-  
+    let xAxisData = this.utils.filterMyArr(eventHistoryGroupedData, 'date');
+    let running_time_data = this.utils.filterMyArr(eventHistoryGroupedData, "executing");
+    let idle_time_data = this.utils.filterMyArr(eventHistoryGroupedData, "total_sum_idle_time");
+    let changerover_data = this.utils.filterMyArr(eventHistoryGroupedData, "changeover_time");
+    let no_prod_planned_data = this.utils.filterMyArr(eventHistoryGroupedData, "no_production_planned");
+
 
     console.log(xAxisData);
     console.log(running_time_data);
@@ -1238,10 +1235,6 @@ export class DaywiseReportComponent implements OnInit {
               color: 'white',
               format: '{point.percentage:.1f} %'
             },
-            // dataLabels: {
-            //   enabled: false,
-            //   format: '<b>{point.name}</b>: {point.percentage:.1f} %'
-            // },
             showInLegend: true
           }
         },
@@ -1475,7 +1468,7 @@ export class DaywiseReportComponent implements OnInit {
 
   lineWiseKpiTabClick(tabName) {
 
-    
+
     console.log(tabName, "TAB NAME - lineWiseKpiTabClick");
     if (tabName === 'Lines-combined') {
       this.createChart_kpi_linewise('all', 'higchartcontainer-control-linecombined', 'line_id', 'Key parameters', 'APQOEE');
@@ -1546,13 +1539,13 @@ export class DaywiseReportComponent implements OnInit {
     );
   }
 
- 
+
 
   createChart_kpi_linewise(line, controlname, category, chartTitle, chartType) {
     console.log(controlname, "controlname");
     console.log(line, "line Name");
-    console.log(this.selected,"DDL");
-    console.log(this.selected2,"DDL");
+    console.log(this.selected, "DDL");
+    console.log(this.selected2, "DDL");
 
     console.log(category, "category");
 
@@ -1570,13 +1563,14 @@ export class DaywiseReportComponent implements OnInit {
       itm["Performance"] = this.utils.roundOff((itm["net_operating_time"] / itm["gross_operating_time"]) * 100)
       itm["Availability"] = this.utils.roundOff((itm["gross_operating_time"] / itm["planed_production_time"]) * 100)
       itm["Quality"] = this.utils.roundOff((itm["productive_time"] / itm["net_operating_time"]) * 100)
-      itm["total_sum_idle_time"] = this.utils.GetDigitDecimalNum(this.utils.ConvertToHours(itm["total_sum_idle_time"]),'1e2')
-      itm["speed_loss"] = this.utils.GetDigitDecimalNum(this.utils.ConvertToHours(itm["speed_loss"]),'1e2')
+      itm["total_sum_idle_time"] = this.utils.GetDigitDecimalNum(this.utils.ConvertToHours(itm["total_sum_idle_time"]), '1e2')
+      itm["speed_loss"] = this.utils.GetDigitDecimalNum(this.utils.ConvertToHours(itm["speed_loss"]), '1e2')
     });
     console.log(GroupedData, "GroupedData");
     GroupedData.sort(this.utils.dynamicSort('OEE'))
 
     let xAxisData = this.utils.filterMyArr(GroupedData, category);
+
     let measureDataOEE = this.utils.filterMyArr(GroupedData, "OEE");
     let measureDataPerformace = this.utils.filterMyArr(GroupedData, "Performance");
     let measureDataQuality = this.utils.filterMyArr(GroupedData, "Quality");
@@ -1589,16 +1583,17 @@ export class DaywiseReportComponent implements OnInit {
     let chartTitleName;
     let toolTipEnd;
     let seriesData;
-    
+    let matTabClassName;
     if (chartType === 'APQOEE') {
       chartTitleName = chartTitle + '(%)'
       toolTipEnd = '%'
-       seriesData = [
+      matTabClassName = '.matTabChangeAPQ'
+      seriesData = [
         {
           name: "Availability",
           data: measureDataAvailability,
           color: '#ffe66d',
-        
+
         },
         {
           name: "Performance",
@@ -1617,10 +1612,11 @@ export class DaywiseReportComponent implements OnInit {
         },
 
       ]
-    } else if(chartType === 'speedidle') {
-       chartTitleName = chartTitle + '(in Hours)'
-       toolTipEnd = ''
-       seriesData = [
+    } else if (chartType === 'speedidle') {
+      chartTitleName = chartTitle + '(in Hours)'
+      toolTipEnd = ''
+      matTabClassName = '.matTabChangeIdle'
+      seriesData = [
         // {
         //   name: "Speed Loss",
         //   data: measureDataSpeedLoss,
@@ -1677,15 +1673,24 @@ export class DaywiseReportComponent implements OnInit {
       },
       plotOptions: {
         column: {
-          // cursor: 'pointer',
-          // point: {
-          //     events: {
-          //         click: function () {
-          //           console.log(this.category);
-                   
-          //         }
-          //       }
-          //      } ,   
+          cursor: 'pointer',
+          point: {
+            events: {
+              click: function () {
+                console.log(this.category);
+                console.log(matTabClassName);
+                console.log(this.x);
+                var querySelector1 =''+matTabClassName+ ' .mat-tab-label-content';
+                var querySelector2 =''+matTabClassName+ ' .mat-tab-label';
+                console.log(querySelector1,querySelector2)
+                for (let i = 0; i < document.querySelectorAll(querySelector1).length; i++) {
+                  if ((<HTMLElement>document.querySelectorAll(querySelector1)[i]).innerText == this.category) {
+                    (<HTMLElement>document.querySelectorAll(querySelector2)[i]).click();
+                  }
+                }
+              }
+            }
+          },
           stacking: undefined,
           dataLabels: {
             enabled: true,
@@ -1709,4 +1714,6 @@ export class DaywiseReportComponent implements OnInit {
     console.log(JSON.stringify(ChartData));
     Highcharts.chart(controlname, ChartData);
   }
+
+
 }

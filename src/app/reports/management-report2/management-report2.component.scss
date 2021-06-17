@@ -1,58 +1,46 @@
 .invisible {
-  display: block;
-  visibility: hidden;
-  height: 0;
-  width: 0;
-}
-
+    display: block;
+    visibility: hidden;
+    height: 0;
+    width: 0;
+  }
 
 
 path.highcharts-tracker-line.wdr-ui-element {
-stroke: rgba(255, 158, 44, 1) !important;
-stroke-width: 2px !important;
+  stroke: rgba(255, 158, 44, 1) !important;
+  stroke-width: 2px !important;
 }
 
-
+mat-form-field.filterdropdown {
+  position: absolute;
+  z-index: 10;
+  text-align: right;
+  display: inline-block;
+  text-align: left;
+  margin-left: auto;
+  margin-right: auto;
+  top: 1%;
+  right: 40%;
+}
 
 
 
 ::ng-deep .mat-form-field-flex{
-padding: .10em .75em 0 .75em !important;;
+  padding: .10em .75em 0 .75em !important;;
 }
+//  mat-form-field #filterdropdown .mat-form-field-appearance-fill .mat-form-field-flex  {
+//   background-color: #000000 !important;
+// }
 
-mat-form-field#filterdropdown {
-  position: absolute;
-  z-index: 10;
-  text-align: right;
-  display: inline-block;
-  text-align: left;
-  margin-left: auto;
-  margin-right: auto;
-  top: 30.5em;
-  right: 42%;
-}
-
-mat-form-field#filterdropdown1 {
-  position: absolute;
-  z-index: 10;
-  text-align: right;
-  display: inline-block;
-  text-align: left;
-  margin-left: auto;
-  margin-right: auto;
-  top: 55.5em;
-  right: 42%;
-}
-
+// ::ng-deep #filterdropdown .mat-select-value {
+//   color: #ffffff !important;
+// }
 
 ::ng-deep .mat-tab-list .mat-tab-labels .mat-tab-label-active {
-  color: rgb(255, 255, 255);
-  background-color: #2b1316;
+  color: rgb(255, 255, 255) !important;;
+  background-color: #2b1316 !important;;
 }
-::ng-deep .mat-tab-label, .mat-tab-link {
-   color: #000000; 
-  
-}
+
 ::ng-deep .mat-ink-bar {
   //color: #ffffff !important;
   background-color:#ff0000 !important;

@@ -4,21 +4,21 @@
             <div fxLayout="column" style="width:100%;">
                 <div fxLayout="row" style="width: 50%;padding: 1%;" fxLayoutAlign="space-around start" fxFlex="95">
 
-                    <!-- <mat-form-field appearance="fill" fxFlex="35">
+                    <mat-form-field appearance="fill" fxFlex="35">
                         <mat-label>Month and Year</mat-label>
                         <input matInput [matDatepicker]="dp" [formControl]="date">
                         <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
                         <mat-datepicker #dp startView="year" (yearSelected)="chosenYearHandler($event)"
                             (monthSelected)="chosenMonthHandler($event, dp)" panelClass="example-month-picker">
                         </mat-datepicker>
-                    </mat-form-field> -->
-
+                    </mat-form-field>
+                    <!-- 
                     <mat-form-field appearance="fill" fxFlex="35">
                         <mat-label>Choose the Date</mat-label>
                         <input matInput [matDatepicker]="picker" formControlName="date" placeholder="Shift Date">
                         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                         <mat-datepicker #picker></mat-datepicker>
-                    </mat-form-field>
+                    </mat-form-field> -->
 
                     <!-- <mat-form-field class="form-field" fxFlex="1" class="invisible">
                         <mat-label>State </mat-label>
@@ -46,18 +46,16 @@
         </pre> -->
     </div>
 </div>
-<div *ngIf="OutputData?.length == 0" style="color: red;text-align: center;">
+<!-- <div *ngIf="OutputData?.length == 0" style="color: red;text-align: center;">
     <mat-label>No Records Found</mat-label>
-</div>
-<div *ngIf="OutputData?.length > 0" fxLayout="column" style="width: 99%;" fxLayoutAlign="center">
-
-
-    <mat-tab-group  class="gb"
-        (selectedTabChange)="waterfallMonthTimelineTabClick($event.tab.textLabel)" mat-align-tabs="center">
+</div> -->
+<div fxLayout="column" style="width: 99%;" fxLayoutAlign="center">
+    <mat-tab-group class="gb" (selectedTabChange)="waterfallMonthTimelineTabClick($event.tab.textLabel)"
+        mat-align-tabs="center">
         <mat-tab label="Combined">
             <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap
                 fxLayoutAlign="space-around center" fxFlex="90">
-                <div id="higchartcontainer-waterfall-linewise-combined"
+                <div id="highchartcontainer-waterfall-linewise-combined"
                     style="height:400px; padding-top:1px;background: url('/../../../assets/images/chartLoader.gif')  no-repeat center ;background-size: 70px 70px;"
                     fxFlex="100">
                 </div>
@@ -67,7 +65,7 @@
         <mat-tab [label]="line" *ngFor="let line of lines">
             <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap
                 fxLayoutAlign="space-around center" fxFlex="90">
-                <div [id]="'higchartcontainer-waterfall-' + line" style="height:400px; padding-top:1px;" fxFlex="100">
+                <div [id]="'highchartcontainer-waterfall-' + line" style="height:400px; padding-top:1px;" fxFlex="100">
                 </div>
             </div>
 
@@ -76,23 +74,22 @@
     </mat-tab-group>
 
 
-    <mat-tab-group mat-align-tabs="center"   class="matTabChangeAPQ" (selectedTabChange)="lineWiseKpiTabClick($event.tab.textLabel)">
+    <mat-tab-group mat-align-tabs="center"  class="matTabChangeAPQ" (selectedTabChange)="lineWiseKpiTabClick($event.tab.textLabel)">
         <mat-tab label="Lines-combined">
             <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap
                 fxLayoutAlign="space-around center" fxFlex="99">
 
-                <div id="higchartcontainer-control-linecombined"
+                <div id="highchartcontainer-control-linecombined"
                     style="height:400px; padding-top:1px;background: url('/../../../assets/images/chartLoader.gif')  no-repeat center ;background-size: 70px 70px;"
                     fxFlex="100">
                 </div>
             </div>
         </mat-tab>
 
-       
-        <mat-tab [label]="line" *ngFor="let line of lines" >
+
+        <mat-tab [label]="line" *ngFor="let line of lines">
             <mat-form-field appearance="fill" class="filterdropdown">
-                <mat-select [(ngModel)]="selected"
-                    (selectionChange)="getFilterValue($event.value,line)" id="select1">
+                <mat-select [(ngModel)]="selected" (selectionChange)="getFilterValue($event.value,line)" id="select1">
                     <mat-option *ngFor="let filter of filters" [value]="filter.value">
                         {{filter.viewValue}}
                     </mat-option>
@@ -101,7 +98,7 @@
             <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap
                 fxLayoutAlign="space-around center" fxFlex="100">
 
-                <div [id]="'higchartcontainer-control-'+line" style="height:400px; padding-top:1px;" fxFlex="100">
+                <div [id]="'highchartcontainer-control-'+line" style="height:400px; padding-top:1px;" fxFlex="100">
                 </div>
             </div>
 
@@ -110,12 +107,13 @@
     </mat-tab-group>
 
 
-    <mat-tab-group mat-align-tabs="center" class="matTabChangeIdle" (selectedTabChange)="lineWiseSpeedIdleTabClick($event.tab.textLabel)">
+    <mat-tab-group mat-align-tabs="center" class="matTabChangeIdle"
+        (selectedTabChange)="lineWiseSpeedIdleTabClick($event.tab.textLabel)">
         <mat-tab label="Lines-combined">
             <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap
                 fxLayoutAlign="space-around center" fxFlex="99">
 
-                <div id="higchartcontainer-control-speedloss-linecombined"
+                <div id="highchartcontainer-control-speedloss-linecombined"
                     style="height:400px; padding-top:1px;background: url('/../../../assets/images/chartLoader.gif')  no-repeat center ;background-size: 70px 70px;"
                     fxFlex="100">
                 </div>
@@ -124,8 +122,8 @@
         <mat-tab [label]="line" *ngFor="let line of lines">
 
             <mat-form-field appearance="fill" class="filterdropdown">
-                <mat-select [(ngModel)]="selected2"
-                    (selectionChange)="getFilterSpeedIdleValue($event.value,line)" id="select">
+                <mat-select [(ngModel)]="selected2" (selectionChange)="getFilterSpeedIdleValue($event.value,line)"
+                    id="select">
                     <mat-option *ngFor="let filter of filters" [value]="filter.value">
                         {{filter.viewValue}}
                     </mat-option>
@@ -134,7 +132,8 @@
             <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap
                 fxLayoutAlign="space-around center" fxFlex="100">
 
-                <div [id]="'higchartcontainer-control-speedidle-'+line" style="height:400px; padding-top:1px;" fxFlex="100">
+                <div [id]="'highchartcontainer-control-speedidle-'+line" style="height:400px; padding-top:1px;"
+                    fxFlex="100">
                 </div>
             </div>
 
@@ -142,19 +141,17 @@
 
     </mat-tab-group>
 
-    <mat-tab-group backgroundColor="" mat-align-tabs="center" label="Event History" class="gb"
+    <mat-tab-group backgroundColor="" mat-align-tabs="center" label="Event History"  class="matTabChangeEventHistory"
         (selectedTabChange)="eventHistoryTabClick($event.tab.textLabel)">
         <mat-tab label="Combined">
 
             <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap
                 fxLayoutAlign="space-around center" fxFlex="99">
 
-                <div id="higchartcontainer-lines-combined-eventhistory"
+                <div id="highchartcontainer-lines-combined-eventhistory"
                     style="height:400px; padding-top:1px;background: url('/../../../assets/images/chartLoader.gif')  no-repeat center ;background-size: 70px 70px;"
                     fxFlex="50">
                 </div>
-
-
 
                 <div id="highChartContainer-Combined-EventHistory-Pie"
                     style="height:400px; padding-top:1px;background: url('/../../../assets/images/chartLoader.gif')  no-repeat center ;background-size: 70px 70px;"
@@ -162,19 +159,17 @@
                 </div>
             </div>
         </mat-tab>
-
-
         <mat-tab [label]="line" *ngFor="let line of lines">
             <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap
                 fxLayoutAlign="space-around center" fxFlex="99">
 
-                <div [id]="'higchartcontainer-eventhistory-'+line" style="height:400px; padding-top:1px;" fxFlex="100">
+                <div [id]="'highchartcontainer-eventhistory-'+line" style="height:400px; padding-top:1px;" fxFlex="100">
                 </div>
             </div>
         </mat-tab>
     </mat-tab-group>
 </div>
-<div *ngIf="OutputData?.length > 0" fxLayout="column" style="width: 99%;" fxLayoutAlign="center">
+<div fxLayout="column" style="width: 99%;" fxLayoutAlign="center">
     <div>
         <button mat-raised-button color="primary" (click)="Export_Excel()">Export to Excel</button>&nbsp;
         <button mat-raised-button color="primary" (click)="Export_PDF()">Export to PDF</button>
@@ -185,7 +180,11 @@
         <wbr-pivot #pivot1 [toolbar]="true" [width]="'100%'" [height]="700" fxFlex="99"
             (beforetoolbarcreated)="customizeToolbar($event)" (reportcomplete)="onReportComplete()">
         </wbr-pivot>
+        <!-- <fm-pivot #pivot1 [toolbar]="true" [width]="'100%'" [height]="700" fxFlex="99"
+            (beforetoolbarcreated)="customizeToolbar($event)" (reportcomplete)="onReportComplete()"
+            [licenseKey]="licenseKey">
+        </fm-pivot> -->
     </div>
- 
+
     <!-- <pre>{{lines|json}}</pre> -->
 </div>
