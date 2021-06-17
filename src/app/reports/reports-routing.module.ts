@@ -40,7 +40,7 @@ const routes: Routes = [
         pathMatch: 'full'
       },
       {
-        path: 'management-V2',
+        path: 'management-v2',
         component: ManagementReport2Component ,
         pathMatch: 'full'
       },
