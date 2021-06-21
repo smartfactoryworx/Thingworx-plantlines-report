@@ -1443,23 +1443,24 @@ export class OutputReportComponent implements OnInit {
       itm["speed_loss"] = this.utils.GetDigitDecimalNum(this.utils.ConvertToHours(itm["speed_loss"]), '1e2')
     });
     console.log(GroupedData, "GroupedData");
-    GroupedData.sort(this.utils.dynamicSort('OEE'))
-
-    let xAxisData = this.utils.filterMyArr(GroupedData, category);
-    let measureDataOEE = this.utils.filterMyArr(GroupedData, "OEE");
-    let measureDataPerformace = this.utils.filterMyArr(GroupedData, "Performance");
-    let measureDataQuality = this.utils.filterMyArr(GroupedData, "Quality");
-    let measureDataAvailability = this.utils.filterMyArr(GroupedData, "Availability");
-    let measureDataSpeedLoss = this.utils.filterMyArr(GroupedData, "speed_loss");
-
-    GroupedData.sort(this.utils.dynamicSort('total_sum_idle_time'));
-    let measureDataIdleTime = this.utils.filterMyArr(GroupedData, "total_sum_idle_time");
-
+    let xAxisData;
+    let measureDataOEE;
+    let measureDataPerformace;
+    let measureDataQuality;
+    let measureDataAvailability;
+    let measureDataSpeedLoss;
+    let measureDataIdleTime;
     let chartTitleName;
     let toolTipEnd;
     let seriesData;
 
     if (chartType === 'APQOEE') {
+      GroupedData.sort(this.utils.dynamicSort('OEE'))
+      xAxisData = this.utils.filterMyArr(GroupedData, category);
+      measureDataOEE = this.utils.filterMyArr(GroupedData, "OEE");
+      measureDataPerformace = this.utils.filterMyArr(GroupedData, "Performance");
+      measureDataQuality = this.utils.filterMyArr(GroupedData, "Quality");
+      measureDataAvailability = this.utils.filterMyArr(GroupedData, "Availability");
       chartTitleName = chartTitle + '(%)'
       toolTipEnd = '%'
       seriesData = [
@@ -1486,6 +1487,10 @@ export class OutputReportComponent implements OnInit {
 
       ]
     } else if (chartType === 'idle') {
+      GroupedData.sort(this.utils.dynamicSort('total_sum_idle_time'));
+      xAxisData = this.utils.filterMyArr(GroupedData, category);
+      measureDataSpeedLoss = this.utils.filterMyArr(GroupedData, "speed_loss");
+      measureDataIdleTime = this.utils.filterMyArr(GroupedData, "total_sum_idle_time");
       chartTitleName = chartTitle + '(in Hours)'
       toolTipEnd = ''
       seriesData = [
