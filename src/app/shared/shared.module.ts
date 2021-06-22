@@ -14,6 +14,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { LoadingBarRouterModule } from '@ngx-loading-bar/router';
 import { LoadingBarModule } from '@ngx-loading-bar/core';
 import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client';
+import { Ng2GoogleChartsModule } from 'ng2-google-charts';
 import {
   PerfectScrollbarModule,
   PERFECT_SCROLLBAR_CONFIG,
@@ -69,7 +70,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     }),
     ToastrModule.forRoot(),
     GoogleChartsModule.forRoot(),
-    TabModule
+    TabModule,
+    Ng2GoogleChartsModule
   ],
   exports: [
     MaterialModules,
@@ -87,7 +89,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ToastrModule,
     WebDataRocksPivot,
     TabModule,
-    DurationToTime
+    DurationToTime,
+    Ng2GoogleChartsModule
     // WidgetComponentModule,
   ],
   providers: [
