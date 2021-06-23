@@ -1,15 +1,15 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { EventChartHistoryComponent } from './event-chart-history.component';
+import { EventChartHistory2Component } from './event-chart-history2.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 
 
 
 @NgModule({
-  declarations: [EventChartHistoryComponent],
+  declarations: [EventChartHistory2Component],
   imports: [
     CommonModule,
     SharedModule
   ]
 })
-export class EventChartHistoryModule { }
+export class EventChartHistory2Module { }

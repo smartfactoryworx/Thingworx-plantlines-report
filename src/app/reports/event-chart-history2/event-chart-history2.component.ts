@@ -9,11 +9,11 @@ import { DatePipe } from '@angular/common';
 import * as moment from 'moment';
 
 @Component({
-  selector: 'app-event-chart-history',
-  templateUrl: './event-chart-history.component.html',
-  styleUrls: ['./event-chart-history.component.scss'],
+  selector: 'app-event-chart-history2',
+  templateUrl: './event-chart-history2.component.html',
+  styleUrls: ['./event-chart-history2.component.scss'],
 })
-export class EventChartHistoryComponent implements OnInit {
+export class EventChartHistory2Component implements OnInit {
   tomorrow = new Date();
   eventchartform: FormGroup;
   //2 formcontrols used in page as below

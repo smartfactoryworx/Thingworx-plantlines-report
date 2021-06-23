@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EventChartHistoryComponent } from './event-chart-history.component';
+import { EventChartHistory2Component } from './event-chart-history2.component';
 
-describe('EventChartHistoryComponent', () => {
-  let component: EventChartHistoryComponent;
-  let fixture: ComponentFixture<EventChartHistoryComponent>;
+describe('EventChartHistory2Component', () => {
+  let component: EventChartHistory2Component;
+  let fixture: ComponentFixture<EventChartHistory2Component>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ EventChartHistoryComponent ]
+      declarations: [ EventChartHistory2Component ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(EventChartHistoryComponent);
+    fixture = TestBed.createComponent(EventChartHistory2Component);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
