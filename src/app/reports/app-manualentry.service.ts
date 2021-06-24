@@ -98,8 +98,8 @@ export class ManualEntryService {
         return this.httpClient.get('/api/changeover/changeoverreport?startDate=' + startdate + '&endDate=' + enddate);
     }
 
-    GetFaultwiseData(startdate, enddate, machinestate, duration): Observable<object> {
-        return this.httpClient.get('/api/trend/day_state_wise_report?startDate=' + startdate + '&endDate=' + enddate + '&machine_state=' + machinestate + '&duration=' + duration);
+    GetFaultwiseData(startdate, enddate, machinestate, duration,lineid): Observable<object> {
+        return this.httpClient.get('/api/trend/day_state_wise_report?startDate=' + startdate + '&endDate=' + enddate + '&machine_state=' + machinestate + '&duration=' + duration + '&line_id=' + lineid);
     }
 
     GetOutputData(startDate, endDate, line_Id): Observable<object> {

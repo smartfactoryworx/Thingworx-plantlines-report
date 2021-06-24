@@ -153,7 +153,7 @@ export class ManagementReport2Component implements OnInit {
   lines = [];
   filters: Filter[] = [
     { value: 'operator_name', viewValue: 'Operator wise' },
-    // { value: 'datewise', viewValue: 'Date wise' },
+    { value: 'date', viewValue: 'Date wise' },
     { value: 'batch_name', viewValue: 'Batch wise' },
     { value: 'shift', viewValue: 'Shift wise' },
     { value: 'product', viewValue: 'Product wise' }
@@ -1522,15 +1522,27 @@ export class ManagementReport2Component implements OnInit {
     let toolTipEnd;
     let seriesData;
     let matTabClassName;
+    let chartTypeName;
+    let chartForm;
 
 
     if (chartType === 'APQOEE') {
-      GroupedData.sort(this.utils.dynamicSort('OEE'))
-      xAxisData = this.utils.filterMyArr(GroupedData, category);
-      measureDataOEE = this.utils.filterMyArr(GroupedData, "OEE");
-      measureDataPerformace = this.utils.filterMyArr(GroupedData, "Performance");
-      measureDataQuality = this.utils.filterMyArr(GroupedData, "Quality");
-      measureDataAvailability = this.utils.filterMyArr(GroupedData, "Availability");
+      if(category === "date"){
+        GroupedData.sort(this.utils.dynamicSort(category))
+        xAxisData = this.utils.filterMyArr(GroupedData, category);
+        measureDataOEE = this.utils.filterMyArr(GroupedData, "OEE");
+        measureDataPerformace = this.utils.filterMyArr(GroupedData, "Performance");
+        measureDataQuality = this.utils.filterMyArr(GroupedData, "Quality");
+        measureDataAvailability = this.utils.filterMyArr(GroupedData, "Availability");
+      }else{
+        GroupedData.sort(this.utils.dynamicSort('OEE'))
+        xAxisData = this.utils.filterMyArr(GroupedData, category);
+        measureDataOEE = this.utils.filterMyArr(GroupedData, "OEE");
+        measureDataPerformace = this.utils.filterMyArr(GroupedData, "Performance");
+        measureDataQuality = this.utils.filterMyArr(GroupedData, "Quality");
+        measureDataAvailability = this.utils.filterMyArr(GroupedData, "Availability");
+      }
+     
       chartTitleName = chartTitle + '(%)'
       toolTipEnd = '%'
       matTabClassName = '.matTabChangeAPQ'
@@ -1559,10 +1571,17 @@ export class ManagementReport2Component implements OnInit {
 
       ]
     } else if (chartType === 'speedidle') {
+      if(category === "date"){
+        GroupedData.sort(this.utils.dynamicSort(category));
+        xAxisData = this.utils.filterMyArr(GroupedData, category);
+        measureDataSpeedLoss = this.utils.filterMyArr(GroupedData, "speed_loss");
+        measureDataIdleTime = this.utils.filterMyArr(GroupedData, "total_sum_idle_time");
+      }else{ 
       GroupedData.sort(this.utils.dynamicSort('total_sum_idle_time'));
       xAxisData = this.utils.filterMyArr(GroupedData, category);
       measureDataSpeedLoss = this.utils.filterMyArr(GroupedData, "speed_loss");
       measureDataIdleTime = this.utils.filterMyArr(GroupedData, "total_sum_idle_time");
+      }
       chartTitleName = chartTitle + '(in Hours)'
       toolTipEnd = ''
       matTabClassName = '.matTabChangeIdle'
@@ -1581,11 +1600,70 @@ export class ManagementReport2Component implements OnInit {
 
       ]
     }
+
+
+    
+    if (category === "date") {
+      chartTypeName = "line";
+      chartForm = {
+        series: {
+          stacking: undefined,
+          dataLabels: {
+            enabled: true,
+            style: {
+              fontWeight: 'bold',
+              color: '#000000'
+            },
+            formatter: function () {
+              let value = (this.y);
+              return '' + value;
+            }
+          }
+        }
+      }
+    } else {
+      chartTypeName = "column";
+      chartForm = {
+        column: {
+          cursor: 'pointer',
+          point: {
+              events: {
+                click: function () {
+                  console.log(this.category);
+                  console.log(matTabClassName);
+                  console.log(this.x);
+                  var querySelector1 =''+matTabClassName+ ' .mat-tab-label-content';
+                  var querySelector2 =''+matTabClassName+ ' .mat-tab-label';
+                  console.log(querySelector1,querySelector2)
+                  for (let i = 0; i < document.querySelectorAll(querySelector1).length; i++) {
+                    if ((<HTMLElement>document.querySelectorAll(querySelector1)[i]).innerText == this.category) {
+                      (<HTMLElement>document.querySelectorAll(querySelector2)[i]).click();
+                    }
+                  }
+                }
+                }
+               } ,   
+          stacking: undefined,
+          dataLabels: {
+            enabled: true,
+            style: {
+              fontWeight: 'bold',
+              color: '#000000'
+            },
+            formatter: function () {
+              let value = (this.y);
+              return '' + value;
+            }
+          }
+        }
+      }
+    }
+
     var ChartData: any;
     ChartData = {
 
       chart: {
-        type: 'column'
+        type: chartTypeName,
       },
       title: {
         text: chartTitleName,
@@ -1621,41 +1699,7 @@ export class ManagementReport2Component implements OnInit {
           return this.key + '<br>' + '' + value + toolTipEnd;
         }
       },
-      plotOptions: {
-        column: {
-          cursor: 'pointer',
-          point: {
-              events: {
-                click: function () {
-                  console.log(this.category);
-                  console.log(matTabClassName);
-                  console.log(this.x);
-                  var querySelector1 =''+matTabClassName+ ' .mat-tab-label-content';
-                  var querySelector2 =''+matTabClassName+ ' .mat-tab-label';
-                  console.log(querySelector1,querySelector2)
-                  for (let i = 0; i < document.querySelectorAll(querySelector1).length; i++) {
-                    if ((<HTMLElement>document.querySelectorAll(querySelector1)[i]).innerText == this.category) {
-                      (<HTMLElement>document.querySelectorAll(querySelector2)[i]).click();
-                    }
-                  }
-                }
-                }
-               } ,   
-          stacking: undefined,
-          dataLabels: {
-            enabled: true,
-            style: {
-              fontWeight: 'bold',
-              color: '#000000'
-            },
-            formatter: function () {
-              let value = (this.y);
-              return '' + value;
-            }
-          }
-        }
-      },
-
+      plotOptions:chartForm,
       series: seriesData,
       credits: {
         enabled: false

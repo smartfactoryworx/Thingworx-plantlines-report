@@ -7,7 +7,9 @@ import { DaywiseReportComponent } from './daywise-report/daywise-report.componen
 import { ManagementReportComponent } from './management-report/management-report.component';
 import { OutputReport1Component } from './output-report1/output-report1.component';
 import { ManagementReport2Component } from './management-report2/management-report2.component';
-import { EventChartHistoryComponent } from './event-chart-history/event-chart-history.component';
+import { EventChartHistory2Component } from './event-chart-history2/event-chart-history2.component';
+import { FaultWiseReport2Component } from './fault-wise-report2/fault-wise-report2.component';
+import { ChangeoverReport2Component } from './changeover-report2/changeover-report2.component';
 
 const routes: Routes = [
  
@@ -47,10 +49,19 @@ const routes: Routes = [
       },
       {
         path: 'eventchart-v2',
-        component: EventChartHistoryComponent ,
+        component: EventChartHistory2Component ,
         pathMatch: 'full'
       },
-      
+      {
+        path: 'fault-v2',
+        component: FaultWiseReport2Component ,
+        pathMatch: 'full'
+      },
+      {
+        path: 'changeover-v2',
+        component: ChangeoverReport2Component ,
+        pathMatch: 'full'
+      },
       
     ]
   }

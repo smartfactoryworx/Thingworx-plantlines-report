@@ -147,7 +147,7 @@ export class ManagementReportComponent implements OnInit {
   gotLines: boolean = false;
   filters: Filter[] = [
     { value: 'operator_name', viewValue: 'Operator wise' },
-    // { value: 'datewise', viewValue: 'Date wise' },
+    { value: 'date', viewValue: 'Date wise' },
     { value: 'batch_name', viewValue: 'Batch wise' },
     { value: 'shift', viewValue: 'Shift wise' },
     { value: 'product', viewValue: 'Product wise' }
@@ -1492,14 +1492,28 @@ export class ManagementReportComponent implements OnInit {
     let chartTitleName;
     let toolTipEnd;
     let seriesData;
+    let chartTypeName;
+    let chartForm;
+
+ 
  
     if (chartType === 'APQOEE') {
-      GroupedData.sort(this.utils.dynamicSort('OEE'))
-      xAxisData = this.utils.filterMyArr(GroupedData, category);
-      measureDataOEE = this.utils.filterMyArr(GroupedData, "OEE");
-      measureDataPerformace = this.utils.filterMyArr(GroupedData, "Performance");
-      measureDataQuality = this.utils.filterMyArr(GroupedData, "Quality");
-      measureDataAvailability = this.utils.filterMyArr(GroupedData, "Availability");
+      if(category==="date"){
+        GroupedData.sort(this.utils.dynamicSort(category))
+        xAxisData = this.utils.filterMyArr(GroupedData, category);
+        measureDataOEE = this.utils.filterMyArr(GroupedData, "OEE");
+        measureDataPerformace = this.utils.filterMyArr(GroupedData, "Performance");
+        measureDataQuality = this.utils.filterMyArr(GroupedData, "Quality");
+        measureDataAvailability = this.utils.filterMyArr(GroupedData, "Availability");
+      }else{
+        GroupedData.sort(this.utils.dynamicSort('OEE'))
+        xAxisData = this.utils.filterMyArr(GroupedData, category);
+        measureDataOEE = this.utils.filterMyArr(GroupedData, "OEE");
+        measureDataPerformace = this.utils.filterMyArr(GroupedData, "Performance");
+        measureDataQuality = this.utils.filterMyArr(GroupedData, "Quality");
+        measureDataAvailability = this.utils.filterMyArr(GroupedData, "Availability");
+      }
+      
       chartTitleName = chartTitle + '(%)'
       toolTipEnd = '%'
       seriesData = [
@@ -1526,10 +1540,18 @@ export class ManagementReportComponent implements OnInit {
 
       ]
     } else if (chartType === 'idle') {
-      GroupedData.sort(this.utils.dynamicSort('total_sum_idle_time'));
-      xAxisData = this.utils.filterMyArr(GroupedData, category);
-      measureDataSpeedLoss = this.utils.filterMyArr(GroupedData, "speed_loss");
-      measureDataIdleTime = this.utils.filterMyArr(GroupedData, "total_sum_idle_time");
+      if(category=== "date"){
+        GroupedData.sort(this.utils.dynamicSort(category));
+        xAxisData = this.utils.filterMyArr(GroupedData, category);
+        measureDataSpeedLoss = this.utils.filterMyArr(GroupedData, "speed_loss");
+        measureDataIdleTime = this.utils.filterMyArr(GroupedData, "total_sum_idle_time");
+      }else{
+        GroupedData.sort(this.utils.dynamicSort('total_sum_idle_time'));
+        xAxisData = this.utils.filterMyArr(GroupedData, category);
+        measureDataSpeedLoss = this.utils.filterMyArr(GroupedData, "speed_loss");
+        measureDataIdleTime = this.utils.filterMyArr(GroupedData, "total_sum_idle_time");
+      }
+     
       chartTitleName = chartTitle + '(in Hours)'
       toolTipEnd = ''
       seriesData = [
@@ -1547,11 +1569,50 @@ export class ManagementReportComponent implements OnInit {
 
       ]
     }
+
+    if (category === "date") {
+      chartTypeName = "line";
+      chartForm = {
+        series: {
+          stacking: undefined,
+          dataLabels: {
+            enabled: true,
+            style: {
+              fontWeight: 'bold',
+              color: '#000000'
+            },
+            formatter: function () {
+              let value = (this.y);
+              return '' + value;
+            }
+          }
+        }
+      }
+    } else {
+      chartTypeName = "column";
+      chartForm = {
+        column: {
+          stacking: undefined,
+          dataLabels: {
+            enabled: true,
+            style: {
+              fontWeight: 'bold',
+              color: '#000000'
+            },
+            formatter: function () {
+              let value = (this.y);
+              return '' + value;
+            }
+          }
+        }
+      }
+    }
+
     var ChartData: any;
     ChartData = {
 
       chart: {
-        type: 'column'
+        type: chartTypeName,
       },
       title: {
         text: chartTitleName,
@@ -1587,23 +1648,7 @@ export class ManagementReportComponent implements OnInit {
           return this.key + '<br>' + '' + value + toolTipEnd;
         }
       },
-      plotOptions: {
-        column: {
-          stacking: undefined,
-          dataLabels: {
-            enabled: true,
-            style: {
-              fontWeight: 'bold',
-              color: '#000000'
-            },
-            formatter: function () {
-              let value = (this.y);
-              return '' + value;
-            }
-          }
-        }
-      },
-
+      plotOptions:chartForm,
       series: seriesData,
       credits: {
         enabled: false

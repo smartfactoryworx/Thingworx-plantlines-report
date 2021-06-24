@@ -142,7 +142,7 @@ export class DaywiseReportComponent implements OnInit {
   lines = [];
   filters: Filter[] = [
     { value: 'operator_name', viewValue: 'Operator wise' },
-    // { value: 'datewise', viewValue: 'Date wise' },
+    // { value: 'date', viewValue: 'Date wise' },
     { value: 'batch_name', viewValue: 'Batch wise' },
     { value: 'shift', viewValue: 'Shift wise' },
     { value: 'product', viewValue: 'Product wise' }
@@ -1579,6 +1579,8 @@ export class DaywiseReportComponent implements OnInit {
     let seriesData;
     let matTabClassName;
 
+
+
     if (chartType === 'APQOEE') {
       GroupedData.sort(this.utils.dynamicSort('OEE'))
       xAxisData = this.utils.filterMyArr(GroupedData, category);
@@ -1636,11 +1638,13 @@ export class DaywiseReportComponent implements OnInit {
 
       ]
     }
+
+
     var ChartData: any;
     ChartData = {
 
       chart: {
-        type: 'column'
+        type: "column",
       },
       title: {
         text: chartTitleName,
@@ -1685,9 +1689,9 @@ export class DaywiseReportComponent implements OnInit {
                 console.log(this.category);
                 console.log(matTabClassName);
                 console.log(this.x);
-                var querySelector1 =''+matTabClassName+ ' .mat-tab-label-content';
-                var querySelector2 =''+matTabClassName+ ' .mat-tab-label';
-                console.log(querySelector1,querySelector2)
+                var querySelector1 = '' + matTabClassName + ' .mat-tab-label-content';
+                var querySelector2 = '' + matTabClassName + ' .mat-tab-label';
+                console.log(querySelector1, querySelector2)
                 for (let i = 0; i < document.querySelectorAll(querySelector1).length; i++) {
                   if ((<HTMLElement>document.querySelectorAll(querySelector1)[i]).innerText == this.category) {
                     (<HTMLElement>document.querySelectorAll(querySelector2)[i]).click();
@@ -1710,7 +1714,6 @@ export class DaywiseReportComponent implements OnInit {
           }
         }
       },
-
       series: seriesData,
       credits: {
         enabled: false

@@ -1,0 +1,37 @@
+.invisible {
+    display: block;
+    visibility: hidden;
+    height: 0;
+    width: 0;
+  }
+  .wdr-sheet-selection-canvas {
+    display: none !important;
+  }
+  .btn {
+    border: 2px solid blue;
+    background: #fff;
+    width: 150px;
+    color: blue;
+    text-transform: uppercase;
+    cursor: pointer;
+    margin: 5px 0;
+    display: inline-block;
+    -webkit-transition: all .3s;
+    transition: all .3s;
+    font-weight: normal;
+     padding: 6px 6px; 
+    font-size: 13px;
+}
+
+.btn:hover {
+    background: blue;
+    color: #fff;
+}
+
+.btn:focus {
+    outline: none;
+}
+
+/* #wdr-toolbar-wrapper{
+  height: 30px !important;
+} */

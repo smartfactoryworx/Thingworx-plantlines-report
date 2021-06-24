@@ -141,7 +141,7 @@ export class OutputReportComponent implements OnInit {
   gotLines: boolean = false;
   filters: Filter[] = [
     { value: 'operator_name', viewValue: 'Operator wise' },
-    // { value: 'datewise', viewValue: 'Date wise' },
+    { value: 'date', viewValue: 'Date wise' },
     { value: 'batch_name', viewValue: 'Batch wise' },
     { value: 'shift', viewValue: 'Shift wise' },
     { value: 'product', viewValue: 'Product wise' }
@@ -168,7 +168,7 @@ export class OutputReportComponent implements OnInit {
   createFiltersForm() {
     this.outputReport = new FormGroup({
       date: this.date,
-      line_id: this.line_id
+      line_id: this.line_id,
     });
   }
 
@@ -248,8 +248,8 @@ export class OutputReportComponent implements OnInit {
   ngOnInit(): void {
     this.createFormFilters();
     this.createFiltersForm();
-    this.BindDefaultDates();
     this.GetLinesList();
+    this.BindDefaultDates();
     this.getSearchData(this.line_id.value);
   }
 
@@ -692,9 +692,7 @@ export class OutputReportComponent implements OnInit {
           },
         ],
         rows: [
-          {
-            uniqueName: "line_id"
-          },
+
           {
             uniqueName: "batch_name"
           },
@@ -1268,11 +1266,12 @@ export class OutputReportComponent implements OnInit {
     }
 
     this.child.webDataRocks.setReport(setReportType);
-    
+
 
     console.log('*************************1528*******************');
   }
   getSearchData(lineid) {
+    
     var selectedLineId;
     if (lineid != "") {
       selectedLineId = lineid;
@@ -1453,16 +1452,29 @@ export class OutputReportComponent implements OnInit {
     let chartTitleName;
     let toolTipEnd;
     let seriesData;
+    let chartTypeName;
+    let chartForm;
 
+   
     if (chartType === 'APQOEE') {
-      GroupedData.sort(this.utils.dynamicSort('OEE'))
-      xAxisData = this.utils.filterMyArr(GroupedData, category);
-      measureDataOEE = this.utils.filterMyArr(GroupedData, "OEE");
-      measureDataPerformace = this.utils.filterMyArr(GroupedData, "Performance");
-      measureDataQuality = this.utils.filterMyArr(GroupedData, "Quality");
-      measureDataAvailability = this.utils.filterMyArr(GroupedData, "Availability");
-      chartTitleName = chartTitle + '(%)'
-      toolTipEnd = '%'
+      if(category === "date"){
+        GroupedData.sort(this.utils.dynamicSort(category))
+        xAxisData = this.utils.filterMyArr(GroupedData, category);
+        measureDataOEE = this.utils.filterMyArr(GroupedData, "OEE");
+        measureDataPerformace = this.utils.filterMyArr(GroupedData, "Performance");
+        measureDataQuality = this.utils.filterMyArr(GroupedData, "Quality");
+        measureDataAvailability = this.utils.filterMyArr(GroupedData, "Availability");
+      }else{
+        GroupedData.sort(this.utils.dynamicSort('OEE'))
+        xAxisData = this.utils.filterMyArr(GroupedData, category);
+        measureDataOEE = this.utils.filterMyArr(GroupedData, "OEE");
+        measureDataPerformace = this.utils.filterMyArr(GroupedData, "Performance");
+        measureDataQuality = this.utils.filterMyArr(GroupedData, "Quality");
+        measureDataAvailability = this.utils.filterMyArr(GroupedData, "Availability");
+      }
+     
+      chartTitleName = chartTitle + '(%)';
+      toolTipEnd = '%';
       seriesData = [
         {
           name: "A",
@@ -1487,12 +1499,20 @@ export class OutputReportComponent implements OnInit {
 
       ]
     } else if (chartType === 'idle') {
-      GroupedData.sort(this.utils.dynamicSort('total_sum_idle_time'));
-      xAxisData = this.utils.filterMyArr(GroupedData, category);
-      measureDataSpeedLoss = this.utils.filterMyArr(GroupedData, "speed_loss");
-      measureDataIdleTime = this.utils.filterMyArr(GroupedData, "total_sum_idle_time");
-      chartTitleName = chartTitle + '(in Hours)'
-      toolTipEnd = ''
+      if(category === "date"){
+        GroupedData.sort(this.utils.dynamicSort(category));
+        xAxisData = this.utils.filterMyArr(GroupedData, category);
+        measureDataSpeedLoss = this.utils.filterMyArr(GroupedData, "speed_loss");
+        measureDataIdleTime = this.utils.filterMyArr(GroupedData, "total_sum_idle_time");
+      }else{
+        GroupedData.sort(this.utils.dynamicSort('total_sum_idle_time'));
+        xAxisData = this.utils.filterMyArr(GroupedData, category);
+        measureDataSpeedLoss = this.utils.filterMyArr(GroupedData, "speed_loss");
+        measureDataIdleTime = this.utils.filterMyArr(GroupedData, "total_sum_idle_time");
+      }
+
+      chartTitleName = chartTitle + '(in Hours)';
+      toolTipEnd = '';
       seriesData = [
         // {
         //   name: "Speed Loss",
@@ -1508,11 +1528,50 @@ export class OutputReportComponent implements OnInit {
 
       ]
     }
+
+    if (category === "date") {
+      chartTypeName = "line";
+      chartForm = {
+        series: {
+          stacking: undefined,
+          dataLabels: {
+            enabled: true,
+            style: {
+              fontWeight: 'bold',
+              color: '#000000'
+            },
+            formatter: function () {
+              let value = (this.y);
+              return '' + value;
+            }
+          }
+        }
+      }
+    } else {
+      chartTypeName = "column";
+      chartForm = {
+        column: {
+          stacking: undefined,
+          dataLabels: {
+            enabled: true,
+            style: {
+              fontWeight: 'bold',
+              color: '#000000'
+            },
+            formatter: function () {
+              let value = (this.y);
+              return '' + value;
+            }
+          }
+        }
+      }
+    }
+    //console.log(chartTypeName, "chartTypeName");
     var ChartData: any;
     ChartData = {
 
       chart: {
-        type: 'column'
+        type: chartTypeName,
       },
       title: {
         text: chartTitleName,
@@ -1548,23 +1607,7 @@ export class OutputReportComponent implements OnInit {
           return this.key + '<br>' + '' + value + toolTipEnd;
         }
       },
-      plotOptions: {
-        column: {
-          stacking: undefined,
-          dataLabels: {
-            enabled: true,
-            style: {
-              fontWeight: 'bold',
-              color: '#000000'
-            },
-            formatter: function () {
-              let value = (this.y);
-              return '' + value;
-            }
-          }
-        }
-      },
-
+      plotOptions:chartForm,
       series: seriesData,
       credits: {
         enabled: false
@@ -1598,14 +1641,14 @@ export class OutputReportComponent implements OnInit {
     });
 
     console.log(eventHistoryGroupedData, "eventHistoryGroupedData");
-    
+
     let xAxisData;
     if (line === 'all') {
       xAxisData = this.utils.filterMyArr(eventHistoryGroupedData, 'line_id');
-    }else{
-       xAxisData   = this.utils.filterMyArr(eventHistoryGroupedData, 'date');
+    } else {
+      xAxisData = this.utils.filterMyArr(eventHistoryGroupedData, 'date');
     }
-  
+
     let running_time_data = this.utils.filterMyArr(eventHistoryGroupedData, "executing");
     let idle_time_data = this.utils.filterMyArr(eventHistoryGroupedData, "total_sum_idle_time");
     let changerover_data = this.utils.filterMyArr(eventHistoryGroupedData, "changeover_time");

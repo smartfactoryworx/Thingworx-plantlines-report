@@ -49,7 +49,7 @@
 <!-- <div *ngIf="OutputData?.length == 0" style="color: red;text-align: center;">
     <mat-label>No Records Found</mat-label>
 </div> -->
-<div fxLayout="column" style="width: 99%;" fxLayoutAlign="center">
+<div *ngIf="OutputData?.length > 0" fxLayout="column" style="width: 99%;" fxLayoutAlign="center">
     <mat-tab-group class="gb" (selectedTabChange)="waterfallMonthTimelineTabClick($event.tab.textLabel)"
         mat-align-tabs="center">
         <mat-tab label="Combined">

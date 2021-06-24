@@ -104,4 +104,9 @@ export class UtilService {
     return date;
   }
 
+  SortArray(val1, val2) {
+    if (val1[1] > val2[1]) return -1;
+    if (val1[1] < val2[1]) return 1;
+    return 0;
+  }
 }

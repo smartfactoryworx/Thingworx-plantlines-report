@@ -40,7 +40,7 @@
     </div>
 </div>
 
-<div fxLayout="column" style="width: 99%;" fxLayoutAlign="center" id="element-to-print">
+<div *ngIf="OutputData?.length > 0" fxLayout="column" style="width: 99%;" fxLayoutAlign="center" id="element-to-print">
 
     <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap fxLayoutAlign="space-around center"
         fxFlex="90">
