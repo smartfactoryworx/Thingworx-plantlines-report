@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable, Observer } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
-import { LineViewService } from '../line-view/line-view.service';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+
 import { Router } from '@angular/router';
+import { AppHttpheadersService } from './app-httpheaders.service';
 
 @Injectable({
     providedIn: 'root'
@@ -11,12 +12,7 @@ export class ManualEntryService {
     path;
     public lineId;
     public lineName;
-    constructor(private httpClient: HttpClient, private lineViewService: LineViewService, private router: Router) {
-        this.path = this.getLineId();
-        this.lineId = this.lineViewService.path2LineID(this.path);
-        this.lineName = this.lineViewService.path2LineName(this.path);
-        console.log(this.lineId, 'ghostly');
-        console.log(this.lineName, 'ABXXX');
+    constructor(private httpClient: HttpClient, private router: Router, private httpHeadersService: AppHttpheadersService) {
     }
 
     getLineId() {
@@ -75,6 +71,7 @@ export class ManualEntryService {
     GetDatapattern(): Observable<object> {
         return this.httpClient.get('configs/apix/data_pattern.json');
     }
+
     GetBatchEndDatapattern(): Observable<object> {
         return this.httpClient.get('configs/apix/batch_end_data_pattern.json');
     }
@@ -98,7 +95,7 @@ export class ManualEntryService {
         return this.httpClient.get('/api/changeover/changeoverreport?startDate=' + startdate + '&endDate=' + enddate);
     }
 
-    GetFaultwiseData(startdate, enddate, machinestate, duration,lineid): Observable<object> {
+    GetFaultwiseData(startdate, enddate, machinestate, duration, lineid): Observable<object> {
         return this.httpClient.get('/api/trend/day_state_wise_report?startDate=' + startdate + '&endDate=' + enddate + '&machine_state=' + machinestate + '&duration=' + duration + '&line_id=' + lineid);
     }
 
@@ -114,5 +111,34 @@ export class ManualEntryService {
     PostShiftEmailData(data): Observable<object> {
         return this.httpClient.post('/api/manual/emailreportdata', data);
     }
+    GetChangeoverMultilinesData(): Observable<object> {
+        return this.httpClient.get('configs/apix/changeover_multilines_data.json');
+    }
+
+    PostMachinedata(URL, data): Observable<object> {
+        console.log(URL, data);
+        let headers = new HttpHeaders({
+            'Accept': 'application/json',
+            'appKey': 'a6ad66f8-990f-4c1d-8366-86c143868b5f',
+            //'Content-Type': 'application/json',
+        }).append('Accept', '*/*')
+            .append('Content-Type', 'application/x-www-form-urlencoded')
+            .append('Access-Control-Allow-Origin', '*')
+            .append('Access-Control-Allow-Methods', '*')
+            .append('Access-Control-Allow-Headers', '*')
+            .append('Access-Control-Allow-Credentials', '*')
+            .append('Set-Cookie', 'SameSite=None');
+            .append('withCredentials', true);
+            .append('Set-Cookie', 'SameSite=None');
+            .append('Set-Cookie', 'SameSite=None');
+            : true, 'access-control-allow-origin': "http://localhost:4500/", 'Content-Type': 'application/json'
+        let options = { headers: headers }
+        console.log(options);
+        //console.log(URL + '/api/sap?token=sfw0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ8', data);
+        //return this.httpClient.post(URL + '/api/sap', data, options);
+        return this.httpClient.post('http://103.205.66.170:8082/Thingworx/Things/current&TempReport/Services/getCurrentTempReport', data, options);
+        //return this.httpHeadersService.post(URL + '/Thingworx/Things/current&TempReport/Services/getCurrentTempReport',data,'Content-Type','Accept','appKey','application/json','application/json','a6ad66f8-990f-4c1d-8366-86c143868b5f');
+    }
+
 
 }

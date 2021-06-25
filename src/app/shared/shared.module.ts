@@ -28,9 +28,9 @@ import { ToastrModule } from 'ngx-toastr';
 // import { D3ChartService } from "./core/nvD3/nvD3.service";
 
 import { environment } from '../../environments/environment';
-import { LineHandlingInterceptor } from '../line-view/line-handling.interceptor';
+
 import { GoogleChartsModule } from 'angular-google-charts';
-import {TabModule} from 'angular-tabs-component';
+// import {TabModule} from 'angular-tabs-component';
 import { WebDataRocksPivot } from '../reports/@webdatarocks/webdatarocks.angular4';
 
 export function HttpLoaderFactory(http: HttpClient) {
@@ -70,7 +70,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     }),
     ToastrModule.forRoot(),
     GoogleChartsModule.forRoot(),
-    TabModule,
+    // TabModule,
     Ng2GoogleChartsModule
   ],
   exports: [
@@ -88,14 +88,14 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     TranslateModule,
     ToastrModule,
     WebDataRocksPivot,
-    TabModule,
+    // TabModule,
     DurationToTime,
     Ng2GoogleChartsModule
     // WidgetComponentModule,
   ],
   providers: [
     { provide: PERFECT_SCROLLBAR_CONFIG, useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG },
-    { provide: HTTP_INTERCEPTORS, useClass: LineHandlingInterceptor, multi: true },
+  
      
   ],
 

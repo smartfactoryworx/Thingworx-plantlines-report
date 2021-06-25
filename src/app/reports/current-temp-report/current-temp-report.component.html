@@ -1,0 +1,17 @@
+<div fxLayout="column" class="form" style="width: 100%;">
+    <form [formGroup]="currenttemp">
+        <div fxLayout="column" style="width:100%;">
+            <div fxLayout="row" style="width: 100%;padding: 1%;" fxLayoutAlign="center center" fxFlex="50">
+                <mat-form-field fxFlex="20" style="margin-right: 5%;">
+                    <input matInput autocomplete="off" placeholder="Machine Name" formControlName="machine">
+                </mat-form-field>
+                <button mat-raised-button color="primary" [disabled]="currenttemp.invalid" (click)="PostCurrentTemp(this.machine.value)" fxFlex="5">Submit </button>
+            </div>
+        </div>
+    </form>
+    <div style="color: red;">
+        {{errorText}}
+    </div>
+</div>
+
+<!-- <pre>{{currenttemp.value|json}}</pre> -->

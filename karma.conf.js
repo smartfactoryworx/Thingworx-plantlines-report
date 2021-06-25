@@ -25,7 +25,7 @@ module.exports = function (config) {
       suppressAll: true // removes the duplicated traces
     },
     coverageReporter: {
-      dir: require('path').join(__dirname, './coverage/sfw-module-common'),
+      dir: require('path').join(__dirname, './coverage/thingworx-common'),
       subdir: '.',
       reporters: [
         { type: 'html' },

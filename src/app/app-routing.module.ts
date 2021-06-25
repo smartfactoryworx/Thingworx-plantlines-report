@@ -5,8 +5,8 @@ const routes: Routes = [
   {
     path: '',
     loadChildren: () =>
-      import('./line-view/line-view.module').then((m) => m.LineViewModule),
-    data: { breadcrumb: 'Line-View' },
+      import('./reports/reports.module').then((m) => m.ReportsModule),
+    data: { breadcrumb: 'Reports' },
   },
 ];
 

@@ -1,5 +1,5 @@
 {
-  "name": "sfw-module-report",
+  "name": "thingworx-report",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
