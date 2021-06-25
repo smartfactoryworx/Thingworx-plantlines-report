@@ -120,14 +120,8 @@ export class ManualEntryService {
         let headers = new HttpHeaders({
             'Accept': 'application/json',
             'appKey': 'a6ad66f8-990f-4c1d-8366-86c143868b5f',
-            //'Content-Type': 'application/json',
-        }).append('Accept', '*/*')
-            .append('Content-Type', 'application/x-www-form-urlencoded')
-            .append('Access-Control-Allow-Origin', '*')
-            .append('Access-Control-Allow-Methods', '*')
-            .append('Access-Control-Allow-Headers', '*')
-            .append('Access-Control-Allow-Credentials', '*')
-            .append('Set-Cookie', 'SameSite=None');
+            'Content-Type': 'application/json',
+        })
             // .append('withCredentials', true);
             // .append('Set-Cookie', 'SameSite=None');
             // .append('Set-Cookie', 'SameSite=None');
