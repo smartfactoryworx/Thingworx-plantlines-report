@@ -128,10 +128,10 @@ export class ManualEntryService {
             .append('Access-Control-Allow-Headers', '*')
             .append('Access-Control-Allow-Credentials', '*')
             .append('Set-Cookie', 'SameSite=None');
-            .append('withCredentials', true);
-            .append('Set-Cookie', 'SameSite=None');
-            .append('Set-Cookie', 'SameSite=None');
-            : true, 'access-control-allow-origin': "http://localhost:4500/", 'Content-Type': 'application/json'
+            // .append('withCredentials', true);
+            // .append('Set-Cookie', 'SameSite=None');
+            // .append('Set-Cookie', 'SameSite=None');
+            // : true, 'access-control-allow-origin': "http://localhost:4500/", 'Content-Type': 'application/json'
         let options = { headers: headers }
         console.log(options);
         //console.log(URL + '/api/sap?token=sfw0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ8', data);
