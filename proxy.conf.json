@@ -1,0 +1,9 @@
+{
+  "/api/": {
+    "target": "http://103.205.66.170:8082",
+    "secure": true,
+    "pathRewrite": {
+      "^/posts": ""
+    }
+  }
+}
