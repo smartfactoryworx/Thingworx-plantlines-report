@@ -46,7 +46,7 @@ export class CurrentTempReportComponent implements OnInit {
   PostCurrentTemp(machine) {
     console.log(machine, "machine")
     let MachineData = {
-      "Machine": "IP21033a"
+      Machine: "IP21033a"
     }
     this.httpClient.get('configs/api/api_server.json').subscribe(apipath => {
       console.log(apipath['api']);
