@@ -1,0 +1,317 @@
+{
+    "dataShape": {
+        "fieldDefinitions": {
+            "Machine": {
+                "name": "Machine",
+                "description": "",
+                "baseType": "STRING",
+                "ordinal": 0,
+                "aspects": {}
+            },
+            "CycleMode": {
+                "name": "CycleMode",
+                "description": "",
+                "baseType": "INTEGER",
+                "ordinal": 0,
+                "aspects": {}
+            },
+            "From": {
+                "name": "From",
+                "description": "",
+                "baseType": "DATETIME",
+                "ordinal": 0,
+                "aspects": {}
+            },
+            "To": {
+                "name": "To",
+                "description": "",
+                "baseType": "DATETIME",
+                "ordinal": 0,
+                "aspects": {}
+            },
+            "Duration": {
+                "name": "Duration",
+                "description": "",
+                "baseType": "INTEGER",
+                "ordinal": 0,
+                "aspects": {}
+            },
+            "SKU": {
+                "name": "SKU",
+                "description": "",
+                "baseType": "INTEGER",
+                "ordinal": 0,
+                "aspects": {}
+            },
+            "CycleRun": {
+                "name": "CycleRun",
+                "description": "",
+                "baseType": "INTEGER",
+                "ordinal": 0,
+                "aspects": {}
+            },
+            "InfeedCount": {
+                "name": "InfeedCount",
+                "description": "",
+                "baseType": "INTEGER",
+                "ordinal": 0,
+                "aspects": {}
+            },
+            "OutFeedCount": {
+                "name": "OutFeedCount",
+                "description": "",
+                "baseType": "INTEGER",
+                "ordinal": 0,
+                "aspects": {}
+            },
+            "RejectCount": {
+                "name": "RejectCount",
+                "description": "",
+                "baseType": "INTEGER",
+                "ordinal": 0,
+                "aspects": {}
+            },
+            "MaxActualSpeed": {
+                "name": "MaxActualSpeed",
+                "description": "",
+                "baseType": "INTEGER",
+                "ordinal": 0,
+                "aspects": {}
+            },
+            "MinActualSpeed": {
+                "name": "MinActualSpeed",
+                "description": "",
+                "baseType": "INTEGER",
+                "ordinal": 0,
+                "aspects": {}
+            },
+            "AvgActualSpeed": {
+                "name": "AvgActualSpeed",
+                "description": "",
+                "baseType": "INTEGER",
+                "ordinal": 0,
+                "aspects": {}
+            },
+            "ManualStop": {
+                "name": "ManualStop",
+                "description": "",
+                "baseType": "INTEGER",
+                "ordinal": 0,
+                "aspects": {}
+            },
+            "FirstFault": {
+                "name": "FirstFault",
+                "description": "",
+                "baseType": "INTEGER",
+                "ordinal": 0,
+                "aspects": {}
+            }
+        }
+    },
+    "rows": [
+        {
+            "Machine": "IS21008a",
+            "CycleMode": 4,
+            "From": 1625080001895,
+            "To": 1625080756074,
+            "Duration": 755,
+            "SKU": 1,
+            "CycleRun": 3,
+            "InfeedCount": 0,
+            "OutFeedCount": 156,
+            "RejectCount": 0,
+            "MaxActualSpeed": 8,
+            "MinActualSpeed": 8,
+            "AvgActualSpeed": 8,
+            "ManualStop": 0,
+            "FirstFault": 1
+        },
+        {
+            "Machine": "IS21008a",
+            "CycleMode": 4,
+            "From": 1625080791012,
+            "To": 1625081077536,
+            "Duration": 286,
+            "SKU": 1,
+            "CycleRun": 4,
+            "InfeedCount": 0,
+            "OutFeedCount": 160,
+            "RejectCount": 0,
+            "MaxActualSpeed": 8,
+            "MinActualSpeed": 8,
+            "AvgActualSpeed": 8,
+            "ManualStop": 1,
+            "FirstFault": 0
+        },
+        {
+            "Machine": "IS21008a",
+            "CycleMode": 4,
+            "From": 1625081248290,
+            "To": 1625081747524,
+            "Duration": 499,
+            "SKU": 1,
+            "CycleRun": 7,
+            "InfeedCount": 0,
+            "OutFeedCount": 166,
+            "RejectCount": 0,
+            "MaxActualSpeed": 8,
+            "MinActualSpeed": 8,
+            "AvgActualSpeed": 8,
+            "ManualStop": 0,
+            "FirstFault": 1
+        },
+        {
+            "Machine": "IS21008a",
+            "CycleMode": 4,
+            "From": 1625081890168,
+            "To": 1625081937451,
+            "Duration": 47,
+            "SKU": 1,
+            "CycleRun": 1,
+            "InfeedCount": 0,
+            "OutFeedCount": 167,
+            "RejectCount": 0,
+            "MaxActualSpeed": 8,
+            "MinActualSpeed": 8,
+            "AvgActualSpeed": 8,
+            "ManualStop": 0,
+            "FirstFault": 1
+        },
+        {
+            "Machine": "IS21008a",
+            "CycleMode": 4,
+            "From": 1625082156238,
+            "To": 1625082429278,
+            "Duration": 273,
+            "SKU": 1,
+            "CycleRun": 4,
+            "InfeedCount": 0,
+            "OutFeedCount": 170,
+            "RejectCount": 0,
+            "MaxActualSpeed": 8,
+            "MinActualSpeed": 8,
+            "AvgActualSpeed": 8,
+            "ManualStop": 0,
+            "FirstFault": 1
+        },
+        {
+            "Machine": "IS21008a",
+            "CycleMode": 4,
+            "From": 1625082638628,
+            "To": 1625084820051,
+            "Duration": 2182,
+            "SKU": 1,
+            "CycleRun": 30,
+            "InfeedCount": 0,
+            "OutFeedCount": 199,
+            "RejectCount": 0,
+            "MaxActualSpeed": 8,
+            "MinActualSpeed": 8,
+            "AvgActualSpeed": 8,
+            "ManualStop": 0,
+            "FirstFault": 1
+        },
+        {
+            "Machine": "IS21008a",
+            "CycleMode": 4,
+            "From": 1625084901179,
+            "To": 1625088058926,
+            "Duration": 3157,
+            "SKU": 1,
+            "CycleRun": 43,
+            "InfeedCount": 0,
+            "OutFeedCount": 243,
+            "RejectCount": 0,
+            "MaxActualSpeed": 8,
+            "MinActualSpeed": 8,
+            "AvgActualSpeed": 8,
+            "ManualStop": 1,
+            "FirstFault": 0
+        },
+        {
+            "Machine": "IS21008a",
+            "CycleMode": 4,
+            "From": 1625114021153,
+            "To": 1625116424069,
+            "Duration": 2403,
+            "SKU": 1,
+            "CycleRun": 50,
+            "InfeedCount": 0,
+            "OutFeedCount": 293,
+            "RejectCount": 0,
+            "MaxActualSpeed": 8,
+            "MinActualSpeed": 8,
+            "AvgActualSpeed": 8,
+            "ManualStop": 0,
+            "FirstFault": 1
+        },
+        {
+            "Machine": "IS21008a",
+            "CycleMode": 4,
+            "From": 1625116686280,
+            "To": 1625117981832,
+            "Duration": 1295,
+            "SKU": 1,
+            "CycleRun": 21,
+            "InfeedCount": 0,
+            "OutFeedCount": 314,
+            "RejectCount": 0,
+            "MaxActualSpeed": 8,
+            "MinActualSpeed": 8,
+            "AvgActualSpeed": 8,
+            "ManualStop": 0,
+            "FirstFault": 1
+        },
+        {
+            "Machine": "IS21008a",
+            "CycleMode": 4,
+            "From": 1625140849771,
+            "To": 1625142565507,
+            "Duration": 1716,
+            "SKU": 3,
+            "CycleRun": 15,
+            "InfeedCount": 0,
+            "OutFeedCount": 13,
+            "RejectCount": 0,
+            "MaxActualSpeed": 7,
+            "MinActualSpeed": 7,
+            "AvgActualSpeed": 7,
+            "ManualStop": 0,
+            "FirstFault": 1
+        },
+        {
+            "Machine": "IS21008a",
+            "CycleMode": 4,
+            "From": 1625142735137,
+            "To": 1625144733882,
+            "Duration": 1998,
+            "SKU": 3,
+            "CycleRun": 21,
+            "InfeedCount": 0,
+            "OutFeedCount": 34,
+            "RejectCount": 0,
+            "MaxActualSpeed": 7,
+            "MinActualSpeed": 7,
+            "AvgActualSpeed": 7,
+            "ManualStop": 0,
+            "FirstFault": 1
+        },
+        {
+            "Machine": "IS21008a",
+            "CycleMode": 4,
+            "From": 1625144877308,
+            "To": 1625147815957,
+            "Duration": 2938,
+            "SKU": 3,
+            "CycleRun": 25,
+            "InfeedCount": 0,
+            "OutFeedCount": 59,
+            "RejectCount": 0,
+            "MaxActualSpeed": 7,
+            "MinActualSpeed": 7,
+            "AvgActualSpeed": 7,
+            "ManualStop": 1,
+            "FirstFault": 0
+        }
+    ]
+}

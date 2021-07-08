@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { CurrentTempReportComponent } from './current-temp-report/current-temp-report.component';
 import { ReportsComponent } from './reports.component';
+import { SummaryReportComponent } from './summary-report/summary-report.component';
 
 const routes: Routes = [
   {
@@ -10,12 +11,17 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'temp-report',
+        redirectTo: 'summary-report',
         pathMatch: 'full'
       },
       {
         path: 'temp-report',
         component: CurrentTempReportComponent ,
+        pathMatch: 'full'
+      },
+      {
+        path: 'summary-report',
+        component: SummaryReportComponent ,
         pathMatch: 'full'
       },
 

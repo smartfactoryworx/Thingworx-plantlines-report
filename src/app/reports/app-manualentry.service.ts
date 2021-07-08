@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable, Observer } from 'rxjs';
+import { Observable, Observer, from } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-
 import { Router } from '@angular/router';
 import { AppHttpheadersService } from './app-httpheaders.service';
 
@@ -115,23 +114,11 @@ export class ManualEntryService {
         return this.httpClient.get('configs/apix/changeover_multilines_data.json');
     }
 
-    PostMachinedata(URL, data): Observable<object> {
-        console.log(URL, data);
-        let headers = new HttpHeaders({
-            'Accept': 'application/json',
-            'appKey': 'a6ad66f8-990f-4c1d-8366-86c143868b5f',
-            'Content-Type': 'application/json',
-        })
-            // .append('withCredentials', true);
-            // .append('Set-Cookie', 'SameSite=None');
-            // .append('Set-Cookie', 'SameSite=None');
-            // : true, 'access-control-allow-origin': "http://localhost:4500/", 'Content-Type': 'application/json'
-        let options = { headers: headers }
-        console.log(options);
-        //console.log(URL + '/api/sap?token=sfw0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ8', data);
-        //return this.httpClient.post(URL + '/api/sap', data, options);
-        return this.httpClient.post('http://103.205.66.170:8082/Thingworx/Things/current&TempReport/Services/getCurrentTempReport', data, options);
-        //return this.httpHeadersService.post(URL + '/Thingworx/Things/current&TempReport/Services/getCurrentTempReport',data,'Content-Type','Accept','appKey','application/json','application/json','a6ad66f8-990f-4c1d-8366-86c143868b5f');
+
+
+    GetMachineData(URL, dataSource, body): Observable<object> {
+        console.log(URL + dataSource + '&body=' + body);
+        return this.httpClient.get(URL + dataSource + '&body=' + body);
     }
 
 

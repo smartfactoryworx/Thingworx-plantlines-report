@@ -1,26 +1,32 @@
 <div fxLayout="column" class="form" style="width: 100%;">
     <form [formGroup]="currenttemp">
         <div fxLayout="column" style="width:100%;">
-            <div fxLayout="row" style="width: 100%;padding: 1%;" fxLayoutAlign="center center" fxFlex="65">
-                <!-- <mat-form-field fxFlex="20" style="margin-right: 5%;">
-                    <input matInput autocomplete="off" placeholder="Machine Name" formControlName="machine">
-                </mat-form-field> -->
-                <mat-form-field appearance="fill" fxFlex="20" style="margin-right: 3%;">
-                    <mat-label>Choose the Date</mat-label>
-                    <input matInput [matDatepicker]="picker" formControlName="date" placeholder="Date">
+            <div fxLayout="row" style="width: 100%;padding: 1%;" fxLayoutAlign="center center" fxFlex="85">
+          
+                <mat-form-field appearance="fill" fxFlex="20"  style="margin-right: 3%;">
+                    <mat-label>Start Date</mat-label>
+                    <input matInput [matDatepicker]="picker" formControlName="fromdate" placeholder="Start Date">
                     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                     <mat-datepicker #picker></mat-datepicker>
                 </mat-form-field>
 
+                <mat-form-field appearance="fill" fxFlex="20"  style="margin-right: 3%;">
+                    <mat-label>End Date</mat-label>
+                    <input matInput [matDatepicker]="picker1" formControlName="todate" placeholder="End Date">
+                    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                    <mat-datepicker #picker1></mat-datepicker>
+                </mat-form-field>
+   
+
                 <mat-form-field appearance="fill" fxFlex="20" style="margin-right: 3%;">
                     <mat-label>Choose the Machine</mat-label>
                     <mat-select formControlName="machine" placeholder="Date">
-                        <mat-option value="IP21033a">
-                            IP21033a
+                        <mat-option  *ngFor="let machine of MachineList" [value]="machine.machineId">
+                            {{machine.machineName}}
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
-                <button mat-raised-button color="primary" [disabled]="currenttemp.invalid"  fxFlex="5" style="margin-bottom: 1%;">Submit </button>
+                <button mat-raised-button color="primary" [disabled]="currenttemp.invalid" (click)="PostCurrentTemp(this.machine.value,this.fromdate.value,this.todate.value)" fxFlex="5" style="margin-bottom: 1%;">Submit </button>
             </div>
         </div>
     </form>
@@ -33,7 +39,7 @@
             <button mat-raised-button color="primary" (click)="Export_PDF()">Export to PDF</button> -->
         </div>
     
-        <div *ngIf="tempData?.length > 0" fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap
+        <div *ngIf="skuData?.length > 0" fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap
             fxLayoutGap="0.1%" fxLayoutAlign="space-around center" fxFlex="100">
             <wbr-pivot #pivot1 [toolbar]="true" [width]="'100%'" [height]="700" fxFlex="99"
                 (beforetoolbarcreated)="customizeToolbar($event)" (reportcomplete)="onReportComplete()">
@@ -44,7 +50,7 @@
             </fm-pivot> -->
         </div>
     
-        <!-- <pre>{{lines|json}}</pre> -->
+        
     </div>
 </div>
 

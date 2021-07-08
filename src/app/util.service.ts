@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
 import * as html2pdf from 'html2pdf.js';
+import * as _moment from 'moment';
+import { default as _rollupMoment, Moment } from 'moment';
+const moment = _rollupMoment || _moment;
 @Injectable({
   providedIn: 'root'
 })
@@ -108,5 +111,14 @@ export class UtilService {
     if (val1[1] > val2[1]) return -1;
     if (val1[1] < val2[1]) return 1;
     return 0;
+  }
+
+  getMonthDateRange(year, month) {
+    console.log(year, month)
+    var startDate = moment([year, month - 1]);
+    var endDate = moment(startDate).endOf('month');
+    console.log(startDate, endDate)
+
+    return { start: startDate, end: endDate };
   }
 }
