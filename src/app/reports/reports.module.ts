@@ -6,6 +6,7 @@ import { SharedModule } from '../shared/shared.module';
 import { CurrentTempReportModule } from './current-temp-report/current-temp-report.module';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { SummaryReportModule } from './summary-report/summary-report.module';
+import { CycleReportModule } from './cycle-report/cycle-report.module';
 
 
 @NgModule({
@@ -15,7 +16,8 @@ import { SummaryReportModule } from './summary-report/summary-report.module';
     ReportsRoutingModule,
     SharedModule,
     CurrentTempReportModule,
-    SummaryReportModule
+    SummaryReportModule,
+    CycleReportModule
   ],
   providers:[
     { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
