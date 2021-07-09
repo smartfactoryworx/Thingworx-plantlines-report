@@ -158,6 +158,53 @@ export class CycleReportComponent implements OnInit {
 
   BindReportData(reportData) {
     console.log(reportData);
+    this.DataWithStructure = [
+      {
+
+        CycleRun: {
+          type: "number"
+        },
+        Duration: {
+          type: "number"
+        },
+        FirstFault: {
+          type: "number"
+        },
+        FirstFaultDesc: {
+          type: "string"
+        },
+        From: {
+          type: "datetime"
+        },
+        InfeedCount:  {
+          type: "number"
+        },
+        Machine: {
+          type: "string"
+        },
+        ManualStop:  {
+          type: "number"
+        },
+        MaxActualSpeed:  {
+          type: "number"
+        },
+        OutFeedCount: {
+          type: "number"
+        },
+        SKU:  {
+          type: "number"
+        },
+        SKUDesc: {
+          type: "string"
+        },
+        To:  {
+          type: "datetime"
+        }
+     
+      }
+    ]
+    this.DataWithStructure = this.DataWithStructure.concat(reportData);
+    console.log(this.DataWithStructure, "DataWithStructure");
     this.child.webDataRocks.off("reportcomplete");
     var setReportType;
     setReportType = {
