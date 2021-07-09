@@ -68,7 +68,7 @@ export class CycleReportComponent implements OnInit {
       let body = {};
       let dataSource = 'http://103.205.66.170:8082/Thingworx/Things/MachineDetailsMaster/Services/GetDataTableEntries'
       this.dataentryservice.GetMachineData(apipath['apithings'], dataSource, JSON.stringify(body)).subscribe((machineList: any) => {
-        console.log(machineList['rows'], "machineList");
+       // console.log(machineList['rows'], "machineList");
         var c = machineList['rows'];
         for (let i = 0; i < c.length; i++) {
           const a = c[i];
@@ -89,6 +89,7 @@ export class CycleReportComponent implements OnInit {
     this.createCurrentTempForm();
     this.GetMachineData();
     this.BindDefaultData();
+    this.GetCycleData(this.machine.value);
   }
 
   GetCycleData(machine) {
@@ -165,7 +166,7 @@ export class CycleReportComponent implements OnInit {
           type: "number"
         },
         Duration: {
-          type: "number"
+          type: "time"
         },
         FirstFault: {
           type: "number"
@@ -296,13 +297,10 @@ export class CycleReportComponent implements OnInit {
             caption: "OutFeedCount"
 
           },
-         
         ],
-        
         expands: {
           expandAll: true,
         }
-
       },
       options: {
         grid: {
