@@ -68,7 +68,7 @@ export class CycleReportComponent implements OnInit {
       let body = {};
       let dataSource = 'http://103.205.66.170:8082/Thingworx/Things/MachineDetailsMaster/Services/GetDataTableEntries'
       this.dataentryservice.GetMachineData(apipath['apithings'], dataSource, JSON.stringify(body)).subscribe((machineList: any) => {
-       // console.log(machineList['rows'], "machineList");
+        // console.log(machineList['rows'], "machineList");
         var c = machineList['rows'];
         for (let i = 0; i < c.length; i++) {
           const a = c[i];
@@ -177,31 +177,31 @@ export class CycleReportComponent implements OnInit {
         From: {
           type: "datetime"
         },
-        InfeedCount:  {
+        InfeedCount: {
           type: "number"
         },
         Machine: {
           type: "string"
         },
-        ManualStop:  {
+        ManualStop: {
           type: "number"
         },
-        MaxActualSpeed:  {
+        MaxActualSpeed: {
           type: "number"
         },
         OutFeedCount: {
           type: "number"
         },
-        SKU:  {
+        SKU: {
           type: "number"
         },
         SKUDesc: {
           type: "string"
         },
-        To:  {
+        To: {
           type: "datetime"
         }
-     
+
       }
     ]
     this.DataWithStructure = this.DataWithStructure.concat(reportData);
@@ -210,7 +210,7 @@ export class CycleReportComponent implements OnInit {
     var setReportType;
     setReportType = {
       dataSource: {
-        data: reportData
+        data: this.DataWithStructure
       },
       slice: {
         reportFilters: [
@@ -265,13 +265,6 @@ export class CycleReportComponent implements OnInit {
             uniqueName: "Duration",
             formula: "((\"Duration\"))",
             caption: "Duration"
-
-          },
-          {
-            uniqueName: "FirstFault",
-            formula: "((\"FirstFault\"))",
-            caption: "FirstFault"
-
           },
           {
             uniqueName: "InfeedCount",
@@ -280,23 +273,22 @@ export class CycleReportComponent implements OnInit {
 
           },
           {
-            uniqueName: "ManualStop",
-            formula: "((\"ManualStop\"))",
-            caption: "ManualStop"
-
-          },
-          {
-            uniqueName: "MaxActualSpeed",
-            formula: "((\"MaxActualSpeed\"))",
-            caption: "MaxActualSpeed"
-
-          },
-          {
             uniqueName: "OutFeedCount",
             formula: "((\"OutFeedCount\"))",
             caption: "OutFeedCount"
 
           },
+          {
+            uniqueName: "MaxActualSpeed",
+            formula: "(max(\"MaxActualSpeed\"))",
+            caption: "MaxActualSpeed"
+          },
+          {
+            uniqueName: "ManualStop",
+            formula: "((\"ManualStop\"))",
+            caption: "ManualStop"
+          },
+
         ],
         expands: {
           expandAll: true,
