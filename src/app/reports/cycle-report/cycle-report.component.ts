@@ -28,6 +28,7 @@ interface cycledata {
   SKU: number;
   SKUDesc: string;
   To: string;
+  Count: number;
 }
 
 @Component({
@@ -119,7 +120,7 @@ export class CycleReportComponent implements OnInit {
           const allCycleData = {
             CycleRun: data.CycleRun,
             Duration: data.Duration,
-            FirstFault: data.FirstFault,
+            FirstFault: data.FirstFault>0?1:0,
             FirstFaultDesc: data.FirstFaultDesc,
             From: moment(data.From).format("DD MMM YYYY hh:mm a"),
             InfeedCount: data.InfeedCount,
@@ -130,6 +131,7 @@ export class CycleReportComponent implements OnInit {
             SKU: data.SKU,
             SKUDesc: data.SKUDesc,
             To: moment(data.To).format("DD MMM YYYY hh:mm a"),
+            Count:1
           }
           this.cycleData.push(allCycleData);
         }
@@ -216,6 +218,9 @@ export class CycleReportComponent implements OnInit {
         },
         To: {
           type: "datetime"
+        },
+        Count: {
+          type: "number"
         }
 
       }
@@ -301,6 +306,11 @@ export class CycleReportComponent implements OnInit {
             uniqueName: "ManualStop",
             formula: "((\"ManualStop\"))",
             caption: "ManualStop"
+          },
+          {
+            uniqueName: "FirstFault",
+            formula: "((\"FirstFault\"))",
+            caption: "FirstFault Count"
           },
 
         ],
