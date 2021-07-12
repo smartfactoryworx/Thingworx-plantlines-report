@@ -6,6 +6,7 @@ import { default as _rollupMoment, Moment } from 'moment';
 import { HttpClient } from '@angular/common/http';
 import { ManualEntryService } from '../app-manualentry.service';
 import { UtilService } from 'src/app/util.service';
+import { DatePipe } from '@angular/common';
 const moment = _rollupMoment || _moment;
 
 interface machinelist {
@@ -49,8 +50,10 @@ export class CycleReportComponent implements OnInit {
   pivotTableReportComplete: boolean = false;
   gotData: boolean = true;
   public DataWithStructure = [];
-  datePipe: any;
-  constructor(private httpClient: HttpClient, protected dataentryservice: ManualEntryService, private util: UtilService) { }
+  //datePipe: any;
+  lastUpdated;
+  constructor(private httpClient: HttpClient, protected dataentryservice: ManualEntryService, private util: UtilService,
+    private datePipe: DatePipe) { }
 
   createCurrentTemp() {
     this.machine = new FormControl('', Validators.required);
@@ -60,7 +63,6 @@ export class CycleReportComponent implements OnInit {
       machine: this.machine,
     });
   }
-
 
   BindDefaultData() {
     this.machine.setValue('IS21008a');
@@ -113,6 +115,7 @@ export class CycleReportComponent implements OnInit {
     this.httpClient.get('configs/api/api_server.json').subscribe(apipath => {
       console.log(apipath['api']);
       this.dataentryservice.GetMachineData(apipath['apithings'], dataSource, JSON.stringify(body)).subscribe((machinecycledata: any) => {
+        this.lastUpdated = this.datePipe.transform(new Date(), 'dd-MMM-yyyy hh:mm:ss')
         console.log("machinecycledata", machinecycledata);
         var c = machinecycledata.rows;
         for (let i = 0; i < c.length; i++) {
@@ -264,9 +267,9 @@ export class CycleReportComponent implements OnInit {
             uniqueName: "To",
             caption: "To Date"
           },
-  
+
         ],
-        rows:[ {
+        rows: [{
           uniqueName: "Date",
           caption: "Date"
         },
@@ -339,7 +342,7 @@ export class CycleReportComponent implements OnInit {
         data: this.DataWithStructure
       },
       slice: {
-        reportFilters:  [
+        reportFilters: [
           {
             uniqueName: "FirstFaultDesc",
             caption: "First Fault"
@@ -441,7 +444,7 @@ export class CycleReportComponent implements OnInit {
           caption: "SKU"
         },
         ],
-        rows:  [{
+        rows: [{
           uniqueName: "FirstFaultDesc",
           caption: "First Fault"
         },
