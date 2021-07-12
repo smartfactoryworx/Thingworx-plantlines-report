@@ -13,25 +13,10 @@ export class ManualEntryService {
     constructor(private httpClient: HttpClient, private router: Router, private httpHeadersService: AppHttpheadersService) {
     }
 
-    getData(data): Observable<any> {
-        return from(
-            fetch(
-                'http://103.205.66.170:8082/Thingworx/Things/current&TempReport/Services/getCurrentTempReport', // the url you are trying to access
-                {
-                    headers: {
 
-                        'appKey': 'a6ad66f8-990f-4c1d-8366-86c143868b5f',
-                        'Accept': 'application/json',
-                    },
-                    //credentials: 'include',
-                    //body: '{"Machine":"IP20060"}',
-                    method: 'POST', // GET, POST, PUT, DELETE
-                    mode: 'no-cors' // the most important option
-                }
-            ));
+    GetApiURL(){
+        return  this.httpClient.get('configs/api/api_server.json');
     }
-
-
 
     GetMachineData(URL, dataSource, body): Observable<object> {
         console.log(URL + dataSource + '&body=' + body);

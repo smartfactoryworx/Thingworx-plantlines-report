@@ -5,11 +5,13 @@ import * as _moment from 'moment';
 import { default as _rollupMoment, Moment } from 'moment';
 import { HttpClient } from '@angular/common/http';
 import { ManualEntryService } from '../app-manualentry.service';
+import { UtilService } from 'src/app/util.service';
 const moment = _rollupMoment || _moment;
 
 interface machinelist {
   machineId: string;
   machineName: string;
+  createdDate: Date;
 }
 
 interface cycledata {
@@ -36,6 +38,8 @@ interface cycledata {
 export class CycleReportComponent implements OnInit {
 
   @ViewChild("pivot1") child: WebDataRocksPivot;
+  @ViewChild("pivot2") child2: WebDataRocksPivot;
+
   public MachineList: machinelist[];
   cycleform: FormGroup;
   machine: FormControl;
@@ -45,7 +49,7 @@ export class CycleReportComponent implements OnInit {
   gotData: boolean = true;
   public DataWithStructure = [];
   datePipe: any;
-  constructor(private httpClient: HttpClient, protected dataentryservice: ManualEntryService) { }
+  constructor(private httpClient: HttpClient, protected dataentryservice: ManualEntryService, private util: UtilService) { }
 
   createCurrentTemp() {
     this.machine = new FormControl('', Validators.required);
@@ -74,11 +78,12 @@ export class CycleReportComponent implements OnInit {
           const a = c[i];
           const data = {
             machineId: a.Machine_MDS,
-            machineName: a.Machine_Name
+            machineName: a.Machine_Name,
+            createdDate: new Date(moment(a.timestamp).format("DD MMM YYYY hh:mm a"))//a.
           }
           this.MachineList.push(data);
         }
-
+        this.MachineList.sort(this.util.dynamicSort('createdDate'));
         console.log(this.MachineList, "MachineData");
       });
 
@@ -124,11 +129,12 @@ export class CycleReportComponent implements OnInit {
             OutFeedCount: data.OutFeedCount,
             SKU: data.SKU,
             SKUDesc: data.SKUDesc,
-            To: moment(data.From).format("DD MMM YYYY hh:mm a"),
+            To: moment(data.To).format("DD MMM YYYY hh:mm a"),
           }
           this.cycleData.push(allCycleData);
         }
         console.log("cycleData", this.cycleData);
+        //this.cycleData.sort((a,b)=>a.From-b.To)
 
         this.gotData = true;
       });
@@ -150,15 +156,25 @@ export class CycleReportComponent implements OnInit {
     }
   }
 
-  onReportComplete(): void {
-    console.log("*****************************onReportComplete****************************");
-    this.BindReportData(this.cycleData);
-    this.child.webDataRocks.off("reportcomplete");
+  onReportComplete(reportType): void {
+    console.log("*****************************onReportComplete****************************", reportType);
+    if (reportType === 'SKUwise') {
+      this.BindReportData(this.cycleData, reportType);
+      this.child.webDataRocks.off("reportcomplete");
+    }
+    else if (reportType === 'Faultwise') {
+      this.BindReportData(this.cycleData, reportType);
+      this.child2.webDataRocks.off("reportcomplete");
+    }
     this.pivotTableReportComplete = true;
   }
 
-  BindReportData(reportData) {
-    console.log(reportData);
+  GetReport(reportType){
+    this.onReportComplete(reportType);
+  }
+
+  BindReportData(reportData, reportType) {
+    console.log(reportData, reportType);
     this.DataWithStructure = [
       {
 
@@ -206,7 +222,22 @@ export class CycleReportComponent implements OnInit {
     ]
     this.DataWithStructure = this.DataWithStructure.concat(reportData);
     console.log(this.DataWithStructure, "DataWithStructure");
-    this.child.webDataRocks.off("reportcomplete");
+
+    let rowData;
+    if (reportType === 'SKUwise') {
+      this.child.webDataRocks.off("reportcomplete");
+      rowData = {
+        uniqueName: "SKUDesc",
+        caption: "SKU"
+      }
+    } else if (reportType === 'Faultwise') {
+      this.child2.webDataRocks.off("reportcomplete");
+      rowData = {
+        uniqueName: "FirstFaultDesc",
+        caption: "First Fault"
+      }
+    }
+
     var setReportType;
     setReportType = {
       dataSource: {
@@ -232,24 +263,7 @@ export class CycleReportComponent implements OnInit {
           }
 
         ],
-        rows: [
-          {
-            uniqueName: "SKUDesc",
-            caption: "SKU"
-          },
-          {
-            uniqueName: "FirstFaultDesc",
-            caption: "First Fault"
-          },
-          {
-            uniqueName: "From",
-            caption: "From Date"
-          },
-          {
-            uniqueName: "To",
-            caption: "To Date"
-          }
-        ],
+        rows: [rowData],
         columns: [
           {
             uniqueName: "Measures"
@@ -308,6 +322,10 @@ export class CycleReportComponent implements OnInit {
         showAggregationLabels: false
       }
     };
-    this.child.webDataRocks.setReport(setReportType);
+    if (reportType === 'SKUwise') {
+      this.child.webDataRocks.setReport(setReportType);
+    } else if (reportType === 'Faultwise') {
+      this.child2.webDataRocks.setReport(setReportType);
+    }
   }
 }
