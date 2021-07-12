@@ -65,7 +65,7 @@ export class CycleReportComponent implements OnInit {
   }
 
   BindDefaultData() {
-    this.machine.setValue('IS21008a');
+    this.machine.setValue('RU21005a');
   }
 
   GetMachineData() {
