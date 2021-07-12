@@ -6,7 +6,7 @@
                     <mat-label>Choose the Machine</mat-label>
                     <mat-select formControlName="machine" placeholder="Date">
                         <mat-option *ngFor="let machine of MachineList" [value]="machine.machineId">
-                            {{machine.machineId}} ( {{machine.machineName}} - {{machine.createdDate}})
+                            {{machine.machineId}} ( {{machine.machineName}}) - {{machine.createdDate}})
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
@@ -44,6 +44,15 @@
                 <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap
                     fxLayoutGap="0.1%" fxLayoutAlign="space-around center" fxFlex="100">
                     <wbr-pivot #pivot2 [toolbar]="true" [width]="'100%'" [height]="700" fxFlex="99"
+                        (beforetoolbarcreated)="customizeToolbar($event)"
+                        >
+                    </wbr-pivot>
+                </div>
+            </mat-tab>
+            <mat-tab label="Daywise">
+                <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap
+                    fxLayoutGap="0.1%" fxLayoutAlign="space-around center" fxFlex="100">
+                    <wbr-pivot #pivot3 [toolbar]="true" [width]="'100%'" [height]="700" fxFlex="99"
                         (beforetoolbarcreated)="customizeToolbar($event)"
                         >
                     </wbr-pivot>
