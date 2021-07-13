@@ -19,7 +19,7 @@
                     </mat-select>
                 </mat-form-field>
                 <button mat-raised-button color="primary" [disabled]="cycleform.invalid"
-                    (click)="GetCycleData(this.machine.value)" fxFlex="10" style="margin-bottom: 1%;">Submit </button>
+                    (click)="GetCycleData(machine.value)" fxFlex="10" style="margin-bottom: 1%;">Submit </button>
                 <div *ngIf="!gotData" fxFlex="10" style="margin-bottom: 1%;margin-left: 3%;">
                     <mat-spinner diameter="30"></mat-spinner>
                 </div>
@@ -30,17 +30,30 @@
         {{errorText}}
     </div>
     <div *ngIf="cycleData?.length > 0" fxLayout="column" style="width: 99%;" fxLayoutAlign="center">
-        <div>
-            <!-- <button mat-raised-button color="primary" (click)="Export_Excel()">Export to Excel</button>&nbsp;
-            <button mat-raised-button color="primary" (click)="Export_PDF()">Export to PDF</button> -->
-        </div>
+      
         <mat-tab-group (selectedTabChange)="GetReport($event.tab.textLabel)" mat-align-tabs="center">
+            <mat-tab label="Summary">
+                <div>
+                    <button mat-raised-button color="primary" (click)="Export_Excel('Summary',machine.value  + '_Summary_Report','Summary_Report')">Export to Excel</button>&nbsp;
+                    <!-- <button mat-raised-button color="primary" (click)="Export_PDF()">Export to PDF</button> -->
+                </div>
+                <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap fxLayoutGap="0.1%"
+                    fxLayoutAlign="space-around center" fxFlex="100">
+                    <wbr-pivot #pivot3 [toolbar]="true" [width]="'100%'" [height]="700" fxFlex="99"
+                        (beforetoolbarcreated)="customizeToolbar($event)" (reportcomplete)="onReportComplete('Summary')">
+                    </wbr-pivot>
+                </div>
+            </mat-tab>
             <mat-tab label="SKUwise">
+                <div>
+                    <button mat-raised-button color="primary" (click)="Export_Excel('SKUwise',machine.value+'_SKU_Wise_Report','SKU_Wise_Report')">Export to Excel</button>&nbsp;
+                    <!-- <button mat-raised-button color="primary" (click)="Export_PDF()">Export to PDF</button> -->
+                </div>
                 <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap fxLayoutGap="0.1%"
                     fxLayoutAlign="space-around center" fxFlex="100">
                     <wbr-pivot #pivot1 [toolbar]="true" [width]="'100%'" [height]="700" fxFlex="99"
                         (beforetoolbarcreated)="customizeToolbar($event)"
-                        (reportcomplete)="onReportComplete('SKUwise')">
+                        >
                     </wbr-pivot>
                     <!-- <fm-pivot #pivot1 [toolbar]="true" [width]="'100%'" [height]="700" fxFlex="99"
                 (beforetoolbarcreated)="customizeToolbar($event)" (reportcomplete)="onReportComplete()"
@@ -49,6 +62,10 @@
                 </div>
             </mat-tab>
             <mat-tab label="Faultwise">
+                <div>
+                    <button mat-raised-button color="primary" (click)="Export_Excel('Faultwise',machine.value +'_Fault_Wise_Report','Fault_Wise_Report')">Export to Excel</button>&nbsp;
+                    <!-- <button mat-raised-button color="primary" (click)="Export_PDF()">Export to PDF</button> -->
+                </div>
                 <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap fxLayoutGap="0.1%"
                     fxLayoutAlign="space-around center" fxFlex="100">
                     <wbr-pivot #pivot2 [toolbar]="true" [width]="'100%'" [height]="700" fxFlex="99"
@@ -56,15 +73,12 @@
                     </wbr-pivot>
                 </div>
             </mat-tab>
-            <mat-tab label="Daywise">
-                <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap fxLayoutGap="0.1%"
-                    fxLayoutAlign="space-around center" fxFlex="100">
-                    <wbr-pivot #pivot3 [toolbar]="true" [width]="'100%'" [height]="700" fxFlex="99"
-                        (beforetoolbarcreated)="customizeToolbar($event)">
-                    </wbr-pivot>
+           
+            <mat-tab label="DailyCycle">
+                <div>
+                    <button mat-raised-button color="primary" (click)="Export_Excel('DailyCycle',machine.value + '_Daily_Cycle_Report','Daily_Cycle_Report')">Export to Excel</button>&nbsp;
+                    <!-- <button mat-raised-button color="primary" (click)="Export_PDF()">Export to PDF</button> -->
                 </div>
-            </mat-tab>
-            <mat-tab label="DateRange">
                 <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap
                     fxLayoutGap="0.1%" fxLayoutAlign="space-around center" fxFlex="100">
                     <wbr-pivot #pivot4 [toolbar]="true" [width]="'100%'" [height]="700" fxFlex="99"

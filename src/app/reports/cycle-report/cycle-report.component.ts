@@ -74,7 +74,7 @@ export class CycleReportComponent implements OnInit {
     this.httpClient.get('configs/api/api_server.json').subscribe(apipath => {
       console.log(apipath['api']);
       let body = {};
-      let dataSource = 'http://103.205.66.170:8082/Thingworx/Things/MachineDetailsMaster/Services/GetDataTableEntries'
+      let dataSource = 'MachineDetailsMaster/Services/GetDataTableEntries'
       this.dataentryservice.GetMachineData(apipath['apithings'], dataSource, JSON.stringify(body)).subscribe((machineList: any) => {
         // console.log(machineList['rows'], "machineList");
         var c = machineList['rows'];
@@ -111,7 +111,7 @@ export class CycleReportComponent implements OnInit {
 
     console.log(JSON.stringify(body));
 
-    let dataSource = 'http://103.205.66.170:8082/Thingworx/Things/CycleSetDataInDataTable/Services/getAllCycleReport'
+    let dataSource = 'CycleSetDataInDataTable/Services/getAllCycleReport'
 
     this.httpClient.get('configs/api/api_server.json').subscribe(apipath => {
       console.log(apipath['api']);
@@ -137,6 +137,7 @@ export class CycleReportComponent implements OnInit {
             SKUDesc: data.SKUDesc,
             To: moment(data.To).format("DD MMM YYYY hh:mm a"),
             Date: moment(data.From).format("DD MMM YYYY"),
+
           }
           this.cycleData.push(allCycleData);
           //}
@@ -175,11 +176,11 @@ export class CycleReportComponent implements OnInit {
       this.BindReportData(this.cycleData, reportType);
       this.child2.webDataRocks.off("reportcomplete");
     }
-    else if (reportType === 'Daywise') {
+    else if (reportType === 'Summary') {
       this.BindReportData(this.cycleData, reportType);
       this.child3.webDataRocks.off("reportcomplete");
     }
-    else if (reportType === 'DateRange') {
+    else if (reportType === 'DailyCycle') {
       this.BindReportData(this.cycleData, reportType);
       this.child4.webDataRocks.off("reportcomplete");
     }
@@ -253,8 +254,8 @@ export class CycleReportComponent implements OnInit {
 
     var setReportSKUwise;
     var setReportFaultwise;
-    var setReportDaywise;
-    var setReportDateRange;
+    var setReportSummary;
+    var setReportDailyCycle;
     setReportSKUwise = {
       dataSource: {
         data: this.DataWithStructure
@@ -323,12 +324,39 @@ export class CycleReportComponent implements OnInit {
             uniqueName: "OutFeedCount",
             formula: "((\"OutFeedCount\"))",
             caption: "OutFeedCount"
-          }
+          },
+          {
+            uniqueName: "MeanCycleBetweenFault",
+            formula: "((\"CycleRun\")(\"FirstFault\"))",
+            caption: "MeanCycleBetweenFault",
+            format: "44mvcoma",
+          },
+          {
+            uniqueName: "MeanCycleBetweenFaultNManualStop",
+            formula: "((\"CycleRun\")/(\"FirstFault\" + \"ManualStop\"))",
+            caption: "MeanCycleBetweenFaultNManualStop",
+            format: "44mvcoma",
+          },
+
         ],
+
         expands: {
           expandAll: true,
         }
       },
+      formats: [
+        {
+          name: "44mvcoma",
+          decimalPlaces: 0,
+          currencySymbol: "",
+          currencySymbolAlign: "",
+          nullValue: "0",
+          textAlign: "center",
+          infinityValue: "0",
+          divideByZeroValue: "0",
+        },
+
+      ],
       options: {
         grid: {
           type: "classic",
@@ -412,12 +440,39 @@ export class CycleReportComponent implements OnInit {
             uniqueName: "OutFeedCount",
             formula: "((\"OutFeedCount\"))",
             caption: "OutFeedCount"
-          }
+          },
+          {
+            uniqueName: "MeanCycleBetweenFault",
+            formula: "((\"CycleRun\")/(\"FirstFault\"))",
+            caption: "MeanCycleBetweenFault",
+            format: "44mvcoma",
+          },
+          {
+            uniqueName: "MeanCycleBetweenFaultNManualStop",
+            formula: "((\"CycleRun\")/(\"FirstFault\" + \"ManualStop\"))",
+            caption: "MeanCycleBetweenFaultNManualStop",
+            format: "44mvcoma",
+          },
+
         ],
+
         expands: {
           expandAll: true,
         }
       },
+      formats: [
+        {
+          name: "44mvcoma",
+          decimalPlaces: 0,
+          currencySymbol: "",
+          currencySymbolAlign: "",
+          nullValue: "0",
+          textAlign: "center",
+          infinityValue: "0",
+          divideByZeroValue: "0",
+        },
+
+      ],
       options: {
         grid: {
           type: "classic",
@@ -432,7 +487,7 @@ export class CycleReportComponent implements OnInit {
         showAggregationLabels: false
       }
     };
-    setReportDaywise = {
+    setReportSummary = {
       dataSource: {
         data: this.DataWithStructure
       },
@@ -450,10 +505,11 @@ export class CycleReportComponent implements OnInit {
           caption: "SKU"
         },
         ],
-        rows: [{
-          uniqueName: "FirstFaultDesc",
-          caption: "First Fault"
-        },
+        rows: [
+        //   {
+        //   uniqueName: "FirstFaultDesc",
+        //   caption: "First Fault"
+        // },
         {
           uniqueName: "Date",
           caption: "Date"
@@ -499,12 +555,39 @@ export class CycleReportComponent implements OnInit {
             uniqueName: "OutFeedCount",
             formula: "((\"OutFeedCount\"))",
             caption: "OutFeedCount"
-          }
+          },
+
+          {
+            uniqueName: "MeanCycleBetweenFault",
+            formula: "((\"CycleRun\")/(\"FirstFault\"))",
+            caption: "MeanCycleBetweenFault",
+            format: "44mvcoma",
+          },
+          {
+            uniqueName: "MeanCycleBetweenFaultNManualStop",
+            formula: "((\"CycleRun\")/(\"FirstFault\" + \"ManualStop\"))",
+            caption: "MeanCycleBetweenFaultNManualStop",
+            format: "44mvcoma",
+          },
         ],
+
         expands: {
           expandAll: true,
         }
       },
+      formats: [
+        {
+          name: "44mvcoma",
+          decimalPlaces: 0,
+          currencySymbol: "",
+          currencySymbolAlign: "",
+          nullValue: "0",
+          textAlign: "center",
+          infinityValue: "0",
+          divideByZeroValue: "0",
+        },
+
+      ],
       options: {
         grid: {
           type: "classic",
@@ -519,13 +602,13 @@ export class CycleReportComponent implements OnInit {
         showAggregationLabels: false
       }
     };
-    setReportDateRange = {
+    setReportDailyCycle = {
       dataSource: {
         data: this.DataWithStructure
       },
       slice: {
         reportFilters: [],
-        rows:[ {
+        rows: [{
           uniqueName: "Date",
           caption: "Date"
         },
@@ -581,12 +664,39 @@ export class CycleReportComponent implements OnInit {
             uniqueName: "OutFeedCount",
             formula: "((\"OutFeedCount\"))",
             caption: "OutFeedCount"
-          }
+          },
+          {
+            uniqueName: "MeanCycleBetweenFault",
+            formula: "((\"CycleRun\")/(\"FirstFault\"))",
+            caption: "MeanCycleBetweenFault",
+            format: "44mvcoma",
+          },
+          {
+            uniqueName: "MeanCycleBetweenFaultNManualStop",
+            formula: "((\"CycleRun\")/(\"FirstFault\" + \"ManualStop\"))",
+            caption: "MeanCycleBetweenFaultNManualStop",
+            format: "44mvcoma",
+          },
+
         ],
+
         expands: {
           expandAll: true,
         }
       },
+      formats: [
+        {
+          name: "44mvcoma",
+          decimalPlaces: 0,
+          currencySymbol: "",
+          currencySymbolAlign: "",
+          nullValue: "0",
+          textAlign: "center",
+          infinityValue: "0",
+          divideByZeroValue: "0",
+        },
+
+      ],
       options: {
         grid: {
           type: "classic",
@@ -606,11 +716,75 @@ export class CycleReportComponent implements OnInit {
     } else if (reportType === 'Faultwise') {
       this.child2.webDataRocks.setReport(setReportFaultwise);
     }
-    else if (reportType === 'Daywise') {
-      this.child3.webDataRocks.setReport(setReportDaywise);
-    }else if (reportType === 'DateRange') {
-      this.child4.webDataRocks.setReport(setReportDateRange);
+    else if (reportType === 'Summary') {
+      this.child3.webDataRocks.setReport(setReportSummary);
+    } else if (reportType === 'DailyCycle') {
+      this.child4.webDataRocks.setReport(setReportDailyCycle);
     }
+
+  }
+
+  Export_Excel(reportType,fileName,sheetName) {
+    console.log(reportType,fileName,sheetName);
+    if(reportType === 'Summary'){
+      this.child.webDataRocks.exportTo(
+        "Excel", {
+        filename: fileName,
+        excelSheetName: sheetName ,
+        destinationType: "file",
+        url: "URL to server script saving the file"
+  
+      },
+        function () {
+          //console.log("Export process is finished");
+        }
+      );
+    }  
+    else if(reportType === 'SKUwise'){
+      this.child2.webDataRocks.exportTo(
+        "Excel", {
+        filename: fileName,
+        excelSheetName: sheetName ,
+        destinationType: "file",
+        url: "URL to server script saving the file"
+  
+      },
+        function () {
+          //console.log("Export process is finished");
+        }
+      );
+    }
+    else if(reportType === 'Faultwise'){
+      this.child3.webDataRocks.exportTo(
+        "Excel", {
+        filename: fileName,
+        excelSheetName: sheetName ,
+        destinationType: "file",
+        url: "URL to server script saving the file"
+  
+      },
+        function () {
+          //console.log("Export process is finished");
+        }
+      );
+    }
+    else if(reportType === 'DailyCycle'){
+      this.child4.webDataRocks.exportTo(
+        "Excel", {
+        filename: fileName,
+        excelSheetName: sheetName ,
+        destinationType: "file",
+        url: "URL to server script saving the file"
+  
+      },
+        function () {
+          //console.log("Export process is finished");
+        }
+      );
+    }
+  
+  
     
   }
+
 }
