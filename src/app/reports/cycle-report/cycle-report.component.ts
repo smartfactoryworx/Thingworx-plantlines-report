@@ -41,6 +41,7 @@ export class CycleReportComponent implements OnInit {
   @ViewChild("pivot1") child: WebDataRocksPivot;
   @ViewChild("pivot2") child2: WebDataRocksPivot;
   @ViewChild("pivot3") child3: WebDataRocksPivot;
+  @ViewChild("pivot4") child4: WebDataRocksPivot;
   public MachineList: machinelist[];
   cycleform: FormGroup;
   machine: FormControl;
@@ -175,6 +176,10 @@ export class CycleReportComponent implements OnInit {
       this.BindReportData(this.cycleData, reportType);
       this.child3.webDataRocks.off("reportcomplete");
     }
+    else if (reportType === 'DateRange') {
+      this.BindReportData(this.cycleData, reportType);
+      this.child4.webDataRocks.off("reportcomplete");
+    }
     this.pivotTableReportComplete = true;
   }
 
@@ -246,6 +251,7 @@ export class CycleReportComponent implements OnInit {
     var setReportSKUwise;
     var setReportFaultwise;
     var setReportDaywise;
+    var setReportDateRange;
     setReportSKUwise = {
       dataSource: {
         data: this.DataWithStructure
@@ -510,6 +516,88 @@ export class CycleReportComponent implements OnInit {
         showAggregationLabels: false
       }
     };
+    setReportDateRange = {
+      dataSource: {
+        data: this.DataWithStructure
+      },
+      slice: {
+        reportFilters: [],
+        rows:[ {
+          uniqueName: "Date",
+          caption: "Date"
+        },
+        {
+          uniqueName: "SKUDesc",
+          caption: "SKU"
+        },
+        {
+          uniqueName: "From",
+          caption: "From Date"
+        },
+        {
+          uniqueName: "To",
+          caption: "To Date"
+        },],
+        columns: [
+          {
+            uniqueName: "Measures"
+          }
+        ],
+        measures: [
+          {
+            uniqueName: "CycleRun",
+            formula: "((\"CycleRun\"))",
+            caption: "Total Cycle Run"
+          },
+          {
+            uniqueName: "FirstFault",
+            formula: "((\"FirstFault\"))",
+            caption: "FirstFault Count"
+          },
+          {
+            uniqueName: "ManualStop",
+            formula: "((\"ManualStop\"))",
+            caption: "ManualStop Count"
+          },
+          {
+            uniqueName: "MaxActualSpeed",
+            formula: "(max(\"MaxActualSpeed\"))",
+            caption: "Max Speed"
+          },
+          {
+            uniqueName: "Duration",
+            formula: "((\"Duration\"))",
+            caption: "Duration"
+          },
+          {
+            uniqueName: "InfeedCount",
+            formula: "((\"InfeedCount\"))",
+            caption: "InfeedCount"
+          },
+          {
+            uniqueName: "OutFeedCount",
+            formula: "((\"OutFeedCount\"))",
+            caption: "OutFeedCount"
+          }
+        ],
+        expands: {
+          expandAll: true,
+        }
+      },
+      options: {
+        grid: {
+          type: "classic",
+          //showHierarchyCaptions: false,
+          showHeaders: false,
+          showTotals: false,
+          //showGrandTotals: "rows"
+        },
+        dateTimePattern: "yyyy-MM-dd HH:mm:ss",
+        defaultHierarchySortName: "desc",
+        configuratorButton: false,
+        showAggregationLabels: false
+      }
+    };
     if (reportType === 'SKUwise') {
       this.child.webDataRocks.setReport(setReportSKUwise);
     } else if (reportType === 'Faultwise') {
@@ -517,6 +605,9 @@ export class CycleReportComponent implements OnInit {
     }
     else if (reportType === 'Daywise') {
       this.child3.webDataRocks.setReport(setReportDaywise);
+    }else if (reportType === 'DateRange') {
+      this.child4.webDataRocks.setReport(setReportDateRange);
     }
+    
   }
 }
