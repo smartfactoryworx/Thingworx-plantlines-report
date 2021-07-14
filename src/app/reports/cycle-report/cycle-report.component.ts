@@ -570,6 +570,11 @@ export class CycleReportComponent implements OnInit {
             caption: "Total Cycle Run"
           },
           {
+            uniqueName: "FirstFault",
+            formula: "((\"FirstFault\"))",
+            caption: "Fault Count"
+          },
+          {
             uniqueName: "FaultNumber",
             formula: "((\"FaultNumber\"))",
             caption: "Fault Number"
