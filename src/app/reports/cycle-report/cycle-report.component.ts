@@ -30,6 +30,7 @@ interface cycledata {
   SKUDesc: string;
   To: string;
   Date: string;
+  FaultNumber: number;
 }
 
 @Component({
@@ -125,6 +126,7 @@ export class CycleReportComponent implements OnInit {
           const allCycleData = {
             CycleRun: data.CycleRun,
             Duration: data.Duration,
+            FaultNumber : data.FirstFault,
             FirstFault: data.FirstFault > 0 ? 1 : 0,
             FirstFaultDesc: data.FirstFaultDesc,
             From: moment(data.From).format("DD MMM YYYY hh:mm a"),
@@ -137,7 +139,7 @@ export class CycleReportComponent implements OnInit {
             SKUDesc: data.SKUDesc,
             To: moment(data.To).format("DD MMM YYYY hh:mm a"),
             Date: moment(data.From).format("DD MMM YYYY"),
-
+           
           }
           this.cycleData.push(allCycleData);
           //}
@@ -238,6 +240,9 @@ export class CycleReportComponent implements OnInit {
         Date: {
           type: "string"
         },
+        FaultNumber: {
+          type: "number"
+        }
       }
     ]
     if (reportType === 'Faultwise') {
@@ -311,23 +316,8 @@ export class CycleReportComponent implements OnInit {
             caption: "Max Speed"
           },
           {
-            uniqueName: "Duration",
-            formula: "((\"Duration\"))",
-            caption: "Duration"
-          },
-          {
-            uniqueName: "InfeedCount",
-            formula: "((\"InfeedCount\"))",
-            caption: "InfeedCount"
-          },
-          {
-            uniqueName: "OutFeedCount",
-            formula: "((\"OutFeedCount\"))",
-            caption: "OutFeedCount"
-          },
-          {
             uniqueName: "MeanCycleBetweenFault",
-            formula: "((\"CycleRun\")(\"FirstFault\"))",
+            formula: "((\"CycleRun\")/(\"FirstFault\"))",
             caption: "MeanCycleBetweenFault",
             format: "44mvcoma",
           },
@@ -381,14 +371,7 @@ export class CycleReportComponent implements OnInit {
             uniqueName: "FirstFaultDesc",
             caption: "First Fault"
           },
-          {
-            uniqueName: "From",
-            caption: "From Date"
-          },
-          {
-            uniqueName: "To",
-            caption: "To Date"
-          }
+         
         ],
         rows: [
           {
@@ -407,53 +390,18 @@ export class CycleReportComponent implements OnInit {
         ],
         measures: [
           {
-            uniqueName: "CycleRun",
-            formula: "((\"CycleRun\"))",
-            caption: "Total Cycle Run"
+            uniqueName: "FaultNumber",
+            formula: "((\"FaultNumber\"))",
+            caption: "Fault Number"
           },
           {
             uniqueName: "FirstFault",
             formula: "((\"FirstFault\"))",
             caption: "FirstFault Count"
           },
-          {
-            uniqueName: "ManualStop",
-            formula: "((\"ManualStop\"))",
-            caption: "ManualStop Count"
-          },
-          {
-            uniqueName: "MaxActualSpeed",
-            formula: "(max(\"MaxActualSpeed\"))",
-            caption: "Max Speed"
-          },
-          {
-            uniqueName: "Duration",
-            formula: "((\"Duration\"))",
-            caption: "Duration"
-          },
-          {
-            uniqueName: "InfeedCount",
-            formula: "((\"InfeedCount\"))",
-            caption: "InfeedCount"
-          },
-          {
-            uniqueName: "OutFeedCount",
-            formula: "((\"OutFeedCount\"))",
-            caption: "OutFeedCount"
-          },
-          {
-            uniqueName: "MeanCycleBetweenFault",
-            formula: "((\"CycleRun\")/(\"FirstFault\"))",
-            caption: "MeanCycleBetweenFault",
-            format: "44mvcoma",
-          },
-          {
-            uniqueName: "MeanCycleBetweenFaultNManualStop",
-            formula: "((\"CycleRun\")/(\"FirstFault\" + \"ManualStop\"))",
-            caption: "MeanCycleBetweenFaultNManualStop",
-            format: "44mvcoma",
-          },
-
+          
+          
+         
         ],
 
         expands: {
@@ -541,21 +489,7 @@ export class CycleReportComponent implements OnInit {
             formula: "(max(\"MaxActualSpeed\"))",
             caption: "Max Speed"
           },
-          {
-            uniqueName: "Duration",
-            formula: "((\"Duration\"))",
-            caption: "Duration"
-          },
-          {
-            uniqueName: "InfeedCount",
-            formula: "((\"InfeedCount\"))",
-            caption: "InfeedCount"
-          },
-          {
-            uniqueName: "OutFeedCount",
-            formula: "((\"OutFeedCount\"))",
-            caption: "OutFeedCount"
-          },
+         
 
           {
             uniqueName: "MeanCycleBetweenFault",
@@ -636,9 +570,9 @@ export class CycleReportComponent implements OnInit {
             caption: "Total Cycle Run"
           },
           {
-            uniqueName: "FirstFault",
-            formula: "((\"FirstFault\"))",
-            caption: "FirstFault Count"
+            uniqueName: "FaultNumber",
+            formula: "((\"FaultNumber\"))",
+            caption: "Fault Number"
           },
           {
             uniqueName: "ManualStop",

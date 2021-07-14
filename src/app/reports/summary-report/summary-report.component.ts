@@ -57,7 +57,7 @@ export class SummaryReportComponent implements OnInit {
     this.httpClient.get('configs/api/api_server.json').subscribe(apipath => {
       console.log(apipath['api']);
       let body = {};
-      let dataSource = 'http://103.205.66.170:8082/Thingworx/Things/MachineDetailsMaster/Services/GetDataTableEntries'
+      let dataSource = 'MachineDetailsMaster/Services/GetDataTableEntries'
       this.dataentryservice.GetMachineData(apipath['apithings'], dataSource, JSON.stringify(body)).subscribe((machineList: any) => {
         console.log(machineList['rows'], "machineList");
         var c = machineList['rows'];
@@ -92,7 +92,7 @@ export class SummaryReportComponent implements OnInit {
 
     console.log(JSON.stringify(body));
 
-    let dataSource = 'http://103.205.66.170:8082/Thingworx/Things/CycleSetDataInDataTable/Services/getSKUWiseData'
+    let dataSource = 'CycleSetDataInDataTable/Services/getSKUWiseData'
 
     this.httpClient.get('configs/api/api_server.json').subscribe(apipath => {
       console.log(apipath['api']);
