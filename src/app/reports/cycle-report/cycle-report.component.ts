@@ -157,13 +157,13 @@ export class CycleReportComponent implements OnInit {
     let tabs = toolbar.getTabs();
     //console.log(tabs);
     toolbar.getTabs = function () {
-      // delete tabs[0];
-      // delete tabs[1];
-      // delete tabs[2];
-      // delete tabs[3];
-      // delete tabs[4];
-      // //delete tabs[5];
-      // delete tabs[6];
+      delete tabs[0];
+      delete tabs[1];
+      delete tabs[2];
+      delete tabs[3];
+      delete tabs[4];
+      delete tabs[5];
+      //delete tabs[6];
       return tabs;
     }
   }
@@ -440,18 +440,12 @@ export class CycleReportComponent implements OnInit {
         data: this.DataWithStructure
       },
       slice: {
-        reportFilters: [{
-          uniqueName: "FirstFaultDesc",
-          caption: "First Fault"
-        },
+        reportFilters: [
+        
         {
           uniqueName: "Date",
           caption: "Date"
-        },
-        {
-          uniqueName: "SKUDesc",
-          caption: "SKU"
-        },
+        }
         ],
         rows: [
         //   {
@@ -601,7 +595,7 @@ export class CycleReportComponent implements OnInit {
           },
           {
             uniqueName: "OutFeedCount",
-            formula: "((\"OutFeedCount\"))",
+            formula: "(max(\"OutFeedCount\"))",
             caption: "OutFeedCount"
           },
           {
