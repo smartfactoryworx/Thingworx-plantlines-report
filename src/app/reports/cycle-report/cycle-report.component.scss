@@ -27,3 +27,12 @@
     position: relative;
   }
   
+
+  ::ng-deep .mat-select-panel {
+    transform-origin: 46% 114px 0px;
+    font-size: 16px;
+    opacity: 1;
+    min-width: calc(100% + 27px);
+    transform: scaleY(1);
+    margin-top: 8.5rem !important;
+}
