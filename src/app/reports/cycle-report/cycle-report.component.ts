@@ -44,7 +44,8 @@ export class CycleReportComponent implements OnInit {
   @ViewChild("pivot2") child2: WebDataRocksPivot;
   @ViewChild("pivot3") child3: WebDataRocksPivot;
   @ViewChild("pivot4") child4: WebDataRocksPivot;
-  public MachineList: machinelist[];
+  public MachineList: machinelist[] = [];
+  public filteredMachine = this.MachineList.slice(); 
   cycleform: FormGroup;
   machine: FormControl;
   public cycleData: cycledata[];
@@ -52,6 +53,7 @@ export class CycleReportComponent implements OnInit {
   pivotTableReportComplete: boolean = false;
   gotData: boolean = true;
   public DataWithStructure = [];
+
   //datePipe: any;
   lastUpdated;
   constructor(private httpClient: HttpClient, protected dataentryservice: ManualEntryService, private util: UtilService,
@@ -84,14 +86,19 @@ export class CycleReportComponent implements OnInit {
           const data = {
             machineId: a.Machine_MDS,
             machineName: a.Machine_Name,
-            createdDate: new Date(moment(a.timestamp).format("DD MMM YYYY hh:mm a"))//a.
+            createdDate: new Date(moment(a.timestamp).format("DD MMM YYYY hh:mm a")),
+            machineDetails: a.Machine_MDS + ' ('+ a.Machine_Name + ')'
           }
           this.MachineList.push(data);
+          this.filteredMachine = this.MachineList.slice();
+
         }
         this.MachineList.sort(this.util.dynamicSort('createdDate'));
+        console.log(this.filteredMachine);
         console.log(this.MachineList, "MachineData");
       });
-
+     
+      
     });
   }
   ngOnInit(): void {
