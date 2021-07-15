@@ -45,7 +45,7 @@ export class CycleReportComponent implements OnInit {
   @ViewChild("pivot3") child3: WebDataRocksPivot;
   @ViewChild("pivot4") child4: WebDataRocksPivot;
   public MachineList: machinelist[] = [];
-  public filteredMachine = this.MachineList.slice(); 
+  public filteredMachine = this.MachineList.slice();
   cycleform: FormGroup;
   machine: FormControl;
   public cycleData: cycledata[];
@@ -87,7 +87,7 @@ export class CycleReportComponent implements OnInit {
             machineId: a.Machine_MDS,
             machineName: a.Machine_Name,
             createdDate: new Date(moment(a.timestamp).format("DD MMM YYYY hh:mm a")),
-            machineDetails: a.Machine_MDS + ' ('+ a.Machine_Name + ')'
+            machineDetails: a.Machine_MDS + ' - ' + a.Machine_Name + ' - ' + a.Customer_Name + '(' + moment(new Date(a.timestamp)).format("DD-MM-YYYY") + ')'
           }
           this.MachineList.push(data);
         }
@@ -96,8 +96,8 @@ export class CycleReportComponent implements OnInit {
         console.log(this.filteredMachine);
         console.log(this.MachineList, "MachineData");
       });
-     
-      
+
+
     });
   }
   ngOnInit(): void {
@@ -132,7 +132,7 @@ export class CycleReportComponent implements OnInit {
           const allCycleData = {
             CycleRun: data.CycleRun,
             Duration: data.Duration,
-            FaultNumber : data.FirstFault,
+            FaultNumber: data.FirstFault,
             FirstFault: data.FirstFault > 0 ? 1 : 0,
             FirstFaultDesc: data.FirstFaultDesc,
             From: moment(data.From).format("DD MMM YYYY hh:mm a"),
@@ -145,7 +145,7 @@ export class CycleReportComponent implements OnInit {
             SKUDesc: data.SKUDesc,
             To: moment(data.To).format("DD MMM YYYY hh:mm a"),
             Date: moment(data.From).format("DD MMM YYYY"),
-           
+
           }
           this.cycleData.push(allCycleData);
           //}
@@ -363,7 +363,7 @@ export class CycleReportComponent implements OnInit {
           //showGrandTotals: "rows"
         },
         dateTimePattern: "yyyy-MM-dd HH:mm:ss",
-        datePattern:"dd-MMM-yyyy",
+        datePattern: "dd-MMM-yyyy",
         defaultHierarchySortName: "desc",
         configuratorButton: false,
         showAggregationLabels: false
@@ -379,7 +379,7 @@ export class CycleReportComponent implements OnInit {
             uniqueName: "FirstFaultDesc",
             caption: "First Fault"
           },
-         
+
         ],
         rows: [
           {
@@ -407,9 +407,9 @@ export class CycleReportComponent implements OnInit {
             formula: "((\"FirstFault\"))",
             caption: "FirstFault Count"
           },
-          
-          
-         
+
+
+
         ],
 
         expands: {
@@ -438,7 +438,7 @@ export class CycleReportComponent implements OnInit {
           //showGrandTotals: "rows"
         },
         dateTimePattern: "yyyy-MM-dd HH:mm:ss",
-        datePattern:"dd-MMM-yyyy",
+        datePattern: "dd-MMM-yyyy",
         defaultHierarchySortName: "desc",
         configuratorButton: false,
         showAggregationLabels: false
@@ -450,21 +450,21 @@ export class CycleReportComponent implements OnInit {
       },
       slice: {
         reportFilters: [
-        
-        {
-          uniqueName: "Date",
-          caption: "Date"
-        }
+
+          {
+            uniqueName: "Date",
+            caption: "Date"
+          }
         ],
         rows: [
-        //   {
-        //   uniqueName: "FirstFaultDesc",
-        //   caption: "First Fault"
-        // },
-        {
-          uniqueName: "Date",
-          caption: "Date"
-        },
+          //   {
+          //   uniqueName: "FirstFaultDesc",
+          //   caption: "First Fault"
+          // },
+          {
+            uniqueName: "Date",
+            caption: "Date"
+          },
         ],
         columns: [
           {
@@ -492,7 +492,7 @@ export class CycleReportComponent implements OnInit {
             formula: "(max(\"MaxActualSpeed\"))",
             caption: "Max Speed"
           },
-         
+
 
           {
             uniqueName: "MeanCycleBetweenFault",
@@ -534,7 +534,7 @@ export class CycleReportComponent implements OnInit {
           //showGrandTotals: "rows"
         },
         dateTimePattern: "yyyy-MM-dd HH:mm:ss",
-        datePattern:"dd-MMM-yyyy",
+        datePattern: "dd-MMM-yyyy",
         defaultHierarchySortName: "desc",
         configuratorButton: false,
         showAggregationLabels: false
@@ -649,7 +649,7 @@ export class CycleReportComponent implements OnInit {
           //showGrandTotals: "rows"
         },
         dateTimePattern: "yyyy-MM-dd HH:mm:ss",
-        datePattern:"dd-MMM-yyyy",
+        datePattern: "dd-MMM-yyyy",
         defaultHierarchySortName: "desc",
         configuratorButton: false,
         showAggregationLabels: false
@@ -668,67 +668,67 @@ export class CycleReportComponent implements OnInit {
 
   }
 
-  Export_Excel(reportType,fileName,sheetName) {
-    console.log(reportType,fileName,sheetName);
-    if(reportType === 'Summary'){
+  Export_Excel(reportType, fileName, sheetName) {
+    console.log(reportType, fileName, sheetName);
+    if (reportType === 'Summary') {
       this.child.webDataRocks.exportTo(
         "Excel", {
         filename: fileName,
-        excelSheetName: sheetName ,
+        excelSheetName: sheetName,
         destinationType: "file",
         url: "URL to server script saving the file"
-  
+
       },
         function () {
           //console.log("Export process is finished");
         }
       );
-    }  
-    else if(reportType === 'SKUwise'){
+    }
+    else if (reportType === 'SKUwise') {
       this.child2.webDataRocks.exportTo(
         "Excel", {
         filename: fileName,
-        excelSheetName: sheetName ,
+        excelSheetName: sheetName,
         destinationType: "file",
         url: "URL to server script saving the file"
-  
+
       },
         function () {
           //console.log("Export process is finished");
         }
       );
     }
-    else if(reportType === 'Faultwise'){
+    else if (reportType === 'Faultwise') {
       this.child3.webDataRocks.exportTo(
         "Excel", {
         filename: fileName,
-        excelSheetName: sheetName ,
+        excelSheetName: sheetName,
         destinationType: "file",
         url: "URL to server script saving the file"
-  
+
       },
         function () {
           //console.log("Export process is finished");
         }
       );
     }
-    else if(reportType === 'DailyCycle'){
+    else if (reportType === 'DailyCycle') {
       this.child4.webDataRocks.exportTo(
         "Excel", {
         filename: fileName,
-        excelSheetName: sheetName ,
+        excelSheetName: sheetName,
         destinationType: "file",
         url: "URL to server script saving the file"
-  
+
       },
         function () {
           //console.log("Export process is finished");
         }
       );
     }
-  
-  
-    
+
+
+
   }
 
 }
