@@ -90,10 +90,9 @@ export class CycleReportComponent implements OnInit {
             machineDetails: a.Machine_MDS + ' ('+ a.Machine_Name + ')'
           }
           this.MachineList.push(data);
-          this.filteredMachine = this.MachineList.slice();
-
         }
         this.MachineList.sort(this.util.dynamicSort('createdDate'));
+        this.filteredMachine = this.MachineList.slice();
         console.log(this.filteredMachine);
         console.log(this.MachineList, "MachineData");
       });
@@ -152,6 +151,7 @@ export class CycleReportComponent implements OnInit {
           //}
 
         }
+        //this.cycleData.sort(this.util.dynamicSort('Date'));
         console.log("cycleData", this.cycleData);
         //this.cycleData.sort((a,b)=>a.From-b.To)
 
@@ -245,7 +245,7 @@ export class CycleReportComponent implements OnInit {
           type: "datetime"
         },
         Date: {
-          type: "string"
+          type: "date string"
         },
         FaultNumber: {
           type: "number"
@@ -363,6 +363,7 @@ export class CycleReportComponent implements OnInit {
           //showGrandTotals: "rows"
         },
         dateTimePattern: "yyyy-MM-dd HH:mm:ss",
+        datePattern:"dd-MMM-yyyy",
         defaultHierarchySortName: "desc",
         configuratorButton: false,
         showAggregationLabels: false
@@ -437,6 +438,7 @@ export class CycleReportComponent implements OnInit {
           //showGrandTotals: "rows"
         },
         dateTimePattern: "yyyy-MM-dd HH:mm:ss",
+        datePattern:"dd-MMM-yyyy",
         defaultHierarchySortName: "desc",
         configuratorButton: false,
         showAggregationLabels: false
@@ -532,6 +534,7 @@ export class CycleReportComponent implements OnInit {
           //showGrandTotals: "rows"
         },
         dateTimePattern: "yyyy-MM-dd HH:mm:ss",
+        datePattern:"dd-MMM-yyyy",
         defaultHierarchySortName: "desc",
         configuratorButton: false,
         showAggregationLabels: false
@@ -646,6 +649,7 @@ export class CycleReportComponent implements OnInit {
           //showGrandTotals: "rows"
         },
         dateTimePattern: "yyyy-MM-dd HH:mm:ss",
+        datePattern:"dd-MMM-yyyy",
         defaultHierarchySortName: "desc",
         configuratorButton: false,
         showAggregationLabels: false
