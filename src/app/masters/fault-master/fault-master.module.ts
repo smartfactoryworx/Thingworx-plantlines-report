@@ -1,15 +1,15 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FaultMasterComponent } from './fault-master.component';
 import { SharedModule } from 'src/app/shared/shared.module';
-import { CurrentTempReportComponent } from './current-temp-report.component';
 
 
 
 @NgModule({
-  declarations: [CurrentTempReportComponent],
+  declarations: [FaultMasterComponent],
   imports: [
     CommonModule,
     SharedModule
   ]
 })
-export class CurrentTempReportModule { }
+export class FaultMasterModule { }

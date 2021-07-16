@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SummaryReportComponent } from './summary-report.component';
+import { SkuMasterComponent } from './sku-master.component';
 
-describe('SummaryReportComponent', () => {
-  let component: SummaryReportComponent;
-  let fixture: ComponentFixture<SummaryReportComponent>;
+describe('SkuMasterComponent', () => {
+  let component: SkuMasterComponent;
+  let fixture: ComponentFixture<SkuMasterComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SummaryReportComponent ]
+      declarations: [ SkuMasterComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SummaryReportComponent);
+    fixture = TestBed.createComponent(SkuMasterComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
