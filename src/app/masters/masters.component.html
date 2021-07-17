@@ -1,1 +1,33 @@
-<router-outlet></router-outlet>
+<div fxLayout="column" class="form" style="width: 100%;">
+
+    <div fxLayout="row" style="width: 100%;padding: 0%;" fxLayoutAlign="center center" fxFlex="100">
+        <form [formGroup]="masterform" fxFlex="75">
+            <div fxLayout="column" style="width:100%;">
+                <div fxLayout="row" style="width: 100%;padding: 0%;" fxLayoutAlign="center center" fxFlex="70">
+                    <mat-form-field appearance="fill" fxFlex="60" style="margin-right: 3%;">
+                        <mat-label>Choose the Machine</mat-label>
+                        <mat-select formControlName="machine" placeholder="Machine Name" (selectionChange)="sku.GetSKUData(machine.value);fault.GetfaultData(machine.value)">
+                            <mat-select-filter [array]="MachineList" [displayMember]="'machineDetails'"
+                                (filteredReturn)="filteredMachine=$event"></mat-select-filter>
+                            <mat-option *ngFor="let m of filteredMachine" [value]="m.machineId">
+                                {{m.machineDetails}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+
+                   
+                </div>
+            </div>
+        </form>
+    </div>
+    </div>
+    <div fxLayout="column" class="form" style="width: 100%;">
+    <div fxLayout="row" style="width: 100%;padding: 0%;" fxLayoutAlign="space-around center" fxFlex="100">
+        <app-sku-master #sku  [machine]="machine.value" fxFlex="50"></app-sku-master>
+        <app-fault-master #fault  [machine]="machine.value" fxFlex="50"></app-fault-master> 
+    </div>
+</div>
+
+
+
