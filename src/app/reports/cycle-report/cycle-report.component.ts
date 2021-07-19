@@ -4,7 +4,7 @@ import { WebDataRocksPivot } from '../@webdatarocks/webdatarocks.angular4';
 import * as _moment from 'moment';
 import { default as _rollupMoment, Moment } from 'moment';
 import { HttpClient } from '@angular/common/http';
-import { ManualEntryService } from '../app-manualentry.service';
+import { ManualEntryService } from '../../app-manualentry.service';
 import { UtilService } from 'src/app/util.service';
 import { DatePipe } from '@angular/common';
 const moment = _rollupMoment || _moment;
@@ -120,7 +120,7 @@ export class CycleReportComponent implements OnInit {
 
     let dataSource = 'CycleSetDataInDataTable/Services/getAllCycleReport'
 
-    this.httpClient.get('configs/api/api_server.json').subscribe(apipath => {
+    this.dataentryservice.GetApiURL().subscribe(apipath => {
       console.log(apipath['api']);
       this.dataentryservice.GetMachineData(apipath['apithings'], dataSource, JSON.stringify(body)).subscribe((machinecycledata: any) => {
         this.lastUpdated = this.datePipe.transform(new Date(), 'dd-MMM-yyyy hh:mm:ss')

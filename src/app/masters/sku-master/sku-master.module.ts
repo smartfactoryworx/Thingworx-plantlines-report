@@ -1,15 +1,16 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from 'src/app/shared/shared.module';
-import { CurrentTempReportComponent } from './current-temp-report.component';
+import { SkuMasterComponent } from './sku-master.component';
+import { SkuDailogComponent } from './sku-dailog/sku-dailog.component';
 
 
 
 @NgModule({
-  declarations: [CurrentTempReportComponent],
+  declarations: [ SkuDailogComponent],
   imports: [
     CommonModule,
     SharedModule
   ]
 })
-export class CurrentTempReportModule { }
+export class SkuMasterModule { }

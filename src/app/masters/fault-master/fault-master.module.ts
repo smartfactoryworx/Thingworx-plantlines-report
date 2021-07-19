@@ -1,15 +1,15 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SummaryReportComponent } from './summary-report.component';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { FaultDailogComponent } from './fault-dailog/fault-dailog.component';
 
 
 
 @NgModule({
-  declarations: [SummaryReportComponent],
+  declarations: [FaultDailogComponent],
   imports: [
     CommonModule,
     SharedModule
   ]
 })
-export class SummaryReportModule { }
+export class FaultMasterModule { }
