@@ -389,6 +389,10 @@ export class CycleReportComponent implements OnInit {
           {
             uniqueName: "FirstFaultDesc",
             caption: "First Fault"
+          },
+          {
+            uniqueName: "FaultNumber",
+            caption: "Fault Number"
           }
         ],
         columns: [
@@ -397,11 +401,7 @@ export class CycleReportComponent implements OnInit {
           }
         ],
         measures: [
-          {
-            uniqueName: "FaultNumber",
-            formula: "((\"FaultNumber\"))",
-            caption: "Fault Number"
-          },
+
           {
             uniqueName: "FirstFault",
             formula: "((\"FirstFault\"))",
@@ -561,7 +561,12 @@ export class CycleReportComponent implements OnInit {
         {
           uniqueName: "To",
           caption: "To Date"
-        },],
+        },
+        {
+          uniqueName: "FaultNumber",
+          caption: "Fault Number"
+        }
+        ],
         columns: [
           {
             uniqueName: "Measures"
@@ -578,11 +583,7 @@ export class CycleReportComponent implements OnInit {
             formula: "((\"FirstFault\"))",
             caption: "Fault Count"
           },
-          {
-            uniqueName: "FaultNumber",
-            formula: "((\"FaultNumber\"))",
-            caption: "Fault Number"
-          },
+
           {
             uniqueName: "ManualStop",
             formula: "((\"ManualStop\"))",
@@ -726,9 +727,6 @@ export class CycleReportComponent implements OnInit {
         }
       );
     }
-
-
-
   }
 
 }
