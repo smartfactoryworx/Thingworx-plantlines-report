@@ -3,14 +3,14 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ManualEntryService } from '../../../app-manualentry.service';
+import { ManualEntryService } from '../../../../app-manualentry.service';
 
 @Component({
-  selector: 'app-sku-dailog',
-  templateUrl: './sku-dailog.component.html',
-  styleUrls: ['./sku-dailog.component.scss']
+  selector: 'app-sku-dialog',
+  templateUrl: './sku-dialog.component.html',
+  styleUrls: ['./sku-dialog.component.scss']
 })
-export class SkuDailogComponent implements OnInit  {
+export class SkuDialogComponent implements OnInit {
   
   skuform: FormGroup;
   ID : FormControl;
@@ -23,7 +23,7 @@ export class SkuDailogComponent implements OnInit  {
 
 
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any, public dialogRef: MatDialogRef<SkuDailogComponent>,
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any, public dialogRef: MatDialogRef<SkuDialogComponent>,
     private httpClient: HttpClient, private _snackBar: MatSnackBar, protected dataentryservice: ManualEntryService) { }
 
 
@@ -85,3 +85,4 @@ export class SkuDailogComponent implements OnInit  {
 
 
 }
+

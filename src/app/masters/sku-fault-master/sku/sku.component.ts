@@ -1,38 +1,40 @@
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Component, OnInit, Input, SimpleChanges, ɵConsole, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, ɵConsole, ViewChild, OnChanges } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { ManualEntryService } from '../../app-manualentry.service';
-import { TableUtilsService } from '../../table-utils.service';
-
+import { ManualEntryService } from '../../../app-manualentry.service';
+import { TableUtilsService } from '../../../table-utils.service';
+import { SkuDialogComponent } from './sku-dialog/sku-dialog.component';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import * as _moment from 'moment';
 import { default as _rollupMoment, Moment } from 'moment';
 import { UtilService } from 'src/app/util.service';
-import { FaultDailogComponent } from './fault-dailog/fault-dailog.component';
 const moment = _rollupMoment || _moment;
 
-
-interface fault {
+interface sku {
   key?: string;
   source?: string;
   sourceType?: string;
   timestamp?: string;
-  FaultCode?: number;
-  FaultDescription?: string;
+  CasesPerPallet?: number;
   ID?: string;
   Machine_Selected?: string;
-  typeSelected?: string;
+  Product_Details?: string;
+  SKU_Code?: number;
+  SKU_Details?: string;
+  SKU_RatedSpeed?: number;
+  Standard_ChangeOver_Time?: string;
 }
+
 @Component({
-  selector: 'app-fault-master',
-  templateUrl: './fault-master.component.html',
-  styleUrls: ['./fault-master.component.scss']
+  selector: 'app-sku',
+  templateUrl: './sku.component.html',
+  styleUrls: ['./sku.component.scss']
 })
-export class FaultMasterComponent implements OnInit {
+export class SkuComponent implements OnInit {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @Input() machine: string
@@ -47,8 +49,8 @@ export class FaultMasterComponent implements OnInit {
   displayedColumns: string[];// = ['position', 'name', 'weight', 'symbol'];
   gotData: boolean = false;
   vdisplayedColumns: string[];
-  public faultData: fault[] = [];
-  dataSource: MatTableDataSource<fault>;
+  public skuData: sku[] = [];
+  dataSource: MatTableDataSource<sku>;
   errorText;
   noData;
 
@@ -57,11 +59,14 @@ export class FaultMasterComponent implements OnInit {
     source: { 'DN': 'Source', 'visible': true },
     sourceType: { 'DN': 'Source Type', 'visible': true },
     timestamp: { 'DN': 'Date', 'visible': true },
-    FaultCode: { 'DN': 'Fault Code', 'visible': false },
-    FaultDescription: { 'DN': 'Fault Description', 'visible': false },
+    CasesPerPallet: { 'DN': 'Cases Per Pallet', 'visible': true },
     ID: { 'DN': 'ID', 'visible': true },
     Machine_Selected: { 'DN': 'Machine Selected', 'visible': true },
-    typeSelected: { 'DN': 'Type Selected', 'visible': true },
+    Product_Details: { 'DN': 'Product Details', 'visible': true },
+    SKU_Code: { 'DN': 'SKU Code', 'visible': false },
+    SKU_Details: { 'DN': 'SKU Details', 'visible': false },
+    SKU_RatedSpeed: { 'DN': 'SKU RatedSpeed', 'visible': true },
+    Standard_ChangeOver_Time: { 'DN': 'Standard ChangeOver Time', 'visible': true },
   }
   getDisplayedColumns() {                                                                 
     return this.displayedColumnsAs;
@@ -70,8 +75,8 @@ export class FaultMasterComponent implements OnInit {
  
 
 
-  GetfaultData(machine) {
-      this.faultData = [];
+  GetSKUData(machine) {
+      this.skuData = [];
       this.gotData = false;
       console.log(machine, "machine");
       let body = {
@@ -80,42 +85,45 @@ export class FaultMasterComponent implements OnInit {
   
       console.log(JSON.stringify(body));
   
-      let dataSource = 'MachineFaultMaster/Services/getFaultMastersData'
+      let dataSource = 'LineSKUmaster/Services/getSKUMastersData'
   
       this.manualentryservice.GetApiURL().subscribe(apipath => {
         console.log(apipath['api']);
-        this.manualentryservice.GetMachineData(apipath['apithings'], dataSource, JSON.stringify(body)).subscribe((faultdata: any) => {
-          console.log("faultdata", faultdata);
-          var c = faultdata.rows;
+        this.manualentryservice.GetMachineData(apipath['apithings'], dataSource, JSON.stringify(body)).subscribe((skudata: any) => {
+          console.log("skudata", skudata);
+          var c = skudata.rows;
           for (let i = 0; i < c.length; i++) {
             const data = c[i]
             //if(data.FirstFault !=0){
-            const allFaultData = {
+            const allSKUData = {
               key: data.key,
               source: data.source,
               sourceType: data.sourceType,
               timestamp: moment(data.timestamp).format("DD MMM YYYY hh:mm a"),
-              FaultCode: data.FaultCode,
-              FaultDescription: data.FaultDescription,
+              CasesPerPallet: data.CasesPerPallet,
               ID: data.ID,
               Machine_Selected: data.Machine_Selected,
-              typeSelected: data.typeSelected
+              Product_Details: data.Product_Details,
+              SKU_Code: data.SKU_Code,
+              SKU_Details: data.SKU_Details,
+              SKU_RatedSpeed: data.SKU_RatedSpeed,
+              Standard_ChangeOver_Time: data.Standard_ChangeOver_Time,
             }
-            this.faultData.push(allFaultData);
+            this.skuData.push(allSKUData);
             //}
   
           }
-          console.log("faultData", this.faultData);
+          console.log("skuData", this.skuData);
       this.vdisplayedColumns = [];
       //console.log(this.fgextype[0]);
-      if (Object.keys(faultdata).length > 0) {
-        for (let i = 0; i < Object.keys(this.faultData[0]).length; i++) {
-          this.vdisplayedColumns.push(Object.keys(this.faultData[0])[i]);
+      if (Object.keys(skudata).length > 0) {
+        for (let i = 0; i < Object.keys(this.skuData[0]).length; i++) {
+          this.vdisplayedColumns.push(Object.keys(this.skuData[0])[i]);
           //console.log("function");
         }
         this.vdisplayedColumns.push('star');
         this.gotData = true;
-        this.dataSource = new MatTableDataSource(this.faultData);
+        this.dataSource = new MatTableDataSource(this.skuData);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
         this.displayedColumns = this.vdisplayedColumns;
@@ -135,7 +143,7 @@ export class FaultMasterComponent implements OnInit {
 
 
   ngOnInit() {
-    this.GetfaultData(this.machine);
+    this.GetSKUData(this.machine);
   }
 
 
@@ -147,32 +155,32 @@ export class FaultMasterComponent implements OnInit {
     }
   }
 
-  DailogAddFault() {
+  DailogAddsku() {
     //console.log('add details');
-    const dialogRef = this.dialog.open(FaultDailogComponent, {
+    const dialogRef = this.dialog.open(SkuDialogComponent, {
       width: '700px',
       height: '500px',
       data: {
         dataKey: {
           machine: this.machine,
-          title: 'Add Fault',
+          title: 'Add SKU',
           button: 'Add',
-          key:'AddFault'
+          key:'AddSKU'
         }
       }
     });
     dialogRef.afterClosed().subscribe(result => {
       //console.log('The dialog was closed', result);
       if (result !== undefined) {
-        this.postfaultData(result);
+        this.postSKUData(result);
       }
     });
   }
 
-  DailogUpdateFault(element) {
+  DailogUpdatesku(element) {
     //console.log("fuction called");
     //console.log("this is updated: " + JSON.stringify(element));
-    const dialogRef = this.dialog.open(FaultDailogComponent, {
+    const dialogRef = this.dialog.open(SkuDialogComponent, {
       width: '700px',
       height: '500px',
       data: {
@@ -188,32 +196,32 @@ export class FaultMasterComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       //console.log('The dialog was closed', result);
       if (result !== undefined) {
-        this.postfaultData(result);
+        this.postSKUData(result);
       }
 
     });
   }
 
-  postfaultData(result) {
+  postSKUData(result) {
     console.log(result,"Result....");
     var T = {};
     if (result !== null) {
       T = {
         ID : result.ID,
         Machine_Selected: result.Machine_Selected,
-        FaultCode: result.FaultCode,
-        FaultDescription: result.FaultDescription,
+        SKU_Code: result.SKU_Code,
+        SKU_Details: result.SKU_Details,
       }
     }
     console.log(T);
     console.log("Data which is being posted : " + JSON.stringify(T));
 
-    let dataSource = 'MachineFaultMaster/Services/addFaultsInDataTableFromFrontEnd'
+    let dataSource = 'LineSKUmaster/Services/addSkuInDataTableFromFrontEnd'
     this.manualentryservice.GetApiURL().subscribe(apipath => {
       console.log(apipath['api']);
       this.manualentryservice.GetMachineData(apipath['apithings'], dataSource, JSON.stringify(T)).subscribe(
         (data: any[]) => {
-          this.GetfaultData(this.machine);
+          this.GetSKUData(this.machine);
           this.openSnackBar("Success", "Records Added or Updated Successfully");
         },
         (error: HttpErrorResponse) => {
@@ -229,7 +237,6 @@ export class FaultMasterComponent implements OnInit {
   }
 
   exportTable() {
-    this.tableutil.exportArrayToExcel(this.faultData, "Fault_Master", "Fault_Master");
+    this.tableutil.exportArrayToExcel(this.skuData, "SKU_Master", "SKU_Master");
   }
 }
-

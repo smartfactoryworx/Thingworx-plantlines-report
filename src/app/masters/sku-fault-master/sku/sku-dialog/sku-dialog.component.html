@@ -1,6 +1,6 @@
 <div fxLayout="column" class="form" style="width: 100%;">
-    <h3 style="color: blue;text-align: center;">Add Fault Details</h3>
-    <form [formGroup]="faultform">
+    <h3 style="color: blue;text-align: center;">Add SKU Details</h3>
+    <form [formGroup]="skuform">
         <div fxLayout="column" style="width:100%;">
 
             <div fxLayout="row" style="width: 100%;padding: 1%;" fxLayoutAlign="space-around start">
@@ -15,13 +15,13 @@
             </div>
             <div fxLayout="row" style="width: 100%;padding: 1%;" fxLayoutAlign="space-around start" fxFlex="90">
                 <mat-form-field fxFlex="90">
-                    <input matInput autocomplete="off" appSpecialCharacter placeholder="Fault Code"
-                        formControlName="FaultCode">
+                    <input matInput autocomplete="off" appSpecialCharacter placeholder="SKU Code"
+                        formControlName="SKU_Code">
                 </mat-form-field>
             </div>
             <div fxLayout="row" style="width: 100%;padding: 1%;" fxLayoutAlign="space-around start" fxFlex="90">
                 <mat-form-field class="form-field" fxFlex="90">
-                    <input matInput autocomplete="off" placeholder="Fault Description" formControlName="FaultDescription">
+                    <input matInput autocomplete="off" placeholder="SKU Details" formControlName="SKU_Details">
                 </mat-form-field>
             </div>
         </div>
@@ -29,9 +29,9 @@
 </div>
 
 <div fxLayout="row" style="width: 100%;padding: 1%;" fxLayoutAlign="space-around start">
-    <button mat-raised-button color="primary" [disabled]="faultform.invalid" [mat-dialog-close]="faultform.value">{{button}}
+    <button mat-raised-button color="primary" [disabled]="skuform.invalid" [mat-dialog-close]="skuform.value">{{button}}
     </button>
     <button mat-raised-button color="warn" (click)="close()">Cancel</button>
 </div>
 
-<pre>{{faultform.value|json}}</pre>
+<!-- <pre>{{skuform.value|json}}</pre> -->

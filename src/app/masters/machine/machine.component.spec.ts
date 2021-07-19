@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SkuDailogComponent } from './sku-dailog.component';
+import { MachineComponent } from './machine.component';
 
-describe('SkuDailogComponent', () => {
-  let component: SkuDailogComponent;
-  let fixture: ComponentFixture<SkuDailogComponent>;
+describe('MachineComponent', () => {
+  let component: MachineComponent;
+  let fixture: ComponentFixture<MachineComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SkuDailogComponent ]
+      declarations: [ MachineComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SkuDailogComponent);
+    fixture = TestBed.createComponent(MachineComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

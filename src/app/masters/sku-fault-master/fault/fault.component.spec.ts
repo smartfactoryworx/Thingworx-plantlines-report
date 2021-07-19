@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FaultMasterComponent } from './fault-master.component';
+import { FaultComponent } from './fault.component';
 
-describe('FaultMasterComponent', () => {
-  let component: FaultMasterComponent;
-  let fixture: ComponentFixture<FaultMasterComponent>;
+describe('FaultComponent', () => {
+  let component: FaultComponent;
+  let fixture: ComponentFixture<FaultComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ FaultMasterComponent ]
+      declarations: [ FaultComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(FaultMasterComponent);
+    fixture = TestBed.createComponent(FaultComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

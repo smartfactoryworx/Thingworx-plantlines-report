@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FaultDailogComponent } from './fault-dailog.component';
+import { SkuComponent } from './sku.component';
 
-describe('FaultDailogComponent', () => {
-  let component: FaultDailogComponent;
-  let fixture: ComponentFixture<FaultDailogComponent>;
+describe('SkuComponent', () => {
+  let component: SkuComponent;
+  let fixture: ComponentFixture<SkuComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ FaultDailogComponent ]
+      declarations: [ SkuComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(FaultDailogComponent);
+    fixture = TestBed.createComponent(SkuComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

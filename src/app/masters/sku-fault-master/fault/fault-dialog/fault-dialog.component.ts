@@ -3,14 +3,14 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ManualEntryService } from '../../../app-manualentry.service';
+import { ManualEntryService } from '../../../../app-manualentry.service';
 
 @Component({
-  selector: 'app-fault-dailog',
-  templateUrl: './fault-dailog.component.html',
-  styleUrls: ['./fault-dailog.component.scss']
+  selector: 'app-fault-dialog',
+  templateUrl: './fault-dialog.component.html',
+  styleUrls: ['./fault-dialog.component.scss']
 })
-export class FaultDailogComponent implements OnInit {
+export class FaultDialogComponent implements OnInit {
   
   faultform: FormGroup;
   ID : FormControl;
@@ -23,7 +23,7 @@ export class FaultDailogComponent implements OnInit {
 
 
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any, public dialogRef: MatDialogRef<FaultDailogComponent>,
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any, public dialogRef: MatDialogRef<FaultDialogComponent>,
     private httpClient: HttpClient, private _snackBar: MatSnackBar, protected dataentryservice: ManualEntryService) { }
 
 

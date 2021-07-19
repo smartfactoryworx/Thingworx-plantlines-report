@@ -1,16 +1,15 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from 'src/app/shared/shared.module';
-import { SkuMasterComponent } from './sku-master.component';
-import { SkuDailogComponent } from './sku-dailog/sku-dailog.component';
+import { MachineComponent } from './machine.component';
 
 
 
 @NgModule({
-  declarations: [ SkuDailogComponent],
+  declarations: [MachineComponent],
   imports: [
     CommonModule,
     SharedModule
   ]
 })
-export class SkuMasterModule { }
+export class MachineModule { }
