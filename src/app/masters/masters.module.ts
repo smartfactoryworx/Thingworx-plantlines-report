@@ -6,9 +6,10 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { MastersComponent } from './masters.component';
 import { SkuFaultMasterModule } from './sku-fault-master/sku-fault-master.module';
 import { MachineModule } from './machine/machine.module';
+import { FaultCauseComponent } from './fault-cause/fault-cause.component';
 
 @NgModule({
-  declarations: [MastersComponent],
+  declarations: [MastersComponent, FaultCauseComponent],
   imports: [
     CommonModule,
     SharedModule,
