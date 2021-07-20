@@ -1,16 +1,16 @@
 
 <div [hidden]="!gotData" fxLayout="column" fxLayoutAlign="center none" style="width: 95%;margin-left: 1%;margin-right: 1%;">
     <div fxLayout="row" style="width: 100%;padding: 0%;" fxLayoutAlign="space-between center" fxFlex="100">
-        <mat-form-field fxFlex="70" >
+        <mat-form-field fxFlex="60" >
             <input autocomplete="off" class="placeholder" matInput (keyup)="applyFilter($event.target.value)"
                 placeholder="Filter">
         </mat-form-field>
 
-        <button mat-raised-button color="primary"  (click)="DailogAddFault()" fxFlex="10">
+        <button mat-raised-button color="primary"  (click)="DailogAddFault()" fxFlex="15">
             Add Fault
         </button>
 
-        <button mat-raised-button color="primary" (click)="exportTable()" fxFlex="16">
+        <button mat-raised-button color="primary" (click)="exportTable()" fxFlex="21">
             Export To Excel
         </button>
     </div>

@@ -12,6 +12,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import * as _moment from 'moment';
 import { default as _rollupMoment, Moment } from 'moment';
 import { UtilService } from 'src/app/util.service';
+import { DatePipe } from '@angular/common';
 const moment = _rollupMoment || _moment;
 
 interface machineData {
@@ -41,7 +42,7 @@ export class MachineComponent implements OnInit {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @Input() machine: string
-  constructor(private httpClient: HttpClient, private _snackBar: MatSnackBar, public dialog: MatDialog, private manualentryservice: ManualEntryService, private tableutil: TableUtilsService, private util: UtilService) { }
+  constructor(private httpClient: HttpClient, protected datePipe: DatePipe, private _snackBar: MatSnackBar, public dialog: MatDialog, private manualentryservice: ManualEntryService, private tableutil: TableUtilsService, private util: UtilService) { }
 
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action, {
@@ -113,7 +114,7 @@ export class MachineComponent implements OnInit {
             CycleMeaning: data && data.CycleMeaning,
             SpeedIntermsOf: data && data.SpeedIntermsOf,
             OutfeedCountInTermsOf: data && data.OutfeedCountInTermsOf,
-            EndDate: data && data.EndDate
+            EndDate: data && this.datePipe.transform(data.EndDate, 'yyyy-MM-dd'), 
 
           }
           this.MachineData.push(allMachineData);
@@ -162,7 +163,7 @@ export class MachineComponent implements OnInit {
     }
   }
 
-  DailogAddsku() {
+  DailogAddMachine() {
     //console.log('add details');
     const dialogRef = this.dialog.open(MachineDialogComponent, {
       width: '700px',
@@ -170,21 +171,21 @@ export class MachineComponent implements OnInit {
       data: {
         dataKey: {
           machine: this.machine,
-          title: 'Add SKU',
+          title: 'Add Machine',
           button: 'Add',
-          key: 'AddSKU'
+          key: 'AddMachine'
         }
       }
     });
     dialogRef.afterClosed().subscribe(result => {
       //console.log('The dialog was closed', result);
       if (result !== undefined) {
-        this.postSKUData(result);
+        this.postMachineData(result);
       }
     });
   }
 
-  DailogUpdatesku(element) {
+  DailogUpdateMachine(element) {
     //console.log("fuction called");
     //console.log("this is updated: " + JSON.stringify(element));
     const dialogRef = this.dialog.open(MachineDialogComponent, {
@@ -203,17 +204,18 @@ export class MachineComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       //console.log('The dialog was closed', result);
       if (result !== undefined) {
-        this.postSKUData(result);
+        this.postMachineData(result);
       }
 
     });
   }
 
-  postSKUData(result) {
+  postMachineData(result) {
     console.log(result, "Result....");
     var T = {};
     if (result !== null) {
       T ={
+        ID: result.ID,
         Machine_MDS: result.Machine_MDS,
         Machine_Name: result.Machine_Name,
         Customer_Name: result.Customer_Name,
@@ -222,7 +224,7 @@ export class MachineComponent implements OnInit {
         CycleMeaning: result.CycleMeaning,
         SpeedIntermsOf: result.SpeedIntermsOf,
         OutfeedCountInTermsOf: result.OutfeedCountInTermsOf,
-        EndDate: result.EndDate
+        EndDate: this.datePipe.transform(result.EndDate, 'yyyy-MM-dd'), 
     }
     }
     console.log(T);
@@ -239,16 +241,16 @@ export class MachineComponent implements OnInit {
         (error: HttpErrorResponse) => {
           //console.log(error);
           if (error.status >= 400) {
-            this.openSnackBar("Validation", error.error);
+            this.openSnackBar("Validation", error.error.error);
           }
           else {
-            this.openSnackBar("Error", error.error);
+            this.openSnackBar("Error", error.error.error);
           }
         });
     });
   }
 
   exportTable() {
-    this.tableutil.exportArrayToExcel(this.MachineData, "SKU_Master", "SKU_Master");
+    this.tableutil.exportArrayToExcel(this.MachineData, "Machine_Master", "Machine_Master");
   }
 }
