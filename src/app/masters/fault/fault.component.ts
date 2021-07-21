@@ -1,13 +1,13 @@
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Component, OnInit, Input, SimpleChanges, ɵConsole, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, ɵConsole, ViewChild, OnChanges } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ManualEntryService } from '../../app-manualentry.service';
 import { TableUtilsService } from '../../table-utils.service';
-
+import * as jspreadsheet from 'jspreadsheet-ce';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import * as _moment from 'moment';
 import { default as _rollupMoment, Moment } from 'moment';
@@ -15,6 +15,11 @@ import { UtilService } from 'src/app/util.service';
 import { FaultDialogComponent } from './fault-dialog/fault-dialog.component';
 const moment = _rollupMoment || _moment;
 
+interface faultTableData {
+  ID?: string;
+  FaultCode?: number;
+  FaultDescription?: string;
+}
 
 interface fault {
   key?: string;
@@ -32,200 +37,167 @@ interface fault {
   templateUrl: './fault.component.html',
   styleUrls: ['./fault.component.scss']
 })
-export class FaultComponent implements OnInit{
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
-  @ViewChild(MatSort, { static: true }) sort: MatSort;
-  @Input() machine: string
-  constructor(private httpClient: HttpClient, private _snackBar: MatSnackBar, public dialog: MatDialog, private manualentryservice: ManualEntryService, private tableutil: TableUtilsService,private util: UtilService) { }
+export class FaultComponent implements OnChanges {
+
+  machineName: any;
+  table: any;
+  //FaultPostData = [];
+  constructor(private httpClient: HttpClient, private _snackBar: MatSnackBar, private manualentryservice: ManualEntryService, private tableutil: TableUtilsService, private util: UtilService) { }
 
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action, {
       duration: 2000,
     });
   }
- 
-  displayedColumns: string[];// = ['position', 'name', 'weight', 'symbol'];
+
+
   gotData: boolean = false;
-  vdisplayedColumns: string[];
   public faultData: fault[] = [];
-  dataSource: MatTableDataSource<fault>;
+  public FaultTableData: faultTableData[] = [];
   errorText;
   noData;
 
-  displayedColumnsAs = {
-    key: { 'DN': 'Key', 'visible': true },
-    source: { 'DN': 'Source', 'visible': true },
-    sourceType: { 'DN': 'Source Type', 'visible': true },
-    timestamp: { 'DN': 'Date', 'visible': true },
-    FaultCode: { 'DN': 'Fault Code', 'visible': false },
-    FaultDescription: { 'DN': 'Fault Description', 'visible': false },
-    ID: { 'DN': 'ID', 'visible': true },
-    Machine_Selected: { 'DN': 'Machine Selected', 'visible': true },
-    typeSelected: { 'DN': 'Type Selected', 'visible': true },
-  }
-  getDisplayedColumns() {                                                                 
-    return this.displayedColumnsAs;
-  }
-
- 
-
 
   GetfaultData(machine) {
-      this.faultData = [];
-      this.gotData = false;
-      console.log(machine, "machine");
-      let body = {
-        "Machine": machine,
-      }
-  
-      console.log(JSON.stringify(body));
-  
-      let dataSource = 'MachineFaultMaster/Services/getFaultMastersData'
-  
-      this.manualentryservice.GetApiURL().subscribe(apipath => {
-        console.log(apipath['api']);
-        this.manualentryservice.GetMachineData(apipath['apithings'], dataSource, JSON.stringify(body)).subscribe((faultdata: any) => {
-          console.log("faultdata", faultdata);
-          var c = faultdata.rows;
-          for (let i = 0; i < c.length; i++) {
-            const data = c[i]
-            //if(data.FirstFault !=0){
-            const allFaultData = {
-              key: data.key,
-              source: data.source,
-              sourceType: data.sourceType,
-              timestamp: moment(data.timestamp).format("DD MMM YYYY hh:mm a"),
-              FaultCode: data.FaultCode,
-              FaultDescription: data.FaultDescription,
-              ID: data.ID,
-              Machine_Selected: data.Machine_Selected,
-              typeSelected: data.typeSelected
-            }
-            this.faultData.push(allFaultData);
-            //}
-  
-          }
-          console.log("faultData", this.faultData);
-      this.vdisplayedColumns = [];
-      //console.log(this.fgextype[0]);
-      if (Object.keys(faultdata).length > 0) {
-        for (let i = 0; i < Object.keys(this.faultData[0]).length; i++) {
-          this.vdisplayedColumns.push(Object.keys(this.faultData[0])[i]);
-          //console.log("function");
-        }
-        this.vdisplayedColumns.push('star');
-        this.gotData = true;
-        this.dataSource = new MatTableDataSource(this.faultData);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-        this.displayedColumns = this.vdisplayedColumns;
-        this.noData = this.dataSource.filteredData.length;
-      }
-      else {
-        this.gotData = true;
-        this.dataSource = null;
-        this.displayedColumns = this.vdisplayedColumns;
-        this.noData = this.dataSource.filteredData.length;
-      }
-     
-        });
-      });
-
-  }
-
-
-  ngOnInit() {
-    this.GetfaultData(this.machine);
-  }
-
-
-
-  applyFilter(filterValue: string) {
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
+    this.machineName = machine;
+    this.FaultTableData = [];
+    this.gotData = false;
+    console.log(machine, "machine");
+    let body = {
+      "Machine": machine,
     }
-  }
+    console.log(JSON.stringify(body));
+    let dataSource = 'MachineFaultMaster/Services/getFaultMastersData'
 
-  DailogAddFault() {
-    //console.log('add details');
-    const dialogRef = this.dialog.open(FaultDialogComponent, {
-      width: '700px',
-      height: '500px',
-      data: {
-        dataKey: {
-          machine: this.machine,
-          title: 'Add Fault',
-          button: 'Add',
-          key:'AddFault'
-        }
-      }
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      //console.log('The dialog was closed', result);
-      if (result !== undefined) {
-        this.postfaultData(result);
-      }
-    });
-  }
-
-  DailogUpdateFault(element) {
-    //console.log("fuction called");
-    //console.log("this is updated: " + JSON.stringify(element));
-    const dialogRef = this.dialog.open(FaultDialogComponent, {
-      width: '700px',
-      height: '500px',
-      data: {
-        dataKey: {
-          machine: this.machine,
-          rowdata: element,
-          title: 'Update Details',
-          button: 'Update',
-          key:'Update'
-        }
-      }
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      //console.log('The dialog was closed', result);
-      if (result !== undefined) {
-        this.postfaultData(result);
-      }
-
-    });
-  }
-
-  postfaultData(result) {
-    console.log(result,"Result....");
-    var T = {};
-    if (result !== null) {
-      T = {
-        ID : result.ID,
-        Machine_Selected: result.Machine_Selected,
-        FaultCode: result.FaultCode,
-        FaultDescription: result.FaultDescription,
-      }
-    }
-    console.log(T);
-    console.log("Data which is being posted : " + JSON.stringify(T));
-
-    let dataSource = 'MachineFaultMaster/Services/addFaultsInDataTableFromFrontEnd'
     this.manualentryservice.GetApiURL().subscribe(apipath => {
       console.log(apipath['api']);
-      this.manualentryservice.GetMachineData(apipath['apithings'], dataSource, JSON.stringify(T)).subscribe(
-        (data: any[]) => {
-          this.GetfaultData(this.machine);
-          this.openSnackBar("Success", "Records Added or Updated Successfully");
-        },
-        (error: HttpErrorResponse) => {
-          //console.log(error);
-          if (error.status >= 400) {
-            this.openSnackBar("Validation", error.error);
+      this.manualentryservice.GetMachineData(apipath['apithings'], dataSource, JSON.stringify(body)).subscribe((faultdata: any) => {
+        console.log("faultdata", faultdata);
+        var c = faultdata.rows;
+        for (let i = 0; i < c.length; i++) {
+          const data = c[i]
+          const allFaultData = {
+            ID: data.ID,
+            FaultCode: data.FaultCode,
+            FaultDescription: data.FaultDescription,
           }
-          else {
-            this.openSnackBar("Error", error.error);
-          }
-        });
+          this.FaultTableData.push(allFaultData);
+        }
+        console.log("FaultTableData", this.FaultTableData);
+        this.jexcelGridView();
+        this.gotData = true;
+      });
     });
+  }
+
+  jexcelGridView() {
+    //jexcel(this.spreadsheet.nativeElement.innerHTML = '');
+    document.getElementById('spreadsheet').innerHTML = '';
+    this.table = jspreadsheet(document.getElementById('spreadsheet'), {
+      data: this.FaultTableData,
+      search: true,
+      pagination: 20,
+      paginationOptions: [20, 40, 60],
+      allowExport: true,
+      tableHeight: '800px',
+      defaultColWidth: 150,
+      contextMenu: true,
+      allowInsertRow: true,
+      allowInsertColumn: false,
+      button: true,
+      rowResize: true,
+      columnDrag: true,
+      colHeaders: ['ID', 'Fault Code', 'Fault Description'],
+      columns: [
+        { type: 'hidden', width: 300, readOnly: false },
+        { type: 'text', width: 150, readOnly: false },
+        { type: 'tex', width: 600, readOnly: false },
+      ],
+      // insertRow:this.Addnewrow,
+
+      onchange: this.onchange,
+      // onafterchange:this.UT,
+      // handler:this.handler,
+      // onselection: this.selected,
+      // updateTable:this.UT
+    });
+    // console.log(jexcel(this.spreadsheet.nativeElement.headers));
+    // jexcel(this.spreadsheet.nativeElement.headers.style.backgroundColor ='red');
+  }
+  onchange(instance, cell, x, y, value, cellName) {
+    console.log("onchange called");
+    console.log(instance, "instance");
+    console.log(cell, "cell");
+    console.log(this.table);
+    console.log(x, "column number");
+    console.log(y, "row number");
+    console.log(value, "value");
+    console.log(cellName, "cellName");
+
+    console.log('New change on cell ' + jspreadsheet.getColumnNameFromId([4, y]) + ' to: ' + value + '');
+    // instance.td
+    // instance.thead.firstElementChild.children[x].style.backgroundColor = "red";
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
+    //Add '${implements OnChanges}' to the class.
+    console.log(this.machineName);
+    this.GetfaultData(this.machineName);
+  }
+
+  postfaultData() {
+    console.log(this.machineName);
+    console.log(this.table.getData());
+
+    let faultDetails;
+    faultDetails = this.table.getData();
+    console.log(faultDetails.length);
+    let ID = faultDetails.map(function (x) {
+      return x[0];
+    });
+    // console.log(date, "date");
+    let FaultCode = faultDetails.map(function (x) {
+      return x[1];
+    });
+    let FaultDescription = faultDetails.map(function (x) {
+      return x[2];
+    });
+
+    if (this.machineName !== null) {
+      for (let i = 0; i <= faultDetails.length - 1; i++) {
+        const T = {
+          "ID": ID[i],
+          "Machine_Selected": this.machineName,
+          "FaultCode": FaultCode[i],
+          "FaultDescription": FaultDescription[i]
+        }
+        console.log(JSON.stringify(T), "FaultPostData");
+        let dataSource = 'MachineFaultMaster/Services/addFaultsInDataTableFromFrontEnd'
+        this.manualentryservice.GetApiURL().subscribe(apipath => {
+          console.log(apipath['api']);
+          this.manualentryservice.GetMachineData(apipath['apithings'], dataSource, JSON.stringify(T)).subscribe(
+            (data: any[]) => {
+              console.log(data);
+              // this.GetfaultData(this.machineName);
+              this.openSnackBar("Success", "Records Added or Updated Successfully");
+            },
+            (error: HttpErrorResponse) => {
+              //console.log(error);
+              if (error.status >= 400) {
+                this.openSnackBar("Validation", error.error);
+              }
+              else {
+                this.openSnackBar("Error", error.error);
+              }
+            });
+        });
+      }
+
+    }
+
+
+
   }
 
   exportTable() {

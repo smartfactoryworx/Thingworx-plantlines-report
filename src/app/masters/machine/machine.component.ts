@@ -95,9 +95,7 @@ export class MachineComponent implements OnInit {
       this.manualentryservice.GetMachineData(apipath['apithings'], dataSource, JSON.stringify(body)).subscribe((machinedata: any) => {
         console.log("machinedata", machinedata);
         var c = machinedata.rows;
-        if(c.length === 0){
-
-        }
+     
         for (let i = 0; i < c.length; i++) {
           const data = c[i]
           //if(data.FirstFault !=0){
@@ -128,10 +126,12 @@ export class MachineComponent implements OnInit {
         this.vdisplayedColumns = [];
         //console.log(this.fgextype[0]);
         if (Object.keys(machinedata).length > 0) {
+          if (this.MachineData.length > 0) {
           for (let i = 0; i < Object.keys(this.MachineData[0]).length; i++) {
             this.vdisplayedColumns.push(Object.keys(this.MachineData[0])[i]);
             //console.log("function");
           }
+       
           this.vdisplayedColumns.push('star');
           this.gotData = true;
           this.dataSource = new MatTableDataSource(this.MachineData);
@@ -139,6 +139,12 @@ export class MachineComponent implements OnInit {
           this.dataSource.sort = this.sort;
           this.displayedColumns = this.vdisplayedColumns;
           this.noData = this.dataSource.filteredData.length;
+        }else{
+          console.log('hide data');
+          this.dataSource = new MatTableDataSource(this.MachineData);
+          this.noData = this.dataSource.filteredData.length;
+          this.errorText = "No Records Found";
+          }
         }
         else {
           this.gotData = true;
@@ -174,7 +180,6 @@ export class MachineComponent implements OnInit {
       height: '500px',
       data: {
         dataKey: {
-          machine: this.machine,
           title: 'Add Machine',
           button: 'Add',
           key: 'AddMachine'
@@ -197,7 +202,6 @@ export class MachineComponent implements OnInit {
       height: '500px',
       data: {
         dataKey: {
-          machine: this.machine,
           rowdata: element,
           title: 'Update Details',
           button: 'Update',

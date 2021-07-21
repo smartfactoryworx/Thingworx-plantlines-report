@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { WebDataRocksPivot } from '../@webdatarocks/webdatarocks.angular4';
 import * as _moment from 'moment';
@@ -56,6 +56,7 @@ export class CycleReportComponent implements OnInit {
 
   //datePipe: any;
   lastUpdated;
+  machineName: any;
   constructor(private httpClient: HttpClient, protected dataentryservice: ManualEntryService, private util: UtilService,
     private datePipe: DatePipe) { }
 
@@ -105,10 +106,15 @@ export class CycleReportComponent implements OnInit {
     this.createCurrentTempForm();
     this.GetMachineData();
     this.BindDefaultData();
-    this.GetCycleData(this.machine.value);
   }
-
+ngOnChanges(changes: SimpleChanges): void {
+  //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
+  //Add '${implements OnChanges}' to the class.
+  console.log(this.machineName);
+  this.GetCycleData(this.machineName);
+}
   GetCycleData(machine) {
+    this.machineName = machine;
     this.errorText = "";
     this.cycleData = [];
     this.gotData = false;

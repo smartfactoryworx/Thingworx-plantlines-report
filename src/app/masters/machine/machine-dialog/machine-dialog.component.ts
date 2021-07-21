@@ -77,7 +77,6 @@ export class MachineDialogComponent implements OnInit {
 
     if (this.data.dataKey.rowdata !== null) {
       if (this.data.dataKey.key === 'AddMachine') {
-        console.log(this.data.dataKey.machine);
         this.title = this.data.dataKey.title;
         this.button = this.data.dataKey.button;
         this.ID.setValue('');

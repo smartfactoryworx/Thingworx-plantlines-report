@@ -32,6 +32,7 @@ import { environment } from '../../environments/environment';
 import { GoogleChartsModule } from 'angular-google-charts';
 // import {TabModule} from 'angular-tabs-component';
 import { WebDataRocksPivot } from '../reports/@webdatarocks/webdatarocks.angular4';
+import { ParentMasterComponent } from '../masters/parent-master/parent-master.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
@@ -42,7 +43,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 };
 
 @NgModule({
-  declarations: [ WebDataRocksPivot,DurationToTime],
+  declarations: [ WebDataRocksPivot,DurationToTime,ParentMasterComponent],
   imports: [
     CommonModule,
     MaterialModules,
@@ -87,11 +88,11 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     PerfectScrollbarModule,
     TranslateModule,
     ToastrModule,
-    WebDataRocksPivot,
-    // TabModule,
+    WebDataRocksPivot,    // TabModule,
     DurationToTime,
-    Ng2GoogleChartsModule
+    Ng2GoogleChartsModule,
     // WidgetComponentModule,
+    ParentMasterComponent
   ],
   providers: [
     { provide: PERFECT_SCROLLBAR_CONFIG, useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG },

@@ -1,1 +1,38 @@
-<p>fault-cause-dialog works!</p>
+<div fxLayout="column" class="form" style="width: 100%;">
+    <h3 style="color: blue;text-align: center;">Add Fault Cause Details</h3>
+    <form [formGroup]="faultcauseform">
+        <div fxLayout="column" style="width:100%;">
+
+
+            <div fxLayout="row" style="width: 100%;padding: 0%;" fxLayoutAlign="space-around start">
+                <mat-form-field fxFlex="5" fxHide>
+                    <input matInput autocomplete="off"  placeholder="ID" formControlName="ID">
+                </mat-form-field>
+                <mat-form-field fxFlex="90">
+                    <input matInput autocomplete="off" placeholder="Cause No"
+                        formControlName="CauseNo">
+                </mat-form-field>
+              
+            </div>
+            <div fxLayout="row" style="width: 100%;padding: 0%;" fxLayoutAlign="space-around start">
+                <mat-form-field fxFlex="90">
+                    <input matInput autocomplete="off" placeholder="Cause Description"
+                        formControlName="CauseDesc">
+                </mat-form-field>
+               
+
+            </div>
+          
+        </div>
+    </form>
+</div>
+
+<div fxLayout="row" style="width: 100%;padding: 1%;" fxLayoutAlign="space-around start">
+    <button mat-raised-button color="primary" [disabled]="faultcauseform.invalid"
+        [mat-dialog-close]="faultcauseform.value">{{button}}
+    </button>
+    <button mat-raised-button color="warn" (click)="close()">Cancel</button>
+</div>
+
+ <pre>{{faultcauseform.value|json}}</pre> 
+
