@@ -49,7 +49,7 @@ export class CycleReportComponent implements OnInit {
   cycleform: FormGroup;
   machine: FormControl;
   public cycleData: cycledata[];
-  errorText;
+  errorText = "";
   pivotTableReportComplete: boolean = false;
   gotData: boolean = true;
   public DataWithStructure = [];
@@ -109,6 +109,7 @@ export class CycleReportComponent implements OnInit {
   }
 
   GetCycleData(machine) {
+    this.errorText = "";
     this.cycleData = [];
     this.gotData = false;
     console.log(machine, "machine");
@@ -125,7 +126,9 @@ export class CycleReportComponent implements OnInit {
       this.dataentryservice.GetMachineData(apipath['apithings'], dataSource, JSON.stringify(body)).subscribe((machinecycledata: any) => {
         this.lastUpdated = this.datePipe.transform(new Date(), 'dd-MMM-yyyy hh:mm:ss')
         console.log("machinecycledata", machinecycledata);
+
         var c = machinecycledata.rows;
+        if(c.length != 0){
         for (let i = 0; i < c.length; i++) {
           const data = c[i]
           //if(data.FirstFault !=0){
@@ -151,11 +154,12 @@ export class CycleReportComponent implements OnInit {
           //}
 
         }
-        //this.cycleData.sort(this.util.dynamicSort('Date'));
         console.log("cycleData", this.cycleData);
-        //this.cycleData.sort((a,b)=>a.From-b.To)
-
-        this.gotData = true;
+        
+      }else{
+        this.errorText = "No Records Found";
+      }
+      this.gotData = true;
       });
     });
   }

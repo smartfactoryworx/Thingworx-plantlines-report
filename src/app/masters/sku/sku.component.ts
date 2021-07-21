@@ -5,8 +5,8 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { ManualEntryService } from '../../../app-manualentry.service';
-import { TableUtilsService } from '../../../table-utils.service';
+import { ManualEntryService } from '../../app-manualentry.service';
+import { TableUtilsService } from '../../table-utils.service';
 import { SkuDialogComponent } from './sku-dialog/sku-dialog.component';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import * as _moment from 'moment';
@@ -34,25 +34,26 @@ interface sku {
   templateUrl: './sku.component.html',
   styleUrls: ['./sku.component.scss']
 })
-export class SkuComponent implements OnInit {
+export class SkuComponent implements OnChanges {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
-  @Input() machine: string
-  constructor(private httpClient: HttpClient, private _snackBar: MatSnackBar, public dialog: MatDialog, private manualentryservice: ManualEntryService, private tableutil: TableUtilsService,private util: UtilService) { }
+  //@Input() machine: string
+  constructor(private httpClient: HttpClient, private _snackBar: MatSnackBar, public dialog: MatDialog, private manualentryservice: ManualEntryService, private tableutil: TableUtilsService, private util: UtilService) { }
 
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action, {
       duration: 2000,
     });
   }
- 
+
   displayedColumns: string[];// = ['position', 'name', 'weight', 'symbol'];
   gotData: boolean = false;
   vdisplayedColumns: string[];
   public skuData: sku[] = [];
   dataSource: MatTableDataSource<sku>;
-  errorText;
+  errorText = "";
   noData;
+  machineName;
 
   displayedColumnsAs = {
     key: { 'DN': 'Key', 'visible': true },
@@ -68,84 +69,99 @@ export class SkuComponent implements OnInit {
     SKU_RatedSpeed: { 'DN': 'SKU RatedSpeed', 'visible': true },
     Standard_ChangeOver_Time: { 'DN': 'Standard ChangeOver Time', 'visible': true },
   }
-  getDisplayedColumns() {                                                                 
+  getDisplayedColumns() {
     return this.displayedColumnsAs;
   }
 
- 
+
 
 
   GetSKUData(machine) {
-      this.skuData = [];
-      this.gotData = false;
-      console.log(machine, "machine");
-      let body = {
-        "Machine": machine,
-      }
-  
-      console.log(JSON.stringify(body));
-  
-      let dataSource = 'LineSKUmaster/Services/getSKUMastersData'
-  
-      this.manualentryservice.GetApiURL().subscribe(apipath => {
-        console.log(apipath['api']);
-        this.manualentryservice.GetMachineData(apipath['apithings'], dataSource, JSON.stringify(body)).subscribe((skudata: any) => {
-          console.log("skudata", skudata);
-          var c = skudata.rows;
-          for (let i = 0; i < c.length; i++) {
-            const data = c[i]
-            //if(data.FirstFault !=0){
-            const allSKUData = {
-              key: data.key,
-              source: data.source,
-              sourceType: data.sourceType,
-              timestamp: moment(data.timestamp).format("DD MMM YYYY hh:mm a"),
-              CasesPerPallet: data.CasesPerPallet,
-              ID: data.ID,
-              Machine_Selected: data.Machine_Selected,
-              Product_Details: data.Product_Details,
-              SKU_Code: data.SKU_Code,
-              SKU_Details: data.SKU_Details,
-              SKU_RatedSpeed: data.SKU_RatedSpeed,
-              Standard_ChangeOver_Time: data.Standard_ChangeOver_Time,
-            }
-            this.skuData.push(allSKUData);
-            //}
-  
+  this.machineName = machine;
+    this.errorText = "";
+    this.skuData = [];
+    this.gotData = false;
+    console.log(machine, "machine");
+    let body = {
+      "Machine": machine,
+    }
+
+    console.log(JSON.stringify(body));
+
+    let dataSource = 'LineSKUmaster/Services/getSKUMastersData'
+
+    this.manualentryservice.GetApiURL().subscribe(apipath => {
+      console.log(apipath['api']);
+      this.manualentryservice.GetMachineData(apipath['apithings'], dataSource, JSON.stringify(body)).subscribe((skudata: any) => {
+        console.log("skudata", skudata);
+        var c = skudata.rows;
+        //if(c.length != 0){
+        for (let i = 0; i < c.length; i++) {
+          const data = c[i]
+
+          const allSKUData = {
+            key: data.key,
+            source: data.source,
+            sourceType: data.sourceType,
+            timestamp: moment(data.timestamp).format("DD MMM YYYY hh:mm a"),
+            CasesPerPallet: data.CasesPerPallet,
+            ID: data.ID,
+            Machine_Selected: data.Machine_Selected,
+            Product_Details: data.Product_Details,
+            SKU_Code: data.SKU_Code,
+            SKU_Details: data.SKU_Details,
+            SKU_RatedSpeed: data.SKU_RatedSpeed,
+            Standard_ChangeOver_Time: data.Standard_ChangeOver_Time,
           }
-          console.log("skuData", this.skuData);
-      this.vdisplayedColumns = [];
-      //console.log(this.fgextype[0]);
-      if (Object.keys(skudata).length > 0) {
-        for (let i = 0; i < Object.keys(this.skuData[0]).length; i++) {
-          this.vdisplayedColumns.push(Object.keys(this.skuData[0])[i]);
-          //console.log("function");
+          this.skuData.push(allSKUData);
         }
-        this.vdisplayedColumns.push('star');
-        this.gotData = true;
-        this.dataSource = new MatTableDataSource(this.skuData);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-        this.displayedColumns = this.vdisplayedColumns;
-        this.noData = this.dataSource.filteredData.length;
-      }
-      else {
-        this.gotData = true;
-        this.dataSource = null;
-        this.displayedColumns = this.vdisplayedColumns;
-        this.noData = this.dataSource.filteredData.length;
-      }
-     
-        });
+        console.log("skuData", this.skuData);
+        this.vdisplayedColumns = [];
+        //console.log(this.fgextype[0]);
+        if (Object.keys(skudata).length > 0) {
+          if (this.skuData.length > 0) {
+            for (let i = 0; i < Object.keys(this.skuData[0]).length; i++) {
+              this.vdisplayedColumns.push(Object.keys(this.skuData[0])[i]);
+              //console.log("function");
+            }
+            this.vdisplayedColumns.push('star');
+            this.gotData = true;
+            this.dataSource = new MatTableDataSource(this.skuData);
+            this.dataSource.paginator = this.paginator;
+            this.dataSource.sort = this.sort;
+            this.displayedColumns = this.vdisplayedColumns;
+            this.noData = this.dataSource.filteredData.length;
+          }
+          else {
+            console.log('hide data');
+            this.dataSource = new MatTableDataSource(this.skuData);
+            this.noData = this.dataSource.filteredData.length;
+            this.errorText = "No Records Found";
+          }
+        }
+        else {
+          this.gotData = true;
+          this.dataSource = null;
+          this.displayedColumns = this.vdisplayedColumns;
+          this.noData = this.dataSource.filteredData.length;
+        }
+
+
+
       });
+    });
 
   }
 
 
-  ngOnInit() {
-    this.GetSKUData(this.machine);
-  }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
+    //Add '${implements OnChanges}' to the class.
+    console.log(this.machineName);
+    this.GetSKUData(this.machineName);
+
+  }
 
 
   applyFilter(filterValue: string) {
@@ -162,10 +178,10 @@ export class SkuComponent implements OnInit {
       height: '500px',
       data: {
         dataKey: {
-          machine: this.machine,
+          machine:  this.machineName,
           title: 'Add SKU',
           button: 'Add',
-          key:'AddSKU'
+          key: 'AddSKU'
         }
       }
     });
@@ -185,11 +201,11 @@ export class SkuComponent implements OnInit {
       height: '500px',
       data: {
         dataKey: {
-          machine: this.machine,
+          machine:  this.machineName,
           rowdata: element,
           title: 'Update Details',
           button: 'Update',
-          key:'Update'
+          key: 'Update'
         }
       }
     });
@@ -203,11 +219,11 @@ export class SkuComponent implements OnInit {
   }
 
   postSKUData(result) {
-    console.log(result,"Result....");
+    console.log(result, "Result....");
     var T = {};
     if (result !== null) {
       T = {
-        ID : result.ID,
+        ID: result.ID,
         Machine_Selected: result.Machine_Selected,
         SKU_Code: result.SKU_Code,
         SKU_Details: result.SKU_Details,
@@ -221,7 +237,7 @@ export class SkuComponent implements OnInit {
       console.log(apipath['api']);
       this.manualentryservice.GetMachineData(apipath['apithings'], dataSource, JSON.stringify(T)).subscribe(
         (data: any[]) => {
-          this.GetSKUData(this.machine);
+          this.GetSKUData( this.machineName);
           this.openSnackBar("Success", "Records Added or Updated Successfully");
         },
         (error: HttpErrorResponse) => {

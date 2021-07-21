@@ -3,27 +3,27 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ManualEntryService } from '../../../../app-manualentry.service';
+import { ManualEntryService } from '../../../app-manualentry.service';
 
 @Component({
-  selector: 'app-fault-dialog',
-  templateUrl: './fault-dialog.component.html',
-  styleUrls: ['./fault-dialog.component.scss']
+  selector: 'app-sku-dialog',
+  templateUrl: './sku-dialog.component.html',
+  styleUrls: ['./sku-dialog.component.scss']
 })
-export class FaultDialogComponent implements OnInit {
+export class SkuDialogComponent implements OnInit {
   
-  faultform: FormGroup;
+  skuform: FormGroup;
   ID : FormControl;
   Machine_Selected: FormControl;
-  FaultCode: FormControl;
-  FaultDescription: FormControl;
+  SKU_Code: FormControl;
+  SKU_Details: FormControl;
   title;
   button;
   machine;
 
 
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any, public dialogRef: MatDialogRef<FaultDialogComponent>,
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any, public dialogRef: MatDialogRef<SkuDialogComponent>,
     private httpClient: HttpClient, private _snackBar: MatSnackBar, protected dataentryservice: ManualEntryService) { }
 
 
@@ -33,28 +33,28 @@ export class FaultDialogComponent implements OnInit {
     });
   }
 
-  createfault() {
+  createsku() {
   this.ID = new FormControl('');
   this.Machine_Selected = new FormControl('', Validators.required);
-  this.FaultCode = new FormControl('', Validators.required);
-  this.FaultDescription = new FormControl('', Validators.required);
+  this.SKU_Code = new FormControl('', Validators.required);
+  this.SKU_Details = new FormControl('', Validators.required);
   }
 
-  createfaultform() {
-    this.faultform = new FormGroup({
+  createskuform() {
+    this.skuform = new FormGroup({
       ID: this.ID,
       Machine_Selected: this.Machine_Selected,
-      FaultCode: this.FaultCode,
-      FaultDescription: this.FaultDescription,
+      SKU_Code: this.SKU_Code,
+      SKU_Details: this.SKU_Details,
     });
   }
   ngOnInit() {
     console.log(this.data);
-    this.createfault();
-    this.createfaultform();
+    this.createsku();
+    this.createskuform();
 
     if (this.data.dataKey.rowdata !== null) {
-      if (this.data.dataKey.key === 'AddFault') {
+      if (this.data.dataKey.key === 'AddSKU') {
         console.log(this.data.dataKey.machine);
         this.title = this.data.dataKey.title;
         this.button = this.data.dataKey.button;
@@ -67,11 +67,11 @@ export class FaultDialogComponent implements OnInit {
         this.title = this.data.dataKey.title;
         this.button = this.data.dataKey.button;
         const c = this.data.dataKey.rowdata;
-        this.faultform.patchValue({
+        this.skuform.patchValue({
           ID:c.ID,
           Machine_Selected: c.Machine_Selected,
-          FaultCode: c.FaultCode,
-          FaultDescription: c.FaultDescription,
+          SKU_Code: c.SKU_Code,
+          SKU_Details: c.SKU_Details,
         });
       }
 
@@ -85,3 +85,4 @@ export class FaultDialogComponent implements OnInit {
 
 
 }
+

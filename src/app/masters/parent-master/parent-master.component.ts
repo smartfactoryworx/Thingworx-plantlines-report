@@ -5,6 +5,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import * as _moment from 'moment';
 import { default as _rollupMoment, Moment } from 'moment';
 import { UtilService } from 'src/app/util.service';
+import { Output, EventEmitter } from '@angular/core';
 const moment = _rollupMoment || _moment;
 
 
@@ -14,21 +15,15 @@ interface machinelist {
   createdDate: Date;
 }
 @Component({
-  selector: 'app-sku-fault-master',
-  templateUrl: './sku-fault-master.component.html',
-  styleUrls: ['./sku-fault-master.component.scss']
+  selector: 'app-parent-master',
+  templateUrl: './parent-master.component.html',
+  styleUrls: ['./parent-master.component.scss']
 })
-export class SkuFaultMasterComponent implements OnInit {
+export class ParentMasterComponent implements OnInit {
 
-  constructor(private httpClient: HttpClient, private manualentryservice: ManualEntryService,private util: UtilService) { }
+  constructor(private httpClient: HttpClient, private manualentryservice: ManualEntryService, private util: UtilService) { }
 
-  ngOnInit(): void {
-    this.createmaster();
-    this.createmasterForm();
-    this.GetMachineData();
-    this.BindDefaultData();
-  }
-
+  @Output() machineOut = new EventEmitter<string>();
   masterform: FormGroup;
   machine: FormControl;
   public MachineList: machinelist[] = [];
@@ -46,7 +41,10 @@ export class SkuFaultMasterComponent implements OnInit {
   BindDefaultData() {
     this.machine.setValue('RU21005a');
   }
-
+  GetMachineName(machine) {
+    console.log(machine);
+    this.machineOut.emit(machine);
+  }
   GetMachineData() {
     this.MachineList = [];
     this.manualentryservice.GetApiURL().subscribe(apipath => {
@@ -71,8 +69,14 @@ export class SkuFaultMasterComponent implements OnInit {
         console.log(this.filteredMachine);
         console.log(this.MachineList, "MachineData");
       });
-
-
     });
+  }
+
+  ngOnInit(): void {
+    this.createmaster();
+    this.createmasterForm();
+    this.GetMachineData();
+    this.BindDefaultData();
+    this.machineOut.emit(this.machine.value);
   }
 }

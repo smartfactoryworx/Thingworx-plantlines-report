@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SkuFaultMasterComponent } from './sku-fault-master.component';
+import { ParentMasterComponent } from './parent-master.component';
 
-describe('SkuFaultMasterComponent', () => {
-  let component: SkuFaultMasterComponent;
-  let fixture: ComponentFixture<SkuFaultMasterComponent>;
+describe('ParentMasterComponent', () => {
+  let component: ParentMasterComponent;
+  let fixture: ComponentFixture<ParentMasterComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SkuFaultMasterComponent ]
+      declarations: [ ParentMasterComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SkuFaultMasterComponent);
+    fixture = TestBed.createComponent(ParentMasterComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

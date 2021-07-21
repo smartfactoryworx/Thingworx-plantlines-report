@@ -95,6 +95,9 @@ export class MachineComponent implements OnInit {
       this.manualentryservice.GetMachineData(apipath['apithings'], dataSource, JSON.stringify(body)).subscribe((machinedata: any) => {
         console.log("machinedata", machinedata);
         var c = machinedata.rows;
+        if(c.length === 0){
+
+        }
         for (let i = 0; i < c.length; i++) {
           const data = c[i]
           //if(data.FirstFault !=0){
@@ -153,6 +156,7 @@ export class MachineComponent implements OnInit {
   ngOnInit() {
     this.GetAllMachineData();
   }
+
 
 
 

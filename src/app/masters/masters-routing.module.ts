@@ -1,8 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { FaultComponent } from './fault/fault.component';
 import { MachineComponent } from './machine/machine.component';
 import { MastersComponent } from './masters.component';
-import { SkuFaultMasterComponent } from './sku-fault-master/sku-fault-master.component';
+import { ParentMasterComponent } from './parent-master/parent-master.component';
+import { SkuComponent } from './sku/sku.component';
 
 
 const routes: Routes = [
@@ -12,12 +14,17 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'sku-fault',
+        redirectTo: 'sku',
         pathMatch: 'full'
       },
       {
-        path: 'sku-fault',
-        component: SkuFaultMasterComponent ,
+        path: 'sku',
+        component: SkuComponent ,
+        pathMatch: 'full'
+      },
+      {
+        path: 'fault',
+        component: FaultComponent ,
         pathMatch: 'full'
       },
       {
