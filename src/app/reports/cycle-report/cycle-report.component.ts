@@ -128,10 +128,8 @@ export class CycleReportComponent implements OnInit {
         console.log("machinecycledata", machinecycledata);
 
         var c = machinecycledata.rows;
-        if(c.length != 0){
         for (let i = 0; i < c.length; i++) {
           const data = c[i]
-          //if(data.FirstFault !=0){
           const allCycleData = {
             CycleRun: data.CycleRun,
             Duration: data.Duration,
@@ -148,18 +146,18 @@ export class CycleReportComponent implements OnInit {
             SKUDesc: data.SKUDesc,
             To: moment(data.To).format("DD MMM YYYY hh:mm a"),
             Date: moment(data.From).format("DD MMM YYYY"),
-
           }
           this.cycleData.push(allCycleData);
-          //}
-
         }
         console.log("cycleData", this.cycleData);
-        
-      }else{
-        this.errorText = "No Records Found";
-      }
-      this.gotData = true;
+        if(this.cycleData.length === 0){
+          this.gotData = true;
+          this.errorText = " No Record Found";
+        }else{
+          this.gotData = true;
+          this.errorText = "";
+        }
+      
       });
     });
   }
