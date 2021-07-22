@@ -13,7 +13,7 @@ import * as _moment from 'moment';
 import { default as _rollupMoment, Moment } from 'moment';
 import { UtilService } from 'src/app/util.service';
 import { DatePipe } from '@angular/common';
-import { FaultDialogComponent } from '../fault/fault-dialog/fault-dialog.component';
+
 import { FaultCauseDialogComponent } from './fault-cause-dialog/fault-cause-dialog.component';
 const moment = _rollupMoment || _moment;
 

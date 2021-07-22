@@ -12,7 +12,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import * as _moment from 'moment';
 import { default as _rollupMoment, Moment } from 'moment';
 import { UtilService } from 'src/app/util.service';
-import { FaultDialogComponent } from './fault-dialog/fault-dialog.component';
+
 const moment = _rollupMoment || _moment;
 
 interface faultTableData {
@@ -83,6 +83,12 @@ export class FaultComponent implements OnChanges {
           }
           this.FaultTableData.push(allFaultData);
         }
+        const BlankData = {
+          ID: null,
+          FaultCode: null,
+          FaultDescription: null,
+        }
+        this.FaultTableData.push(BlankData);
         console.log("FaultTableData", this.FaultTableData);
         this.jexcelGridView();
         this.gotData = true;
@@ -96,8 +102,8 @@ export class FaultComponent implements OnChanges {
     this.table = jspreadsheet(document.getElementById('spreadsheet'), {
       data: this.FaultTableData,
       search: true,
-      pagination: 20,
-      paginationOptions: [20, 40, 60],
+      // pagination: 20,
+      // paginationOptions: [20, 40, 60],
       allowExport: true,
       tableHeight: '800px',
       defaultColWidth: 150,
@@ -109,8 +115,8 @@ export class FaultComponent implements OnChanges {
       colHeaders: ['ID', 'Fault Code', 'Fault Description'],
       columns: [
         { type: 'hidden', width: 300, readOnly: false },
-        { type: 'text', width: 150, readOnly: false },
-        { type: 'tex', width: 600, readOnly: false },
+        { type: 'numeric', width: 150, readOnly: false, mask: '#,00', decimal: '' },
+        { type: 'text', width: 600, readOnly: false },
       ],
       // insertRow:this.Addnewrow,
 
@@ -138,6 +144,9 @@ export class FaultComponent implements OnChanges {
     // instance.thead.firstElementChild.children[x].style.backgroundColor = "red";
   }
 
+  // insertRow() {
+  //   this.table.insertRow(1, 5, true);
+  // }
   ngOnChanges(changes: SimpleChanges): void {
     //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
     //Add '${implements OnChanges}' to the class.
@@ -165,34 +174,37 @@ export class FaultComponent implements OnChanges {
 
     if (this.machineName !== null) {
       for (let i = 0; i <= faultDetails.length - 1; i++) {
-        const T = {
-          "ID": ID[i],
-          "Machine_Selected": this.machineName,
-          "FaultCode": FaultCode[i],
-          "FaultDescription": FaultDescription[i]
+        if ((FaultCode[i] != "" || FaultCode[i] != null) && (FaultDescription[i] != "" || FaultDescription[i] != null)) {
+          const T = {
+            "ID": ID[i],
+            "Machine_Selected": this.machineName,
+            "FaultCode": FaultCode[i],
+            "FaultDescription": FaultDescription[i]
+          }
+          console.log(JSON.stringify(T), "FaultPostData");
+          let dataSource = 'MachineFaultMaster/Services/addFaultsInDataTableFromFrontEnd'
+          this.manualentryservice.GetApiURL().subscribe(apipath => {
+            console.log(apipath['api']);
+            this.manualentryservice.GetMachineData(apipath['apithings'], dataSource, JSON.stringify(T)).subscribe(
+              (data: any[]) => {
+                console.log(data);
+                //this.GetfaultData(this.machineName);
+                //this.openSnackBar("Success", "Records Added or Updated Successfully");
+              },
+              (error: HttpErrorResponse) => {
+                //console.log(error);
+                if (error.status >= 400) {
+                  //this.openSnackBar("Validation", error.error);
+                }
+                else {
+                  //this.openSnackBar("Error", error.error);
+                }
+              });
+          });
         }
-        console.log(JSON.stringify(T), "FaultPostData");
-        let dataSource = 'MachineFaultMaster/Services/addFaultsInDataTableFromFrontEnd'
-        this.manualentryservice.GetApiURL().subscribe(apipath => {
-          console.log(apipath['api']);
-          this.manualentryservice.GetMachineData(apipath['apithings'], dataSource, JSON.stringify(T)).subscribe(
-            (data: any[]) => {
-              console.log(data);
-              //this.GetfaultData(this.machineName);
-              this.openSnackBar("Success", "Records Added or Updated Successfully");
-            },
-            (error: HttpErrorResponse) => {
-              //console.log(error);
-              if (error.status >= 400) {
-                this.openSnackBar("Validation", error.error);
-              }
-              else {
-                this.openSnackBar("Error", error.error);
-              }
-            });
-        });
+
       }
-     
+console.log('YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY')
     }
 
 

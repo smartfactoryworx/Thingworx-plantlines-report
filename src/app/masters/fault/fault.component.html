@@ -1,8 +1,11 @@
 <app-parent-master  (machineOut)='GetfaultData($event)'></app-parent-master>
 <div fxLayout="column" style="width: 100%;align-items: center;">
     <div fxFlex="100" id="spreadsheet"></div>
-    <div *ngIf="gotData" style="text-align: center;" fxFlex="15">
-      <button mat-raised-button color="primary"  (click)="postfaultData()">
+    <div *ngIf="gotData" style="text-align: center;" fxLayoutAlign="space-between center" fxFlex="100">
+      <!-- <button mat-raised-button color="primary" fxFlex="40" style="margin-right: 2%;"  (click)="insertRow()">
+        Insert Row
+      </button> -->
+      <button mat-raised-button color="primary"  fxFlex="20" (click)="postfaultData()">
         Submit
       </button>
     </div>

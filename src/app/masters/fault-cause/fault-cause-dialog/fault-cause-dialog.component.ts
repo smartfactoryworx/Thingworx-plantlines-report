@@ -6,7 +6,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ManualEntryService } from '../../../app-manualentry.service';
 import * as _moment from 'moment';
 import { default as _rollupMoment, Moment } from 'moment';
-import { FaultDialogComponent } from '../../fault/fault-dialog/fault-dialog.component';
+
 
 const moment = _rollupMoment || _moment;
 @Component({
@@ -26,7 +26,7 @@ export class FaultCauseDialogComponent implements OnInit {
 
 
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any, public dialogRef: MatDialogRef<FaultDialogComponent>,
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any, public dialogRef: MatDialogRef<FaultCauseDialogComponent>,
     private httpClient: HttpClient, private _snackBar: MatSnackBar, protected dataentryservice: ManualEntryService) { }
 
 
