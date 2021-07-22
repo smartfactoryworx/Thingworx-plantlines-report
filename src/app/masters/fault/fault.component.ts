@@ -101,7 +101,6 @@ export class FaultComponent implements OnChanges {
       allowExport: true,
       tableHeight: '800px',
       defaultColWidth: 150,
-      contextMenu: true,
       allowInsertRow: true,
       allowInsertColumn: false,
       button: true,
@@ -179,7 +178,7 @@ export class FaultComponent implements OnChanges {
           this.manualentryservice.GetMachineData(apipath['apithings'], dataSource, JSON.stringify(T)).subscribe(
             (data: any[]) => {
               console.log(data);
-              // this.GetfaultData(this.machineName);
+              //this.GetfaultData(this.machineName);
               this.openSnackBar("Success", "Records Added or Updated Successfully");
             },
             (error: HttpErrorResponse) => {
@@ -193,7 +192,7 @@ export class FaultComponent implements OnChanges {
             });
         });
       }
-
+     
     }
 
 

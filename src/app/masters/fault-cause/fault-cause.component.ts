@@ -19,8 +19,8 @@ const moment = _rollupMoment || _moment;
 
 interface faultCauseData {
   ID?: string;
-  CauseNo?: number;
-  CauseDesc?: string;
+  causeNo?: number;
+  causeDescription?: string;
 }
 @Component({
   selector: 'app-fault-cause',
@@ -48,8 +48,8 @@ export class FaultCauseComponent implements OnInit {
   noData;
 
   displayedColumnsAs = {
-    CauseNo: { 'DN': 'Cause Number', 'visible': false },
-    CauseDesc: { 'DN': 'Cause Description', 'visible': false },
+    causeNo: { 'DN': 'Cause Number', 'visible': false },
+    causeDescription: { 'DN': 'Cause Description', 'visible': false },
     ID: { 'DN': 'ID', 'visible': true },
 
   }
@@ -77,8 +77,8 @@ export class FaultCauseComponent implements OnInit {
           const data = c[i]
           //if(data.FirstFault !=0){
           const allFaultCauseData = {
-            CauseNo: data && data.CauseNo,
-            CauseDesc: data && data.CauseDesc,
+            causeNo: data && data.causeNo,
+            causeDescription: data && data.causeDescription,
             ID: data && data.ID,
           }
           this.FaultCauseData.push(allFaultCauseData);
@@ -187,9 +187,9 @@ export class FaultCauseComponent implements OnInit {
     if (result !== null) {
      
       T = {
-       // ID: result.ID,
-        CauseNo: 2,
-        CauseDesc: "test34",
+        ID: result.ID,
+        causeNo: result.causeNo,
+        causeDescription:  result.causeDescription,
       }
     }
     console.log(T);
