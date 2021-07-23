@@ -1,7 +1,7 @@
 
 <app-parent-master  (machineOut)='GetSKUData($event)'></app-parent-master>
 
-<div [hidden]="!gotData"  fxLayout="column" fxLayoutAlign="center none" style="width: 95%;margin-left: 1%;margin-right: 1%;">
+<div [hidden]="!gotData"  fxLayout="column" fxLayoutAlign="center none" style="width: 98%;margin-left: 1%;margin-right: 1%;">
     <div fxLayout="row" style="width: 100%;padding: 0%;" fxLayoutAlign="space-between center" fxFlex="100">
         <mat-form-field fxFlex="60" >
             <input autocomplete="off" class="placeholder" matInput (keyup)="applyFilter($event.target.value)"

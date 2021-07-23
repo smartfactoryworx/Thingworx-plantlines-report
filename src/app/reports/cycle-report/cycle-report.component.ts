@@ -130,7 +130,7 @@ ngOnChanges(changes: SimpleChanges): void {
     this.dataentryservice.GetApiURL().subscribe(apipath => {
       console.log(apipath['api']);
       this.dataentryservice.GetMachineData(apipath['apithings'], dataSource, JSON.stringify(body)).subscribe((machinecycledata: any) => {
-        this.lastUpdated = this.datePipe.transform(new Date(), 'dd-MMM-yyyy hh:mm:ss')
+      
         console.log("machinecycledata", machinecycledata);
 
         var c = machinecycledata.rows;

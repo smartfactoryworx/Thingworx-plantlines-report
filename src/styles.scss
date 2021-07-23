@@ -3,4 +3,4 @@
 @import '~material-icons/iconfont/material-icons.css';
 @import "~webdatarocks/webdatarocks.min.css";
 
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,body{ margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; min-height: 100vh; height: auto;}

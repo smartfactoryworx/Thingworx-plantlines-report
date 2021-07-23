@@ -1,0 +1,12 @@
+<mat-toolbar color="primary">
+    <button mat-icon-button  (click)="sidenavID.sidenav.toggle()" style=" margin-right: 1%;"><mat-icon>menu</mat-icon></button>
+    <div style="width: 100%;" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="2">
+        <div><img class="resizeimg" src="../../../configs/images/smart-logo.png" width="165px" height="71px" alt="smartfactoryworx"
+                style="object-fit: none;background-color: white; margin-top: 5%;" /></div>
+        <div>CAPL Noida Plant</div>
+        <div>
+            <h5>{{lastUpdated}}</h5>
+        </div>
+    </div>
+</mat-toolbar>
+<app-sidenav  #sidenavID ></app-sidenav>

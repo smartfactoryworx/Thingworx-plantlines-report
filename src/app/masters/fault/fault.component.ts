@@ -19,6 +19,7 @@ interface faultTableData {
   ID?: string;
   FaultCode?: number;
   FaultDescription?: string;
+  Machine_Selected?:string;
 }
 
 interface fault {
@@ -80,6 +81,7 @@ export class FaultComponent implements OnChanges {
             ID: data.ID,
             FaultCode: data.FaultCode,
             FaultDescription: data.FaultDescription,
+            Machine_Selected:data.Machine_Selected
           }
           this.FaultTableData.push(allFaultData);
         }
@@ -87,6 +89,7 @@ export class FaultComponent implements OnChanges {
           ID: null,
           FaultCode: null,
           FaultDescription: null,
+          Machine_Selected:null,
         }
         this.FaultTableData.push(BlankData);
         console.log("FaultTableData", this.FaultTableData);
@@ -112,11 +115,12 @@ export class FaultComponent implements OnChanges {
       button: true,
       rowResize: true,
       columnDrag: true,
-      colHeaders: ['ID', 'Fault Code', 'Fault Description'],
+      colHeaders: ['ID', 'Fault Code', 'Fault Description','Machine_Selected'],
       columns: [
-        { type: 'hidden', width: 300, readOnly: false },
+        { type: 'hidden', width: 300, readOnly: false  },
         { type: 'numeric', width: 150, readOnly: false, mask: '#,00', decimal: '' },
         { type: 'text', width: 600, readOnly: false },
+        { type: 'hidden', width: 300, readOnly: false }
       ],
       // insertRow:this.Addnewrow,
 
@@ -160,55 +164,55 @@ export class FaultComponent implements OnChanges {
 
     let faultDetails;
     faultDetails = this.table.getData();
-    console.log(faultDetails.length);
     let ID = faultDetails.map(function (x) {
       return x[0];
-    });
+    }).filter(item => item);
     // console.log(date, "date");
     let FaultCode = faultDetails.map(function (x) {
       return x[1];
-    });
+    }).filter(item => item);
     let FaultDescription = faultDetails.map(function (x) {
       return x[2];
-    });
+    }).filter(item => item);
+    let Machine_Selected = faultDetails.map(function (x) {
+      return x[3];
+    }).filter(item => item);
 
     if (this.machineName !== null) {
       for (let i = 0; i <= faultDetails.length - 1; i++) {
-        if ((FaultCode[i] != "" || FaultCode[i] != null) && (FaultDescription[i] != "" || FaultDescription[i] != null)) {
+        
           const T = {
             "ID": ID[i],
-            "Machine_Selected": this.machineName,
+            "Machine_Selected": Machine_Selected[i],
             "FaultCode": FaultCode[i],
             "FaultDescription": FaultDescription[i]
           }
           console.log(JSON.stringify(T), "FaultPostData");
-          let dataSource = 'MachineFaultMaster/Services/addFaultsInDataTableFromFrontEnd'
-          this.manualentryservice.GetApiURL().subscribe(apipath => {
-            console.log(apipath['api']);
-            this.manualentryservice.GetMachineData(apipath['apithings'], dataSource, JSON.stringify(T)).subscribe(
-              (data: any[]) => {
-                console.log(data);
-                //this.GetfaultData(this.machineName);
-                //this.openSnackBar("Success", "Records Added or Updated Successfully");
-              },
-              (error: HttpErrorResponse) => {
-                //console.log(error);
-                if (error.status >= 400) {
-                  //this.openSnackBar("Validation", error.error);
-                }
-                else {
-                  //this.openSnackBar("Error", error.error);
-                }
-              });
-          });
-        }
-
+          if(JSON.stringify(T) !== '{}'){
+            let dataSource = 'MachineFaultMaster/Services/addFaultsInDataTableFromFrontEnd'
+            this.manualentryservice.GetApiURL().subscribe(apipath => {
+              console.log(apipath['api']);
+              this.manualentryservice.GetMachineData(apipath['apithings'], dataSource, JSON.stringify(T)).subscribe(
+                (data: any[]) => {
+                  //console.log(data);
+                  //this.GetfaultData(this.machineName);
+                  this.openSnackBar("Success", "Records Added or Updated Successfully");
+                },
+                (error: HttpErrorResponse) => {
+                  //console.log(error);
+                  if (error.status >= 400) {
+                    this.openSnackBar("Validation", error.error);
+                  }
+                  else {
+                    this.openSnackBar("Error", error.error);
+                  }
+                });
+            });
+          }
+       
       }
-console.log('YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY')
+//console.log('YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY')
     }
-
-
-
   }
 
   exportTable() {
