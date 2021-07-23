@@ -1,5 +1,7 @@
 
-<app-parent-master  (machineOut)='GetSKUData($event)'></app-parent-master>
+<div fxLayout="column" style="width: 100%;min-height: 92.47vh;">
+    <app-parent-master  (machineOut)='GetSKUData($event)'></app-parent-master>
+
 
 <div [hidden]="!gotData"  fxLayout="column" fxLayoutAlign="center none" style="width: 98%;margin-left: 1%;margin-right: 1%;">
     <div fxLayout="row" style="width: 100%;padding: 0%;" fxLayoutAlign="space-between center" fxFlex="100">
@@ -45,4 +47,5 @@
     <div>
         <mat-paginator [pageSizeOptions]="[10, 20, 40]"></mat-paginator>
     </div>
+</div>
 </div>

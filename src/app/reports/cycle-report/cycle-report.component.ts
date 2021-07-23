@@ -1,4 +1,4 @@
-import { Component, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { WebDataRocksPivot } from '../@webdatarocks/webdatarocks.angular4';
 import * as _moment from 'moment';
@@ -9,11 +9,7 @@ import { UtilService } from 'src/app/util.service';
 import { DatePipe } from '@angular/common';
 const moment = _rollupMoment || _moment;
 
-interface machinelist {
-  machineId: string;
-  machineName: string;
-  createdDate: Date;
-}
+
 
 interface cycledata {
   CycleRun: number;
@@ -38,75 +34,25 @@ interface cycledata {
   templateUrl: './cycle-report.component.html',
   styleUrls: ['./cycle-report.component.scss']
 })
-export class CycleReportComponent implements OnInit {
+export class CycleReportComponent implements OnChanges {
 
   @ViewChild("pivot1") child: WebDataRocksPivot;
   @ViewChild("pivot2") child2: WebDataRocksPivot;
   @ViewChild("pivot3") child3: WebDataRocksPivot;
   @ViewChild("pivot4") child4: WebDataRocksPivot;
-  public MachineList: machinelist[] = [];
-  public filteredMachine = this.MachineList.slice();
-  cycleform: FormGroup;
-  machine: FormControl;
+
+
   public cycleData: cycledata[];
   errorText = "";
   pivotTableReportComplete: boolean = false;
   gotData: boolean = true;
   public DataWithStructure = [];
 
-  //datePipe: any;
-  lastUpdated;
+
   machineName: any;
   constructor(private httpClient: HttpClient, protected dataentryservice: ManualEntryService, private util: UtilService,
     private datePipe: DatePipe) { }
 
-  createCurrentTemp() {
-    this.machine = new FormControl('', Validators.required);
-  }
-  createCurrentTempForm() {
-    this.cycleform = new FormGroup({
-      machine: this.machine,
-    });
-  }
-
-  BindDefaultData() {
-    this.machine.setValue('RU21005a');
-  }
-
-  GetMachineData() {
-    this.MachineList = [];
-    this.httpClient.get('configs/api/api_server.json').subscribe(apipath => {
-      console.log(apipath['api']);
-      let body = {};
-      let dataSource = 'MachineDetailsMaster/Services/GetDataTableEntries'
-      this.dataentryservice.GetMachineData(apipath['apithings'], dataSource, JSON.stringify(body)).subscribe((machineList: any) => {
-        // console.log(machineList['rows'], "machineList");
-        var c = machineList['rows'];
-        for (let i = 0; i < c.length; i++) {
-          const a = c[i];
-          const data = {
-            machineId: a.Machine_MDS,
-            machineName: a.Machine_Name,
-            createdDate: new Date(moment(a.timestamp).format("DD MMM YYYY hh:mm a")),
-            machineDetails: a.Machine_MDS + ' - ' + a.Machine_Name + ' - ' + a.Customer_Name + '(' + moment(new Date(a.timestamp)).format("DD-MM-YYYY") + ')'
-          }
-          this.MachineList.push(data);
-        }
-        this.MachineList.sort(this.util.dynamicSort('createdDate'));
-        this.filteredMachine = this.MachineList.slice();
-        console.log(this.filteredMachine);
-        console.log(this.MachineList, "MachineData");
-      });
-
-
-    });
-  }
-  ngOnInit(): void {
-    this.createCurrentTemp();
-    this.createCurrentTempForm();
-    this.GetMachineData();
-    this.BindDefaultData();
-  }
 ngOnChanges(changes: SimpleChanges): void {
   //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
   //Add '${implements OnChanges}' to the class.

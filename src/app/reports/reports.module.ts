@@ -5,16 +5,17 @@ import { ReportsComponent } from './reports.component';
 import { SharedModule } from '../shared/shared.module';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { CycleReportModule } from './cycle-report/cycle-report.module';
-import { DailyCycleEntryComponent } from './daily-cycle-entry/daily-cycle-entry.component';
+import { DailyCycleEntryModule } from './daily-cycle-entry/daily-cycle-entry.module';
 
 
 @NgModule({
-  declarations: [ReportsComponent, DailyCycleEntryComponent],
+  declarations: [ReportsComponent],
   imports: [
     CommonModule,
     ReportsRoutingModule,
     SharedModule,
-    CycleReportModule
+    CycleReportModule,
+    DailyCycleEntryModule
   ],
   providers:[
     { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },

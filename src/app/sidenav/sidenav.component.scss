@@ -3,6 +3,7 @@
 }
 .example-sidenav {
      user-select: none;
+     width: 240px;
   }
   .full-width {
     width: 100%;
@@ -23,4 +24,9 @@
   }
   .submenu.expanded {
     transform: scaleY(1);
+  }
+
+  .active-list-item {
+    background-color: #3F51B5 !important; /* Note: You could also use a custom theme */
+    color: #ffffff !important;
   }

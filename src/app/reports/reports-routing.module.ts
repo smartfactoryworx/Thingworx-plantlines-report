@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { CycleReportComponent } from './cycle-report/cycle-report.component';
+import { DailyCycleEntryComponent } from './daily-cycle-entry/daily-cycle-entry.component';
 import { ReportsComponent } from './reports.component';
 
 const routes: Routes = [
@@ -11,15 +12,19 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'cycle-report',
+        redirectTo: 'cycle',
         pathMatch: 'full'
       },
       {
-        path: 'cycle-report',
+        path: 'cycle',
         component: CycleReportComponent ,
         pathMatch: 'full'
       },
-      
+       {
+        path: 'daily-cycle',
+        component: DailyCycleEntryComponent ,
+        pathMatch: 'full'
+      },
       
     ]
   }

@@ -1,16 +1,19 @@
 <mat-sidenav-container class="">
-	<mat-sidenav #sidenav class="example-sidenav" mode="over" opened="false">
+	<mat-sidenav #sidenav class="example-sidenav" mode="over" opened="false" (click)="sidenav.toggle()">
 		<mat-nav-list>
-			<mat-list-item (click)="showSubmenu = !showSubmenu" class="parent">
-				<span class="full-width" *ngIf="isExpanded || isShowing">Parent Menu</span>
-				<mat-icon mat-list-icon>home</mat-icon>
-				<mat-icon class="menu-button" [ngClass]="{'rotated' : showSubmenu}" *ngIf="isExpanded || isShowing">expand_more
+			<mat-list-item  class="parent">
+				<span class="full-width" *ngIf="isExpanded || isShowing">Masters</span>
+				<mat-icon mat-list-icon>description</mat-icon>
+				<mat-icon class="menu-button" [ngClass]="{'rotated' : showMastersSubmenu}"
+					*ngIf="isExpanded || isShowing">expand_more
 				</mat-icon>
 			</mat-list-item>
-			<div class="submenu" [ngClass]="{'expanded' : showSubmenu}" *ngIf="isShowing || isExpanded">
-				<a mat-list-item href="...">Submenu Item 1</a>
-				<a mat-list-item href="...">Submenu Item 2</a>
-				<mat-list-item (click)="showSubSubMenu = !showSubSubMenu" class="parent">
+			<div class="submenu" [ngClass]="{'expanded' : showMastersSubmenu}" *ngIf="isShowing || isExpanded">
+				<a mat-list-item [routerLink]="['/masters/sku']" routerLinkActive="active-list-item">SKU</a>
+				<a mat-list-item  [routerLink]="['/masters/fault']" routerLinkActive="active-list-item" >Fault</a>
+				<a mat-list-item [routerLink]="['/masters/machine']" routerLinkActive="active-list-item">Machine</a>
+				<a mat-list-item [routerLink]="['/masters/faultcause']" routerLinkActive="active-list-item">Fault Cause</a>
+				<!-- <mat-list-item (click)="showSubSubMenu = !showSubSubMenu" class="parent">
 					<span class="full-width" *ngIf="isExpanded || isShowing">Nested Menu</span>
 					<mat-icon class="menu-button" [ngClass]="{'rotated' : showSubSubMenu}" *ngIf="isExpanded || isShowing">
 						expand_more</mat-icon>
@@ -18,15 +21,27 @@
 				<div class="submenu" [ngClass]="{'expanded' : showSubSubMenu}" *ngIf="isShowing || isExpanded">
 					<mat-list-item>SubSubmenu Item 1</mat-list-item>
 					<mat-list-item>SubSubmenu Item 2</mat-list-item>
-				</div>
+				</div> -->
+			</div>
+			<mat-list-item class="parent">
+				<span class="full-width" *ngIf="isExpanded || isShowing">Reports</span>
+				<mat-icon mat-list-icon>menu_book</mat-icon>
+				<mat-icon class="menu-button" [ngClass]="{'rotated' : showReportsSubmenu}"
+					*ngIf="isExpanded || isShowing">expand_more
+				</mat-icon>
+			</mat-list-item>
+		
+			<div class="submenu" [ngClass]="{'expanded' : showReportsSubmenu}" *ngIf="isShowing || isExpanded">
+				<a mat-list-item  [routerLink]="['/reports/cycle']" routerLinkActive="active-list-item">Cycle Report</a>
+				<a mat-list-item  [routerLink]="['/reports/daily-cycle']" routerLinkActive="active-list-item">Daily Cycle Report</a>
 			</div>
 		</mat-nav-list>
 		<mat-nav-list>
 		</mat-nav-list>
 	</mat-sidenav>
 
-	<div class="">
+	<mat-sidenav-content>
 		<router-outlet></router-outlet>
-	</div>
+	</mat-sidenav-content>
 
 </mat-sidenav-container>

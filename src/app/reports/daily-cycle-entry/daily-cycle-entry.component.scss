@@ -1,0 +1,20 @@
+th.mat-header-cell,
+td.mat-cell,
+td.mat-footer-cell {
+  padding: 0;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-left-width: 1px;
+  border-left-style: solid;
+  border-left-color: rgba(0, 0, 0, 0.12);
+  text-align: center;
+}
+
+.mat-cell,
+.mat-footer-cell {
+  font-size: 12px;
+}
+::ng-deep .mat-sort-header-container {
+  display: flex;
+  justify-content: center;
+}

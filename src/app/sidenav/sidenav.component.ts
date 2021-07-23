@@ -12,9 +12,10 @@ export class SidenavComponent  {
   @ViewChild('sidenav') sidenav: MatSidenav;
  
   isExpanded = true;
-  showSubmenu: boolean = false;
+  showMastersSubmenu: boolean = true;
+  showReportsSubmenu: boolean = true;
   isShowing = false;
-  showSubSubMenu: boolean = false;
+ // showSubSubMenu: boolean = false;
 
 
 
