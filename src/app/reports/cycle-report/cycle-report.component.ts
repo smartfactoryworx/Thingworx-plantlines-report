@@ -71,7 +71,7 @@ ngOnChanges(changes: SimpleChanges): void {
 
     console.log(JSON.stringify(body));
 
-    let dataSource = 'CycleSetDataInDataTable/Services/getAllCycleReport'
+    let dataSource = 'CycleSetDataInDataTable/Services/allDataJoint'
 
     this.dataentryservice.GetApiURL().subscribe(apipath => {
       console.log(apipath['api']);
@@ -83,21 +83,21 @@ ngOnChanges(changes: SimpleChanges): void {
         for (let i = 0; i < c.length; i++) {
           const data = c[i]
           const allCycleData = {
-            CycleRun: data.CycleRun,
-            Duration: data.Duration,
-            FaultNumber: data.FirstFault,
-            FirstFault: data.FirstFault > 0 ? 1 : 0,
-            FirstFaultDesc: data.FirstFaultDesc,
-            From: moment(data.From).format("DD MMM YYYY hh:mm a"),
-            InfeedCount: data.InfeedCount,
-            Machine: data.Machine,
-            ManualStop: data.ManualStop,
-            MaxActualSpeed: data.MaxActualSpeed,
-            OutFeedCount: data.OutFeedCount,
-            SKU: data.SKU,
-            SKUDesc: data.SKUDesc,
-            To: moment(data.To).format("DD MMM YYYY hh:mm a"),
-            Date: moment(data.From).format("DD MMM YYYY"),
+            CycleRun:  data && data.CycleCount,
+            Duration: data && data.Duration,
+            FaultNumber: data && data.FirstFault,
+            FirstFault: data && data.FirstFault > 0 ? 1 : 0,
+            FirstFaultDesc: data && data.FaultDescription,
+            From: data && moment(data.StartTime).format("DD MMM YYYY hh:mm a"),
+            InfeedCount: data && data.InfeedCount,
+            Machine: data && data.Machine,
+            ManualStop: data && data.ManualStop===true?1:0,
+            MaxActualSpeed: data && data.MaxActualSpeed,
+            OutFeedCount: data && data.OutFeedCount,
+            SKU: data && data.SKU,
+            SKUDesc: data && data.SKU_Details,
+            To: data && moment(data.StopTime).format("DD MMM YYYY hh:mm a"),
+            Date: data && moment(data.StartTime).format("DD MMM YYYY"),
           }
           this.cycleData.push(allCycleData);
         }

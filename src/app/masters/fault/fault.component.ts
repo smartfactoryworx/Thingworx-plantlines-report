@@ -19,7 +19,7 @@ interface faultTableData {
   ID?: string;
   FaultCode?: number;
   FaultDescription?: string;
-  Machine_Selected?:string;
+  Machine_Selected?: string;
 }
 
 interface fault {
@@ -42,7 +42,7 @@ export class FaultComponent implements OnChanges {
 
   machineName: any;
   table: any;
-  //FaultPostData = [];
+  FaultPostData = [];
   constructor(private httpClient: HttpClient, private _snackBar: MatSnackBar, private manualentryservice: ManualEntryService, private tableutil: TableUtilsService, private util: UtilService) { }
 
   openSnackBar(message: string, action: string) {
@@ -81,7 +81,7 @@ export class FaultComponent implements OnChanges {
             ID: data.ID,
             FaultCode: data.FaultCode,
             FaultDescription: data.FaultDescription,
-            Machine_Selected:data.Machine_Selected
+            Machine_Selected: data.Machine_Selected
           }
           this.FaultTableData.push(allFaultData);
         }
@@ -89,7 +89,7 @@ export class FaultComponent implements OnChanges {
           ID: null,
           FaultCode: null,
           FaultDescription: null,
-          Machine_Selected:null,
+          Machine_Selected: null,
         }
         this.FaultTableData.push(BlankData);
         console.log("FaultTableData", this.FaultTableData);
@@ -115,10 +115,10 @@ export class FaultComponent implements OnChanges {
       button: true,
       rowResize: true,
       columnDrag: true,
-      colHeaders: ['ID', 'Fault Code', 'Fault Description','Machine_Selected'],
+      colHeaders: ['ID', 'Fault Code', 'Fault Description', 'Machine_Selected'],
       columns: [
-        { type: 'hidden', width: 300, readOnly: false  },
-        { type: 'numeric', width: 150, readOnly: false, mask: '#,00', decimal: '' },
+        { type: 'hidden', width: 300, readOnly: false },
+        { type: 'numeric', width: 150, readOnly: false, mask: '', decimal: '' },
         { type: 'text', width: 600, readOnly: false },
         { type: 'hidden', width: 300, readOnly: false }
       ],
@@ -159,59 +159,72 @@ export class FaultComponent implements OnChanges {
   }
 
   postfaultData() {
+    this.FaultPostData = [];
     console.log(this.machineName);
-    console.log(this.table.getData());
+    console.log(this.table.getData().length);
 
     let faultDetails;
     faultDetails = this.table.getData();
     let ID = faultDetails.map(function (x) {
       return x[0];
-    }).filter(item => item);
-    // console.log(date, "date");
+    });
+
     let FaultCode = faultDetails.map(function (x) {
       return x[1];
-    }).filter(item => item);
+    });
+
+
     let FaultDescription = faultDetails.map(function (x) {
       return x[2];
-    }).filter(item => item);
-    let Machine_Selected = faultDetails.map(function (x) {
-      return x[3];
-    }).filter(item => item);
+    });
+
+
 
     if (this.machineName !== null) {
+      var T = {};
       for (let i = 0; i <= faultDetails.length - 1; i++) {
-        
-          const T = {
-            "ID": ID[i],
-            "Machine_Selected": Machine_Selected[i],
+
+        if ((FaultCode[i] != undefined || FaultCode[i] != null || !FaultCode[i].isEmpty()) && (FaultDescription[i] != undefined || FaultDescription[i] != null || !FaultDescription[i].isEmpty())) {
+         console.log(FaultCode[i]);
+         console.log(FaultDescription[i]);
+          T = {
+            "ID": ID[i] ,
+            "Machine_Selected": this.machineName,
             "FaultCode": FaultCode[i],
             "FaultDescription": FaultDescription[i]
           }
-          console.log(JSON.stringify(T), "FaultPostData");
-          if(JSON.stringify(T) !== '{}'){
-            let dataSource = 'MachineFaultMaster/Services/addFaultsInDataTableFromFrontEnd'
-            this.manualentryservice.GetApiURL().subscribe(apipath => {
-              console.log(apipath['api']);
-              this.manualentryservice.GetMachineData(apipath['apithings'], dataSource, JSON.stringify(T)).subscribe(
-                (data: any[]) => {
-                  //console.log(data);
-                  //this.GetfaultData(this.machineName);
-                  this.openSnackBar("Success", "Records Added or Updated Successfully");
-                },
-                (error: HttpErrorResponse) => {
-                  //console.log(error);
-                  if (error.status >= 400) {
-                    this.openSnackBar("Validation", error.error);
-                  }
-                  else {
-                    this.openSnackBar("Error", error.error);
-                  }
-                });
-            });
-          }
-       
+          this.FaultPostData.push(T);
+        }
       }
-//console.log('YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY')
+      console.log(this.FaultPostData);
+      var PostData = {};
+      PostData = {
+        "input": this.FaultPostData
+      }
+      console.log(JSON.stringify(PostData));
+      let dataSource = 'MachineFaultMaster/Services/addMultipleData'
+      // this.manualentryservice.GetApiURL().subscribe(apipath => {
+      //   console.log(apipath['api']);
+      //   this.manualentryservice.GetMachineData(apipath['apithings'], dataSource, JSON.stringify(PostData)).subscribe(
+      //     (data: any[]) => {
+      //       //console.log(data);
+      //       //this.GetfaultData(this.machineName);
+      //       this.openSnackBar("Success", "Records Added or Updated Successfully");
+      //     },
+      //     (error: HttpErrorResponse) => {
+      //       //console.log(error);
+      //       if (error.status >= 400) {
+      //         this.openSnackBar("Validation", error.error);
+      //       }
+      //       else {
+      //         this.openSnackBar("Error", error.error);
+      //       }
+      //     });
+      // });
+
+
+
+      //console.log('YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY')
     }
   }
 

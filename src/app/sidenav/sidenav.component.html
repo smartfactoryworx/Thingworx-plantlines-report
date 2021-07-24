@@ -1,6 +1,17 @@
 <mat-sidenav-container class="">
 	<mat-sidenav #sidenav class="example-sidenav" mode="over" opened="false" (click)="sidenav.toggle()">
 		<mat-nav-list>
+			<mat-list-item class="parent">
+				<span class="full-width" *ngIf="isExpanded || isShowing">Manual Entry</span>
+				<mat-icon mat-list-icon>border_color</mat-icon>
+				<mat-icon class="menu-button" [ngClass]="{'rotated' : showManualEntrySubmenu}"
+					*ngIf="isExpanded || isShowing">expand_more
+				</mat-icon>
+			</mat-list-item>
+		
+			<div class="submenu" [ngClass]="{'expanded' : showManualEntrySubmenu}" *ngIf="isShowing || isExpanded">
+				<a mat-list-item  [routerLink]="['/reports/daily-cycle']" routerLinkActive="active-list-item">Daily Cycle Entry</a>
+			</div>
 			<mat-list-item  class="parent">
 				<span class="full-width" *ngIf="isExpanded || isShowing">Masters</span>
 				<mat-icon mat-list-icon>description</mat-icon>
@@ -33,8 +44,8 @@
 		
 			<div class="submenu" [ngClass]="{'expanded' : showReportsSubmenu}" *ngIf="isShowing || isExpanded">
 				<a mat-list-item  [routerLink]="['/reports/cycle']" routerLinkActive="active-list-item">Cycle Report</a>
-				<a mat-list-item  [routerLink]="['/reports/daily-cycle']" routerLinkActive="active-list-item">Daily Cycle Report</a>
 			</div>
+			
 		</mat-nav-list>
 		<mat-nav-list>
 		</mat-nav-list>

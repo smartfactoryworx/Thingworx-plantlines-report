@@ -3,7 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { WebDataRocksPivot } from '../@webdatarocks/webdatarocks.angular4';
 import * as _moment from 'moment';
 import { default as _rollupMoment, Moment } from 'moment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { ManualEntryService } from '../../app-manualentry.service';
 import { UtilService } from 'src/app/util.service';
 import { DatePipe, Time } from '@angular/common';
@@ -16,13 +16,14 @@ const moment = _rollupMoment || _moment;
 
 
 interface dailyCycle {
+  ID?: string;
   Date?: string;
   SKU?: number;
   From?: string;
   To?: string;
   FaultNumber?: number;
-  TotalCycleRun ?: number;
-  FaultCount ?: number;
+  TotalCycleRun?: number;
+  FaultCount?: number;
   ManualStopCount?: number;
   MaxSpeed?: number;
   Duration?: string;
@@ -30,6 +31,7 @@ interface dailyCycle {
   OutFeedCount?: number;
   MeanCycleBetweenFault?: number;
   MeanCycleBetweenFaultNManualStop?: number;
+  CauseSelected?: string;
 }
 
 interface faultCauseData {
@@ -59,12 +61,16 @@ export class DailyCycleEntryComponent implements OnChanges {
   vdisplayedColumns: string[];
   //datePipe: any;
   lastUpdated;
+  lastValueofArray: string;
+
 
   constructor(private _snackBar: MatSnackBar, private httpClient: HttpClient, protected dataentryservice: ManualEntryService, private util: UtilService,
     private datePipe: DatePipe, private tableutil: TableUtilsService,) { }
 
 
+
   displayedColumnsAs = {
+    ID: { 'DN': 'ID', 'visible': true },
     Date: { 'DN': 'Date', 'visible': false },
     SKU: { 'DN': 'SKU', 'visible': false },
     From: { 'DN': 'From Date', 'visible': false },
@@ -80,11 +86,16 @@ export class DailyCycleEntryComponent implements OnChanges {
     FirstFault: { 'DN': 'Fault', 'visible': false },
     MeanCycleBetweenFault: { 'DN': 'MeanCycle b/w Fault', 'visible': false },
     MeanCycleBetweenFaultNManualStop: { 'DN': 'MeanCycle b/w FaultNManualStop', 'visible': false },
+    CauseSelected: { 'DN': 'Cause Selected', 'visible': false },
   }
+
+
 
   getDisplayedColumns() {
     return this.displayedColumnsAs;
   }
+
+
   ngOnChanges(changes: SimpleChanges): void {
     //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
     //Add '${implements OnChanges}' to the class.
@@ -152,7 +163,7 @@ export class DailyCycleEntryComponent implements OnChanges {
 
     console.log(JSON.stringify(body));
 
-    let dataSource = 'CycleSetDataInDataTable/Services/getAllCycleReport'
+    let dataSource = 'CycleSetDataInDataTable/Services/allDataJoint'
 
     this.dataentryservice.GetApiURL().subscribe(apipath => {
       console.log(apipath['api']);
@@ -164,22 +175,24 @@ export class DailyCycleEntryComponent implements OnChanges {
         for (let i = 0; i < c.length; i++) {
           const data = c[i]
           const allCycleData = {
-            Date: moment(data.From).format("DD MMM YYYY"),
-            SKU: data.SKUDesc,
-            From: moment(data.From).format("DD MMM YYYY hh:mm a"),
-            To: moment(data.To).format("DD MMM YYYY hh:mm a"),
-            FaultNumber: data.FirstFault,
-            TotalCycleRun: data.CycleRun,
-            FaultCount: data.FirstFault > 0 ? 1 : 0,
-            ManualStopCount: data.ManualStop,
-            MaxSpeed: data.MaxActualSpeed,
-            Duration: new Date(data.Duration * 1000).toISOString().substr(11, 8),//moment(data.Duration).format("hh:mm a"),
-            InfeedCount: data.InfeedCount,
-            OutFeedCount: data.OutFeedCount,
+            ID: data && data.ID,
+            Date: data && moment(data.StartTime).format("DD MMM YYYY"),
+            SKU: data && data.SKU_Details,
+            From: data && moment(data.StartTime).format("DD MMM YYYY hh:mm a"),
+            To: data && moment(data.StopTime).format("DD MMM YYYY hh:mm a"),
+            FaultNumber: data && data.FaultDescription,
+            TotalCycleRun: data && data.CycleCount,
+            FaultCount: data && data.FirstFault > 0 ? 1 : 0,
+            ManualStopCount: data && data.ManualStop === true ? 1 : 0,
+            MaxSpeed: data && data.MaxActualSpeed,
+            Duration: data && new Date(data.Duration * 1000).toISOString().substr(11, 8),//moment(data.Duration).format("hh:mm a"),
+            InfeedCount: data && data.InfeedCount,
+            OutFeedCount: data && data.OutFeedCount,
             //FirstFault: data.FirstFault > 0 ? 1 : 0,
-            FirstFault: data.FirstFault,
-            MeanCycleBetweenFault: isFinite(this.util.roundOff(data.CycleRun/data.FirstFault)) ? this.util.roundOff(data.CycleRun/data.FirstFault) : 0,
-            MeanCycleBetweenFaultNManualStop: this.util.roundOff(data.CycleRun/(data.FirstFault+data.ManualStop))
+            FirstFault: data && data.FirstFault,
+            MeanCycleBetweenFault: data && isFinite(this.util.roundOff(data.CycleCount / data.FirstFault)) ? this.util.roundOff(data.CycleCount / data.FirstFault) : 0,
+            MeanCycleBetweenFaultNManualStop: data && isFinite(this.util.roundOff(data.CycleCount / (data.FirstFault + data.ManualStop === true ? 1 : 0))) ? this.util.roundOff(data.CycleCount / (data.FirstFault + data.ManualStop === true ? 1 : 0)) : 0,
+            CauseSelected: data && data.CauseSelected
           }
           this.DailyCycle.push(allCycleData);
         }
@@ -193,8 +206,13 @@ export class DailyCycleEntryComponent implements OnChanges {
             for (let i = 0; i < Object.keys(this.DailyCycle[0]).length; i++) {
               this.vdisplayedColumns.push(Object.keys(this.DailyCycle[0])[i]);
               //console.log("function");
+
             }
-            this.vdisplayedColumns.push('star');
+            //this.vdisplayedColumns.push('CauseSelected');
+            console.log(this.vdisplayedColumns)
+
+            this.lastValueofArray = this.vdisplayedColumns.slice(-1)[0];
+            console.log(this.lastValueofArray);
             this.gotData = true;
             this.loading = true;
             this.dataSource = new MatTableDataSource(this.DailyCycle);
@@ -220,6 +238,38 @@ export class DailyCycleEntryComponent implements OnChanges {
           this.noData = this.dataSource.filteredData.length;
         }
       });
+    });
+  }
+
+  PostRowData(element, event) {
+    console.log(element, event.value);
+    var T = {};
+    if (element !== null) {
+      T = {
+        RawDataID: element.ID,
+        CauseSelected: event.value,
+      }
+    }
+    console.log(T);
+    console.log("Data which is being posted : " + JSON.stringify(T));
+
+    let dataSource = 'causeEnteredData/Services/saveData'
+    this.dataentryservice.GetApiURL().subscribe(apipath => {
+      console.log(apipath['api']);
+      this.dataentryservice.GetMachineData(apipath['apithings'], dataSource, JSON.stringify(T)).subscribe(
+        (data: any[]) => {
+          this.GetCycleData(this.machineName);
+          this.openSnackBar("Success", "Records Added or Updated Successfully");
+        },
+        (error: HttpErrorResponse) => {
+          //console.log(error);
+          if (error.status >= 400) {
+            this.openSnackBar("Validation", error.error);
+          }
+          else {
+            this.openSnackBar("Error", error.error);
+          }
+        });
     });
   }
   exportTable() {

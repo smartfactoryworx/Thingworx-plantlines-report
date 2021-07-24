@@ -14,6 +14,7 @@ export class SidenavComponent  {
   isExpanded = true;
   showMastersSubmenu: boolean = true;
   showReportsSubmenu: boolean = true;
+  showManualEntrySubmenu: boolean = true;
   isShowing = false;
  // showSubSubMenu: boolean = false;
 
