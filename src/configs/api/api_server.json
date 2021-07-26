@@ -1,4 +1,7 @@
 {
     "api": "http://103.205.66.170:8082",
-    "apithings" : "https://capl91gn-lines.testing.smartfactoryworx.net/api/thing?datasource="
- }
+    "apithings": "https://capl91gn-lines.testing.smartfactoryworx.net/api/thing?datasource=",
+    "infeedintermsof": ["Carton","Cases","Pouches","Bottles","Bundles","Pallets"],
+    "outfeedintermsof": ["Carton","Cases","Pouches","Bottles","Bundles","Pallets"],
+    "speedintermsof": ["Carton","Cases","Pouches","Bottles","Bundles","Pallets"]
+    }

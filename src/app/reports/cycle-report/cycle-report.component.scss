@@ -42,3 +42,67 @@
   z-index: 2;
   margin-top: 2%;
 }
+
+
+// ::ng-deep #wdr-toolbar-wrapper {
+//   /* display: none; */
+//   height: 0px !important;
+// }
+
+
+// ::ng-deep #wdr-toolbar-wrapper #wdr-toolbar {
+//   width: 100%;
+//   position: absolute;
+//   height: 78px;
+//   list-style: none;
+//   background: #fff0;
+//   white-space: nowrap;
+//   bottom: 90.5%;
+//   z-index: 1000;
+// }
+
+.invisible {
+  display: block;
+  visibility: hidden;
+  height: 0;
+  width: 0;
+}
+
+
+
+path.highcharts-tracker-line.wdr-ui-element {
+stroke: rgba(255, 158, 44, 1) !important;
+stroke-width: 2px !important;
+}
+
+
+
+
+
+::ng-deep .mat-form-field-flex{
+padding: .10em .75em 0 .75em !important;;
+}
+
+mat-form-field#filterdropdown {
+  position: absolute;
+  z-index: 10;
+  text-align: right;
+  display: inline-block;
+  text-align: left;
+  margin-left: auto;
+  margin-right: auto;
+  top: 53em;
+  right: 46%;
+}
+
+mat-form-field#filterdropdown1 {
+  position: absolute;
+  z-index: 10;
+  text-align: right;
+  display: inline-block;
+  text-align: left;
+  margin-left: auto;
+  margin-right: auto;
+  top: 55.5em;
+  right: 42%;
+}

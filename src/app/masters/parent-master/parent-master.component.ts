@@ -13,6 +13,10 @@ interface machinelist {
   machineId: string;
   machineName: string;
   createdDate: Date;
+  CycleMeaning:string;
+  InfeedInTermsOf:string;
+  OutfeedCountInTermsOf:string;
+  SpeedIntermsOf:string;
 }
 @Component({
   selector: 'app-parent-master',
@@ -24,11 +28,12 @@ export class ParentMasterComponent implements OnInit {
   constructor(private httpClient: HttpClient, private manualentryservice: ManualEntryService, private util: UtilService) { }
 
   @Output() machineOut = new EventEmitter<string>();
+  @Output() machineDetail = new EventEmitter<machinelist[]>();
   masterform: FormGroup;
   machine: FormControl;
   public MachineList: machinelist[] = [];
   public filteredMachine = this.MachineList.slice();
-
+  FilteredMachineData = [];
   createmaster() {
     this.machine = new FormControl('', Validators.required);
   }
@@ -44,7 +49,13 @@ export class ParentMasterComponent implements OnInit {
   }
   GetMachineName(machine) {
     console.log(machine);
-    this.machineOut.emit(machine);
+    console.log(this.MachineList);
+     this.FilteredMachineData = this.MachineList.filter(function (value) {
+      return value.machineId === machine
+    })
+    console.log(this.FilteredMachineData)
+    this.machineDetail.emit(this.FilteredMachineData);
+    this.machineOut.emit(this.machine.value);
   }
   GetMachineData() {
     this.MachineList = [];
@@ -53,7 +64,7 @@ export class ParentMasterComponent implements OnInit {
       let body = {};
       let dataSource = 'MachineDetailsMaster/Services/GetDataTableEntries'
       this.manualentryservice.GetMachineData(apipath['apithings'], dataSource, JSON.stringify(body)).subscribe((machineList: any) => {
-        // console.log(machineList['rows'], "machineList");
+        console.log(machineList['rows'], "machineList");
         var c = machineList['rows'];
         for (let i = 0; i < c.length; i++) {
           const a = c[i];
@@ -61,7 +72,11 @@ export class ParentMasterComponent implements OnInit {
             machineId: a.Machine_MDS,
             machineName: a.Machine_Name,
             createdDate: new Date(moment(a.timestamp).format("DD MMM YYYY hh:mm a")),
-            machineDetails: a.Machine_MDS + ' - ' + a.Machine_Name + ' - ' + a.Customer_Name + '(' + moment(new Date(a.timestamp)).format("DD-MM-YYYY") + ')'
+            machineDetails: a.Machine_MDS + ' - ' + a.Machine_Name + ' - ' + a.Customer_Name + '(' + moment(new Date(a.timestamp)).format("DD-MM-YYYY") + ')',
+            CycleMeaning:a.CycleMeaning,
+            InfeedInTermsOf:a.InfeedInTermsOf,
+            OutfeedCountInTermsOf:a.OutfeedCountInTermsOf,
+            SpeedIntermsOf:a.SpeedIntermsOf
           }
           this.MachineList.push(data);
         }
@@ -69,6 +84,12 @@ export class ParentMasterComponent implements OnInit {
         this.filteredMachine = this.MachineList.slice();
         console.log(this.filteredMachine);
         console.log(this.MachineList, "MachineData");
+        if(this.machine.value === ""){
+          this.BindDefaultData();
+          this.GetMachineName(this.machine.value);
+        }
+      
+
       });
     });
   }
@@ -77,7 +98,5 @@ export class ParentMasterComponent implements OnInit {
     this.createmaster();
     this.createmasterForm();
     this.GetMachineData();
-    this.BindDefaultData();
-    this.machineOut.emit(this.machine.value);
   }
 }

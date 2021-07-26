@@ -59,7 +59,10 @@ export class MachineComponent implements OnInit {
   dataSource: MatTableDataSource<machineData>;
   errorText;
   noData;
-
+  InfeedIntermsofList = [] ;
+  OutfeedIntermsofList = [];
+  SpeedIntermsofList = [];
+  AllList;
   displayedColumnsAs = {
     Machine_MDS: { 'DN': 'Machine MDS', 'visible': false },
     Machine_Name: { 'DN': 'Machine Name', 'visible': false },
@@ -96,6 +99,10 @@ export class MachineComponent implements OnInit {
 
     this.manualentryservice.GetApiURL().subscribe(apipath => {
       console.log(apipath['api']);
+      this.InfeedIntermsofList = apipath['infeedintermsof'];
+      this.OutfeedIntermsofList  = apipath['outfeedintermsof'];
+      this.SpeedIntermsofList  = apipath['speedintermsof'];
+      this.AllList = [this.InfeedIntermsofList,this.OutfeedIntermsofList,this.SpeedIntermsofList];
       this.manualentryservice.GetMachineData(apipath['apithings'], dataSource, JSON.stringify(body)).subscribe((machinedata: any) => {
         console.log("machinedata", machinedata);
         var c = machinedata.rows;
@@ -181,13 +188,14 @@ export class MachineComponent implements OnInit {
   DailogAddMachine() {
     //console.log('add details');
     const dialogRef = this.dialog.open(MachineDialogComponent, {
-      width: '700px',
+      width: '800px',
       height: '500px',
       data: {
         dataKey: {
           title: 'Add Machine',
           button: 'Add',
-          key: 'AddMachine'
+          key: 'AddMachine',
+          dropdownList:  this.AllList
         }
       }
     });
@@ -203,14 +211,15 @@ export class MachineComponent implements OnInit {
     //console.log("fuction called");
     //console.log("this is updated: " + JSON.stringify(element));
     const dialogRef = this.dialog.open(MachineDialogComponent, {
-      width: '700px',
+      width: '800px',
       height: '500px',
       data: {
         dataKey: {
           rowdata: element,
           title: 'Update Details',
           button: 'Update',
-          key: 'Update'
+          key: 'Update',
+          dropdownList:  this.AllList
         }
       }
     });

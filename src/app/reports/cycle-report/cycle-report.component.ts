@@ -7,6 +7,10 @@ import { HttpClient } from '@angular/common/http';
 import { ManualEntryService } from '../../app-manualentry.service';
 import { UtilService } from 'src/app/util.service';
 import { DatePipe } from '@angular/common';
+import Highcharts, { seriesType } from 'highcharts';
+import HighchartsMore from "highcharts/highcharts-more";
+HighchartsMore(Highcharts)
+import exporting from 'highcharts/modules/exporting';
 const moment = _rollupMoment || _moment;
 
 
@@ -28,6 +32,10 @@ interface cycledata {
   Date: string;
   FaultNumber: number;
 }
+interface Filter {
+  value: string;
+  viewValue: string;
+}
 
 @Component({
   selector: 'app-cycle-report',
@@ -44,29 +52,48 @@ export class CycleReportComponent implements OnChanges {
 
   public cycleData: cycledata[];
   errorText = "";
+  Highcharts: typeof Highcharts = Highcharts;
   pivotTableReportComplete: boolean = false;
   gotData: boolean = true;
   public DataWithStructure = [];
-
+  filters: Filter[] = [
+   // { value: 'SKUDesc', viewValue: 'SKU Wise' },
+    { value: 'FirstFaultDesc', viewValue: 'Fault Wise' },
+   // { value: 'Date', viewValue: 'Daily Cycle Wise' },
+  ];
+  public selected = this.filters[0].value;
 
   machineName: any;
+  machineData: any;
+  CycleMeaning: any;
+  InfeedInTermsOf: any;
+  OutfeedCountInTermsOf: any;
+  SpeedIntermsOf:any;
   constructor(private httpClient: HttpClient, protected dataentryservice: ManualEntryService, private util: UtilService,
     private datePipe: DatePipe) { }
 
 ngOnChanges(changes: SimpleChanges): void {
   //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
   //Add '${implements OnChanges}' to the class.
-  console.log(this.machineName);
-  this.GetCycleData(this.machineName);
+  console.log(this.machineData);
+  this.GetCycleData(this.machineData);
 }
-  GetCycleData(machine) {
-    this.machineName = machine;
+  GetCycleData(machineDetails) {
+    console.log(machineDetails);
+
+    console.log(machineDetails[0].machineId,machineDetails[0].CycleMeaning,machineDetails[0].InfeedInTermsOf,machineDetails[0].OutfeedCountInTermsOf,machineDetails[0].SpeedIntermsOf);
+    this.machineData = machineDetails;
+    this.machineName = machineDetails[0].machineId;
+    this.CycleMeaning= machineDetails[0].CycleMeaning;
+    this.InfeedInTermsOf= machineDetails[0].InfeedInTermsOf;
+    this.OutfeedCountInTermsOf= machineDetails[0].OutfeedCountInTermsOf;
+    this.SpeedIntermsOf= machineDetails[0].SpeedIntermsOf;
     this.errorText = "";
     this.cycleData = [];
     this.gotData = false;
-    console.log(machine, "machine");
+    
     let body = {
-      "Machine": machine,
+      "Machine": this.machineName,
     }
 
     console.log(JSON.stringify(body));
@@ -114,9 +141,10 @@ ngOnChanges(changes: SimpleChanges): void {
     });
   }
 
-  customizeToolbar(toolbar) {
+  customizeToolbar(toolbar,reportType, fileName, sheetName) {
     let tabs = toolbar.getTabs();
-    //console.log(tabs);
+    console.log(tabs);
+    
     toolbar.getTabs = function () {
       delete tabs[0];
       delete tabs[1];
@@ -125,8 +153,20 @@ ngOnChanges(changes: SimpleChanges): void {
       delete tabs[4];
       delete tabs[5];
       //delete tabs[6];
-      return tabs;
+      tabs.unshift({  
+        id: "fm-tab-newtab", 
+        title: "Export", 
+        rightGroup : true,
+        handler: newtabHandler,  
+        icon:'<mat-icon>create</mat-icon>'
+    }); 
+    return tabs; 
+      
     }
+
+    var newtabHandler = () => { 
+      this.Export_Excel(reportType, fileName, sheetName);
+ }  
   }
 
   onReportComplete(reportType): void {
@@ -148,6 +188,7 @@ ngOnChanges(changes: SimpleChanges): void {
       this.child4.webDataRocks.off("reportcomplete");
     }
     this.pivotTableReportComplete = true;
+    this.createChart_kpi_linewise('highchartcontainer-control', this.selected, 'Fault-Wise', 'faultwise');
   }
 
   GetReport(reportType) {
@@ -259,7 +300,7 @@ ngOnChanges(changes: SimpleChanges): void {
           {
             uniqueName: "CycleRun",
             formula: "((\"CycleRun\"))",
-            caption: "Total Cycle Run"
+            caption: "Total Cycle Run (" + this.CycleMeaning + ")"
           },
           {
             uniqueName: "FirstFault",
@@ -274,7 +315,7 @@ ngOnChanges(changes: SimpleChanges): void {
           {
             uniqueName: "MaxActualSpeed",
             formula: "(max(\"MaxActualSpeed\"))",
-            caption: "Max Speed"
+            caption: "Max Speed (" +this.SpeedIntermsOf+ ")"
           },
           {
             uniqueName: "MeanCycleBetweenFault",
@@ -429,7 +470,7 @@ ngOnChanges(changes: SimpleChanges): void {
           {
             uniqueName: "CycleRun",
             formula: "((\"CycleRun\"))",
-            caption: "Total Cycle Run"
+            caption: "Total Cycle Run (" + this.CycleMeaning + ")"
           },
           {
             uniqueName: "FirstFault",
@@ -444,7 +485,7 @@ ngOnChanges(changes: SimpleChanges): void {
           {
             uniqueName: "MaxActualSpeed",
             formula: "(max(\"MaxActualSpeed\"))",
-            caption: "Max Speed"
+            caption: "Max Speed (" +this.SpeedIntermsOf+ ")"
           },
 
 
@@ -538,7 +579,7 @@ ngOnChanges(changes: SimpleChanges): void {
           {
             uniqueName: "CycleRun",
             formula: "((\"CycleRun\"))",
-            caption: "Total Cycle Run"
+            caption: "Total Cycle Run (" + this.CycleMeaning + ")"
           },
           {
             uniqueName: "FirstFault",
@@ -554,7 +595,7 @@ ngOnChanges(changes: SimpleChanges): void {
           {
             uniqueName: "MaxActualSpeed",
             formula: "(max(\"MaxActualSpeed\"))",
-            caption: "Max Speed"
+            caption: "Max Speed (" +this.SpeedIntermsOf+ ")"
           },
           {
             uniqueName: "Duration",
@@ -564,12 +605,12 @@ ngOnChanges(changes: SimpleChanges): void {
           {
             uniqueName: "InfeedCount",
             formula: "((\"InfeedCount\"))",
-            caption: "InfeedCount"
+            caption: "InfeedCount (" + this.InfeedInTermsOf+ ")"
           },
           {
             uniqueName: "OutFeedCount",
             formula: "(max(\"OutFeedCount\"))",
-            caption: "OutFeedCount"
+            caption: "OutFeedCount (" + this.OutfeedCountInTermsOf+ ")"
           },
           {
             uniqueName: "MeanCycleBetweenFault",
@@ -689,6 +730,142 @@ ngOnChanges(changes: SimpleChanges): void {
         }
       );
     }
+  }
+
+  //Highcharts
+
+  createChart_kpi_linewise(controlname, category, chartTitle, chartType) {
+    console.log(controlname, "controlname");
+    console.log(category, "category");
+    console.log(this.cycleData);
+    if(category === 'FirstFaultDesc'){
+    var FalutWiseData = this.cycleData.filter(function (value) {
+      return value.FirstFault != 0
+    })
+  }
+   // const GroupedData1 = this.util.groupAndSum(this.cycleData, ['Date'], ['CycleRun', 'InfeedCount', 'OutFeedCount', 'ManualStop', 'FirstFault', 'FaultNumber']);
+    const GroupedDataFault = this.util.groupAndSum(FalutWiseData, [category], ['FirstFault']);
+    //console.log(GroupedData1, "GroupedData");
+    console.log(GroupedDataFault, "GroupedData");
+  
+     let xAxisData;
+    let measureDataFaultCount;
+  
+    let chartTitleName;
+    let seriesData;
+    let chartTypeName;
+    let chartForm;
+
+   
+    if (chartType === 'faultwise') {
+     
+        GroupedDataFault.sort(this.util.dynamicSort('FirstFault'))
+        xAxisData = this.util.filterMyArr(GroupedDataFault, category);
+        measureDataFaultCount = this.util.filterMyArr(GroupedDataFault, "FirstFault");
+      chartTitleName = chartTitle;
+     
+      seriesData = [
+        {
+          name: "Fault Count",
+          data: measureDataFaultCount,
+          color: '#ffe66d'
+        },
+      ]
+    } else if (chartType === 'skuwise') {
+ 
+    }else if(chartType === 'dailycycle'){
+
+    }
+
+    if (category === "date") {
+      chartTypeName = "line";
+      chartForm = {
+        series: {
+          stacking: undefined,
+          dataLabels: {
+            enabled: true,
+            style: {
+              fontWeight: 'bold',
+              color: '#000000',
+              fontSize:'15px'
+            },
+            formatter: function () {
+              let value = (this.y);
+              return '' + value;
+            }
+          }
+        }
+      }
+    } else {
+      chartTypeName = "column";
+      chartForm = {
+        column: {
+          stacking: undefined,
+          dataLabels: {
+            enabled: true,
+            style: {
+              fontWeight: 'bold',
+              color: '#000000',
+              fontSize:'15px'
+            },
+            formatter: function () {
+              let value = (this.y);
+              return '' + value;
+            }
+          }
+        }
+      }
+    }
+    //console.log(chartTypeName, "chartTypeName");
+    var ChartData: any;
+    ChartData = {
+
+      chart: {
+        type: chartTypeName,
+      },
+      title: {
+        text: chartTitleName,
+        align: 'left',
+        style: {
+          fontWeight: 'bold',
+          fontSize:'15px'
+        }
+      },
+      xAxis: {
+        title: {
+          text: category
+        },
+        categories: xAxisData
+      },
+      yAxis: [
+        {
+          title: {
+            text: "Fault Count"
+          },
+          opposite: false,
+          labels: {
+            enabled: true,
+            formatter: function () {
+              let value = (this.value);
+              return value;
+            },
+          },
+        },
+      ],
+      tooltip: {
+        formatter: function () {
+          let value = (this.y);
+          return this.key + '<br>' + '' + value ;
+        }
+      },
+      plotOptions:chartForm,
+      series: seriesData,
+      credits: {
+        enabled: false
+      }
+    }
+    console.log(JSON.stringify(ChartData));
+    Highcharts.chart(controlname, ChartData);
   }
 
 }

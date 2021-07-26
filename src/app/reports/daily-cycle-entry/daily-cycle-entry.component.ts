@@ -62,8 +62,11 @@ export class DailyCycleEntryComponent implements OnChanges {
   //datePipe: any;
   lastUpdated;
   lastValueofArray: string;
-
-
+  CycleMeaning ="";
+  InfeedInTermsOf="";
+  OutfeedCountInTermsOf="";
+  SpeedIntermsOf="";
+  machineData;
   constructor(private _snackBar: MatSnackBar, private httpClient: HttpClient, protected dataentryservice: ManualEntryService, private util: UtilService,
     private datePipe: DatePipe, private tableutil: TableUtilsService,) { }
 
@@ -75,17 +78,17 @@ export class DailyCycleEntryComponent implements OnChanges {
     SKU: { 'DN': 'SKU', 'visible': false },
     From: { 'DN': 'From Date', 'visible': false },
     To: { 'DN': 'To Date', 'visible': false },
-    FaultNumber: { 'DN': 'Fault Number', 'visible': false },
-    TotalCycleRun: { 'DN': 'Total Cycle Run', 'visible': false },
+    FaultNumber: { 'DN': 'Fault No.', 'visible': false },
+    TotalCycleRun: { 'DN': 'Total Cycle Run ('+ this.CycleMeaning + ')', 'visible': false },
     FaultCount: { 'DN': 'Fault Count', 'visible': false },
     ManualStopCount: { 'DN': 'Manual Stop Count', 'visible': false },
-    MaxSpeed: { 'DN': 'Max Speed', 'visible': false },
+    MaxSpeed: { 'DN': 'Max Speed ('+ this.SpeedIntermsOf + ')', 'visible': false },
     Duration: { 'DN': 'Duration', 'visible': false },
-    InfeedCount: { 'DN': 'Infeed Count', 'visible': false },
-    OutFeedCount: { 'DN': 'Outfeed Count', 'visible': false },
+    InfeedCount: { 'DN': 'Infeed Count ('+ this.InfeedInTermsOf + ')', 'visible': false },
+    OutFeedCount: { 'DN': 'Outfeed Count ('+ this.OutfeedCountInTermsOf + ')', 'visible': false },
     FirstFault: { 'DN': 'Fault', 'visible': false },
-    MeanCycleBetweenFault: { 'DN': 'MeanCycle b/w Fault', 'visible': false },
-    MeanCycleBetweenFaultNManualStop: { 'DN': 'MeanCycle b/w FaultNManualStop', 'visible': false },
+    MeanCycleBetweenFault: { 'DN': 'MCBF', 'visible': false },
+    MeanCycleBetweenFaultNManualStop: { 'DN': 'MCBFS', 'visible': false },
     CauseSelected: { 'DN': 'Cause Selected', 'visible': false },
   }
 
@@ -99,8 +102,7 @@ export class DailyCycleEntryComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
     //Add '${implements OnChanges}' to the class.
-    console.log(this.machineName);
-    this.GetCycleData(this.machineName);
+    this.GetCycleData(this.machineData);
   }
 
   applyFilter(filterValue: string) {
@@ -150,15 +152,24 @@ export class DailyCycleEntryComponent implements OnChanges {
 
   }
 
-  GetCycleData(machine) {
-    this.machineName = machine;
+  GetCycleData(machineDetails) {
+    console.log(machineDetails);
+
+    console.log(machineDetails[0].machineId,machineDetails[0].CycleMeaning,machineDetails[0].InfeedInTermsOf,machineDetails[0].OutfeedCountInTermsOf,machineDetails[0].SpeedIntermsOf);
+    this.machineData = machineDetails;
+    this.machineName = machineDetails[0].machineId;
+    this.CycleMeaning= machineDetails[0].CycleMeaning;
+    this.InfeedInTermsOf= machineDetails[0].InfeedInTermsOf;
+    this.OutfeedCountInTermsOf= machineDetails[0].OutfeedCountInTermsOf;
+    this.SpeedIntermsOf= machineDetails[0].SpeedIntermsOf;
+   
     this.errorText = "";
     this.DailyCycle = [];
     this.gotData = false;
     this.loading = false;
-    console.log(machine, "machine");
+   
     let body = {
-      "Machine": machine,
+      "Machine": this.machineName,
     }
 
     console.log(JSON.stringify(body));

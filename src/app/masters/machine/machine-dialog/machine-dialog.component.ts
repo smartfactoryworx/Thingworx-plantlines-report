@@ -31,7 +31,9 @@ export class MachineDialogComponent implements OnInit {
   title;
   button;
   machine;
-
+  infeedIntermsofList;
+  outfeedIntermsofList;
+  speedIntermsofList;
 
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any, public dialogRef: MatDialogRef<MachineDialogComponent>,
@@ -79,10 +81,15 @@ export class MachineDialogComponent implements OnInit {
     this.createmachineform();
 
     if (this.data.dataKey.rowdata !== null) {
+      console.log(this.data.dataKey.dropdownList);
+        this.infeedIntermsofList = this.data.dataKey.dropdownList[0];
+        this.outfeedIntermsofList = this.data.dataKey.dropdownList[1];
+        this.speedIntermsofList = this.data.dataKey.dropdownList[2];
       if (this.data.dataKey.key === 'AddMachine') {
         this.title = this.data.dataKey.title;
         this.button = this.data.dataKey.button;
         this.ID.setValue('');
+        
       } else {
         console.log(this.data.dataKey.rowdata);
         this.title = this.data.dataKey.title;

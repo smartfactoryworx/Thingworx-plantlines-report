@@ -6,50 +6,54 @@
 
             <div fxLayout="row" style="width: 100%;padding: 0%;" fxLayoutAlign="space-around start">
                 <mat-form-field fxFlex="5" fxHide>
-                    <input matInput autocomplete="off" appSpecialCharacter placeholder="ID" formControlName="ID">
+                    <input matInput autocomplete="off"  placeholder="ID" formControlName="ID">
                 </mat-form-field>
                 <mat-form-field fxFlex="24">
-                    <input matInput autocomplete="off" appSpecialCharacter placeholder="Machine MDS"
+                    <input matInput autocomplete="off"  placeholder="Machine MDS"
                         formControlName="Machine_MDS">
                 </mat-form-field>
                 <mat-form-field fxFlex="24">
-                    <input matInput autocomplete="off" appSpecialCharacter placeholder="Machine Name"
+                    <input matInput autocomplete="off"  placeholder="Machine Name"
                         formControlName="Machine_Name">
                 </mat-form-field>
                 <mat-form-field fxFlex="24">
                     <input matInput autocomplete="off" placeholder="Customer Name" formControlName="Customer_Name">
                 </mat-form-field>
-            </div>
-            <div fxLayout="row" style="width: 100%;padding: 0%;" fxLayoutAlign="space-around start">
                 <mat-form-field fxFlex="24">
                     <input matInput autocomplete="off" placeholder="Installation Site"
                         formControlName="Installation_Site">
                 </mat-form-field>
+            </div>
+            <div fxLayout="row" style="width: 100%;padding: 0%;" fxLayoutAlign="space-around start">
+                
                 <mat-form-field fxFlex="24">
-                    <input matInput autocomplete="off" appSpecialCharacter placeholder="IP Address"
+                    <input matInput autocomplete="off"  placeholder="IP Address"
                         formControlName="IP_Address">
                 </mat-form-field>
                 <mat-form-field fxFlex="24">
-                    <input matInput autocomplete="off" appSpecialCharacter placeholder="CycleMeaning"
+                    <input matInput autocomplete="off"  placeholder="Cycle:OutFeed"
                         formControlName="CycleMeaning">
                 </mat-form-field>
-
+                <mat-form-field appearance="" id="filterdropdown2" fxFlex="24">
+                    <mat-select formControlName="InfeedInTermsOf" id="select3" placeholder="InfeedInTermsOf">
+                        <mat-option *ngFor="let infeed of infeedIntermsofList" [value]="infeed">{{infeed}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+               
+                <mat-form-field appearance="" id="filterdropdown1" fxFlex="24">
+                    <mat-select formControlName="OutfeedCountInTermsOf" id="select2" placeholder="OutfeedCountInTermsOf">
+                        <mat-option  *ngFor="let outfeed of outfeedIntermsofList" [value]="outfeed">{{outfeed}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
             </div>
             <div fxLayout="row" style="width: 100%;padding: 0%;" fxLayoutAlign="space-around start">
-
-                <mat-form-field fxFlex="24">
-                    <input matInput autocomplete="off" appSpecialCharacter placeholder="Speed IntermsOf"
-                        formControlName="SpeedIntermsOf">
+               
+                <mat-form-field appearance="" id="filterdropdown" fxFlex="48">
+                    <mat-select formControlName="SpeedIntermsOf" id="select1" placeholder="SpeedIntermsOf">
+                        <mat-option *ngFor="let speed of speedIntermsofList" [value]="speed">{{speed}}</mat-option>
+                    </mat-select>
                 </mat-form-field>
-                <mat-form-field fxFlex="24">
-                    <input matInput autocomplete="off" placeholder="OutfeedCount InTermsOf"
-                        formControlName="OutfeedCountInTermsOf">
-                </mat-form-field>
-                <mat-form-field fxFlex="24">
-                    <input matInput autocomplete="off" placeholder="InfeedCount InTermsOf"
-                        formControlName="InfeedInTermsOf">
-                </mat-form-field>
-                <mat-form-field appearance="" fxFlex="24">
+                <mat-form-field appearance="" fxFlex="48">
                     <mat-label>Choose the Date</mat-label>
                     <input matInput [matDatepicker]="picker" formControlName="EndDate" placeholder="End Date">
                     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
