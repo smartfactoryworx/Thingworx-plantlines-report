@@ -26,6 +26,7 @@ export class MachineDialogComponent implements OnInit {
   CycleMeaning: FormControl;
   SpeedIntermsOf: FormControl;
   OutfeedCountInTermsOf: FormControl;
+  InfeedInTermsOf :FormControl;
   EndDate =  new FormControl(moment());
   title;
   button;
@@ -54,6 +55,7 @@ export class MachineDialogComponent implements OnInit {
     this.SpeedIntermsOf = new FormControl('');
     this.OutfeedCountInTermsOf = new FormControl('');
     this.EndDate = new FormControl('');
+    this.InfeedInTermsOf = new FormControl('')
   }
 
   createmachineform() {
@@ -68,6 +70,7 @@ export class MachineDialogComponent implements OnInit {
       SpeedIntermsOf: this.SpeedIntermsOf,
       OutfeedCountInTermsOf: this.OutfeedCountInTermsOf,
       EndDate: this.EndDate,
+      InfeedInTermsOf: this.InfeedInTermsOf
     });
   }
   ngOnInit() {
@@ -95,7 +98,8 @@ export class MachineDialogComponent implements OnInit {
           CycleMeaning: c.CycleMeaning,
           SpeedIntermsOf: c.SpeedIntermsOf,
           OutfeedCountInTermsOf: c.OutfeedCountInTermsOf,
-          EndDate: c.EndDate
+          EndDate: c.EndDate,
+          InfeedInTermsOf: c.InfeedInTermsOf
         });
       }
 

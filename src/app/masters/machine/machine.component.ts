@@ -21,7 +21,7 @@ interface machineData {
   key?: string;
   source?: string;
   sourceType?: string;
-  timestamp?: Date;
+  timestamp?: String;
   Customer_Name?: string;
   ID?: string;
   Installation_Site?: string;
@@ -32,6 +32,8 @@ interface machineData {
   SpeedIntermsOf?: string;
   OutfeedCountInTermsOf?: string;
   EndDate?: string;
+  InfeedInTermsOf?: string;
+
 }
 @Component({
   selector: 'app-machine',
@@ -75,6 +77,8 @@ export class MachineComponent implements OnInit {
     SpeedIntermsOf: { 'DN': 'Speed IntermsOf', 'visible': false },
     OutfeedCountInTermsOf: { 'DN': 'Outfeed Count InTermsOf', 'visible': false },
     EndDate: { 'DN': 'EndDate', 'visible': false },
+    InfeedInTermsOf: { 'DN': 'Infeed InTermsOf', 'visible': false },
+
   }
   getDisplayedColumns() {
     return this.displayedColumnsAs;
@@ -105,17 +109,18 @@ export class MachineComponent implements OnInit {
             key: data && data.key,
             source: data && data.source,
             sourceType: data && data.sourceType,
-            timestamp: data && new Date(moment(data.timestamp).format("DD MMM YYYY hh:mm a")),
+            timestamp: data && moment(data.timestamp).format("DD-MMM-YY hh:mm"),
             Customer_Name: data && data.Customer_Name,
             ID: data && data.ID,
             Installation_Site: data && data.Installation_Site,
             IP_Address: data && data.IP_Address,
             
-            Type: data && data.Type,
+            // Type: data && data.Type,
             CycleMeaning: data && data.CycleMeaning,
             SpeedIntermsOf: data && data.SpeedIntermsOf,
             OutfeedCountInTermsOf: data && data.OutfeedCountInTermsOf,
             EndDate: data && this.datePipe.transform(data.EndDate, 'yyyy-MM-dd'), 
+            InfeedInTermsOf: data && data.InfeedInTermsOf,
 
           }
           this.MachineData.push(allMachineData);
@@ -232,7 +237,9 @@ export class MachineComponent implements OnInit {
         CycleMeaning: result.CycleMeaning,
         SpeedIntermsOf: result.SpeedIntermsOf,
         OutfeedCountInTermsOf: result.OutfeedCountInTermsOf,
-        EndDate: this.datePipe.transform(result.EndDate, 'yyyy-MM-dd'), 
+        EndDate: result.EndDate ? this.datePipe.transform(result.EndDate, 'yyyy-MM-dd') : "", 
+        InfeedInTermsOf: result.InfeedInTermsOf
+
     }
     }
     console.log(T);

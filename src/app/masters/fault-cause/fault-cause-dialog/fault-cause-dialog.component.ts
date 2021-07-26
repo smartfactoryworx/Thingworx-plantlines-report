@@ -18,7 +18,7 @@ export class FaultCauseDialogComponent implements OnInit {
 
  faultcauseform: FormGroup;
   ID: FormControl;
-  causeNo: FormControl;
+  // causeNo: FormControl;
   causeDescription: FormControl;
   title;
   button;
@@ -38,14 +38,14 @@ export class FaultCauseDialogComponent implements OnInit {
 
   createfaultcause() {
     this.ID = new FormControl('');
-    this.causeNo = new FormControl('', Validators.required);
+    // this.causeNo = new FormControl('', Validators.required);
     this.causeDescription = new FormControl('', Validators.required);
   }
 
   createfaultcauseform() {
     this.faultcauseform = new FormGroup({
       ID: this.ID,
-      causeNo: this.causeNo,
+      // causeNo: this.causeNo,
       causeDescription: this.causeDescription,
     });
   }
@@ -66,7 +66,7 @@ export class FaultCauseDialogComponent implements OnInit {
         const c = this.data.dataKey.rowdata;
         this.faultcauseform.patchValue({
           ID: c.ID,
-          causeNo: c.causeNo,
+          // causeNo: c.causeNo,
           causeDescription: c.causeDescription,
         });
       }

@@ -201,26 +201,26 @@ export class FaultComponent implements OnChanges {
       PostData = {
         "input": this.FaultPostData
       }
-      console.log(JSON.stringify(PostData));
+      console.log(JSON.stringify(PostData), 'HI');
       let dataSource = 'MachineFaultMaster/Services/addMultipleData'
-      // this.manualentryservice.GetApiURL().subscribe(apipath => {
-      //   console.log(apipath['api']);
-      //   this.manualentryservice.GetMachineData(apipath['apithings'], dataSource, JSON.stringify(PostData)).subscribe(
-      //     (data: any[]) => {
-      //       //console.log(data);
-      //       //this.GetfaultData(this.machineName);
-      //       this.openSnackBar("Success", "Records Added or Updated Successfully");
-      //     },
-      //     (error: HttpErrorResponse) => {
-      //       //console.log(error);
-      //       if (error.status >= 400) {
-      //         this.openSnackBar("Validation", error.error);
-      //       }
-      //       else {
-      //         this.openSnackBar("Error", error.error);
-      //       }
-      //     });
-      // });
+      this.manualentryservice.GetApiURL().subscribe(apipath => {
+        console.log(apipath['apithings'], 'HI');
+        this.manualentryservice.GetMachineData(apipath['apithings'], dataSource, JSON.stringify(PostData)).subscribe(
+          (data: any[]) => {
+            console.log(data);
+            this.GetfaultData(this.machineName);
+            this.openSnackBar("Success", "Records Added or Updated Successfully");
+          },
+          (error: HttpErrorResponse) => {
+            console.log(error);
+            if (error.status >= 400) {
+              this.openSnackBar("Validation", error.error);
+            }
+            else {
+              this.openSnackBar("Error", error.error);
+            }
+          });
+      });
 
 
 
