@@ -499,7 +499,15 @@ ngOnChanges(changes: SimpleChanges): void {
         data: this.DataWithStructure
       },
       slice: {
-        reportFilters: [],
+        reportFilters: [{
+          uniqueName: "Date",
+          caption: "Date"
+        },
+        {
+          uniqueName: "SKUDesc",
+          caption: "SKU"
+        }
+      ],
         rows: [{
           uniqueName: "Date",
           caption: "Date"

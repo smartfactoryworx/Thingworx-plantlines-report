@@ -12,11 +12,11 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'cycle',
+        redirectTo: 'cycle-report',
         pathMatch: 'full'
       },
       {
-        path: 'cycle',
+        path: 'cycle-report',
         component: CycleReportComponent ,
         pathMatch: 'full'
       },
