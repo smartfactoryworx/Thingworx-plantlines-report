@@ -31,6 +31,7 @@ interface cycledata {
   To: string;
   Date: string;
   FaultNumber: number;
+  Cause:string;
 }
 interface Filter {
   value: string;
@@ -125,6 +126,7 @@ export class CycleReportComponent implements OnChanges {
             SKUDesc: data && data.SKU_Details,
             To: data && moment(data.StopTime).format("HH:mm"),
             Date: data && moment(data.StartTime).format("DD MMM YYYY"),
+            Cause:data && data.CauseSelected
           }
           this.cycleData.push(allCycleData);
         }
@@ -246,6 +248,9 @@ export class CycleReportComponent implements OnChanges {
         },
         FaultNumber: {
           type: "number"
+        },
+        Cause: {
+          type: "string"
         }
       }
     ]
@@ -464,6 +469,8 @@ export class CycleReportComponent implements OnChanges {
             uniqueName: "Date",
             caption: "Date"
           },
+         
+          
         ],
         columns: [
           {
@@ -551,7 +558,11 @@ export class CycleReportComponent implements OnChanges {
         {
           uniqueName: "SKUDesc",
           caption: "SKU"
-        }
+        },
+        {
+          uniqueName: "Cause",
+          caption: "Cause"
+        },
         ],
         rows: [{
           uniqueName: "Date",

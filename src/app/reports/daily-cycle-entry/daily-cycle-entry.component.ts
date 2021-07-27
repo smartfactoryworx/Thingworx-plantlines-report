@@ -291,7 +291,7 @@ export class DailyCycleEntryComponent implements OnChanges {
       console.log(apipath['api']);
       this.dataentryservice.GetMachineData(apipath['apithings'], dataSource, JSON.stringify(T)).subscribe(
         (data: any[]) => {
-          this.GetCycleData(this.machineName);
+          //this.GetCycleData(this.machineName);
           this.openSnackBar("Success", "Records Added or Updated Successfully");
         },
         (error: HttpErrorResponse) => {
