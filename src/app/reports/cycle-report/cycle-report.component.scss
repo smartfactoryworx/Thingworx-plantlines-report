@@ -44,23 +44,28 @@
 }
 
 
-// ::ng-deep #wdr-toolbar-wrapper {
-//   /* display: none; */
-//   height: 0px !important;
-// }
+::ng-deep #wdr-toolbar-wrapper {
+  /* display: none; */
+  height: 1px !important;
+}
 
 
-// ::ng-deep #wdr-toolbar-wrapper #wdr-toolbar {
-//   width: 100%;
-//   position: absolute;
-//   height: 78px;
-//   list-style: none;
-//   background: #fff0;
-//   white-space: nowrap;
-//   bottom: 90.5%;
-//   z-index: 1000;
-// }
+::ng-deep #wdr-toolbar-wrapper #wdr-toolbar {
+  width: 20%;
+  position: absolute;
+  height: 78px;
+  list-style: none;
+  background: #fff0;
+  white-space: nowrap;
+  bottom: 90.5%;
+  z-index: 1000;
+  right: 0;
+}
 
+
+::ng-deep #wdr-pivot-view .wdr-grid-layout .wdr-cell {
+  white-space: normal;
+}
 .invisible {
   display: block;
   visibility: hidden;

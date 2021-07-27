@@ -116,7 +116,7 @@ export class CycleReportComponent implements OnChanges {
             FaultNumber: data && data.FirstFault,
             FirstFault: data && data.FirstFault > 0 ? 1 : 0,
             FirstFaultDesc: data && data.FaultDescription,
-            From: data && moment(data.StartTime).format("DD MMM YYYY hh:mm a"),
+            From: data && moment(data.StartTime).format("HH:mm:ss"),
             InfeedCount: data && data.InfeedCount,
             Machine: data && data.Machine,
             ManualStop: data && data.ManualStop === true ? 1 : 0,
@@ -124,7 +124,7 @@ export class CycleReportComponent implements OnChanges {
             OutFeedCount: data && data.OutFeedCount,
             SKU: data && data.SKU,
             SKUDesc: data && data.SKU_Details,
-            To: data && moment(data.StopTime).format("DD MMM YYYY hh:mm a"),
+            To: data && moment(data.StopTime).format("HH:mm:ss"),
             Date: data && moment(data.StartTime).format("DD MMM YYYY"),
             Cause:data && data.CauseSelected
           }
@@ -180,6 +180,7 @@ export class CycleReportComponent implements OnChanges {
     else if (reportType === 'Faultwise') {
       this.BindReportData(this.cycleData, reportType);
       this.child2.webDataRocks.off("reportcomplete");
+      this.createChart_kpi_linewise('highchartcontainer-control', this.selected, 'Fault-Wise', 'fault');
     }
     else if (reportType === 'Summary') {
       this.BindReportData(this.cycleData, reportType);
@@ -190,11 +191,12 @@ export class CycleReportComponent implements OnChanges {
       this.child4.webDataRocks.off("reportcomplete");
     }
     this.pivotTableReportComplete = true;
-    this.createChart_kpi_linewise('highchartcontainer-control', this.selected, 'Fault-Wise', 'faultwise');
+    
   }
 
   GetReport(reportType) {
     this.onReportComplete(reportType);
+    
   }
 
   BindReportData(reportData, reportType) {
@@ -215,7 +217,7 @@ export class CycleReportComponent implements OnChanges {
           type: "string"
         },
         From: {
-          type: "datetime"
+          type: "string"
         },
         InfeedCount: {
           type: "number"
@@ -239,7 +241,7 @@ export class CycleReportComponent implements OnChanges {
           type: "string"
         },
         To: {
-          type: "datetime"
+          type: "string"
         },
         Date: {
           type: "date string"
@@ -252,6 +254,8 @@ export class CycleReportComponent implements OnChanges {
         }
       }
     ]
+
+  
     if (reportType === 'Faultwise') {
       var FalutWiseData = reportData.filter(function (value) {
         return value.FirstFault != 0
@@ -564,10 +568,7 @@ export class CycleReportComponent implements OnChanges {
           uniqueName: "Date",
           caption: "Date"
         },
-        {
-          uniqueName: "SKUDesc",
-          caption: "SKU"
-        },
+       
         {
           uniqueName: "From",
           caption: "From Date"
@@ -575,6 +576,10 @@ export class CycleReportComponent implements OnChanges {
         {
           uniqueName: "To",
           caption: "To Date"
+        },
+        {
+          uniqueName: "SKUDesc",
+          caption: "SKU"
         },
         {
           uniqueName: "FaultNumber",
@@ -768,7 +773,7 @@ export class CycleReportComponent implements OnChanges {
     let chartForm;
 
 
-    if (chartType === 'faultwise') {
+    if (chartType === 'fault') {
 
       GroupedDataFault.sort(this.util.dynamicSort('FirstFault'))
       xAxisData = this.util.filterMyArr(GroupedDataFault, category);

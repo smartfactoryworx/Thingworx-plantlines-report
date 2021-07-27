@@ -208,6 +208,28 @@ export class DailyCycleEntryComponent implements OnChanges {
           this.DailyCycle.push(allCycleData);
         }
         console.log("DailyCycle", this.DailyCycle);
+
+
+        this.displayedColumnsAs = {
+          ID: { 'DN': 'ID', 'visible': true },
+          Date: { 'DN': 'Date', 'visible': false },
+          SKU: { 'DN': 'SKU', 'visible': false },
+          From: { 'DN': 'From Date', 'visible': false },
+          To: { 'DN': 'To Date', 'visible': false },
+          FaultNumber: { 'DN': 'Fault No.', 'visible': false },
+          TotalCycleRun: { 'DN': 'Total Cycle Run ('+ this.CycleMeaning + ')', 'visible': false },
+          FaultCount: { 'DN': 'Fault Count', 'visible': false },
+          ManualStopCount: { 'DN': 'Manual Stop Count', 'visible': false },
+          MaxSpeed: { 'DN': 'Max Speed ('+ this.SpeedIntermsOf + ')', 'visible': false },
+          Duration: { 'DN': 'Duration', 'visible': false },
+          InfeedCount: { 'DN': 'Infeed Count ('+ this.InfeedInTermsOf + ')', 'visible': false },
+          OutFeedCount: { 'DN': 'Outfeed Count ('+ this.OutfeedCountInTermsOf + ')', 'visible': false },
+          FirstFault: { 'DN': 'Fault', 'visible': false },
+          MeanCycleBetweenFault: { 'DN': 'MCBF', 'visible': false },
+          MeanCycleBetweenFaultNManualStop: { 'DN': 'MCBFS', 'visible': false },
+          CauseSelected: { 'DN': 'Cause Selected', 'visible': false },
+        }
+      
         this.DailyCycle.sort(this.util.dynamicSort('From'));
         this.GetAllFaultCauseData();
         this.vdisplayedColumns = [];
