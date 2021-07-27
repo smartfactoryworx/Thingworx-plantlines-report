@@ -115,7 +115,7 @@ export class CycleReportComponent implements OnChanges {
             FaultNumber: data && data.FirstFault,
             FirstFault: data && data.FirstFault > 0 ? 1 : 0,
             FirstFaultDesc: data && data.FaultDescription,
-            From: data && moment(data.StartTime).format("HH:mm:ss"),
+            From: data && moment(data.StartTime).format("HH:mm"),
             InfeedCount: data && data.InfeedCount,
             Machine: data && data.Machine,
             ManualStop: data && data.ManualStop === true ? 1 : 0,
@@ -123,7 +123,7 @@ export class CycleReportComponent implements OnChanges {
             OutFeedCount: data && data.OutFeedCount,
             SKU: data && data.SKU,
             SKUDesc: data && data.SKU_Details,
-            To: data && moment(data.StopTime).format("HH:mm:ss"),
+            To: data && moment(data.StopTime).format("HH:mm"),
             Date: data && moment(data.StartTime).format("DD MMM YYYY"),
           }
           this.cycleData.push(allCycleData);

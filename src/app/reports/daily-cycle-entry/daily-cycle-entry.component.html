@@ -2,7 +2,7 @@
     <div fxLayout="column" style="width: 99%;" fxLayoutAlign="center">
         <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap fxLayoutGap="0.1%"
             fxLayoutAlign="space-around center" fxFlex="100">
-            <app-parent-master fxFlex="90" (machineDetail)='GetCycleData($event)'></app-parent-master>
+            <app-parent-master fxFlex="58" (machineDetail)='GetCycleData($event)'></app-parent-master>
             <div *ngIf="!loading" fxFlex="10" style="margin-bottom: 1%;">
                 <mat-spinner diameter="30"></mat-spinner>
             </div>
@@ -12,8 +12,8 @@
 
     <div [hidden]="!gotData" fxLayout="column" fxLayoutAlign="center none"
         style="width: 98%;margin-left: 1%;margin-right: 1%;">
-        <div fxLayout="row" style="width: 100%;padding: 0%;" fxLayoutAlign="space-between center" fxFlex="100">
-            <mat-form-field fxFlex="85">
+        <div fxLayout="row" style="width: 100%;padding: 0%;" fxLayoutAlign="end center" fxFlex="100">
+            <mat-form-field fxFlex="30" style="margin-right: 1%;">
                 <input autocomplete="off" class="placeholder" matInput (keyup)="applyFilter($event.target.value)"
                     placeholder="Filter">
             </mat-form-field>
@@ -22,7 +22,7 @@
             Add SKU
         </button> -->
 
-            <button mat-raised-button color="primary" (click)="exportTable()" fxFlex="10">
+            <button mat-raised-button color="primary" (click)="exportTable()" fxFlex="7">
                 Export To Excel
             </button>
         </div>

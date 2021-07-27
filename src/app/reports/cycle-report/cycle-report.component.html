@@ -1,13 +1,11 @@
-<div fxLayout="column" style="width: 100%;min-height: 92.47vh;">
-    <div fxLayout="column" style="width: 99%;" fxLayoutAlign="center">
-        <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap fxLayoutGap="0.1%"
-            fxLayoutAlign="space-around center" fxFlex="100">
-            <app-parent-master fxFlex="90" (machineDetail)='GetCycleData($event)'></app-parent-master>
-            <div *ngIf="!gotData" fxFlex="10" style="margin-bottom: 1%;">
+<div fxLayout="column" style="width: 100%;min-height: 92.47vh;margin-top: 1%;">
+    
+            <app-parent-master (machineDetail)='GetCycleData($event)'></app-parent-master>
+            <div *ngIf="!gotData" fxFlex="10" style="margin-bottom: 1%;margin-left: 49%;">
                 <mat-spinner diameter="30"></mat-spinner>
             </div>
-        </div>
-    </div>
+       
+   
 
     <div *ngIf="cycleData?.length > 0" fxLayout="column" style="width: 99%;" fxLayoutAlign="center">
 
