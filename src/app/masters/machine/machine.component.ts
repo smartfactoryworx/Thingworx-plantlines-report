@@ -75,7 +75,7 @@ export class MachineComponent implements OnInit {
     Installation_Site: { 'DN': 'Installation Site', 'visible': false },
     IP_Address: { 'DN': 'IP Address', 'visible': false },
     
-    Type: { 'DN': 'Type', 'visible': false },
+    //Type: { 'DN': 'Type', 'visible': false },
     CycleMeaning: { 'DN': 'Cycle Meaning', 'visible': false },
     SpeedIntermsOf: { 'DN': 'Speed IntermsOf', 'visible': false },
     OutfeedCountInTermsOf: { 'DN': 'Outfeed Count InTermsOf', 'visible': false },
