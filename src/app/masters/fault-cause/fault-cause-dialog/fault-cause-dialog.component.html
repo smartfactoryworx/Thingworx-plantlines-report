@@ -15,9 +15,10 @@
               
             </div>
             <div fxLayout="row" style="width: 100%;padding: 0%;" fxLayoutAlign="space-around start">
-                <mat-form-field fxFlex="90">
-                    <input matInput autocomplete="off" placeholder="Cause Description"
+                <mat-form-field fxFlex="90" hintLabel="Max 20 characters">
+                    <input matInput autocomplete="off" placeholder="Cause Description" maxlength="20"
                         formControlName="causeDescription">
+                        <mat-hint align="end">{{causeDescription.value?.length || 0}}/20</mat-hint>
                 </mat-form-field>
                
 
