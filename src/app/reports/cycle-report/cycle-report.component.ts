@@ -57,9 +57,9 @@ export class CycleReportComponent implements OnChanges {
   gotData: boolean = true;
   public DataWithStructure = [];
   filters: Filter[] = [
-   // { value: 'SKUDesc', viewValue: 'SKU Wise' },
+    // { value: 'SKUDesc', viewValue: 'SKU Wise' },
     { value: 'FirstFaultDesc', viewValue: 'Fault Wise' },
-   // { value: 'Date', viewValue: 'Daily Cycle Wise' },
+    // { value: 'Date', viewValue: 'Daily Cycle Wise' },
   ];
   public selected = this.filters[0].value;
 
@@ -68,30 +68,30 @@ export class CycleReportComponent implements OnChanges {
   CycleMeaning: any;
   InfeedInTermsOf: any;
   OutfeedCountInTermsOf: any;
-  SpeedIntermsOf:any;
+  SpeedIntermsOf: any;
   constructor(private httpClient: HttpClient, protected dataentryservice: ManualEntryService, private util: UtilService,
     private datePipe: DatePipe) { }
 
-ngOnChanges(changes: SimpleChanges): void {
-  //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
-  //Add '${implements OnChanges}' to the class.
-  console.log(this.machineData);
-  this.GetCycleData(this.machineData);
-}
+  ngOnChanges(changes: SimpleChanges): void {
+    //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
+    //Add '${implements OnChanges}' to the class.
+    console.log(this.machineData);
+    this.GetCycleData(this.machineData);
+  }
   GetCycleData(machineDetails) {
     console.log(machineDetails);
 
-    console.log(machineDetails[0].machineId,machineDetails[0].CycleMeaning,machineDetails[0].InfeedInTermsOf,machineDetails[0].OutfeedCountInTermsOf,machineDetails[0].SpeedIntermsOf);
+    console.log(machineDetails[0].machineId, machineDetails[0].CycleMeaning, machineDetails[0].InfeedInTermsOf, machineDetails[0].OutfeedCountInTermsOf, machineDetails[0].SpeedIntermsOf);
     this.machineData = machineDetails;
     this.machineName = machineDetails[0].machineId;
-    this.CycleMeaning= machineDetails[0].CycleMeaning;
-    this.InfeedInTermsOf= machineDetails[0].InfeedInTermsOf;
-    this.OutfeedCountInTermsOf= machineDetails[0].OutfeedCountInTermsOf;
-    this.SpeedIntermsOf= machineDetails[0].SpeedIntermsOf;
+    this.CycleMeaning = machineDetails[0].CycleMeaning == undefined ? '' : machineDetails[0].CycleMeaning;
+    this.InfeedInTermsOf = machineDetails[0].InfeedInTermsOf == undefined ? '' : machineDetails[0].InfeedInTermsOf;
+    this.OutfeedCountInTermsOf = machineDetails[0].OutfeedCountInTermsOf == undefined ? '' : machineDetails[0].OutfeedCountInTermsOf;
+    this.SpeedIntermsOf = machineDetails[0].SpeedIntermsOf == undefined ? '' : machineDetails[0].SpeedIntermsOf;
     this.errorText = "";
     this.cycleData = [];
     this.gotData = false;
-    
+
     let body = {
       "Machine": this.machineName,
     }
@@ -103,14 +103,14 @@ ngOnChanges(changes: SimpleChanges): void {
     this.dataentryservice.GetApiURL().subscribe(apipath => {
       console.log(apipath['api']);
       this.dataentryservice.GetMachineData(apipath['apithings'], dataSource, JSON.stringify(body)).subscribe((machinecycledata: any) => {
-      
+
         console.log("machinecycledata", machinecycledata);
 
         var c = machinecycledata.rows;
         for (let i = 0; i < c.length; i++) {
           const data = c[i]
           const allCycleData = {
-            CycleRun:  data && data.CycleCount,
+            CycleRun: data && data.CycleCount,
             Duration: data && data.Duration,
             FaultNumber: data && data.FirstFault,
             FirstFault: data && data.FirstFault > 0 ? 1 : 0,
@@ -118,7 +118,7 @@ ngOnChanges(changes: SimpleChanges): void {
             From: data && moment(data.StartTime).format("DD MMM YYYY hh:mm a"),
             InfeedCount: data && data.InfeedCount,
             Machine: data && data.Machine,
-            ManualStop: data && data.ManualStop===true?1:0,
+            ManualStop: data && data.ManualStop === true ? 1 : 0,
             MaxActualSpeed: data && data.MaxActualSpeed,
             OutFeedCount: data && data.OutFeedCount,
             SKU: data && data.SKU,
@@ -129,22 +129,22 @@ ngOnChanges(changes: SimpleChanges): void {
           this.cycleData.push(allCycleData);
         }
         console.log("cycleData", this.cycleData);
-        if(this.cycleData.length === 0){
+        if (this.cycleData.length === 0) {
           this.gotData = true;
           this.errorText = " No Record Found";
-        }else{
+        } else {
           this.gotData = true;
           this.errorText = "";
         }
-      
+
       });
     });
   }
 
-  customizeToolbar(toolbar,reportType, fileName, sheetName) {
+  customizeToolbar(toolbar, reportType, fileName, sheetName) {
     let tabs = toolbar.getTabs();
     console.log(tabs);
-    
+
     toolbar.getTabs = function () {
       delete tabs[0];
       delete tabs[1];
@@ -153,20 +153,20 @@ ngOnChanges(changes: SimpleChanges): void {
       delete tabs[4];
       delete tabs[5];
       //delete tabs[6];
-      tabs.unshift({  
-        id: "fm-tab-newtab", 
-        title: "Export", 
-        rightGroup : true,
-        handler: newtabHandler,  
-        icon:'<mat-icon>create</mat-icon>'
-    }); 
-    return tabs; 
-      
+      tabs.unshift({
+        id: "fm-tab-newtab",
+        title: "Export",
+        rightGroup: true,
+        handler: newtabHandler,
+        icon: '<mat-icon>create</mat-icon>'
+      });
+      return tabs;
+
     }
 
-    var newtabHandler = () => { 
+    var newtabHandler = () => {
       this.Export_Excel(reportType, fileName, sheetName);
- }  
+    }
   }
 
   onReportComplete(reportType): void {
@@ -315,18 +315,18 @@ ngOnChanges(changes: SimpleChanges): void {
           {
             uniqueName: "MaxActualSpeed",
             formula: "(max(\"MaxActualSpeed\"))",
-            caption: "Max Speed (" +this.SpeedIntermsOf+ ")"
+            caption: "Max Speed (" + this.SpeedIntermsOf + ")"
           },
           {
             uniqueName: "MeanCycleBetweenFault",
             formula: "((\"CycleRun\")/(\"FirstFault\"))",
-            caption: "MeanCycleBetweenFault",
+            caption: "MCBF",
             format: "44mvcoma",
           },
           {
             uniqueName: "MeanCycleBetweenFaultNManualStop",
             formula: "((\"CycleRun\")/(\"FirstFault\" + \"ManualStop\"))",
-            caption: "MeanCycleBetweenFaultNManualStop",
+            caption: "MCBF&S",
             format: "44mvcoma",
           },
 
@@ -387,7 +387,7 @@ ngOnChanges(changes: SimpleChanges): void {
           },
           {
             uniqueName: "FaultNumber",
-            caption: "Fault Number"
+            caption: "Fault No."
           }
         ],
         columns: [
@@ -485,20 +485,20 @@ ngOnChanges(changes: SimpleChanges): void {
           {
             uniqueName: "MaxActualSpeed",
             formula: "(max(\"MaxActualSpeed\"))",
-            caption: "Max Speed (" +this.SpeedIntermsOf+ ")"
+            caption: "Max Speed (" + this.SpeedIntermsOf + ")"
           },
 
 
           {
             uniqueName: "MeanCycleBetweenFault",
             formula: "((\"CycleRun\")/(\"FirstFault\"))",
-            caption: "MeanCycleBetweenFault",
+            caption: "MCBF",
             format: "44mvcoma",
           },
           {
             uniqueName: "MeanCycleBetweenFaultNManualStop",
             formula: "((\"CycleRun\")/(\"FirstFault\" + \"ManualStop\"))",
-            caption: "MeanCycleBetweenFaultNManualStop",
+            caption: "MCBF&S",
             format: "44mvcoma",
           },
         ],
@@ -548,7 +548,7 @@ ngOnChanges(changes: SimpleChanges): void {
           uniqueName: "SKUDesc",
           caption: "SKU"
         }
-      ],
+        ],
         rows: [{
           uniqueName: "Date",
           caption: "Date"
@@ -567,7 +567,7 @@ ngOnChanges(changes: SimpleChanges): void {
         },
         {
           uniqueName: "FaultNumber",
-          caption: "Fault Number"
+          caption: "Fault No."
         }
         ],
         columns: [
@@ -595,7 +595,7 @@ ngOnChanges(changes: SimpleChanges): void {
           {
             uniqueName: "MaxActualSpeed",
             formula: "(max(\"MaxActualSpeed\"))",
-            caption: "Max Speed (" +this.SpeedIntermsOf+ ")"
+            caption: "Max Speed (" + this.SpeedIntermsOf + ")"
           },
           {
             uniqueName: "Duration",
@@ -605,23 +605,23 @@ ngOnChanges(changes: SimpleChanges): void {
           {
             uniqueName: "InfeedCount",
             formula: "((\"InfeedCount\"))",
-            caption: "InfeedCount (" + this.InfeedInTermsOf+ ")"
+            caption: "InfeedCount (" + this.InfeedInTermsOf + ")"
           },
           {
             uniqueName: "OutFeedCount",
             formula: "(max(\"OutFeedCount\"))",
-            caption: "OutFeedCount (" + this.OutfeedCountInTermsOf+ ")"
+            caption: "OutFeedCount (" + this.OutfeedCountInTermsOf + ")"
           },
           {
             uniqueName: "MeanCycleBetweenFault",
             formula: "((\"CycleRun\")/(\"FirstFault\"))",
-            caption: "MeanCycleBetweenFault",
+            caption: "MCBF",
             format: "44mvcoma",
           },
           {
             uniqueName: "MeanCycleBetweenFaultNManualStop",
             formula: "((\"CycleRun\")/(\"FirstFault\" + \"ManualStop\"))",
-            caption: "MeanCycleBetweenFaultNManualStop",
+            caption: "MCBF&S",
             format: "44mvcoma",
           },
 
@@ -738,32 +738,32 @@ ngOnChanges(changes: SimpleChanges): void {
     console.log(controlname, "controlname");
     console.log(category, "category");
     console.log(this.cycleData);
-    if(category === 'FirstFaultDesc'){
-    var FalutWiseData = this.cycleData.filter(function (value) {
-      return value.FirstFault != 0
-    })
-  }
-   // const GroupedData1 = this.util.groupAndSum(this.cycleData, ['Date'], ['CycleRun', 'InfeedCount', 'OutFeedCount', 'ManualStop', 'FirstFault', 'FaultNumber']);
+    if (category === 'FirstFaultDesc') {
+      var FalutWiseData = this.cycleData.filter(function (value) {
+        return value.FirstFault != 0
+      })
+    }
+    // const GroupedData1 = this.util.groupAndSum(this.cycleData, ['Date'], ['CycleRun', 'InfeedCount', 'OutFeedCount', 'ManualStop', 'FirstFault', 'FaultNumber']);
     const GroupedDataFault = this.util.groupAndSum(FalutWiseData, [category], ['FirstFault']);
     //console.log(GroupedData1, "GroupedData");
     console.log(GroupedDataFault, "GroupedData");
-  
-     let xAxisData;
+
+    let xAxisData;
     let measureDataFaultCount;
-  
+
     let chartTitleName;
     let seriesData;
     let chartTypeName;
     let chartForm;
 
-   
+
     if (chartType === 'faultwise') {
-     
-        GroupedDataFault.sort(this.util.dynamicSort('FirstFault'))
-        xAxisData = this.util.filterMyArr(GroupedDataFault, category);
-        measureDataFaultCount = this.util.filterMyArr(GroupedDataFault, "FirstFault");
+
+      GroupedDataFault.sort(this.util.dynamicSort('FirstFault'))
+      xAxisData = this.util.filterMyArr(GroupedDataFault, category);
+      measureDataFaultCount = this.util.filterMyArr(GroupedDataFault, "FirstFault");
       chartTitleName = chartTitle;
-     
+
       seriesData = [
         {
           name: "Fault Count",
@@ -772,8 +772,8 @@ ngOnChanges(changes: SimpleChanges): void {
         },
       ]
     } else if (chartType === 'skuwise') {
- 
-    }else if(chartType === 'dailycycle'){
+
+    } else if (chartType === 'dailycycle') {
 
     }
 
@@ -787,7 +787,7 @@ ngOnChanges(changes: SimpleChanges): void {
             style: {
               fontWeight: 'bold',
               color: '#000000',
-              fontSize:'15px'
+              fontSize: '15px'
             },
             formatter: function () {
               let value = (this.y);
@@ -806,7 +806,7 @@ ngOnChanges(changes: SimpleChanges): void {
             style: {
               fontWeight: 'bold',
               color: '#000000',
-              fontSize:'15px'
+              fontSize: '15px'
             },
             formatter: function () {
               let value = (this.y);
@@ -828,7 +828,7 @@ ngOnChanges(changes: SimpleChanges): void {
         align: 'left',
         style: {
           fontWeight: 'bold',
-          fontSize:'15px'
+          fontSize: '15px'
         }
       },
       xAxis: {
@@ -855,10 +855,10 @@ ngOnChanges(changes: SimpleChanges): void {
       tooltip: {
         formatter: function () {
           let value = (this.y);
-          return this.key + '<br>' + '' + value ;
+          return this.key + '<br>' + '' + value;
         }
       },
-      plotOptions:chartForm,
+      plotOptions: chartForm,
       series: seriesData,
       credits: {
         enabled: false

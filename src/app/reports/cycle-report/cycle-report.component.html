@@ -40,6 +40,25 @@
                         (beforetoolbarcreated)="customizeToolbar($event,'Faultwise',machineName +'_Fault_Wise_Report','Fault_Wise_Report')">
                     </wbr-pivot>
                 </div>
+                <div *ngIf="cycleData?.length > 0" fxLayout="column" style="width: 99%;margin-top: 2%;" fxLayoutAlign="center"
+                    id="element-to-print">
+            
+                    <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap fxLayoutAlign="space-around center"
+                        fxFlex="100">
+                        <mat-form-field appearance="fill" id="filterdropdown">
+                            <mat-select [(ngModel)]="selected" (selectionChange)="getFilterValue($event.value)" id="select1">
+                                <mat-option *ngFor="let filter of filters" [value]="filter.value">
+                                    {{filter.viewValue}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <div [id]="'highchartcontainer-control'"
+                            style="height:400px; padding-top:1px;background: url('/../../../assets/images/chartLoader.gif')  no-repeat center ;background-size: 70px 70px;"
+                            fxFlex="100">
+                        </div>
+                    </div>
+            
+                </div>
             </mat-tab>
 
             <mat-tab label="DailyCycle">
@@ -53,25 +72,7 @@
         </mat-tab-group>
 
     </div>
-    <div *ngIf="cycleData?.length > 0" fxLayout="column" style="width: 99%;margin-top: 2%;" fxLayoutAlign="center"
-        id="element-to-print">
 
-        <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap fxLayoutAlign="space-around center"
-            fxFlex="100">
-            <mat-form-field appearance="fill" id="filterdropdown">
-                <mat-select [(ngModel)]="selected" (selectionChange)="getFilterValue($event.value)" id="select1">
-                    <mat-option *ngFor="let filter of filters" [value]="filter.value">
-                        {{filter.viewValue}}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-            <div [id]="'highchartcontainer-control'"
-                style="height:400px; padding-top:1px;background: url('/../../../assets/images/chartLoader.gif')  no-repeat center ;background-size: 70px 70px;"
-                fxFlex="100">
-            </div>
-        </div>
-
-    </div>
     <div style="color: red;text-align: center;margin-top: 4%;">
         {{errorText}}
     </div>
