@@ -28,12 +28,14 @@ export class MachineDialogComponent implements OnInit {
   OutfeedCountInTermsOf: FormControl;
   InfeedInTermsOf :FormControl;
   EndDate =  new FormControl(moment());
+  Field1: FormControl;
   title;
   button;
   machine;
   infeedIntermsofList;
   outfeedIntermsofList;
   speedIntermsofList;
+  machinetypeList
 
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any, public dialogRef: MatDialogRef<MachineDialogComponent>,
@@ -58,6 +60,7 @@ export class MachineDialogComponent implements OnInit {
     this.OutfeedCountInTermsOf = new FormControl('');
     this.EndDate = new FormControl('');
     this.InfeedInTermsOf = new FormControl('')
+    this.Field1 = new FormControl('')
   }
 
   createmachineform() {
@@ -72,7 +75,8 @@ export class MachineDialogComponent implements OnInit {
       SpeedIntermsOf: this.SpeedIntermsOf,
       OutfeedCountInTermsOf: this.OutfeedCountInTermsOf,
       EndDate: this.EndDate,
-      InfeedInTermsOf: this.InfeedInTermsOf
+      InfeedInTermsOf: this.InfeedInTermsOf,
+      Field1: this.Field1
     });
   }
   ngOnInit() {
@@ -85,6 +89,8 @@ export class MachineDialogComponent implements OnInit {
         this.infeedIntermsofList = this.data.dataKey.dropdownList[0];
         this.outfeedIntermsofList = this.data.dataKey.dropdownList[1];
         this.speedIntermsofList = this.data.dataKey.dropdownList[2];
+        this.machinetypeList = this.data.dataKey.dropdownList[3];
+        
       if (this.data.dataKey.key === 'AddMachine') {
         this.title = this.data.dataKey.title;
         this.button = this.data.dataKey.button;
@@ -106,7 +112,8 @@ export class MachineDialogComponent implements OnInit {
           SpeedIntermsOf: c.SpeedIntermsOf,
           OutfeedCountInTermsOf: c.OutfeedCountInTermsOf,
           EndDate: c.EndDate,
-          InfeedInTermsOf: c.InfeedInTermsOf
+          InfeedInTermsOf: c.InfeedInTermsOf,
+          Field1:c.Field1
         });
       }
 

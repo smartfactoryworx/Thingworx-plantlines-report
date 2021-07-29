@@ -19,12 +19,15 @@ export class FaultCauseDialogComponent implements OnInit {
  faultcauseform: FormGroup;
   ID: FormControl;
   // causeNo: FormControl;
+  MachineType: FormControl;
+  Machine_MDS: FormControl;
   causeDescription: FormControl;
   title;
   button;
-  
-
-
+  machinetypeList;
+  machineDataList;
+  filteredMachine;
+  errorText="";
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any, public dialogRef: MatDialogRef<FaultCauseDialogComponent>,
     private httpClient: HttpClient, private _snackBar: MatSnackBar, protected dataentryservice: ManualEntryService) { }
@@ -40,21 +43,47 @@ export class FaultCauseDialogComponent implements OnInit {
     this.ID = new FormControl('');
     // this.causeNo = new FormControl('', Validators.required);
     this.causeDescription = new FormControl('', Validators.required);
+    this.Machine_MDS =   new FormControl('');
+    this.MachineType = new FormControl('');
   }
 
   createfaultcauseform() {
     this.faultcauseform = new FormGroup({
       ID: this.ID,
       // causeNo: this.causeNo,
+      Machine_MDS:this.Machine_MDS,
+      MachineType:this.MachineType,
       causeDescription: this.causeDescription,
     });
+  }
+
+  MachineTypeRadio(){
+    this.Machine_MDS.setValue('');
+  }
+  MachineMDSRadio(){
+    this.MachineType.setValue('');
+  }
+  GetFaultCauseDetail(){
+    this.errorText ="";
+    console.log(this.MachineType.value,this.Machine_MDS.value);
+    if((this.MachineType.value ==="" || this.MachineType.value === undefined || this.MachineType.value ==="undefined")&& (this.Machine_MDS.value === "" ||this.Machine_MDS.value === "undefined" || this.Machine_MDS.value === undefined)){
+      this.errorText = "Please select the list item"
+      return;
+    }
+    this.dialogRef.close(this.faultcauseform.value);
+  }
+
+  ResetErrorMsg(){
+    this.errorText = "";
   }
   ngOnInit() {
     console.log(this.data);
     this.createfaultcause();
     this.createfaultcauseform();
-
     if (this.data.dataKey.rowdata !== null) {
+      this.machinetypeList =this.data.dataKey.machineType;
+      this.machineDataList = this.data.dataKey.machineList;
+      this.filteredMachine = this.data.dataKey.filteredMachine;
       if (this.data.dataKey.key === 'AddMachine') {
         this.title = this.data.dataKey.title;
         this.button = this.data.dataKey.button;
@@ -67,6 +96,8 @@ export class FaultCauseDialogComponent implements OnInit {
         this.faultcauseform.patchValue({
           ID: c.ID,
           // causeNo: c.causeNo,
+          Machine_MDS:c.Machine_MDS,
+          MachineType:c.MachineType,
           causeDescription: c.causeDescription,
         });
       }

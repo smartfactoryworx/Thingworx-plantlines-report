@@ -115,7 +115,7 @@ export class SkuComponent implements OnChanges {
           }
           this.skuData.push(allSKUData);
         }
-        console.log("skuData", this.skuData);
+        console.log("skuData", JSON.stringify(this.skuData));
         this.vdisplayedColumns = [];
         //console.log(this.fgextype[0]);
         if (Object.keys(skudata).length > 0) {

@@ -26,13 +26,19 @@
             </div>
             <div fxLayout="row" style="width: 100%;padding: 0%;" fxLayoutAlign="space-around start">
                 
-                <mat-form-field fxFlex="24">
+                <mat-form-field fxFlex="24" fxHide>
                     <input matInput autocomplete="off"  placeholder="IP Address"
                         formControlName="IP_Address">
                 </mat-form-field>
+              
                 <mat-form-field fxFlex="24">
                     <input matInput autocomplete="off"  placeholder="Cycle:OutFeed"
                         formControlName="CycleMeaning">
+                </mat-form-field>
+                <mat-form-field appearance="" id="filterdropdown3" fxFlex="24">
+                    <mat-select formControlName="Field1" id="select4" placeholder="Machine Type">
+                        <mat-option *ngFor="let type of machinetypeList" [value]="type">{{type}}</mat-option>
+                    </mat-select>
                 </mat-form-field>
                 <mat-form-field appearance="" id="filterdropdown2" fxFlex="24">
                     <mat-select formControlName="InfeedInTermsOf" id="select3" placeholder="InfeedInTermsOf">

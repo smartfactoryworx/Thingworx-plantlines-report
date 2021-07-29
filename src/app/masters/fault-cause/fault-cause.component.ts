@@ -21,6 +21,18 @@ interface faultCauseData {
   ID?: string;
   // causeNo?: number;
   causeDescription?: string;
+  MachineType?: string;
+  Machine_MDS?: string;
+}
+
+interface machinelist {
+  machineId: string;
+  machineName: string;
+  createdDate: Date;
+  CycleMeaning:string;
+  InfeedInTermsOf:string;
+  OutfeedCountInTermsOf:string;
+  SpeedIntermsOf:string;
 }
 @Component({
   selector: 'app-fault-cause',
@@ -30,14 +42,9 @@ interface faultCauseData {
 export class FaultCauseComponent implements OnInit {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
- 
-  constructor(private httpClient: HttpClient, protected datePipe: DatePipe, private _snackBar: MatSnackBar, public dialog: MatDialog, private manualentryservice: ManualEntryService, private tableutil: TableUtilsService, private util: UtilService) { }
 
-  openSnackBar(message: string, action: string) {
-    this._snackBar.open(message, action, {
-      duration: 2000,
-    });
-  }
+  public MachineList: machinelist[] = [];
+  public filteredMachine = this.MachineList.slice();
 
   displayedColumns: string[];// = ['position', 'name', 'weight', 'symbol'];
   gotData: boolean = false;
@@ -46,11 +53,24 @@ export class FaultCauseComponent implements OnInit {
   dataSource: MatTableDataSource<faultCauseData>;
   errorText;
   noData;
+  MachineTypeList = [];
+  FilteredMachineData = [];
+  constructor(private httpClient: HttpClient, protected datePipe: DatePipe, private _snackBar: MatSnackBar, public dialog: MatDialog, private manualentryservice: ManualEntryService, private tableutil: TableUtilsService, private util: UtilService) { }
+
+  openSnackBar(message: string, action: string) {
+    this._snackBar.open(message, action, {
+      duration: 2000,
+    });
+  }
+
+
 
   displayedColumnsAs = {
     // causeNo: { 'DN': 'Cause Number', 'visible': false },
     causeDescription: { 'DN': 'Cause Description', 'visible': false },
     ID: { 'DN': 'ID', 'visible': true },
+    Machine_MDS: { 'DN': 'Machine_MDS', 'visible': false },
+    MachineType: { 'DN': 'MachineType', 'visible': false },
 
   }
   getDisplayedColumns() {
@@ -69,6 +89,8 @@ export class FaultCauseComponent implements OnInit {
 
     this.manualentryservice.GetApiURL().subscribe(apipath => {
       console.log(apipath['api']);
+      console.log(apipath['machinetype']);
+      this.MachineTypeList = apipath['machinetype'];
       this.manualentryservice.GetMachineData(apipath['apithings'], dataSource, JSON.stringify(body)).subscribe((faultcausedata: any) => {
         console.log("faultcausedata", faultcausedata);
         var c = faultcausedata.rows;
@@ -80,6 +102,8 @@ export class FaultCauseComponent implements OnInit {
             // causeNo: data && data.causeNo,
             causeDescription: data && data.causeDescription,
             ID: data && data.ID,
+            Machine_MDS: data && data.Machine_MDS === "undefined" ? "" : data.Machine_MDS,
+            MachineType: data && data.MachineType === "undefined" ? "" : data.MachineType
           }
           this.FaultCauseData.push(allFaultCauseData);
           //}
@@ -124,9 +148,38 @@ export class FaultCauseComponent implements OnInit {
 
   ngOnInit() {
     this.GetAllFaultCauseData();
+    this.GetMachineData();
   }
 
-
+  GetMachineData() {
+    this.MachineList = [];
+    this.manualentryservice.GetApiURL().subscribe(apipath => {
+      console.log(apipath['apithings']);
+      let body = {};
+      let dataSource = 'MachineDetailsMaster/Services/GetDataTableEntries'
+      this.manualentryservice.GetMachineData(apipath['apithings'], dataSource, JSON.stringify(body)).subscribe((machineList: any) => {
+        console.log(machineList['rows'], "machineList");
+        var c = machineList['rows'];
+        for (let i = 0; i < c.length; i++) {
+          const a = c[i];
+          const data = {
+            machineId: a.Machine_MDS,
+            machineName: a.Machine_Name,
+            createdDate: new Date(moment(a.timestamp).format("DD MMM YYYY hh:mm a")),
+            machineDetails: a.Machine_MDS + ' - ' + a.Machine_Name + ' - ' + a.Customer_Name + '(' + moment(new Date(a.timestamp)).format("DD-MM-YYYY") + ')',
+            CycleMeaning:a.CycleMeaning,
+            InfeedInTermsOf:a.InfeedInTermsOf,
+            OutfeedCountInTermsOf:a.OutfeedCountInTermsOf,
+            SpeedIntermsOf:a.SpeedIntermsOf          }
+          this.MachineList.push(data);
+        }
+        this.MachineList.sort(this.util.dynamicSort('createdDate'));
+        this.filteredMachine = this.MachineList.slice();
+        console.log(this.filteredMachine);
+        console.log(this.MachineList, "MachineData");
+      });
+    });
+  }
 
 
   applyFilter(filterValue: string) {
@@ -145,12 +198,15 @@ export class FaultCauseComponent implements OnInit {
         dataKey: {
           title: 'Add Fault Cause',
           button: 'Add',
-          key: 'AddMachine'
+          key: 'AddMachine',
+          machineType : this.MachineTypeList,
+          machineList:this.MachineList,
+          filteredMachine:this.filteredMachine
         }
       }
     });
     dialogRef.afterClosed().subscribe(result => {
-      //console.log('The dialog was closed', result);
+      console.log('The dialog was closed', result);
       if (result !== undefined) {
         this.postFaultCauseData(result);
       }
@@ -168,18 +224,23 @@ export class FaultCauseComponent implements OnInit {
           rowdata: element,
           title: 'Update Details',
           button: 'Update',
-          key: 'Update'
+          key: 'Update',
+          machineType : this.MachineTypeList,
+          machineList:this.MachineList,
+          filteredMachine:this.filteredMachine
         }
       }
     });
     dialogRef.afterClosed().subscribe(result => {
-      //console.log('The dialog was closed', result);
+      console.log('The dialog was closed', result);
       if (result !== undefined) {
-        this.postFaultCauseData(result);
+       this.postFaultCauseData(result);
       }
 
     });
   }
+
+
 
   postFaultCauseData(result) {
     console.log(result, "Result....");
@@ -190,6 +251,8 @@ export class FaultCauseComponent implements OnInit {
         ID: result.ID,
         // causeNo: result.causeNo,
         causeDescription:  result.causeDescription,
+        Machine_MDS:  result.Machine_MDS,
+        MachineType:  result.MachineType,
       }
     }
     console.log(T);

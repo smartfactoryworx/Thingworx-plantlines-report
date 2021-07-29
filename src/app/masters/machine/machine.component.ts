@@ -26,14 +26,13 @@ interface machineData {
   ID?: string;
   Installation_Site?: string;
   IP_Address?: string;
-  
   Type?: string;
   CycleMeaning?: string;
   SpeedIntermsOf?: string;
   OutfeedCountInTermsOf?: string;
   EndDate?: string;
   InfeedInTermsOf?: string;
-
+  Field1?: string;
 }
 @Component({
   selector: 'app-machine',
@@ -62,6 +61,7 @@ export class MachineComponent implements OnInit {
   InfeedIntermsofList = [] ;
   OutfeedIntermsofList = [];
   SpeedIntermsofList = [];
+  MachineTypeList = [];
   AllList;
   displayedColumnsAs = {
     Machine_MDS: { 'DN': 'Machine MDS', 'visible': false },
@@ -73,15 +73,14 @@ export class MachineComponent implements OnInit {
     Customer_Name: { 'DN': 'Customer Name', 'visible': false },
     ID: { 'DN': 'ID', 'visible': true },
     Installation_Site: { 'DN': 'Installation Site', 'visible': false },
-    IP_Address: { 'DN': 'IP Address', 'visible': false },
-    
+    IP_Address: { 'DN': 'IP Address', 'visible': true },
     //Type: { 'DN': 'Type', 'visible': false },
     CycleMeaning: { 'DN': 'Cycle Meaning', 'visible': false },
     SpeedIntermsOf: { 'DN': 'Speed IntermsOf', 'visible': false },
     OutfeedCountInTermsOf: { 'DN': 'Outfeed Count InTermsOf', 'visible': false },
     EndDate: { 'DN': 'EndDate', 'visible': false },
     InfeedInTermsOf: { 'DN': 'Infeed InTermsOf', 'visible': false },
-
+    Field1: { 'DN': 'Machine Type', 'visible': false },
   }
   getDisplayedColumns() {
     return this.displayedColumnsAs;
@@ -102,7 +101,8 @@ export class MachineComponent implements OnInit {
       this.InfeedIntermsofList = apipath['infeedintermsof'];
       this.OutfeedIntermsofList  = apipath['outfeedintermsof'];
       this.SpeedIntermsofList  = apipath['speedintermsof'];
-      this.AllList = [this.InfeedIntermsofList,this.OutfeedIntermsofList,this.SpeedIntermsofList];
+      this.MachineTypeList  = apipath['machinetype'];
+      this.AllList = [this.InfeedIntermsofList,this.OutfeedIntermsofList,this.SpeedIntermsofList,this.MachineTypeList];
       this.manualentryservice.GetMachineData(apipath['apithings'], dataSource, JSON.stringify(body)).subscribe((machinedata: any) => {
         console.log("machinedata", machinedata);
         var c = machinedata.rows;
@@ -128,7 +128,7 @@ export class MachineComponent implements OnInit {
             OutfeedCountInTermsOf: data && data.OutfeedCountInTermsOf,
             EndDate: data && this.datePipe.transform(data.EndDate, 'yyyy-MM-dd'), 
             InfeedInTermsOf: data && data.InfeedInTermsOf,
-
+            Field1: data && data.Field1
           }
           this.MachineData.push(allMachineData);
           //}
@@ -247,8 +247,8 @@ export class MachineComponent implements OnInit {
         SpeedIntermsOf: result.SpeedIntermsOf,
         OutfeedCountInTermsOf: result.OutfeedCountInTermsOf,
         EndDate: result.EndDate ? this.datePipe.transform(result.EndDate, 'yyyy-MM-dd') : "", 
-        InfeedInTermsOf: result.InfeedInTermsOf
-
+        InfeedInTermsOf: result.InfeedInTermsOf,
+        Field1: result.Field1
     }
     }
     console.log(T);

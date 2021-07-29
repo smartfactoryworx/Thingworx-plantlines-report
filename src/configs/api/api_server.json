@@ -3,5 +3,6 @@
     "apithings": "https://capl91gn-lines.testing.smartfactoryworx.net/api/thing?datasource=",
     "infeedintermsof": ["Carton","Cases","Pouches","Bottles","Bundles","Pallets"],
     "outfeedintermsof": ["Carton","Cases","Pouches","Bottles","Bundles","Pallets"],
-    "speedintermsof": ["Carton","Cases","Pouches","Bottles","Bundles","Pallets"]
+    "speedintermsof": ["Carton","Cases","Pouches","Bottles","Bundles","Pallets"],
+    "machinetype": ["Case Packer","Case Eractor"]
     }

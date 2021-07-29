@@ -6,34 +6,66 @@
 
             <div fxLayout="row" style="width: 100%;padding: 0%;" fxLayoutAlign="space-around start">
                 <mat-form-field fxFlex="5" fxHide>
-                    <input matInput autocomplete="off"  placeholder="ID" formControlName="ID">
+                    <input matInput autocomplete="off" placeholder="ID" formControlName="ID">
                 </mat-form-field>
                 <!-- <mat-form-field fxFlex="90">
                     <input matInput autocomplete="off" placeholder="Cause No"
                         formControlName="causeNo">
                 </mat-form-field> -->
-              
+
             </div>
             <div fxLayout="row" style="width: 100%;padding: 0%;" fxLayoutAlign="space-around start">
                 <mat-form-field fxFlex="90" hintLabel="Max 20 characters">
                     <input matInput autocomplete="off" placeholder="Cause Description" maxlength="20"
                         formControlName="causeDescription">
-                        <mat-hint align="end">{{causeDescription.value?.length || 0}}/20</mat-hint>
+                    <mat-hint align="end">{{causeDescription.value?.length || 0}}/20</mat-hint>
                 </mat-form-field>
-               
+
 
             </div>
-          
+
+            <mat-radio-group fxLayout="column">
+                <div fxLayout="row" style="width: 100%;padding: 0%;" fxFlex="90" fxLayoutAlign="space-around start">
+                    <mat-radio-button value="machineType" class="example-radio-button"  checked="checked" (click) = "MachineTypeRadio()">
+
+                        <mat-form-field appearance="" id="filterdropdown3">
+                            <mat-select formControlName="MachineType" id="select4" placeholder="Machine Type" (selectionChange)="ResetErrorMsg()">
+                                <mat-option *ngFor="let type of machinetypeList" [value]="type">{{type}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                    </mat-radio-button>
+                </div>
+                <div fxLayout="row" style="width: 100%;padding: 0%;" fxFlex="90" fxLayoutAlign="space-around start">
+
+                    <mat-radio-button value="Machine_MDS" class="example-radio-button"  (click) = "MachineMDSRadio()">
+
+                        <mat-form-field appearance="" id="machineFaultCause">
+                            <mat-label>Choose the Machine</mat-label>
+                            <mat-select formControlName="Machine_MDS" placeholder="Machine Name" (selectionChange)="ResetErrorMsg()">
+                                <mat-select-filter [array]="machineDataList" [displayMember]="'machineDetails'"
+                                    (filteredReturn)="filteredMachine=$event"></mat-select-filter>
+                                <mat-option *ngFor="let m of filteredMachine" [value]="m.machineId">
+                                    {{m.machineDetails}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                    </mat-radio-button>
+                </div>
+            </mat-radio-group>
         </div>
+
     </form>
 </div>
 
 <div fxLayout="row" style="width: 100%;padding: 1%;" fxLayoutAlign="space-around start">
     <button mat-raised-button color="primary" [disabled]="faultcauseform.invalid"
-        [mat-dialog-close]="faultcauseform.value">{{button}}
+        (click)="GetFaultCauseDetail()">{{button}}
     </button>
     <button mat-raised-button color="warn" (click)="close()">Cancel</button>
 </div>
-
- <pre>{{faultcauseform.value|json}}</pre> 
-
+<div style="color: red;text-align: center;margin-top: 4%;">
+    {{errorText}}
+</div>
+<pre>{{faultcauseform.value|json}}</pre>
