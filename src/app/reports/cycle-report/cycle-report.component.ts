@@ -31,6 +31,7 @@ interface cycledata {
   To: string;
   Date: string;
   FaultNumber: number;
+  Cause:string;
 }
 interface Filter {
   value: string;
@@ -115,7 +116,7 @@ export class CycleReportComponent implements OnChanges {
             FaultNumber: data && data.FirstFault,
             FirstFault: data && data.FirstFault > 0 ? 1 : 0,
             FirstFaultDesc: data && data.FaultDescription,
-            From: data && moment(data.StartTime).format("HH:mm:ss"),
+            From: data && moment(data.StartTime).format("HH:mm"),
             InfeedCount: data && data.InfeedCount,
             Machine: data && data.Machine,
             ManualStop: data && data.ManualStop === true ? 1 : 0,
@@ -123,8 +124,9 @@ export class CycleReportComponent implements OnChanges {
             OutFeedCount: data && data.OutFeedCount,
             SKU: data && data.SKU,
             SKUDesc: data && data.SKU_Details,
-            To: data && moment(data.StopTime).format("HH:mm:ss"),
+            To: data && moment(data.StopTime).format("HH:mm"),
             Date: data && moment(data.StartTime).format("DD MMM YYYY"),
+            Cause:data && data.CauseSelected
           }
           this.cycleData.push(allCycleData);
         }
@@ -152,13 +154,13 @@ export class CycleReportComponent implements OnChanges {
       delete tabs[3];
       delete tabs[4];
       delete tabs[5];
-      //delete tabs[6];
+      delete tabs[6];
       tabs.unshift({
         id: "fm-tab-newtab",
         title: "Export",
         rightGroup: true,
         handler: newtabHandler,
-        icon: '<mat-icon>create</mat-icon>'
+        icon: '<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="-17.5 774.5 36 36"><title>menu_export</title><g fill="#555"><path d="M15.446 795.615l-4.289-6.461c-.346-.515-.803-.654-1.428-.654H7.788c-.186 0-.346-.029-.363.156-.008.076.017.07.059.137l4.76 7.108c.042.06.034.337-.017.38-.025.025-.067.219-.102.219H6.699c-.194 0-.354-.063-.363.125-.305 3.23-3.174 5.495-6.407 5.192-2.81-.263-5.039-2.329-5.3-5.14-.009-.195-.168-.178-.363-.178h-5.401c-.076 0-.144-.281-.144-.357 0-.025.008-.157.017-.175l4.76-7.203c.102-.16.05-.245-.109-.347-.06-.035-.118.082-.187.082h-1.94c-.616 0-1.199.145-1.553.658l-4.664 6.547c-.203.304-.545.586-.545.95v9.216c1 .911 1.267 1.646 2.187 1.629h27.625c.903.009 1.188-.709 1.188-1.611v-9.233c1-.373.157-.735-.054-1.04z"></path><path d="M-3.674 783.5H-2.5v10.2c1 1.4 1.764 2.464 3.165 2.371 1.274-.083 1.835-1.097 2.835-2.371v-10.2h1.207c.346 0 .641-.04.65-.387.008-.151-.042-.193-.144-.311l-4.186-5.11c-.228-.287-.642-.302-.929-.073-.042.034-.076.081-.101.115l-4.135 5.172c-.22.271-.187.447.084.668.11.085.244-.074.38-.074z"></path></g></svg>'
       });
       return tabs;
 
@@ -246,6 +248,9 @@ export class CycleReportComponent implements OnChanges {
         },
         FaultNumber: {
           type: "number"
+        },
+        Cause: {
+          type: "string"
         }
       }
     ]
@@ -464,6 +469,8 @@ export class CycleReportComponent implements OnChanges {
             uniqueName: "Date",
             caption: "Date"
           },
+         
+          
         ],
         columns: [
           {
@@ -551,7 +558,11 @@ export class CycleReportComponent implements OnChanges {
         {
           uniqueName: "SKUDesc",
           caption: "SKU"
-        }
+        },
+        {
+          uniqueName: "Cause",
+          caption: "Cause"
+        },
         ],
         rows: [{
           uniqueName: "Date",

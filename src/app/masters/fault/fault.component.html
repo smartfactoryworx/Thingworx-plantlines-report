@@ -1,6 +1,6 @@
 <div fxLayout="column" style="width: 100%;min-height: 92.47vh;">
-<app-parent-master  (machineOut)='GetfaultData($event)'></app-parent-master>
-<div fxLayout="column" style="width: 100%;align-items: center;">
+<app-parent-master fxFlex="58" (machineOut)='GetfaultData($event)'></app-parent-master>
+<div fxLayout="column" style="width: 100%;align-items: center;margin-top: 1.5%;">
     <div fxFlex="100" id="spreadsheet"></div>
     <div *ngIf="gotData" style="text-align: center;" fxLayoutAlign="space-around center" fxFlex="100">
       <!-- <button mat-raised-button color="primary" fxFlex="40" style="margin-right: 2%;"  (click)="insertRow()">

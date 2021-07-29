@@ -1,0 +1,14 @@
+mat-form-field#machineDropdown {
+    position: absolute;
+    width: 33%;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    margin-left: 0.25rem !important;
+    margin-top: 0.25rem !important;;
+}
+
+::ng-deep #machineDropdown.mat-form-field-appearance-fill .mat-form-field-flex {
+    background-color: #ea9c9c !important; 
+}
+
