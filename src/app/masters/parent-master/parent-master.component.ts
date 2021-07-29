@@ -71,8 +71,8 @@ export class ParentMasterComponent implements OnInit {
           const data = {
             machineId: a.Machine_MDS,
             machineName: a.Machine_Name,
-            createdDate: new Date(moment(a.timestamp).format("DD MMM YYYY hh:mm a")),
-            machineDetails: a.Machine_MDS + ' - ' + a.Machine_Name + ' - ' + a.Customer_Name + '(' + moment(new Date(a.timestamp)).format("DD-MM-YYYY") + ')',
+            createdDate: new Date(moment(a.createdAt).format("DD MMM YYYY hh:mm a")),
+            machineDetails: a.Machine_MDS + ' - ' + a.Machine_Name + ' - ' + a.Customer_Name + '(' + moment(new Date(a.createdAt)).format("DD-MM-YYYY") + ')',
             CycleMeaning:a.CycleMeaning,
             InfeedInTermsOf:a.InfeedInTermsOf,
             OutfeedCountInTermsOf:a.OutfeedCountInTermsOf,
