@@ -33,6 +33,7 @@ interface machineData {
   EndDate?: string;
   InfeedInTermsOf?: string;
   Field1?: string;
+  isDisconnected?:boolean;
 }
 @Component({
   selector: 'app-machine',
@@ -81,6 +82,7 @@ export class MachineComponent implements OnInit {
     EndDate: { 'DN': 'EndDate', 'visible': false },
     InfeedInTermsOf: { 'DN': 'Infeed InTermsOf', 'visible': false },
     Field1: { 'DN': 'Machine Type', 'visible': false },
+    isDisconnected: { 'DN': 'Machine Connection Status', 'visible': true },
   }
   getDisplayedColumns() {
     return this.displayedColumnsAs;
@@ -128,7 +130,8 @@ export class MachineComponent implements OnInit {
             OutfeedCountInTermsOf: data && data.OutfeedCountInTermsOf,
             EndDate: data && this.datePipe.transform(data.EndDate, 'yyyy-MM-dd'), 
             InfeedInTermsOf: data && data.InfeedInTermsOf,
-            Field1: data && data.Field1
+            Field1: data && data.Field1,
+            isDisconnected: data && data.isDisconnected
           }
           this.MachineData.push(allMachineData);
           //}
@@ -143,7 +146,7 @@ export class MachineComponent implements OnInit {
             this.vdisplayedColumns.push(Object.keys(this.MachineData[0])[i]);
             //console.log("function");
           }
-       
+          this.vdisplayedColumns.push('machinestatus');
           this.vdisplayedColumns.push('star');
           this.gotData = true;
           this.dataSource = new MatTableDataSource(this.MachineData);

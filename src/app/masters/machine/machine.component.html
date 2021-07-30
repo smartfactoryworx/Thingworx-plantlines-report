@@ -17,13 +17,23 @@
     </div>
 
     <table mat-table [dataSource]="dataSource" id="ExampleTable" matSort class="mat-elevation-z8" style="width:100%;">
-        <ng-container *ngFor="let dc of displayedColumns?.slice(0,displayedColumns.length-1); let i=index;"
+        <ng-container *ngFor="let dc of displayedColumns?.slice(0,displayedColumns.length-2); let i=index;"
             [matColumnDef]="dc">
             <th mat-header-cell [hidden]="displayedColumnsAs[dc]?.visible" *matHeaderCellDef mat-sort-header
                 style="color: white;">
                 {{displayedColumnsAs[dc]?.DN}}</th>
             <td mat-cell [hidden]="displayedColumnsAs[dc]?.visible" *matCellDef="let element">
                 {{element[dc]}}
+            </td>
+        </ng-container>
+        
+        <ng-container matColumnDef="machinestatus">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header style="color: white;">Machine Connection Status</th>
+            <td mat-cell *matCellDef="let element">
+                <img *ngIf="element.isDisconnected !=true" src="../../../assets/images/Icon_green.png" style="width: 32px;" matTooltip="Machine is Connected"
+                matTooltipPosition="above">
+                <img *ngIf="element.isDisconnected ===true" src="../../../assets/images/Icon_red.png" style="width: 25px;" matTooltip="Machine is Disconnected"
+                matTooltipPosition="above">
             </td>
         </ng-container>
         <ng-container matColumnDef="star" stickyEnd>

@@ -15,7 +15,8 @@ import { DailyCycleEntryModule } from './daily-cycle-entry/daily-cycle-entry.mod
     ReportsRoutingModule,
     SharedModule,
     CycleReportModule,
-    DailyCycleEntryModule
+    DailyCycleEntryModule,
+
   ],
   providers:[
     { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
