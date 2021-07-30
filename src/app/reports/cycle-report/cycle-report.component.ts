@@ -314,12 +314,12 @@ export class CycleReportComponent implements OnChanges {
           {
             uniqueName: "FirstFault",
             formula: "((\"FirstFault\"))",
-            caption: "FirstFault Count"
+            caption: "First Fault Count"
           },
           {
             uniqueName: "ManualStop",
             formula: "((\"ManualStop\"))",
-            caption: "ManualStop Count"
+            caption: "Manual Stop Count"
           },
           {
             uniqueName: "MaxActualSpeed",
@@ -335,7 +335,7 @@ export class CycleReportComponent implements OnChanges {
           {
             uniqueName: "MeanCycleBetweenFaultNManualStop",
             formula: "((\"CycleRun\")/(\"FirstFault\" + \"ManualStop\"))",
-            caption: "MCBF&S",
+            caption: "MCBF & S",
             format: "44mvcoma",
           },
 
@@ -358,6 +358,41 @@ export class CycleReportComponent implements OnChanges {
         },
 
       ],
+      tableSizes: {
+        rows:[
+          {
+            idx: 0,
+            height: 63
+          },
+         
+        ],
+        columns: [
+          {
+            idx: 2,
+            width: 51
+          },
+          {
+            idx: 3,
+            width: 56
+          },
+          {
+            idx: 4,
+            width: 62
+          },
+          {
+            idx: 5,
+            width: 76
+          },
+          {
+            idx: 6,
+            width: 56
+          },
+          {
+            idx: 7,
+            width: 56
+          }
+        ]
+      },
       options: {
         grid: {
           type: "classic",
@@ -409,7 +444,7 @@ export class CycleReportComponent implements OnChanges {
           {
             uniqueName: "FirstFault",
             formula: "((\"FirstFault\"))",
-            caption: "FirstFault Count"
+            caption: "First Fault Count"
           },
 
 
@@ -433,6 +468,25 @@ export class CycleReportComponent implements OnChanges {
         },
 
       ],
+      tableSizes: {
+        rows:[
+          {
+            idx: 0,
+            height: 63
+          },
+         
+        ],
+        columns: [
+          {
+            idx: 2,
+            width: 62
+          },
+          {
+            idx: 3,
+            width: 54
+          },
+        ]
+      },
       options: {
         grid: {
           type: "classic",
@@ -486,12 +540,12 @@ export class CycleReportComponent implements OnChanges {
           {
             uniqueName: "FirstFault",
             formula: "((\"FirstFault\"))",
-            caption: "FirstFault Count"
+            caption: "First Fault Count"
           },
           {
             uniqueName: "ManualStop",
             formula: "((\"ManualStop\"))",
-            caption: "ManualStop Count"
+            caption: "Manual Stop Count"
           },
           {
             uniqueName: "MaxActualSpeed",
@@ -509,7 +563,7 @@ export class CycleReportComponent implements OnChanges {
           {
             uniqueName: "MeanCycleBetweenFaultNManualStop",
             formula: "((\"CycleRun\")/(\"FirstFault\" + \"ManualStop\"))",
-            caption: "MCBF&S",
+            caption: "MCBF & S",
             format: "44mvcoma",
           },
         ],
@@ -531,6 +585,41 @@ export class CycleReportComponent implements OnChanges {
         },
 
       ],
+      tableSizes: {
+        rows:[
+          {
+            idx: 0,
+            height: 63
+          },
+         
+        ],
+        columns: [
+          {
+            idx: 1,
+            width: 51
+          },
+          {
+            idx: 2,
+            width: 56
+          },
+          {
+            idx: 3,
+            width: 62
+          },
+          {
+            idx: 4,
+            width: 76
+          },
+          {
+            idx: 5,
+            width: 56
+          },
+          {
+            idx: 6,
+            width: 56
+          }
+        ]
+      },
       options: {
         grid: {
           type: "classic",
@@ -606,7 +695,7 @@ export class CycleReportComponent implements OnChanges {
           {
             uniqueName: "ManualStop",
             formula: "((\"ManualStop\"))",
-            caption: "ManualStop Count"
+            caption: "Manual Stop Count"
           },
           {
             uniqueName: "MaxActualSpeed",
@@ -621,12 +710,12 @@ export class CycleReportComponent implements OnChanges {
           {
             uniqueName: "InfeedCount",
             formula: "((\"InfeedCount\"))",
-            caption: "InfeedCount (" + this.InfeedInTermsOf + ")"
+            caption: "Infeed Count (" + this.InfeedInTermsOf + ")"
           },
           {
             uniqueName: "OutFeedCount",
             formula: "(max(\"OutFeedCount\"))",
-            caption: "OutFeedCount (" + this.OutfeedCountInTermsOf + ")"
+            caption: "OutFeed Count (" + this.OutfeedCountInTermsOf + ")"
           },
           {
             uniqueName: "MeanCycleBetweenFault",
@@ -637,7 +726,7 @@ export class CycleReportComponent implements OnChanges {
           {
             uniqueName: "MeanCycleBetweenFaultNManualStop",
             formula: "((\"CycleRun\")/(\"FirstFault\" + \"ManualStop\"))",
-            caption: "MCBF&S",
+            caption: "MCBF & S",
             format: "44mvcoma",
           },
 
@@ -660,6 +749,65 @@ export class CycleReportComponent implements OnChanges {
         },
 
       ],
+      tableSizes: {
+        rows:[
+          {
+            idx: 0,
+            height: 63
+          },
+         
+        ],
+        columns: [
+          {
+            idx: 1,
+            width: 65
+          },
+          {
+            idx: 2,
+            width: 65
+          },
+          {
+            idx: 4,
+            width: 62
+          },
+          {
+            idx: 5,
+            width: 51
+          },
+          {
+            idx: 6,
+            width: 54
+          },
+          {
+            idx: 7,
+            width: 62
+          },
+          {
+            idx: 8,
+            width: 76
+          },
+          {
+            idx: 9,
+            width: 67
+          },
+          {
+            idx: 10,
+            width: 66
+          },
+          {
+            idx: 11,
+            width: 68
+          },
+          {
+            idx: 12,
+            width: 56
+          },
+          {
+            idx: 13,
+            width: 56
+          }
+        ]
+      },
       options: {
         grid: {
           type: "classic",

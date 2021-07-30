@@ -9,13 +9,13 @@
 
     <div *ngIf="cycleData?.length > 0" fxLayout="column" style="width: 99%;" fxLayoutAlign="center">
 
-        <mat-tab-group (selectedTabChange)="GetReport($event.tab.textLabel)" mat-align-tabs="center">
+        <mat-tab-group (selectedTabChange)="GetReport($event.tab.textLabel)" [selectedIndex]="0" mat-align-tabs="center">
             <mat-tab label="Summary">
                 <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap fxLayoutGap="0.1%"
                     fxLayoutAlign="space-around center" fxFlex="100">
                     <wbr-pivot #pivot3 [toolbar]="true" [width]="'100%'" [height]="700" fxFlex="99"
-                        (beforetoolbarcreated)="customizeToolbar($event,'Summary',machineName  + '_Summary_Report','Summary_Report')"
-                        (reportcomplete)="onReportComplete('Summary')">
+                        (beforetoolbarcreated)="customizeToolbar($event,'Summary',machineName  + '_Summary_Report','Summary_Report')" (reportcomplete)="onReportComplete('Summary')"
+                      >
                     </wbr-pivot>
                 </div>
             </mat-tab>
