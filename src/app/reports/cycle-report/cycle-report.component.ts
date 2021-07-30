@@ -768,7 +768,7 @@ export class CycleReportComponent implements OnChanges {
           },
           {
             idx: 4,
-            width: 62
+            width: 236
           },
           {
             idx: 5,

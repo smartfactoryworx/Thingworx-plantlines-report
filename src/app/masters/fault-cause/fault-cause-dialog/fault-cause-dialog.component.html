@@ -26,7 +26,7 @@
 
             <mat-radio-group fxLayout="column">
                 <div fxLayout="row" style="width: 100%;padding: 0%;" fxFlex="90" fxLayoutAlign="space-around start">
-                    <mat-radio-button value="machineType" class="example-radio-button"  checked="checked" (click) = "MachineTypeRadio()">
+                    <mat-radio-button value="machineType" class="example-radio-button"  [checked]="radioTypeChecked" (click) = "MachineTypeRadio()">
 
                         <mat-form-field appearance="" id="filterdropdown3">
                             <mat-select formControlName="MachineType" id="select4" placeholder="Machine Type" (selectionChange)="ResetErrorMsg()">
@@ -38,7 +38,7 @@
                 </div>
                 <div fxLayout="row" style="width: 100%;padding: 0%;" fxFlex="90" fxLayoutAlign="space-around start">
 
-                    <mat-radio-button value="Machine_MDS" class="example-radio-button"  (click) = "MachineMDSRadio()">
+                    <mat-radio-button value="Machine_MDS" class="example-radio-button"  [checked]="radioMDSChecked" (click) = "MachineMDSRadio()">
 
                         <mat-form-field appearance="" id="machineFaultCause">
                             <mat-label>Choose the Machine</mat-label>

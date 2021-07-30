@@ -28,7 +28,8 @@ export class FaultCauseDialogComponent implements OnInit {
   machineDataList;
   filteredMachine;
   errorText="";
-
+  radioMDSChecked = false;
+  radioTypeChecked = true;
   constructor(@Inject(MAT_DIALOG_DATA) public data: any, public dialogRef: MatDialogRef<FaultCauseDialogComponent>,
     private httpClient: HttpClient, private _snackBar: MatSnackBar, protected dataentryservice: ManualEntryService) { }
 
@@ -78,6 +79,8 @@ export class FaultCauseDialogComponent implements OnInit {
   }
   ngOnInit() {
     console.log(this.data);
+    this.radioMDSChecked = false;
+    this.radioTypeChecked = false;
     this.createfaultcause();
     this.createfaultcauseform();
     if (this.data.dataKey.rowdata !== null) {
@@ -89,10 +92,21 @@ export class FaultCauseDialogComponent implements OnInit {
         this.button = this.data.dataKey.button;
         this.ID.setValue('');
       } else {
+
         console.log(this.data.dataKey.rowdata);
         this.title = this.data.dataKey.title;
         this.button = this.data.dataKey.button;
         const c = this.data.dataKey.rowdata;
+        if((c.MachineType != "" || c.MachineType != "undefined" || c.MachineType != undefined) && (c.Machine_MDS === "" || c.Machine_MDS === "undefined" || c.Machine_MDS === undefined)){
+          console.log("from machine type");
+          this.radioTypeChecked = true;
+          this.radioMDSChecked = false;
+        }
+        else{
+          console.log("from machine MDS");
+          this.radioMDSChecked = true;
+          this.radioTypeChecked = false;
+        }
         this.faultcauseform.patchValue({
           ID: c.ID,
           // causeNo: c.causeNo,

@@ -76,15 +76,15 @@
 }
 
 
-::ng-deep #wdr-pivot-view .wdr-grid-layout div.wdr-scroll-pane div.wdr-scroll-placeholder .wdr-cell {
-  position: absolute;
-  text-align: center !important;
-}
+// ::ng-deep #wdr-pivot-view .wdr-grid-layout div.wdr-scroll-pane div.wdr-scroll-placeholder .wdr-cell {
+//   position: absolute;
+//   text-align: center !important;
+// }
 
-::ng-deep  #wdr-pivot-view .wdr-grid-layout div.wdr-scroll-pane div.wdr-scroll-content .wdr-cell {
-  position: relative;
-  text-align: center !important;
-}
+// ::ng-deep  #wdr-pivot-view .wdr-grid-layout div.wdr-scroll-pane div.wdr-scroll-content .wdr-cell {
+//   position: relative;
+//   text-align: center !important;
+// }
 .invisible {
   display: block;
   visibility: hidden;

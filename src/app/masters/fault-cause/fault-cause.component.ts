@@ -69,9 +69,8 @@ export class FaultCauseComponent implements OnInit {
     // causeNo: { 'DN': 'Cause Number', 'visible': false },
     causeDescription: { 'DN': 'Cause Description', 'visible': false },
     ID: { 'DN': 'ID', 'visible': true },
-    Machine_MDS: { 'DN': 'Machine_MDS', 'visible': false },
     MachineType: { 'DN': 'MachineType', 'visible': false },
-
+    Machine_MDS: { 'DN': 'Machine_MDS', 'visible': false },
   }
   getDisplayedColumns() {
     return this.displayedColumnsAs;
@@ -102,8 +101,8 @@ export class FaultCauseComponent implements OnInit {
             // causeNo: data && data.causeNo,
             causeDescription: data && data.causeDescription,
             ID: data && data.ID,
+            MachineType: data && data.MachineType === "undefined" ? "" : data.MachineType,
             Machine_MDS: data && data.Machine_MDS === "undefined" ? "" : data.Machine_MDS,
-            MachineType: data && data.MachineType === "undefined" ? "" : data.MachineType
           }
           this.FaultCauseData.push(allFaultCauseData);
           //}
