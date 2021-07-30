@@ -31,7 +31,7 @@ interface cycledata {
   To: string;
   Date: string;
   FaultNumber: number;
-  Cause:string;
+  Cause: string;
 }
 interface Filter {
   value: string;
@@ -126,7 +126,7 @@ export class CycleReportComponent implements OnChanges {
             SKUDesc: data && data.SKU_Details,
             To: data && moment(data.StopTime).format("HH:mm"),
             Date: data && moment(data.StartTime).format("DD MMM YYYY"),
-            Cause:data && data.CauseSelected
+            Cause: data && data.CauseSelected
           }
           this.cycleData.push(allCycleData);
         }
@@ -191,12 +191,12 @@ export class CycleReportComponent implements OnChanges {
       this.child4.webDataRocks.off("reportcomplete");
     }
     this.pivotTableReportComplete = true;
-    
+
   }
 
   GetReport(reportType) {
     this.onReportComplete(reportType);
-    
+
   }
 
   BindReportData(reportData, reportType) {
@@ -255,7 +255,7 @@ export class CycleReportComponent implements OnChanges {
       }
     ]
 
-  
+
     if (reportType === 'Faultwise') {
       var FalutWiseData = reportData.filter(function (value) {
         return value.FirstFault != 0
@@ -280,7 +280,7 @@ export class CycleReportComponent implements OnChanges {
         reportFilters: [
           {
             uniqueName: "From",
-            caption: "From Date"
+            caption: "From"
           },
           {
             uniqueName: "SKUDesc",
@@ -288,7 +288,7 @@ export class CycleReportComponent implements OnChanges {
           },
           {
             uniqueName: "To",
-            caption: "To Date"
+            caption: "To"
           },
 
         ],
@@ -469,8 +469,8 @@ export class CycleReportComponent implements OnChanges {
             uniqueName: "Date",
             caption: "Date"
           },
-         
-          
+
+
         ],
         columns: [
           {
@@ -568,22 +568,22 @@ export class CycleReportComponent implements OnChanges {
           uniqueName: "Date",
           caption: "Date"
         },
-       
+
         {
           uniqueName: "From",
-          caption: "From Date"
+          caption: "From"
         },
         {
           uniqueName: "To",
-          caption: "To Date"
+          caption: "To"
         },
         {
           uniqueName: "SKUDesc",
           caption: "SKU"
         },
         {
-          uniqueName: "FaultNumber",
-          caption: "Fault No."
+          uniqueName: "FirstFaultDesc",
+          caption: "Fault Desc"
         }
         ],
         columns: [
