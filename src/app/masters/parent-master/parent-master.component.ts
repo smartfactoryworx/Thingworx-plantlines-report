@@ -44,8 +44,9 @@ export class ParentMasterComponent implements OnInit {
   }
 
   BindDefaultData() {
-    this.machine.setValue('RU21005a');
+    //this.machine.setValue('RU21005a');
     //this.machine.setValue('CM20042A');
+    this.machine.setValue('IP21033a');
   }
   GetMachineName(machine) {
     console.log(machine);
