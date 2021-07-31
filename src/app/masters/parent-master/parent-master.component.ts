@@ -70,14 +70,14 @@ export class ParentMasterComponent implements OnInit {
         for (let i = 0; i < c.length; i++) {
           const a = c[i];
           const data = {
-            machineId: a.Machine_MDS,
-            machineName: a.Machine_Name,
-            createdDate: new Date(moment(a.createdAt).format("DD MMM YYYY hh:mm a")),
-            machineDetails: a.Machine_MDS + ' - ' + a.Machine_Name + ' - ' + a.Customer_Name + '(' + moment(new Date(a.createdAt)).format("DD-MM-YYYY") + ')',
-            CycleMeaning:a.CycleMeaning,
-            InfeedInTermsOf:a.InfeedInTermsOf,
-            OutfeedCountInTermsOf:a.OutfeedCountInTermsOf,
-            SpeedIntermsOf:a.SpeedIntermsOf
+            machineId: a && a.Machine_MDS,
+            machineName: a && a.Machine_Name,
+            createdDate: a && new Date(moment(a.createdAt).format("DD MMM YYYY hh:mm a")),
+            machineDetails: a && a.Machine_MDS + ' - ' + a.Machine_Name + ' - ' + a.Customer_Name + '(' + moment(new Date(a.createdAt)).format("DD-MM-YYYY") + ')',
+            CycleMeaning:a && a.CycleMeaning,
+            InfeedInTermsOf:a && a.InfeedInTermsOf,
+            OutfeedCountInTermsOf:a && a.OutfeedCountInTermsOf,
+            SpeedIntermsOf:a && a.SpeedIntermsOf
           }
           this.MachineList.push(data);
         }

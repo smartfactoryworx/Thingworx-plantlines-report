@@ -21,7 +21,7 @@ interface machineData {
   key?: string;
   source?: string;
   sourceType?: string;
-  timestamp?: String;
+  timestamp?: Date;
   Customer_Name?: string;
   ID?: string;
   Installation_Site?: string;
@@ -34,6 +34,7 @@ interface machineData {
   InfeedInTermsOf?: string;
   Field1?: string;
   isDisconnected?:boolean;
+  createdAt?:string;
 }
 @Component({
   selector: 'app-machine',
@@ -70,7 +71,8 @@ export class MachineComponent implements OnInit {
     key: { 'DN': 'Key', 'visible': true },
     source: { 'DN': 'Source', 'visible': true },
     sourceType: { 'DN': 'Source Type', 'visible': true },
-    timestamp: { 'DN': 'Created Date', 'visible': false },
+    timestamp: { 'DN': 'Created Date', 'visible': true },
+    createdAt: { 'DN': 'Created Date', 'visible': false },
     Customer_Name: { 'DN': 'Customer Name', 'visible': false },
     ID: { 'DN': 'ID', 'visible': true },
     Installation_Site: { 'DN': 'Installation Site', 'visible': false },
@@ -83,6 +85,7 @@ export class MachineComponent implements OnInit {
     InfeedInTermsOf: { 'DN': 'Infeed InTermsOf', 'visible': false },
     Field1: { 'DN': 'Machine Type', 'visible': false },
     isDisconnected: { 'DN': 'Machine Connection Status', 'visible': true },
+   
   }
   getDisplayedColumns() {
     return this.displayedColumnsAs;
@@ -118,12 +121,12 @@ export class MachineComponent implements OnInit {
             key: data && data.key,
             source: data && data.source,
             sourceType: data && data.sourceType,
-            timestamp: data && moment(data.createdAt).format("DD-MMM-YY hh:mm"),
+            timestamp: data && new Date(moment(data.createdAt).format("DD-MMM-YY hh:mm")),
+            createdAt:data && moment(data.createdAt).format("YYYY-MMM-DD"),
             Customer_Name: data && data.Customer_Name,
             ID: data && data.ID,
             Installation_Site: data && data.Installation_Site,
             IP_Address: data && data.IP_Address,
-            
             // Type: data && data.Type,
             CycleMeaning: data && data.CycleMeaning,
             SpeedIntermsOf: data && data.SpeedIntermsOf,
@@ -131,13 +134,15 @@ export class MachineComponent implements OnInit {
             EndDate: data && this.datePipe.transform(data.EndDate, 'yyyy-MM-dd'), 
             InfeedInTermsOf: data && data.InfeedInTermsOf,
             Field1: data && data.Field1,
-            isDisconnected: data && data.isDisconnected
+            isDisconnected: data && data.isDisconnected,
+         
           }
           this.MachineData.push(allMachineData);
           //}
 
         }
         console.log("MachineData", this.MachineData);
+        this.MachineData.sort(this.util.dynamicSort('timestamp'));
         this.vdisplayedColumns = [];
         //console.log(this.fgextype[0]);
         if (Object.keys(machinedata).length > 0) {
