@@ -54,7 +54,7 @@ export class MachineDialogComponent implements OnInit {
     this.Machine_Name = new FormControl('', Validators.required);
     this.Customer_Name = new FormControl('', Validators.required);
     this.Installation_Site = new FormControl('', Validators.required);
-    this.IP_Address = new FormControl('', Validators.required);
+    this.IP_Address = new FormControl('');
     this.CycleMeaning = new FormControl('');
     this.SpeedIntermsOf = new FormControl('');
     this.OutfeedCountInTermsOf = new FormControl('');
