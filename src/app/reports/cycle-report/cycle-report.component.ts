@@ -115,11 +115,11 @@ export class CycleReportComponent implements OnChanges {
             Duration: data && data.Duration,
             FaultNumber: data && data.FirstFault,
             FirstFault: data && data.FirstFault > 0 ? 1 : 0,
-            FirstFaultDesc: data && data.FaultDescription,
+            FirstFaultDesc: data && data.ManualStop === true ? "Manual Stop" : data && data.FaultDescription ,
             From: data && moment(data.StartTime).format("HH:mm"),
+            ManualStop: data && data.ManualStop === true ? 1 : 0,
             InfeedCount: data && data.InfeedCount,
             Machine: data && data.Machine,
-            ManualStop: data && data.ManualStop === true ? 1 : 0,
             MaxActualSpeed: data && data.MaxActualSpeed,
             OutFeedCount: data && data.OutFeedCount,
             SKU: data && data.SKU,
@@ -686,17 +686,17 @@ export class CycleReportComponent implements OnChanges {
             formula: "((\"CycleRun\"))",
             caption: "Total Cycle Run (" + this.CycleMeaning + ")"
           },
-          {
-            uniqueName: "FirstFault",
-            formula: "((\"FirstFault\"))",
-            caption: "Fault Count"
-          },
+          // {
+          //   uniqueName: "FirstFault",
+          //   formula: "((\"FirstFault\"))",
+          //   caption: "Fault Count"
+          // },
 
-          {
-            uniqueName: "ManualStop",
-            formula: "((\"ManualStop\"))",
-            caption: "Manual Stop Count"
-          },
+          // {
+          //   uniqueName: "ManualStop",
+          //   formula: "((\"ManualStop\"))",
+          //   caption: "Manual Stop Count"
+          // },
           {
             uniqueName: "MaxActualSpeed",
             formula: "(max(\"MaxActualSpeed\"))",
@@ -774,36 +774,36 @@ export class CycleReportComponent implements OnChanges {
             idx: 5,
             width: 51
           },
+          // {
+          //   idx: 6,
+          //   width: 54
+          // },
+          // {
+          //   idx: 7,
+          //   width: 62
+          // },
           {
             idx: 6,
-            width: 54
-          },
-          {
-            idx: 7,
-            width: 62
-          },
-          {
-            idx: 8,
             width: 76
           },
           {
-            idx: 9,
+            idx: 7,
             width: 67
           },
           {
-            idx: 10,
+            idx: 8,
             width: 66
           },
           {
-            idx: 11,
+            idx: 9,
             width: 68
           },
           {
-            idx: 12,
+            idx: 10,
             width: 56
           },
           {
-            idx: 13,
+            idx: 11,
             width: 56
           }
         ]

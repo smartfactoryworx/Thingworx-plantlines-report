@@ -122,7 +122,7 @@ export class MachineComponent implements OnInit {
             source: data && data.source,
             sourceType: data && data.sourceType,
             timestamp: data && new Date(moment(data.createdAt).format("DD-MMM-YY hh:mm")),
-            createdAt:data && moment(data.createdAt).format("YYYY-MMM-DD"),
+            createdAt:data && moment(data.createdAt).format("DD-MMM-YYYY"),
             Customer_Name: data && data.Customer_Name,
             ID: data && data.ID,
             Installation_Site: data && data.Installation_Site,

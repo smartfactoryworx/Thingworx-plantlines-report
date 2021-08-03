@@ -46,7 +46,7 @@
         </ng-container>
         <tr mat-header-row style="background-color:#6660be;" *matHeaderRowDef="displayedColumns">
         </tr>
-        <tr mat-row *matRowDef="let row;let even = even;  columns: displayedColumns;" [ngClass]="{ 'highlight': row.EndDate != '' }"></tr>
+        <tr mat-row [ngClass]="{ 'highlight': row.EndDate != null }"  *matRowDef="let row;let even = even;  columns: displayedColumns;" ></tr>
     </table>
     <div *ngIf="noData === 0"  style="color: red;text-align: center;margin-top: 2%;" class="no-records">
         No records found
