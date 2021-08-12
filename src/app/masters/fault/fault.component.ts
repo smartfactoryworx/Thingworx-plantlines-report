@@ -65,7 +65,7 @@ export class FaultComponent implements OnChanges {
     this.gotData = false;
     console.log(machine, "machine");
     let body = {
-      "Machine": machine,
+      "Machine": machine
     }
     console.log(JSON.stringify(body));
     let dataSource = 'MachineFaultMaster/Services/getFaultMastersData'
@@ -183,31 +183,31 @@ export class FaultComponent implements OnChanges {
     if (this.machineName !== null) {
       var T = {};
       for (let i = 0; i <= faultDetails.length - 1; i++) {
-
-        if ((FaultCode[i] != undefined || FaultCode[i] != null || !FaultCode[i].isEmpty()) && (FaultDescription[i] != undefined || FaultDescription[i] != null || !FaultDescription[i].isEmpty())) {
-         console.log(FaultCode[i]);
-         console.log(FaultDescription[i]);
-          T = {
-            "ID": ID[i] ,
-            "Machine_Selected": this.machineName,
-            "FaultCode": FaultCode[i],
-            "FaultDescription": FaultDescription[i]
-          }
-          this.FaultPostData.push(T);
+        T = {
+          "ID": ID[i],
+          "Machine_Selected": this.machineName,
+          "FaultCode": parseInt(FaultCode[i]),
+          "FaultDescription": FaultDescription[i]
         }
+        this.FaultPostData.push(T);
       }
-      console.log(this.FaultPostData);
+
+     // console.log
+      
+      this.FaultPostData=  this.FaultPostData.filter(obj => !isNaN(obj.FaultCode))
+      //console.log(filteredArr);
+
       var PostData = {};
       let dataSource = 'MachineFaultMaster/Services/addMultipleData'
       PostData = {
-        "datasource" : dataSource,
-        "input": {"input": this.FaultPostData}                                                   
+        "datasource": dataSource,
+        "input": { "input": this.FaultPostData }
       }
       console.log(JSON.stringify(PostData), 'HI');
-     
+
       this.manualentryservice.GetApiURL().subscribe(apipath => {
-        console.log(apipath['apithings'], 'HI');
-        this.manualentryservice.PostFaultData(apipath['apithings'],dataSource,PostData).subscribe(
+        console.log(apipath['apifaultthings'], 'HI');
+        this.manualentryservice.PostFaultData(apipath['apifaultthings'], JSON.stringify(PostData)).subscribe(
           (data: any[]) => {
             console.log(data);
             this.GetfaultData(this.machineName);
@@ -216,10 +216,10 @@ export class FaultComponent implements OnChanges {
           (error: HttpErrorResponse) => {
             console.log(error);
             if (error.status >= 400) {
-              this.openSnackBar("Validation", error.error);
+              this.openSnackBar("Validation", error.error.error);
             }
             else {
-              this.openSnackBar("Error", error.error);
+              this.openSnackBar("Error", error.error.error);
             }
           });
       });

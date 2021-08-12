@@ -23,8 +23,13 @@ export class ManualEntryService {
         return this.httpClient.get(URL + dataSource + '&body=' + body);
     }
 
-    PostFaultData(URL,dataSource,data): Observable<object> {
-        return this.httpClient.post(URL + dataSource ,data);
+    PostFaultData(URL,data): Observable<object> {
+            //console.log()
+    let headers = new HttpHeaders({
+        'Content-Type': 'application/json',
+      });
+      let options = { headers: headers };
+        return this.httpClient.post(URL,data,options);
     }
 
 
