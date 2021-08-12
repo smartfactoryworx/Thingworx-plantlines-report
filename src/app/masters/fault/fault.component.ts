@@ -198,14 +198,16 @@ export class FaultComponent implements OnChanges {
       }
       console.log(this.FaultPostData);
       var PostData = {};
+      let dataSource = 'MachineFaultMaster/Services/addMultipleData'
       PostData = {
+        "dataSource" : dataSource,
         "input": this.FaultPostData
       }
       console.log(JSON.stringify(PostData), 'HI');
-      let dataSource = 'MachineFaultMaster/Services/addMultipleData'
+     
       this.manualentryservice.GetApiURL().subscribe(apipath => {
         console.log(apipath['apithings'], 'HI');
-        this.manualentryservice.GetMachineData(apipath['apithings'], dataSource, JSON.stringify(PostData)).subscribe(
+        this.manualentryservice.PostFaultData(apipath['apithings'],dataSource,PostData).subscribe(
           (data: any[]) => {
             console.log(data);
             this.GetfaultData(this.machineName);

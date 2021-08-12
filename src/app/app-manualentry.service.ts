@@ -23,6 +23,9 @@ export class ManualEntryService {
         return this.httpClient.get(URL + dataSource + '&body=' + body);
     }
 
+    PostFaultData(URL,dataSource,data): Observable<object> {
+        return this.httpClient.post(URL + dataSource ,data);
+    }
 
 
 }
