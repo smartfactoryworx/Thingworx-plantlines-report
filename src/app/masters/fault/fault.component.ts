@@ -200,8 +200,8 @@ export class FaultComponent implements OnChanges {
       var PostData = {};
       let dataSource = 'MachineFaultMaster/Services/addMultipleData'
       PostData = {
-        "dataSource" : dataSource,
-        "input": this.FaultPostData
+        "datasource" : dataSource,
+        "input": {"input": this.FaultPostData}                                                   
       }
       console.log(JSON.stringify(PostData), 'HI');
      
