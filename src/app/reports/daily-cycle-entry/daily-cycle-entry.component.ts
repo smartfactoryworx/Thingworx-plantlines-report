@@ -62,11 +62,12 @@ export class DailyCycleEntryComponent implements OnChanges {
   //datePipe: any;
   lastUpdated;
   lastValueofArray: string;
-  CycleMeaning ="";
-  InfeedInTermsOf="";
-  OutfeedCountInTermsOf="";
-  SpeedIntermsOf="";
+  CycleMeaning = "";
+  InfeedInTermsOf = "";
+  OutfeedCountInTermsOf = "";
+  SpeedIntermsOf = "";
   machineData;
+  machineType: any;
   constructor(private _snackBar: MatSnackBar, private httpClient: HttpClient, protected dataentryservice: ManualEntryService, private util: UtilService,
     private datePipe: DatePipe, private tableutil: TableUtilsService,) { }
 
@@ -79,13 +80,13 @@ export class DailyCycleEntryComponent implements OnChanges {
     From: { 'DN': 'From Date', 'visible': false },
     To: { 'DN': 'To Date', 'visible': false },
     FaultNumber: { 'DN': 'Fault No.', 'visible': false },
-    TotalCycleRun: { 'DN': 'Total Cycle Run ('+ this.CycleMeaning + ')', 'visible': false },
+    TotalCycleRun: { 'DN': 'Total Cycle Run (' + this.CycleMeaning + ')', 'visible': false },
     FaultCount: { 'DN': 'Fault Count', 'visible': false },
     ManualStopCount: { 'DN': 'Manual Stop Count', 'visible': false },
-    MaxSpeed: { 'DN': 'Max Speed ('+ this.SpeedIntermsOf + ')', 'visible': false },
+    MaxSpeed: { 'DN': 'Max Speed (' + this.SpeedIntermsOf + ')', 'visible': false },
     Duration: { 'DN': 'Duration', 'visible': false },
-    InfeedCount: { 'DN': 'Infeed Count ('+ this.InfeedInTermsOf + ')', 'visible': false },
-    OutFeedCount: { 'DN': 'Outfeed Count ('+ this.OutfeedCountInTermsOf + ')', 'visible': false },
+    InfeedCount: { 'DN': 'Infeed Count (' + this.InfeedInTermsOf + ')', 'visible': false },
+    OutFeedCount: { 'DN': 'Outfeed Count (' + this.OutfeedCountInTermsOf + ')', 'visible': false },
     FirstFault: { 'DN': 'Fault', 'visible': false },
     MeanCycleBetweenFault: { 'DN': 'MCBF', 'visible': false },
     MeanCycleBetweenFaultNManualStop: { 'DN': 'MCBFS', 'visible': false },
@@ -120,6 +121,7 @@ export class DailyCycleEntryComponent implements OnChanges {
 
 
   GetAllFaultCauseData() {
+    console.log(this.machineType, this.machineName);
     this.FaultCauseData = [];
     let body = {
     }
@@ -133,9 +135,13 @@ export class DailyCycleEntryComponent implements OnChanges {
       this.dataentryservice.GetMachineData(apipath['apithings'], dataSource, JSON.stringify(body)).subscribe((faultcausedata: any) => {
         console.log("faultcausedata", faultcausedata);
         var c = faultcausedata.rows;
+        console.log(this.machineType,"MTYPE");
+        let FilterData = c.filter(item => this.machineType.includes(item.MachineType) || item.Machine_MDS === this.machineName);
 
-        for (let i = 0; i < c.length; i++) {
-          const data = c[i]
+        console.log(FilterData, "FilterData");
+        console.log(FilterData.length);
+        for (let i = 0; i < FilterData.length; i++) {
+          const data = FilterData[i]
           //if(data.FirstFault !=0){
           const allFaultCauseData = {
             causeNo: data && data.causeNo,
@@ -155,19 +161,20 @@ export class DailyCycleEntryComponent implements OnChanges {
   GetCycleData(machineDetails) {
     console.log(machineDetails);
 
-    console.log(machineDetails[0].machineId,machineDetails[0].CycleMeaning,machineDetails[0].InfeedInTermsOf,machineDetails[0].OutfeedCountInTermsOf,machineDetails[0].SpeedIntermsOf);
+    console.log(machineDetails[0].machineId, machineDetails[0].CycleMeaning, machineDetails[0].InfeedInTermsOf, machineDetails[0].OutfeedCountInTermsOf, machineDetails[0].SpeedIntermsOf);
     this.machineData = machineDetails;
     this.machineName = machineDetails[0].machineId;
-    this.CycleMeaning= machineDetails[0].CycleMeaning;
-    this.InfeedInTermsOf= machineDetails[0].InfeedInTermsOf;
-    this.OutfeedCountInTermsOf= machineDetails[0].OutfeedCountInTermsOf;
-    this.SpeedIntermsOf= machineDetails[0].SpeedIntermsOf;
-   
+    this.machineType = machineDetails[0].Field1;
+    this.CycleMeaning = machineDetails[0].CycleMeaning;
+    this.InfeedInTermsOf = machineDetails[0].InfeedInTermsOf;
+    this.OutfeedCountInTermsOf = machineDetails[0].OutfeedCountInTermsOf;
+    this.SpeedIntermsOf = machineDetails[0].SpeedIntermsOf;
+
     this.errorText = "";
     this.DailyCycle = [];
     this.gotData = false;
     this.loading = false;
-   
+
     let body = {
       "Machine": this.machineName,
     }
@@ -217,20 +224,20 @@ export class DailyCycleEntryComponent implements OnChanges {
           From: { 'DN': 'From Date', 'visible': false },
           To: { 'DN': 'To Date', 'visible': false },
           FaultNumber: { 'DN': 'Fault No.', 'visible': false },
-          TotalCycleRun: { 'DN': 'Total Cycle Run ('+ this.CycleMeaning + ')', 'visible': false },
+          TotalCycleRun: { 'DN': 'Total Cycle Run (' + this.CycleMeaning + ')', 'visible': false },
           FaultCount: { 'DN': 'Fault Count', 'visible': false },
           ManualStopCount: { 'DN': 'Manual Stop Count', 'visible': false },
-          MaxSpeed: { 'DN': 'Max Speed ('+ this.SpeedIntermsOf + ')', 'visible': false },
+          MaxSpeed: { 'DN': 'Max Speed (' + this.SpeedIntermsOf + ')', 'visible': false },
           Duration: { 'DN': 'Duration', 'visible': false },
-          InfeedCount: { 'DN': 'Infeed Count ('+ this.InfeedInTermsOf + ')', 'visible': false },
-          OutFeedCount: { 'DN': 'Outfeed Count ('+ this.OutfeedCountInTermsOf + ')', 'visible': false },
+          InfeedCount: { 'DN': 'Infeed Count (' + this.InfeedInTermsOf + ')', 'visible': false },
+          OutFeedCount: { 'DN': 'Outfeed Count (' + this.OutfeedCountInTermsOf + ')', 'visible': false },
           FirstFault: { 'DN': 'Fault', 'visible': false },
           MeanCycleBetweenFault: { 'DN': 'MCBF', 'visible': false },
           MeanCycleBetweenFaultNManualStop: { 'DN': 'MCBFS', 'visible': false },
           CauseSelected: { 'DN': 'Cause Selected', 'visible': false },
         }
-      
-       
+
+
         this.GetAllFaultCauseData();
         this.vdisplayedColumns = [];
         //console.log(this.fgextype[0]);
@@ -276,22 +283,29 @@ export class DailyCycleEntryComponent implements OnChanges {
 
   PostRowData(element, event) {
     console.log(element, event.value);
-    var T = {};
+    let T = {};
+    let PostData = {};
+    let dataSource = 'causeEnteredData/Services/saveData'
+
     if (element !== null) {
       T = {
         RawDataID: element.ID,
         CauseSelected: event.value,
       }
     }
-    console.log(T);
-    console.log("Data which is being posted : " + JSON.stringify(T));
 
-    let dataSource = 'causeEnteredData/Services/saveData'
+    PostData = {
+      "datasource": dataSource,
+      "input": T
+    }
+    console.log("Data which is being posted : " + JSON.stringify(PostData));
+
     this.dataentryservice.GetApiURL().subscribe(apipath => {
-      console.log(apipath['api']);
-      this.dataentryservice.GetMachineData(apipath['apithings'], dataSource, JSON.stringify(T)).subscribe(
+      console.log(apipath['apifaultthings']);
+      this.dataentryservice.PostFaultData(apipath['apifaultthings'], JSON.stringify(PostData)).subscribe(
         (data: any[]) => {
           //this.GetCycleData(this.machineName);
+          console.log(data);
           this.openSnackBar("Success", "Records Added or Updated Successfully");
         },
         (error: HttpErrorResponse) => {

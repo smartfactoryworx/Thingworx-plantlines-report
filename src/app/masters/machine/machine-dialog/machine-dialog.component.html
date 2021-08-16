@@ -35,9 +35,9 @@
                     <input matInput autocomplete="off"  placeholder="Cycle:OutFeed(1:1)"
                         formControlName="CycleMeaning">
                 </mat-form-field>
-                <mat-form-field appearance="" id="filterdropdown3" fxFlex="24">
-                    <mat-select formControlName="Field1" id="select4" placeholder="Machine Type">
-                        <mat-option *ngFor="let type of machinetypeList" [value]="type">{{type}}</mat-option>
+                <mat-form-field appearance="" id="filterdropdown" fxFlex="24">
+                    <mat-select formControlName="SpeedIntermsOf" id="select1" placeholder="SpeedIntermsOf">
+                        <mat-option *ngFor="let speed of speedIntermsofList" [value]="speed">{{speed}}</mat-option>
                     </mat-select>
                 </mat-form-field>
                 <mat-form-field appearance="" id="filterdropdown2" fxFlex="24">
@@ -54,9 +54,10 @@
             </div>
             <div fxLayout="row" style="width: 100%;padding: 0%;" fxLayoutAlign="space-around start">
                
-                <mat-form-field appearance="" id="filterdropdown" fxFlex="48">
-                    <mat-select formControlName="SpeedIntermsOf" id="select1" placeholder="SpeedIntermsOf">
-                        <mat-option *ngFor="let speed of speedIntermsofList" [value]="speed">{{speed}}</mat-option>
+              
+                <mat-form-field appearance="" id="filterdropdown3" fxFlex="48">
+                    <mat-select formControlName="Field1" id="select4" placeholder="Machine Type" multiple>
+                        <mat-option *ngFor="let type of machinetypeList" [value]="type">{{type}}</mat-option>
                     </mat-select>
                 </mat-form-field>
                 <mat-form-field appearance="" fxFlex="48">

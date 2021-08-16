@@ -17,6 +17,7 @@ interface machinelist {
   InfeedInTermsOf:string;
   OutfeedCountInTermsOf:string;
   SpeedIntermsOf:string;
+  Field1:string;
 }
 @Component({
   selector: 'app-parent-master',
@@ -77,7 +78,8 @@ export class ParentMasterComponent implements OnInit {
             CycleMeaning:a && a.CycleMeaning,
             InfeedInTermsOf:a && a.InfeedInTermsOf,
             OutfeedCountInTermsOf:a && a.OutfeedCountInTermsOf,
-            SpeedIntermsOf:a && a.SpeedIntermsOf
+            SpeedIntermsOf:a && a.SpeedIntermsOf,
+            Field1: a && a.Field1 
           }
           this.MachineList.push(data);
         }

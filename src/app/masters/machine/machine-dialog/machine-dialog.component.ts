@@ -28,6 +28,7 @@ export class MachineDialogComponent implements OnInit {
   OutfeedCountInTermsOf: FormControl;
   InfeedInTermsOf :FormControl;
   EndDate =  new FormControl(moment());
+  isDisconnected: FormControl;
   Field1: FormControl;
   title;
   button;
@@ -35,8 +36,9 @@ export class MachineDialogComponent implements OnInit {
   infeedIntermsofList;
   outfeedIntermsofList;
   speedIntermsofList;
-  machinetypeList
+  machinetypeList;
 
+ 
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any, public dialogRef: MatDialogRef<MachineDialogComponent>,
     private httpClient: HttpClient, private _snackBar: MatSnackBar, protected dataentryservice: ManualEntryService) { }
@@ -59,8 +61,10 @@ export class MachineDialogComponent implements OnInit {
     this.SpeedIntermsOf = new FormControl('');
     this.OutfeedCountInTermsOf = new FormControl('');
     this.EndDate = new FormControl('');
-    this.InfeedInTermsOf = new FormControl('')
-    this.Field1 = new FormControl('')
+    this.InfeedInTermsOf = new FormControl('');
+    this.Field1 = new FormControl('');
+    this.isDisconnected = new FormControl('');
+
   }
 
   createmachineform() {
@@ -76,7 +80,8 @@ export class MachineDialogComponent implements OnInit {
       OutfeedCountInTermsOf: this.OutfeedCountInTermsOf,
       EndDate: this.EndDate,
       InfeedInTermsOf: this.InfeedInTermsOf,
-      Field1: this.Field1
+      Field1: this.Field1,
+      isDisconnected: this.isDisconnected
     });
   }
   ngOnInit() {
@@ -101,6 +106,8 @@ export class MachineDialogComponent implements OnInit {
         this.title = this.data.dataKey.title;
         this.button = this.data.dataKey.button;
         const c = this.data.dataKey.rowdata;
+        
+        
         this.machineform.patchValue({
           ID: c.ID,
           Machine_MDS: c.Machine_MDS,
@@ -113,13 +120,16 @@ export class MachineDialogComponent implements OnInit {
           OutfeedCountInTermsOf: c.OutfeedCountInTermsOf,
           EndDate: c.EndDate,
           InfeedInTermsOf: c.InfeedInTermsOf,
-          Field1:c.Field1
+          Field1: c.Field1 === "" ? c.Field1 : JSON.parse(c.Field1),
+          isDisconnected: c.isDisconnected
         });
       }
 
     }
   }
 
+
+  
   close() {
     this.dialogRef.close();
   }

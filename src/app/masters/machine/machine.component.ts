@@ -256,8 +256,9 @@ export class MachineComponent implements OnInit {
         OutfeedCountInTermsOf: result.OutfeedCountInTermsOf,
         EndDate: result.EndDate ? this.datePipe.transform(result.EndDate, 'yyyy-MM-dd') : "", 
         InfeedInTermsOf: result.InfeedInTermsOf,
-        Field1: result.Field1
-    }
+        Field1: result.Field1,
+        isDisconnected:result.isDisconnected
+      }
     }
     console.log(T);
     console.log("Data which is being posted : " + JSON.stringify(T));

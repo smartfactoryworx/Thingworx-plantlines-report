@@ -14,8 +14,8 @@ export class ManualEntryService {
     }
 
 
-    GetApiURL(){
-        return  this.httpClient.get('configs/api/api_server.json');
+    GetApiURL() {
+        return this.httpClient.get('configs/api/api_server.json');
     }
 
     GetMachineData(URL, dataSource, body): Observable<object> {
@@ -23,13 +23,11 @@ export class ManualEntryService {
         return this.httpClient.get(URL + dataSource + '&body=' + body);
     }
 
-    PostFaultData(URL,data): Observable<object> {
-            //console.log()
-    let headers = new HttpHeaders({
-        'Content-Type': 'application/json',
-      });
-      let options = { headers: headers };
-        return this.httpClient.post(URL,data,options);
+    PostFaultData(URL, data): Observable<object> {
+        console.log(URL, data)
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        let options = { headers: headers };
+        return this.httpClient.post(URL, data, options);
     }
 
 
