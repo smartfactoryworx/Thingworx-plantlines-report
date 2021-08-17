@@ -294,30 +294,44 @@ export class DailyCycleEntryComponent implements OnChanges {
       }
     }
 
-    PostData = {
-      "datasource": dataSource,
-      "input": T
-    }
-    console.log("Data which is being posted : " + JSON.stringify(PostData));
+  
+    console.log("Data which is being posted : " + JSON.stringify(T));
 
     this.dataentryservice.GetApiURL().subscribe(apipath => {
-      console.log(apipath['apifaultthings']);
-      this.dataentryservice.PostFaultData(apipath['apifaultthings'], JSON.stringify(PostData)).subscribe(
+      console.log(apipath['api']);
+      this.dataentryservice.GetMachineData(apipath['apithings'], dataSource, JSON.stringify(T)).subscribe(
         (data: any[]) => {
-          //this.GetCycleData(this.machineName);
-          console.log(data);
+         console.log(data,"data");
           this.openSnackBar("Success", "Records Added or Updated Successfully");
         },
         (error: HttpErrorResponse) => {
           //console.log(error);
           if (error.status >= 400) {
-            this.openSnackBar("Validation", error.error);
+            this.openSnackBar("Validation", error.error.error);
           }
           else {
-            this.openSnackBar("Error", error.error);
+            this.openSnackBar("Error", error.error.error);
           }
         });
     });
+    // this.dataentryservice.GetApiURL().subscribe(apipath => {
+    //   console.log(apipath['apifaultthings']);
+    //   this.dataentryservice.PostFaultData(apipath['apifaultthings'], JSON.stringify(PostData)).subscribe(
+    //     (data: any[]) => {
+    //       //this.GetCycleData(this.machineName);
+    //       console.log(data);
+    //       this.openSnackBar("Success", "Records Added or Updated Successfully");
+    //     },
+    //     (error: HttpErrorResponse) => {
+    //       //console.log(error);
+    //       if (error.status >= 400) {
+    //         this.openSnackBar("Validation", error.error);
+    //       }
+    //       else {
+    //         this.openSnackBar("Error", error.error);
+    //       }
+    //     });
+    // });
   }
   exportTable() {
     this.tableutil.exportArrayToExcel(this.DailyCycle, "Daily_Cycle_Report", "Daily_Cycle_Report");
