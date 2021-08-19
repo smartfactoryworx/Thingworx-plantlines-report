@@ -79,15 +79,15 @@ export class DailyCycleEntryComponent implements OnChanges {
     SKU: { 'DN': 'SKU', 'visible': false },
     From: { 'DN': 'From Date', 'visible': false },
     To: { 'DN': 'To Date', 'visible': false },
-    FaultNumber: { 'DN': 'Fault No.', 'visible': false },
+    FaultNumber: { 'DN': 'Fault Description', 'visible': false },
     TotalCycleRun: { 'DN': 'Total Cycle Run (' + this.CycleMeaning + ')', 'visible': false },
-    FaultCount: { 'DN': 'Fault Count', 'visible': false },
-    ManualStopCount: { 'DN': 'Manual Stop Count', 'visible': false },
+    FaultCount: { 'DN': 'Fault Count', 'visible': true },
+    ManualStopCount: { 'DN': 'Manual Stop Count', 'visible': true },
     MaxSpeed: { 'DN': 'Max Speed (' + this.SpeedIntermsOf + ')', 'visible': false },
     Duration: { 'DN': 'Duration', 'visible': false },
     InfeedCount: { 'DN': 'Infeed Count (' + this.InfeedInTermsOf + ')', 'visible': false },
     OutFeedCount: { 'DN': 'Outfeed Count (' + this.OutfeedCountInTermsOf + ')', 'visible': false },
-    FirstFault: { 'DN': 'Fault', 'visible': false },
+    FirstFault: { 'DN': 'Fault', 'visible': true },
     MeanCycleBetweenFault: { 'DN': 'MCBF', 'visible': false },
     MeanCycleBetweenFaultNManualStop: { 'DN': 'MCBFS', 'visible': false },
     CauseSelected: { 'DN': 'Cause Selected', 'visible': false },
@@ -198,7 +198,7 @@ export class DailyCycleEntryComponent implements OnChanges {
             SKU: data && data.SKU_Details,
             From: data && moment(data.StartTime).format("HH:mm"),
             To: data && moment(data.StopTime).format("HH:mm"),
-            FaultNumber: data && data.FaultDescription,
+            FaultNumber: data && data.ManualStop === true ? "Manual Stop" : data && data.FaultDescription ,
             TotalCycleRun: data && data.CycleCount,
             FaultCount: data && data.FirstFault > 0 ? 1 : 0,
             ManualStopCount: data && data.ManualStop === true ? 1 : 0,
@@ -223,15 +223,15 @@ export class DailyCycleEntryComponent implements OnChanges {
           SKU: { 'DN': 'SKU', 'visible': false },
           From: { 'DN': 'From Date', 'visible': false },
           To: { 'DN': 'To Date', 'visible': false },
-          FaultNumber: { 'DN': 'Fault No.', 'visible': false },
+          FaultNumber: { 'DN': 'Fault Description', 'visible': false },
           TotalCycleRun: { 'DN': 'Total Cycle Run (' + this.CycleMeaning + ')', 'visible': false },
-          FaultCount: { 'DN': 'Fault Count', 'visible': false },
-          ManualStopCount: { 'DN': 'Manual Stop Count', 'visible': false },
+          FaultCount: { 'DN': 'Fault Count', 'visible': true },
+          ManualStopCount: { 'DN': 'Manual Stop Count', 'visible': true },
           MaxSpeed: { 'DN': 'Max Speed (' + this.SpeedIntermsOf + ')', 'visible': false },
           Duration: { 'DN': 'Duration', 'visible': false },
           InfeedCount: { 'DN': 'Infeed Count (' + this.InfeedInTermsOf + ')', 'visible': false },
           OutFeedCount: { 'DN': 'Outfeed Count (' + this.OutfeedCountInTermsOf + ')', 'visible': false },
-          FirstFault: { 'DN': 'Fault', 'visible': false },
+          FirstFault: { 'DN': 'Fault', 'visible': true },
           MeanCycleBetweenFault: { 'DN': 'MCBF', 'visible': false },
           MeanCycleBetweenFaultNManualStop: { 'DN': 'MCBFS', 'visible': false },
           CauseSelected: { 'DN': 'Cause Selected', 'visible': false },
@@ -293,45 +293,31 @@ export class DailyCycleEntryComponent implements OnChanges {
         CauseSelected: event.value,
       }
     }
-
+    PostData = {
+      "datasource": dataSource,
+      "input": T 
+    }
   
-    console.log("Data which is being posted : " + JSON.stringify(T));
+    console.log("Data which is being posted : " + JSON.stringify(PostData));
 
     this.dataentryservice.GetApiURL().subscribe(apipath => {
-      console.log(apipath['api']);
-      this.dataentryservice.GetMachineData(apipath['apithings'], dataSource, JSON.stringify(T)).subscribe(
+      console.log(apipath['apifaultthings']);
+      this.dataentryservice.PostFaultData(apipath['apifaultthings'], JSON.stringify(PostData)).subscribe(
         (data: any[]) => {
-         console.log(data,"data");
+          this.GetCycleData(this.machineData);
+          console.log(data);
           this.openSnackBar("Success", "Records Added or Updated Successfully");
         },
         (error: HttpErrorResponse) => {
           //console.log(error);
           if (error.status >= 400) {
-            this.openSnackBar("Validation", error.error.error);
+            this.openSnackBar("Validation", error.error);
           }
           else {
-            this.openSnackBar("Error", error.error.error);
+            this.openSnackBar("Error", error.error);
           }
         });
     });
-    // this.dataentryservice.GetApiURL().subscribe(apipath => {
-    //   console.log(apipath['apifaultthings']);
-    //   this.dataentryservice.PostFaultData(apipath['apifaultthings'], JSON.stringify(PostData)).subscribe(
-    //     (data: any[]) => {
-    //       //this.GetCycleData(this.machineName);
-    //       console.log(data);
-    //       this.openSnackBar("Success", "Records Added or Updated Successfully");
-    //     },
-    //     (error: HttpErrorResponse) => {
-    //       //console.log(error);
-    //       if (error.status >= 400) {
-    //         this.openSnackBar("Validation", error.error);
-    //       }
-    //       else {
-    //         this.openSnackBar("Error", error.error);
-    //       }
-    //     });
-    // });
   }
   exportTable() {
     this.tableutil.exportArrayToExcel(this.DailyCycle, "Daily_Cycle_Report", "Daily_Cycle_Report");

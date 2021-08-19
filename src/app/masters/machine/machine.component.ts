@@ -243,6 +243,7 @@ export class MachineComponent implements OnInit {
   postMachineData(result) {
     console.log(result, "Result....");
     var T = {};
+    var PostData = {};
     if (result !== null) {
       T ={
         ID: result.ID,
@@ -264,20 +265,29 @@ export class MachineComponent implements OnInit {
     console.log("Data which is being posted : " + JSON.stringify(T));
 
     let dataSource = 'MachineDetailsMaster/Services/addMachineMasters'
+    PostData = {
+      "datasource": dataSource,
+      "input": T 
+    }
+  
+    console.log("Data which is being posted : " + JSON.stringify(PostData));
+
     this.manualentryservice.GetApiURL().subscribe(apipath => {
-      console.log(apipath['api']);
-      this.manualentryservice.GetMachineData(apipath['apithings'], dataSource, JSON.stringify(T)).subscribe(
+      console.log(apipath['apifaultthings']);
+      this.manualentryservice.PostFaultData(apipath['apifaultthings'], JSON.stringify(PostData)).subscribe(
         (data: any[]) => {
-          this.GetAllMachineData();
+          //this.GetCycleData(this.machineName);
+          console.log(data);
           this.openSnackBar("Success", "Records Added or Updated Successfully");
+          this.GetAllMachineData();
         },
         (error: HttpErrorResponse) => {
           //console.log(error);
           if (error.status >= 400) {
-            this.openSnackBar("Validation", error.error.error);
+            this.openSnackBar("Validation", error.error);
           }
           else {
-            this.openSnackBar("Error", error.error.error);
+            this.openSnackBar("Error", error.error);
           }
         });
     });

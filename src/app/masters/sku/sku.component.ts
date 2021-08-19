@@ -221,6 +221,7 @@ export class SkuComponent implements OnChanges {
   postSKUData(result) {
     console.log(result, "Result....");
     var T = {};
+    var PostData = {};
     if (result !== null) {
       T = {
         ID: result.ID,
@@ -229,16 +230,23 @@ export class SkuComponent implements OnChanges {
         SKU_Details: result.SKU_Details,
       }
     }
-    console.log(T);
-    console.log("Data which is being posted : " + JSON.stringify(T));
-
     let dataSource = 'LineSKUmaster/Services/addSkuInDataTableFromFrontEnd'
-    this.manualentryservice.GetApiURL().subscribe(apipath => {
-      console.log(apipath['api']);
-      this.manualentryservice.GetMachineData(apipath['apithings'], dataSource, JSON.stringify(T)).subscribe(
+    PostData = {
+      "datasource": dataSource,
+      "input": T 
+    }
+  
+    console.log("Data which is being posted : " + JSON.stringify(PostData));
+
+
+      this.manualentryservice.GetApiURL().subscribe(apipath => {
+      console.log(apipath['apifaultthings']);
+      this.manualentryservice.PostFaultData(apipath['apifaultthings'], JSON.stringify(PostData)).subscribe(
         (data: any[]) => {
-          this.GetSKUData( this.machineName);
+          //this.GetCycleData(this.machineName);
+          console.log(data);
           this.openSnackBar("Success", "Records Added or Updated Successfully");
+          this.GetSKUData(this.machineName);
         },
         (error: HttpErrorResponse) => {
           //console.log(error);

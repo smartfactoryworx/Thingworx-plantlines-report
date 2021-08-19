@@ -32,6 +32,7 @@ interface cycledata {
   Date: string;
   FaultNumber: number;
   Cause: string;
+  Count: number;
 }
 interface Filter {
   value: string;
@@ -126,7 +127,8 @@ export class CycleReportComponent implements OnChanges {
             SKUDesc: data && data.SKU_Details,
             To: data && moment(data.StopTime).format("HH:mm"),
             Date: data && moment(data.StartTime).format("DD MMM YYYY"),
-            Cause: data && data.CauseSelected
+            Cause: data && data.CauseSelected,
+            Count: 1
           }
           this.cycleData.push(allCycleData);
         }
@@ -251,6 +253,9 @@ export class CycleReportComponent implements OnChanges {
         },
         Cause: {
           type: "string"
+        },
+        Count:{
+          type: "number"
         }
       }
     ]
@@ -729,6 +734,11 @@ export class CycleReportComponent implements OnChanges {
             caption: "MCBF & S",
             format: "44mvcoma",
           },
+          {
+            uniqueName: "Count",
+            formula: "((\"Count\"))",
+            caption: "Count"
+          },
 
         ],
 
@@ -804,6 +814,10 @@ export class CycleReportComponent implements OnChanges {
           },
           {
             idx: 11,
+            width: 56
+          },
+          {
+            idx: 12,
             width: 56
           }
         ]
