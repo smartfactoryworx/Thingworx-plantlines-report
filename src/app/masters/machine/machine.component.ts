@@ -142,7 +142,8 @@ export class MachineComponent implements OnInit {
 
         }
         console.log("MachineData", this.MachineData);
-        this.MachineData.sort(this.util.dynamicSort('timestamp'));
+       // this.MachineData.sort(this.util.dynamicSort('timestamp'));
+        this.MachineData.sort(this.util.dynamicDescSort('isDisconnected'));
         this.vdisplayedColumns = [];
         //console.log(this.fgextype[0]);
         if (Object.keys(machinedata).length > 0) {

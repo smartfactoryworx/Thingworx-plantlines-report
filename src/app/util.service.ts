@@ -103,10 +103,10 @@ export class UtilService {
   }
 
   dynamicDescSort(property) {
-    var sortOrder = 1;
+    var sortOrder = -1;
     if (property[0] === "-") {
-      sortOrder = -1;
-      property = property.substr(1);
+      sortOrder = 1;
+      property = property.substr(-1);
     }
     return function (a, b) {
       /* next line works with strings and numbers, 
