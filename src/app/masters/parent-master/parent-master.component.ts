@@ -47,7 +47,8 @@ export class ParentMasterComponent implements OnInit {
   BindDefaultData() {
     //this.machine.setValue('RU21005a');
     //this.machine.setValue('CM20042A');
-    this.machine.setValue('CR20152a');
+    //this.machine.setValue('CR20152a');
+    this.machine.setValue(this.MachineList[0].machineId);
   }
   GetMachineName(machine) {
     console.log(machine);
@@ -84,6 +85,7 @@ export class ParentMasterComponent implements OnInit {
           this.MachineList.push(data);
         }
         this.MachineList.sort(this.util.dynamicSort('createdDate'));
+        
         this.filteredMachine = this.MachineList.slice();
         console.log(this.filteredMachine);
         console.log(this.MachineList, "MachineData");
