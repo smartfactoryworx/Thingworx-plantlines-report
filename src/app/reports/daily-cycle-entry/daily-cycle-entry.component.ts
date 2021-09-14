@@ -190,6 +190,10 @@ export class DailyCycleEntryComponent implements OnChanges {
         console.log("machinecycledata", machinecycledata);
 
         var c = machinecycledata.rows;
+        c.sort((a,b)=>{
+          console.log((new Date(a.StartTime)));
+          return moment(b.StartTime).valueOf()-moment(a.StartTime).valueOf();
+        });
         for (let i = 0; i < c.length; i++) {
           const data = c[i]
           const allCycleData = {
@@ -215,8 +219,8 @@ export class DailyCycleEntryComponent implements OnChanges {
           this.DailyCycle.push(allCycleData);
         }
         console.log("DailyCycle", this.DailyCycle);
-        this.DailyCycle.sort(this.util.dynamicDescSort('OutFeedCount'));
-
+        console.log(this.DailyCycle);
+        //this.DailyCycle.sort(this.util.dynamicDescSort('OutFeedCount'));
         this.displayedColumnsAs = {
           ID: { 'DN': 'ID', 'visible': true },
           Date: { 'DN': 'Date', 'visible': false },
@@ -237,7 +241,6 @@ export class DailyCycleEntryComponent implements OnChanges {
           CauseSelected: { 'DN': 'Cause Selected', 'visible': false },
         }
 
-
         this.GetAllFaultCauseData();
         this.vdisplayedColumns = [];
         //console.log(this.fgextype[0]);
@@ -246,7 +249,6 @@ export class DailyCycleEntryComponent implements OnChanges {
             for (let i = 0; i < Object.keys(this.DailyCycle[0]).length; i++) {
               this.vdisplayedColumns.push(Object.keys(this.DailyCycle[0])[i]);
               //console.log("function");
-
             }
             //this.vdisplayedColumns.push('CauseSelected');
             console.log(this.vdisplayedColumns)
