@@ -1,3 +1,4 @@
+import { HourlyReportComponent } from './hourly-report/hourly-report.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
@@ -25,6 +26,12 @@ const routes: Routes = [
         component: DailyCycleEntryComponent ,
         pathMatch: 'full'
       },
+      {
+        path: 'hourly',
+        component: HourlyReportComponent,
+        pathMatch: 'full'
+      }
+
 
     ]
   }

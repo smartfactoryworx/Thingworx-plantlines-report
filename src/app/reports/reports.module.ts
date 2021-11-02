@@ -6,10 +6,11 @@ import { SharedModule } from '../shared/shared.module';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { CycleReportModule } from './cycle-report/cycle-report.module';
 import { DailyCycleEntryModule } from './daily-cycle-entry/daily-cycle-entry.module';
+import { HourlyReportComponent } from './hourly-report/hourly-report.component';
 
 
 @NgModule({
-  declarations: [ReportsComponent],
+  declarations: [ReportsComponent, HourlyReportComponent],
   imports: [
     CommonModule,
     ReportsRoutingModule,

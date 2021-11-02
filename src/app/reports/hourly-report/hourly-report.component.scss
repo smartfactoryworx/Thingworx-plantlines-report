@@ -1,0 +1,140 @@
+::ng-deep .mat-tab-list .mat-tab-labels .mat-tab-label-active {
+  color: rgb(255, 255, 255) !important;
+  background-color: #2b1316 !important;
+}
+// ::ng-deep .mat-tab-label, .mat-tab-link {
+//    color: #000000;
+
+// }
+::ng-deep .mat-ink-bar {
+  //color: #ffffff !important;
+  background-color:#ff0000 !important;
+}
+
+::ng-deep .mat-tab-label {
+  height: 48px;
+  padding: 0 24px;
+  background-color: lightgrey;
+  cursor: pointer;
+  box-sizing: border-box;
+  opacity: 1;
+  min-width: 160px;
+  text-align: center;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  white-space: nowrap;
+  position: relative;
+}
+
+
+::ng-deep .mat-select-panel {
+  transform-origin: 46% 114px 0px;
+  font-size: 16px;
+  opacity: 1;
+  min-width: calc(100% + 27px);
+  transform: scaleY(1);
+  //margin-top:7.25rem !important;
+}
+
+.excel-btn {
+position: absolute;
+z-index: 2;
+margin-top: 2%;
+}
+
+
+::ng-deep #wdr-toolbar-wrapper {
+/* display: none; */
+height: 1px !important;
+}
+
+
+::ng-deep #wdr-toolbar-wrapper #wdr-toolbar {
+width: 20%;
+position: absolute;
+height: 78px;
+list-style: none;
+background: #fff0;
+white-space: nowrap;
+bottom: 90.5%;
+z-index: 1000;
+right: 0;
+//font-size: 12px
+}
+::ng-deep #wdr-toolbar-wrapper #wdr-toolbar>.wdr-toolbar-group-right>li>a span, #wdr-toolbar-wrapper #wdr-toolbar>li>a span
+::ng-deep #wdr-toolbar-wrapper #wdr-toolbar #wdr-toolbar li{
+font-size: 13px;
+}
+
+::ng-deep #wdr-pivot-view .wdr-grid-layout #wdr-data-sheet .wdr-cell {
+text-align: center !important;
+}
+
+::ng-deep #wdr-pivot-view .wdr-grid-layout .wdr-cell {
+white-space: normal;
+}
+
+
+// ::ng-deep #wdr-pivot-view .wdr-grid-layout div.wdr-scroll-pane div.wdr-scroll-placeholder .wdr-cell {
+//   position: absolute;
+//   text-align: center !important;
+// }
+
+// ::ng-deep  #wdr-pivot-view .wdr-grid-layout div.wdr-scroll-pane div.wdr-scroll-content .wdr-cell {
+//   position: relative;
+//   text-align: center !important;
+// }
+.invisible {
+display: block;
+visibility: hidden;
+height: 0;
+width: 0;
+}
+
+
+
+path.highcharts-tracker-line.wdr-ui-element {
+stroke: rgba(255, 158, 44, 1) !important;
+stroke-width: 2px !important;
+}
+
+
+
+
+
+::ng-deep .mat-form-field-flex{
+padding: .10em .75em 0 .75em !important;;
+}
+
+mat-form-field#filterdropdown {
+position: absolute;
+z-index: 10;
+text-align: right;
+display: inline-block;
+text-align: left;
+margin-left: auto;
+margin-right: auto;
+top: 53em;
+right: 46%;
+}
+
+mat-form-field#filterdropdown1 {
+position: absolute;
+z-index: 10;
+text-align: right;
+display: inline-block;
+text-align: left;
+margin-left: auto;
+margin-right: auto;
+top: 55.5em;
+right: 42%;
+}
+
+::ng-deep .mat-tab-label-container {
+display: flex;
+flex-grow: 1;
+overflow: hidden;
+z-index: 1;
+margin-left: 13rem;
+}

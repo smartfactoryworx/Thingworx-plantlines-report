@@ -1,0 +1,40 @@
+<!-- <div fxLayout="column" style="width: 100%;min-height: 92.47vh;margin-top: 1%;">
+  <div style="margin-left: 94%;position: absolute;top: 2;">
+    <button mat-icon-button (click)="GetCycleData(machineData)" style="background: #3f51b5; color: white;z-index: 5000;"
+      matTooltip="Refresh" matTooltipPosition="below">
+      <mat-icon>refresh</mat-icon>
+    </button>
+  </div> -->
+    <app-parent-master #machineDetails (machineDetail)='noFunction($event)'></app-parent-master>
+
+
+
+
+  <div *ngIf="!gotData" fxFlex="10" style="margin-left: 49%;">
+    <mat-spinner diameter="30"></mat-spinner>
+  </div>
+
+  <div  fxLayout="column" style="width: 99%;" fxLayoutAlign="center">
+    <div fxLayout="row" style="width: 50%;min-height: 10%;margin-top: 0.2%; margin-left: 35%; margin-bottom: 0px;">
+      <mat-form-field appearance="fill" >
+        <mat-label>Enter a date range(max 7 days)</mat-label>
+        <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+          <input  matStartDate formControlName="start" placeholder="Start date">
+          <input  matEndDate formControlName="end" placeholder="End date">
+        </mat-date-range-input>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+      </mat-form-field>
+      <!-- <p>Selected range: {{range.value | json}}</p> -->
+      <button [disabled]="range.controls.start.hasError('matStartDateInvalid')" mat-raised-button color="primary" style="margin-left:5% ; width: 15%; height: 40%; margin-top: 25px;" type="submit" (click)="GetCycleData(machineDetails)" >Submit</button>
+    </div>
+    <h3 *ngIf="!hourlyData">Please Select the machine & Date range(not exceeding 7 days) </h3>
+
+    <div *ngIf="hourlyData?.length > 0" fxLayout="row" style="width: 100%;margin: 0;" fxLayout.xs="column" fxLayoutWrap fxLayoutGap="0.1%"
+      fxLayoutAlign="space-around center" fxFlex="100">
+      <wbr-pivot #pivot1 [toolbar]="true" [width]="'100%'" [height]="700" fxFlex="99"
+        (beforetoolbarcreated)="customizeToolbar($event,'Summary',machineName  + '_Summary_Report','Summary_Report')"
+        >
+      </wbr-pivot>
+    </div>
+  </div>
