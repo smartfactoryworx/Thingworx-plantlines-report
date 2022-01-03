@@ -7,6 +7,13 @@
         <div>
             <h5>{{lastUpdated}}</h5>
         </div>
+        <div [hidden]="logOutHide">
+          <button  mat-raised-button color="warn" type="submit" (click)="logOut()">Logout</button>
+        </div>
     </div>
 </mat-toolbar>
-<app-sidenav  #sidenavID ></app-sidenav>
+<div [hidden]="logOutHide">
+  <app-sidenav   #sidenavID ></app-sidenav>
+
+</div>
+

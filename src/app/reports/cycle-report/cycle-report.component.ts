@@ -71,8 +71,9 @@ export class CycleReportComponent implements OnChanges {
   InfeedInTermsOf: any;
   OutfeedCountInTermsOf: any;
   SpeedIntermsOf: any;
-  constructor(private httpClient: HttpClient, protected dataentryservice: ManualEntryService, private util: UtilService,
-    private datePipe: DatePipe) { }
+  constructor(private httpClient: HttpClient, public dataentryservice: ManualEntryService, private util: UtilService,
+    private datePipe: DatePipe) {
+    }
 
   ngOnChanges(changes: SimpleChanges): void {
     //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
@@ -81,6 +82,7 @@ export class CycleReportComponent implements OnChanges {
     this.GetCycleData(this.machineData);
   }
   GetCycleData(machineDetails) {
+    this.dataentryservice.getDataLoaded(false);
     console.log(machineDetails);
 
     console.log(machineDetails[0].machineId, machineDetails[0].CycleMeaning, machineDetails[0].InfeedInTermsOf, machineDetails[0].OutfeedCountInTermsOf, machineDetails[0].SpeedIntermsOf);
@@ -135,8 +137,10 @@ export class CycleReportComponent implements OnChanges {
         console.log("cycleData", this.cycleData);
         if (this.cycleData.length === 0) {
           this.gotData = true;
+          this.dataentryservice.getDataLoaded( true);
           this.errorText = " No Record Found";
         } else {
+          this.dataentryservice.getDataLoaded( true);
           this.gotData = true;
           this.errorText = "";
         }
@@ -369,7 +373,7 @@ export class CycleReportComponent implements OnChanges {
             idx: 0,
             height: 63
           },
-         
+
         ],
         columns: [
           {
@@ -479,7 +483,7 @@ export class CycleReportComponent implements OnChanges {
             idx: 0,
             height: 63
           },
-         
+
         ],
         columns: [
           {
@@ -596,7 +600,7 @@ export class CycleReportComponent implements OnChanges {
             idx: 0,
             height: 63
           },
-         
+
         ],
         columns: [
           {
@@ -765,7 +769,7 @@ export class CycleReportComponent implements OnChanges {
             idx: 0,
             height: 63
           },
-         
+
         ],
         columns: [
           {

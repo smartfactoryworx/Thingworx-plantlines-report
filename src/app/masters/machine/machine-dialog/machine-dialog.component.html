@@ -1,84 +1,84 @@
 <div fxLayout="column" class="form" style="width: 100%;">
-    <h3 style="color: blue;text-align: center;">Add Machine Details</h3>
-    <form [formGroup]="machineform">
-        <div fxLayout="column" style="width:100%;">
+  <h3 style="color: blue;text-align: center;">Add Machine Details</h3>
+  <form [formGroup]="machineform">
+      <div fxLayout="column" style="width:100%;">
 
 
-            <div fxLayout="row" style="width: 100%;padding: 0%;" fxLayoutAlign="space-around start">
-                <mat-form-field fxFlex="5" fxHide>
-                    <input matInput autocomplete="off"  placeholder="ID" formControlName="ID">
-                </mat-form-field>
-                <mat-form-field fxFlex="24">
-                    <input matInput autocomplete="off"  placeholder="Machine MDS"
-                        formControlName="Machine_MDS">
-                </mat-form-field>
-                <mat-form-field fxFlex="24">
-                    <input matInput autocomplete="off"  placeholder="Machine Name"
-                        formControlName="Machine_Name">
-                </mat-form-field>
-                <mat-form-field fxFlex="24">
-                    <input matInput autocomplete="off" placeholder="Customer Name" formControlName="Customer_Name">
-                </mat-form-field>
-                <mat-form-field fxFlex="24">
-                    <input matInput autocomplete="off" placeholder="Installation Site"
-                        formControlName="Installation_Site">
-                </mat-form-field>
-            </div>
-            <div fxLayout="row" style="width: 100%;padding: 0%;" fxLayoutAlign="space-around start">
-                
-                <mat-form-field fxFlex="24" fxHide>
-                    <input matInput autocomplete="off"  placeholder="IP Address"
-                        formControlName="IP_Address">
-                </mat-form-field>
-              
-                <mat-form-field fxFlex="24">
-                    <input matInput autocomplete="off"  placeholder="Cycle:OutFeed(1:1)"
-                        formControlName="CycleMeaning">
-                </mat-form-field>
-                <mat-form-field appearance="" id="filterdropdown" fxFlex="24">
-                    <mat-select formControlName="SpeedIntermsOf" id="select1" placeholder="SpeedIntermsOf">
-                        <mat-option *ngFor="let speed of speedIntermsofList" [value]="speed">{{speed}}</mat-option>
-                    </mat-select>
-                </mat-form-field>
-                <mat-form-field appearance="" id="filterdropdown2" fxFlex="24">
-                    <mat-select formControlName="InfeedInTermsOf" id="select3" placeholder="InfeedInTermsOf">
-                        <mat-option *ngFor="let infeed of infeedIntermsofList" [value]="infeed">{{infeed}}</mat-option>
-                    </mat-select>
-                </mat-form-field>
-               
-                <mat-form-field appearance="" id="filterdropdown1" fxFlex="24">
-                    <mat-select formControlName="OutfeedCountInTermsOf" id="select2" placeholder="OutfeedCountInTermsOf">
-                        <mat-option  *ngFor="let outfeed of outfeedIntermsofList" [value]="outfeed">{{outfeed}}</mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </div>
-            <div fxLayout="row" style="width: 100%;padding: 0%;" fxLayoutAlign="space-around start">
-               
-              
-                <mat-form-field appearance="" id="filterdropdown3" fxFlex="48">
-                    <mat-select formControlName="Field1" id="select4" placeholder="Machine Type" multiple>
-                        <mat-option *ngFor="let type of machinetypeList" [value]="type">{{type}}</mat-option>
-                    </mat-select>
-                </mat-form-field>
-                <mat-form-field appearance="" fxFlex="48">
-                    <mat-label>End Date</mat-label>
-                    <input matInput [matDatepicker]="picker" formControlName="EndDate" placeholder="End Date">
-                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                    <mat-datepicker #picker></mat-datepicker>
-                </mat-form-field>
-               
-            </div>
-            <div>{{Field1.value}}</div>
-        </div>
-    </form>
+          <div fxLayout="row" style="width: 100%;padding: 0%;" fxLayoutAlign="space-around start">
+              <mat-form-field fxFlex="5" fxHide>
+                  <input matInput autocomplete="off"  placeholder="ID" formControlName="ID">
+              </mat-form-field>
+              <mat-form-field fxFlex="24">
+                  <input matInput autocomplete="off"  placeholder="Machine MDS"
+                      formControlName="Machine_MDS">
+              </mat-form-field>
+              <mat-form-field fxFlex="24">
+                  <input matInput autocomplete="off"  placeholder="Machine Name"
+                      formControlName="Machine_Name">
+              </mat-form-field>
+              <mat-form-field fxFlex="24">
+                  <input matInput autocomplete="off" placeholder="Customer Name" formControlName="Customer_Name">
+              </mat-form-field>
+              <mat-form-field fxFlex="24">
+                  <input matInput autocomplete="off" placeholder="Installation Site"
+                      formControlName="Installation_Site">
+              </mat-form-field>
+          </div>
+          <div fxLayout="row" style="width: 100%;padding: 0%;" fxLayoutAlign="space-around start">
+
+              <mat-form-field fxFlex="24" fxHide>
+                  <input matInput autocomplete="off"  placeholder="IP Address"
+                      formControlName="IP_Address">
+              </mat-form-field>
+
+              <mat-form-field fxFlex="24">
+                  <input matInput autocomplete="off"  placeholder="Cycle:OutFeed(1:1)"
+                      formControlName="CycleMeaning">
+              </mat-form-field>
+              <mat-form-field appearance="" id="filterdropdown" fxFlex="24">
+                  <mat-select formControlName="SpeedIntermsOf" id="select1" placeholder="SpeedIntermsOf">
+                      <mat-option *ngFor="let speed of speedIntermsofList" [value]="speed">{{speed}}</mat-option>
+                  </mat-select>
+              </mat-form-field>
+              <mat-form-field appearance="" id="filterdropdown2" fxFlex="24">
+                  <mat-select formControlName="InfeedInTermsOf" id="select3" placeholder="InfeedInTermsOf">
+                      <mat-option *ngFor="let infeed of infeedIntermsofList" [value]="infeed">{{infeed}}</mat-option>
+                  </mat-select>
+              </mat-form-field>
+
+              <mat-form-field appearance="" id="filterdropdown1" fxFlex="24">
+                  <mat-select formControlName="OutfeedCountInTermsOf" id="select2" placeholder="OutfeedCountInTermsOf">
+                      <mat-option  *ngFor="let outfeed of outfeedIntermsofList" [value]="outfeed">{{outfeed}}</mat-option>
+                  </mat-select>
+              </mat-form-field>
+          </div>
+          <div fxLayout="row" style="width: 100%;padding: 0%;" fxLayoutAlign="space-around start">
+
+
+              <mat-form-field appearance="" id="filterdropdown3" fxFlex="48">
+                  <mat-select formControlName="Field1" id="select4" placeholder="Machine Type" multiple>
+                      <mat-option *ngFor="let type of machinetypeList" [value]="type">{{type}}</mat-option>
+                  </mat-select>
+              </mat-form-field>
+              <mat-form-field appearance="" fxFlex="48">
+                  <mat-label>End Date</mat-label>
+                  <input matInput [matDatepicker]="picker" formControlName="EndDate" placeholder="End Date">
+                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+
+          </div>
+          <div>{{Field1.value}}</div>
+      </div>
+  </form>
 </div>
 
 <div fxLayout="row" style="width: 100%;padding: 1%;" fxLayoutAlign="space-around start">
-    <button mat-raised-button color="primary" [disabled]="machineform.invalid"
-        [mat-dialog-close]="machineform.value">{{button}}
-    </button>
-    <button mat-raised-button color="warn" (click)="close()">Cancel</button>
+  <button mat-raised-button color="primary" [disabled]="machineform.invalid"
+      [mat-dialog-close]="machineform.value">{{button}}
+  </button>
+  <button mat-raised-button color="warn" (click)="close()">Cancel</button>
 </div>
 
- <pre>{{machineform.value|json}}</pre> 
+<!-- <pre>{{machineform.value|json}}</pre>  -->
 

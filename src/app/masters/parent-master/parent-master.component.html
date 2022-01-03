@@ -1,15 +1,15 @@
 <div fxLayout="column" class="form" style="width: 100%;">
-        <form [formGroup]="masterform">
-            <mat-form-field appearance="fill" id="machineDropdown">
-                <mat-label>Choose the Machine</mat-label>
-                <mat-select formControlName="machine" placeholder="Machine Name"
-                    (selectionChange)="GetMachineName(machine.value)">
-                    <mat-select-filter [array]="MachineList" [displayMember]="'machineDetails'"
-                        (filteredReturn)="filteredMachine=$event"></mat-select-filter>
-                    <mat-option *ngFor="let m of filteredMachine" [value]="m.machineId">
-                        {{m.machineDetails}}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-        </form>
+  <form [formGroup]="masterform">
+      <mat-form-field appearance="fill" id="machineDropdown">
+          <mat-label>Choose the Machine</mat-label>
+          <mat-select [disabled]="!manualentryservice.dataLoaded" formControlName="machine" placeholder="Machine Name"
+              (selectionChange)="GetMachineName(machine.value)">
+              <mat-select-filter [array]="MachineList" [displayMember]="'machineDetails'"
+                  (filteredReturn)="filteredMachine=$event"></mat-select-filter>
+              <mat-option *ngFor="let m of filteredMachine" [value]="m.machineId">
+                  {{m.machineDetails}}
+              </mat-option>
+          </mat-select>
+      </mat-form-field>
+  </form>
 </div>
