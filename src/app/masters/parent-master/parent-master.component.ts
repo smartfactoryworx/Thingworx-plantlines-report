@@ -26,7 +26,7 @@ interface machinelist {
 })
 export class ParentMasterComponent implements OnInit {
 
-  constructor(private httpClient: HttpClient, private manualentryservice: ManualEntryService, private util: UtilService) { }
+  constructor(private httpClient: HttpClient, public manualentryservice: ManualEntryService, private util: UtilService) { }
 
   @Output() machineOut = new EventEmitter<string>();
   @Output() machineDetail = new EventEmitter<machinelist[]>();
@@ -80,12 +80,12 @@ export class ParentMasterComponent implements OnInit {
             InfeedInTermsOf:a && a.InfeedInTermsOf,
             OutfeedCountInTermsOf:a && a.OutfeedCountInTermsOf,
             SpeedIntermsOf:a && a.SpeedIntermsOf,
-            Field1: a && a.Field1 
+            Field1: a && a.Field1
           }
           this.MachineList.push(data);
         }
         this.MachineList.sort(this.util.dynamicSort('createdDate'));
-        
+
         this.filteredMachine = this.MachineList.slice();
         console.log(this.filteredMachine);
         console.log(this.MachineList, "MachineData");
@@ -93,7 +93,7 @@ export class ParentMasterComponent implements OnInit {
           this.BindDefaultData();
           this.GetMachineName(this.machine.value);
         }
-      
+
 
       });
     });

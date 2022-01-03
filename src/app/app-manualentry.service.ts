@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, Observer, from } from 'rxjs';
+import { Observable, Observer, from, BehaviorSubject } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 
@@ -9,8 +9,15 @@ import { Router } from '@angular/router';
 })
 export class ManualEntryService {
     path;
+    dataLoaded: false;
+    // public checkDataLoaded : Observer<Boolean> = new BehaviorSubject(false);
 
     constructor(private httpClient: HttpClient, private router: Router) {
+    }
+
+    getDataLoaded(data) {
+        this.dataLoaded = data;
+        // this.checkDataLoaded.next(this.dataLoaded);
     }
 
 

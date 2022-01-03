@@ -1,0 +1,47 @@
+<div fxLayout="row" fxLayoutAlign="center center" class="h-100" style="background-image: url('assets/images/background.jpg'); background-repeat: no-repeat; background-size: cover;background-color: #283593; height: 100%;">
+    <form [formGroup]="loginForm" (ngSubmit)="verifyLoginOtp(loginForm.value)" fxFlex="80" fxFlex.gt-sm="40" fxFlex.sm="70">
+        <mat-card class="p-0 mat-elevation-z24 box">
+            <div fxLayout="column" fxLayoutAlign="center center" class="bg-primary box-header">
+                <img src="assets/images/logo.png"
+                    style="height: 100px; width: auto; padding: 5px 10px 5px 10px; background: white;"
+                    alt="smartfactoryworx" srcset="" />
+            </div>
+            <mat-card-content fxLayout="column" fxLayoutAlign="end center" class="box-content">
+                <mat-card fxLayout="column" fxLayoutAlign="center center" class="mat-elevation-z12 box-content-inner" >
+                    <span class="box-content-header">Member Login</span>
+                    <div [hidden]="!otpInputHide">
+                      <mat-form-field class="w-100">
+                        <input #email matInput placeholder="Email" formControlName="email" />
+                        <mat-error *ngIf="loginForm.controls.email.errors?.required">Email is required</mat-error>
+                        <mat-error *ngIf="loginForm.controls.email.hasError('invalidEmail')">Invalid email address
+                        </mat-error>
+                    </mat-form-field>
+                    <button  color="primary" mat-raised-button class="mat-elevation-z12 box-button" type="button" (click)="SendOtp(email.value)" [disabled]="disableOnClick">Get Otp</button>
+                    </div>
+
+                    <div [hidden]="otpInputHide">
+                      <h2>An Otp has been sent to email, check your inbox/spam</h2>
+                      <mat-form-field class="w-100" >
+                        <input  matInput placeholder="Enter OTP" minlength=6 matInput formControlName="password" required
+                            [type]="passwordHide ? 'password' : 'text'">
+                        <mat-icon matSuffix (click)="passwordHide = !passwordHide">
+                            {{passwordHide ? 'visibility' : 'visibility_off'}}</mat-icon>
+                        <mat-error *ngIf="loginForm.controls.password.errors?.required">OTP is required</mat-error>
+                        <mat-error *ngIf="loginForm.controls.password.hasError('minlength')">OTP isn't long enough,
+                             it is of 6 number</mat-error>
+                    </mat-form-field>
+                    </div>
+
+                </mat-card>
+                <div [hidden]="otpInputHide">
+                  <button  mat-raised-button color="primary"  type="submit">
+                    SIGN IN
+                </button>
+                </div>
+
+                <!-- <a [routerLink]="['/auth/reset-request']" routerLinkActive="router-link-active"
+                    title="Forgot Password">Forgot Password</a> -->
+            </mat-card-content>
+        </mat-card>
+    </form>
+</div>

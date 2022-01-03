@@ -68,7 +68,7 @@ export class DailyCycleEntryComponent implements OnChanges {
   SpeedIntermsOf = "";
   machineData;
   machineType: any;
-  constructor(private _snackBar: MatSnackBar, private httpClient: HttpClient, protected dataentryservice: ManualEntryService, private util: UtilService,
+  constructor(private _snackBar: MatSnackBar, private httpClient: HttpClient, public dataentryservice: ManualEntryService, private util: UtilService,
     private datePipe: DatePipe, private tableutil: TableUtilsService,) { }
 
 
@@ -159,6 +159,7 @@ export class DailyCycleEntryComponent implements OnChanges {
   }
 
   GetCycleData(machineDetails) {
+    this.dataentryservice.getDataLoaded(false);
     console.log(machineDetails);
 
     console.log(machineDetails[0].machineId, machineDetails[0].CycleMeaning, machineDetails[0].InfeedInTermsOf, machineDetails[0].OutfeedCountInTermsOf, machineDetails[0].SpeedIntermsOf);
@@ -255,6 +256,7 @@ export class DailyCycleEntryComponent implements OnChanges {
 
             this.lastValueofArray = this.vdisplayedColumns.slice(-1)[0];
             console.log(this.lastValueofArray);
+            this.dataentryservice.getDataLoaded(true);
             this.gotData = true;
             this.loading = true;
             this.dataSource = new MatTableDataSource(this.DailyCycle);
@@ -273,6 +275,7 @@ export class DailyCycleEntryComponent implements OnChanges {
           }
         }
         else {
+          this.dataentryservice.getDataLoaded(true);
           this.gotData = true;
           this.loading = true;
           this.dataSource = null;
@@ -297,9 +300,9 @@ export class DailyCycleEntryComponent implements OnChanges {
     }
     PostData = {
       "datasource": dataSource,
-      "input": T 
+      "input": T
     }
-  
+
     console.log("Data which is being posted : " + JSON.stringify(PostData));
 
     this.dataentryservice.GetApiURL().subscribe(apipath => {
