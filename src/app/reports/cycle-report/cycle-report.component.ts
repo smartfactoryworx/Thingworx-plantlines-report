@@ -329,7 +329,8 @@ export class CycleReportComponent implements OnChanges {
           {
             uniqueName: "MaxActualSpeed",
             formula: "(max(\"MaxActualSpeed\"))",
-            caption: "Max Speed (" + this.SpeedIntermsOf + ")"
+            caption: "Max Speed (" + this.SpeedIntermsOf + ")",
+            format: "decimal0",
           },
           {
             uniqueName: "MeanCycleBetweenFault",
@@ -342,10 +343,7 @@ export class CycleReportComponent implements OnChanges {
             formula: "((\"CycleRun\")/(\"FirstFault\" + \"ManualStop\"))",
             caption: "MCBF & S",
             format: "44mvcoma",
-          },
-
-        ],
-
+          },                ],
         expands: {
           expandAll: true,
         }
@@ -361,15 +359,17 @@ export class CycleReportComponent implements OnChanges {
           infinityValue: "0",
           divideByZeroValue: "0",
         },
-
+        {
+          name: "decimal0",
+          decimalPlaces: 0,
+        }
       ],
       tableSizes: {
         rows:[
           {
             idx: 0,
             height: 63
-          },
-         
+          }
         ],
         columns: [
           {
@@ -451,9 +451,6 @@ export class CycleReportComponent implements OnChanges {
             formula: "((\"FirstFault\"))",
             caption: "First Fault Count"
           },
-
-
-
         ],
 
         expands: {
@@ -471,7 +468,6 @@ export class CycleReportComponent implements OnChanges {
           infinityValue: "0",
           divideByZeroValue: "0",
         },
-
       ],
       tableSizes: {
         rows:[
@@ -513,7 +509,6 @@ export class CycleReportComponent implements OnChanges {
       },
       slice: {
         reportFilters: [
-
           {
             uniqueName: "Date",
             caption: "Date"
@@ -528,8 +523,6 @@ export class CycleReportComponent implements OnChanges {
             uniqueName: "Date",
             caption: "Date"
           },
-
-
         ],
         columns: [
           {
@@ -555,10 +548,9 @@ export class CycleReportComponent implements OnChanges {
           {
             uniqueName: "MaxActualSpeed",
             formula: "(max(\"MaxActualSpeed\"))",
-            caption: "Max Speed (" + this.SpeedIntermsOf + ")"
+            caption: "Max Speed (" + this.SpeedIntermsOf + ")",
+            format: "44mvcoma",
           },
-
-
           {
             uniqueName: "MeanCycleBetweenFault",
             formula: "((\"CycleRun\")/(\"FirstFault\"))",
@@ -588,7 +580,6 @@ export class CycleReportComponent implements OnChanges {
           infinityValue: "0",
           divideByZeroValue: "0",
         },
-
       ],
       tableSizes: {
         rows:[
@@ -705,7 +696,8 @@ export class CycleReportComponent implements OnChanges {
           {
             uniqueName: "MaxActualSpeed",
             formula: "(max(\"MaxActualSpeed\"))",
-            caption: "Max Speed (" + this.SpeedIntermsOf + ")"
+            caption: "Max Speed (" + this.SpeedIntermsOf + ")",
+            format: "44mvcoma",
           },
           {
             uniqueName: "Duration",
