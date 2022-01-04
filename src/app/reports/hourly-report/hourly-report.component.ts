@@ -72,6 +72,7 @@ export class HourlyReportComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.dataentryservice.getDataLoaded(true);
     // this.GetCycleData();
     // setTimeout(() => {
     //   this.BindReportData(this.hourlyData);
@@ -120,50 +121,50 @@ export class HourlyReportComponent implements OnInit {
 
     let dataSource = 'hourlyDataSetInDataTable/Services/getReport';
 
-    // this.dataentryservice.GetApiURL().subscribe((apipath) => {
-    //   console.log(apipath['api']);
-    //   this.dataentryservice
-    //     .GetMachineData(apipath['apithings'], dataSource, JSON.stringify(body))
-    //     .subscribe((hourlyData: any) => {
-    //       console.log('HourlyData', hourlyData);
-    //       if (hourlyData.rows.length === 0)
-    //         this.openSnackBar(
-    //           'No data found for this machine ',
-    //           'Pls, select another machine'
-    //         );
-    //       hourlyData.rows.forEach((el) => {
-    //         this.hourlyData.push({
-    //           Machine: el?.Machine.split('_')[0],
-    //           FromTime: moment(el?.FromTime).format('HH:mm'),
-    //           ToTime: moment(el?.ToTIme).format('HH:mm'),
-    //           SKU: el?.SKU,
-    //           SKUDesc: el?.SKUDesc,
-    //           TotalCycleRun: el?.TotalCycleRun,
-    //           AvgSpeed: el?.AvgSpeed,
-    //           FaultCount: el?.FaultCount,
-    //           FaultDuration: el?.FaultDuration,
-    //           ManualStopCount: el?.ManualStopCount,
-    //           ManualStopDuration: el?.ManualStopDuration,
-    //           RunTime: el?.RunTIme,
-    //           WaitTime: el?.WaitTIme,
-    //           BlockTime: el?.BlockTIme,
-    //           IdleTime: el?.IdleTime,
-    //           PowerOffTime: el?.PowerOffTime,
-    //           Date: moment(el?.cDate).format('DD-MM-YYYY'),
-    //         });
-    //       });
+    this.dataentryservice.GetApiURL().subscribe((apipath) => {
+      console.log(apipath['api']);
+      this.dataentryservice
+        .GetMachineData(apipath['apithings'], dataSource, JSON.stringify(body))
+        .subscribe((hourlyData: any) => {
+          console.log('HourlyData', hourlyData);
+          if (hourlyData.rows.length === 0)
+            this.openSnackBar(
+              'No data found for this machine ',
+              'Pls, select another machine'
+            );
+          hourlyData.rows.forEach((el) => {
+            this.hourlyData.push({
+              Machine: el?.Machine.split('_')[0],
+              FromTime: moment(el?.FromTime).format('HH:mm'),
+              ToTime: moment(el?.ToTIme).format('HH:mm'),
+              SKU: el?.SKU,
+              SKUDesc: el?.SKUDesc,
+              TotalCycleRun: el?.TotalCycleRun,
+              AvgSpeed: el?.AvgSpeed,
+              FaultCount: el?.FaultCount,
+              FaultDuration: el?.FaultDuration,
+              ManualStopCount: el?.ManualStopCount,
+              ManualStopDuration: el?.ManualStopDuration,
+              RunTime: el?.RunTIme,
+              WaitTime: el?.WaitTIme,
+              BlockTime: el?.BlockTIme,
+              IdleTime: el?.IdleTime,
+              PowerOffTime: el?.PowerOffTime,
+              Date: moment(el?.cDate).format('DD-MM-YYYY'),
+            });
+          });
 
-    //       console.log('HourlyData', this.hourlyData);
-    //       if (this.hourlyData.length === 0) {
-    //         this.gotData = true;
-    //         this.errorText = ' No Record Found';
-    //       } else {
-    //         this.gotData = true;
-    //         this.errorText = '';
-    //       }
-    //       this.hourlyData !== undefined && this.BindReportData(this.hourlyData);
-    //     });
-    // });
+          console.log('HourlyData', this.hourlyData);
+          if (this.hourlyData.length === 0) {
+            this.gotData = true;
+            this.errorText = ' No Record Found';
+          } else {
+            this.gotData = true;
+            this.errorText = '';
+          }
+          this.hourlyData !== undefined && this.BindReportData(this.hourlyData);
+        });
+    });
   }
 
   customizeToolbar(toolbar, reportType, fileName, sheetName) {
