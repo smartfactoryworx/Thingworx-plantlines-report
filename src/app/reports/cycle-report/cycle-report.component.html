@@ -13,14 +13,15 @@
 
 
 
-
-  <div *ngIf="cycleData?.length > 0" fxLayout="column" style="width: 99%;" fxLayoutAlign="center">
+  <mat-card *ngIf="cycleData.length > 0" fxFlex.sm="0 1 calc(50%-10px)" fxFlex.md="0 1 calc(33%-10px)"  fxFlex.gt-md="0 1 calc(100%-5px)" class="card">
+    <div fxLayout="column" style="width: 99%;" fxLayoutAlign="center">
+  
 
       <mat-tab-group (selectedTabChange)="GetReport($event.tab.textLabel)" [selectedIndex]="0"
           mat-align-tabs="center">
           <mat-tab label="Summary">
               <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap fxLayoutGap="0.1%"
-                  fxLayoutAlign="space-around center" fxFlex="100">
+                   fxFlex="100">
                   <wbr-pivot #pivot3 [toolbar]="true" [width]="'100%'" [height]="700" fxFlex="99"
                       (beforetoolbarcreated)="customizeToolbar($event,'Summary',machineName  + '_Summary_Report','Summary_Report')"
                       (reportcomplete)="onReportComplete('Summary')">
@@ -29,7 +30,7 @@
           </mat-tab>
           <mat-tab label="SKUwise">
               <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap fxLayoutGap="0.1%"
-                  fxLayoutAlign="space-around center" fxFlex="100">
+                   fxFlex="100">
                   <wbr-pivot #pivot1 [toolbar]="true" [width]="'100%'" [height]="700" fxFlex="99"
                       (beforetoolbarcreated)="customizeToolbar($event,'SKUwise',machineName+'_SKU_Wise_Report','SKU_Wise_Report')">
                   </wbr-pivot>
@@ -41,7 +42,7 @@
           </mat-tab>
           <mat-tab label="Faultwise">
               <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap fxLayoutGap="0.1%"
-                  fxLayoutAlign="space-around center" fxFlex="100">
+                   fxFlex="100">
                   <wbr-pivot #pivot2 [toolbar]="true" [width]="'100%'" [height]="700" fxFlex="99"
                       (beforetoolbarcreated)="customizeToolbar($event,'Faultwise',machineName +'_Fault_Wise_Report','Fault_Wise_Report')">
                   </wbr-pivot>
@@ -50,7 +51,7 @@
                   fxLayoutAlign="center" id="element-to-print">
 
                   <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap
-                      fxLayoutAlign="space-around center" fxFlex="100">
+                       fxFlex="100">
                       <mat-form-field appearance="fill" id="filterdropdown">
                           <mat-select [(ngModel)]="selected" (selectionChange)="getFilterValue($event.value)"
                               id="select1">
@@ -70,7 +71,7 @@
 
           <mat-tab label="DailyCycle">
               <div fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap fxLayoutGap="0.1%"
-                  fxLayoutAlign="space-around center" fxFlex="98">
+                   fxFlex="98">
                   <wbr-pivot #pivot4 [toolbar]="true" [width]="'100%'" [height]="700" fxFlex="98"
                       (beforetoolbarcreated)="customizeToolbar($event,'DailyCycle',machineName+ '_Daily_Cycle_Report','Daily_Cycle_Report')">
                   </wbr-pivot>
@@ -79,7 +80,7 @@
       </mat-tab-group>
 
   </div>
-
+    </mat-card>
   <div style="color: red;text-align: center;margin-top: 4%;">
       {{errorText}}
   </div>

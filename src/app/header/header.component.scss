@@ -3,3 +3,42 @@
 .mat-toolbar-row, .mat-toolbar-single-row {
     height: 71px !important;
 }
+
+
+@media only screen and (max-width: 414px) {
+ .img{
+     display: none;
+ }
+ .resizeHeading{
+     margin-left: 7%
+ }
+}
+ @media only screen and (max-width: 414px) {
+    .logoutcls{
+        position: absolute;
+        left : 250px
+    }
+    // .CAPLcls{
+    //     display: none;
+    // }
+}
+
+@media only screen and (max-width: 700px) {
+    .resizeimg{
+        display: none;
+    }
+}
+
+@media only screen and (max-width: 537px) {
+    .CAPLimg{
+        display: none;
+    }
+    .datecls{
+        // width:10%;
+        // align-items: start;
+        // place-content: start;
+        display: none;
+    }
+}
+
+
