@@ -1,19 +1,19 @@
-<mat-toolbar color="primary">
-    <button mat-icon-button  (click)="sidenavID.sidenav.toggle()" style=" margin-right: 1%;"><mat-icon>menu</mat-icon></button>
-    <div class = "datecls" style="width: 100%;" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="2">
-        <div><img class="resizeimg" src="../../../configs/images/smart-logo.png" width="165px" height="71px" alt="smartfactoryworx"
-                style="object-fit: none;background-color: white; margin-top: 5%;" /></div>
-        <div class = "CAPLcls">CAPL Noida Plant</div>
-        <div class = "datetime">
-            <h5>{{lastUpdated}}</h5>
-        </div>
-        <div class = "logoutcls" [hidden]="logOutHide">
-          <button  mat-raised-button color="warn" type="submit" (click)="logOut()">Logout</button>
-        </div>
-    </div>
+<mat-toolbar color="primary" class="headerScroll">
+  <button mat-icon-button  (click)="sidenavID.sidenav.toggle()" style=" margin-right: 1%;"><mat-icon>menu</mat-icon></button>
+  <div class = "datecls" style="width: 100%;" fxLayout="row" fxLayoutAlign="space-between center">
+      <div><img class="resizeimg" src="../../../configs/images/smart-logo.png" width="165px" height="71px" alt="smartfactoryworx"
+              style="object-fit: none;background-color: white; margin-top: 5%;" /></div>
+      <div class = "heading">CAPL Noida Plant</div>
+      <!-- <div class = "datetime">
+          <h5>{{lastUpdated}}</h5>
+      </div> -->
+      <div class = "logoutcls" [hidden]="logOutHide">
+        <button  mat-mini-fab color="warn" matTooltip="Logout" type="submit" (click)="logOut()"><mat-icon >logout</mat-icon></button>
+      </div>
+  </div>
 </mat-toolbar>
 <div [hidden]="logOutHide">
-  <app-sidenav   #sidenavID ></app-sidenav>
+<app-sidenav   #sidenavID ></app-sidenav>
 
 </div>
 
