@@ -13,8 +13,6 @@ HighchartsMore(Highcharts)
 import exporting from 'highcharts/modules/exporting';
 const moment = _rollupMoment || _moment;
 
-
-
 interface cycledata {
   CycleRun: number;
   Duration: number;
@@ -33,6 +31,11 @@ interface cycledata {
   FaultNumber: number;
   Cause: string;
   Count: number;
+  
+  StateDuration: number;//Duration of Fault/Manual Stop
+  // CheckFrom:string;
+  // CheckTo:string;
+
 }
 interface Filter {
   value: string;
@@ -73,7 +76,7 @@ export class CycleReportComponent implements OnChanges {
   SpeedIntermsOf: any;
   constructor(private httpClient: HttpClient, public dataentryservice: ManualEntryService, private util: UtilService,
     private datePipe: DatePipe) {
-    }
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
@@ -102,7 +105,7 @@ export class CycleReportComponent implements OnChanges {
 
     console.log(JSON.stringify(body));
 
-    let dataSource = 'CycleSetDataInDataTable/Services/allDataJoint'
+    let dataSource = 'CycleSetDataInDataTable/Services/allDataJointWithTimeQuery'
 
     this.dataentryservice.GetApiURL().subscribe(apipath => {
       console.log(apipath['api']);
@@ -112,25 +115,32 @@ export class CycleReportComponent implements OnChanges {
 
         var c = machinecycledata.rows;
         for (let i = 0; i < c.length; i++) {
-          const data = c[i]
+          const currentData = c[i];
+          let nextData;
+          //Only 1 records is present.
+          nextData = (c.length === 1 || i === c.length-1 ?  c[i] : c[i + 1]);
+
           const allCycleData = {
-            CycleRun: data && data.CycleCount,
-            Duration: data && data.Duration,
-            FaultNumber: data && data.FirstFault,
-            FirstFault: data && data.FirstFault > 0 ? 1 : 0,
-            FirstFaultDesc: data && data.ManualStop === true ? "Manual Stop" : data && data.FaultDescription ,
-            From: data && moment(data.StartTime).format("HH:mm"),
-            ManualStop: data && data.ManualStop === true ? 1 : 0,
-            InfeedCount: data && data.InfeedCount,
-            Machine: data && data.Machine,
-            MaxActualSpeed: data && data.MaxActualSpeed,
-            OutFeedCount: data && data.OutFeedCount,
-            SKU: data && data.SKU,
-            SKUDesc: data && data.SKU_Details,
-            To: data && moment(data.StopTime).format("HH:mm"),
-            Date: data && moment(data.StartTime).format("DD MMM YYYY"),
-            Cause: data && data.CauseSelected,
-            Count: 1
+            CycleRun: currentData && currentData.CycleCount,
+            Duration: currentData && currentData.Duration,
+            FaultNumber: currentData && currentData.FirstFault,
+            FirstFault: currentData && currentData.FirstFault > 0 ? 1 : 0,
+            FirstFaultDesc: currentData && currentData.ManualStop === true ? "Manual Stop" : currentData && currentData.FaultDescription,
+            From: currentData && moment(currentData.StartTime).format("HH:mm"),
+            ManualStop: currentData && currentData.ManualStop === true ? 1 : 0,
+            InfeedCount: currentData && currentData.InfeedCount,
+            Machine: currentData && currentData.Machine,
+            MaxActualSpeed: currentData && currentData.MaxActualSpeed,
+            OutFeedCount: currentData && currentData.OutFeedCount,
+            SKU: currentData && currentData.SKU,
+            SKUDesc: currentData && currentData.SKU_Details,
+            To: currentData && moment(currentData.StopTime).format("HH:mm"),
+            Date: currentData && moment(currentData.StartTime).format("DD MMM YYYY"),
+            Cause: currentData && currentData.CauseSelected,
+            Count: 1,
+            StateDuration: i === c.length-1?0: moment(nextData.StartTime).diff(moment(currentData.StopTime), 'seconds'),
+            // CheckFrom:moment(nextData.StartTime).format("HH:mm"),
+            // CheckTo:moment(currentData.StopTime).format("HH:mm")
           }
           this.cycleData.push(allCycleData);
         }
@@ -258,9 +268,18 @@ export class CycleReportComponent implements OnChanges {
         Cause: {
           type: "string"
         },
-        Count:{
+        Count: {
           type: "number"
-        }
+        },
+        StateDuration:{
+          type:"time"
+        },
+        // CheckFrom:{
+        //   type: "string"
+        // },
+        // CheckTo:{
+        //   type: "string"
+        // }
       }
     ]
 
@@ -347,7 +366,7 @@ export class CycleReportComponent implements OnChanges {
             formula: "((\"CycleRun\")/(\"FirstFault\" + \"ManualStop\"))",
             caption: "MCBF & S",
             format: "44mvcoma",
-          },                ],
+          },],
         expands: {
           expandAll: true,
         }
@@ -369,7 +388,7 @@ export class CycleReportComponent implements OnChanges {
         }
       ],
       tableSizes: {
-        rows:[
+        rows: [
           {
             idx: 0,
             height: 63
@@ -456,6 +475,12 @@ export class CycleReportComponent implements OnChanges {
             formula: "((\"FirstFault\"))",
             caption: "First Fault Count"
           },
+          {
+            uniqueName: "StateDuration",
+            formula: "((\"StateDuration\"))",
+            caption: "Fault Duration",
+            format: "44mvcoma"
+          }
         ],
 
         expands: {
@@ -475,7 +500,7 @@ export class CycleReportComponent implements OnChanges {
         },
       ],
       tableSizes: {
-        rows:[
+        rows: [
           {
             idx: 0,
             height: 63
@@ -587,7 +612,7 @@ export class CycleReportComponent implements OnChanges {
         },
       ],
       tableSizes: {
-        rows:[
+        rows: [
           {
             idx: 0,
             height: 63
@@ -674,7 +699,14 @@ export class CycleReportComponent implements OnChanges {
         {
           uniqueName: "FirstFaultDesc",
           caption: "Fault Desc"
-        }
+        },
+        // {
+        //   uniqueName: "CheckFrom",
+        //   caption: "CheckFrom"
+        // },{
+        //   uniqueName: "CheckTo",
+        //   caption: "CheckTo"
+        // }
         ],
         columns: [
           {
@@ -735,7 +767,12 @@ export class CycleReportComponent implements OnChanges {
             uniqueName: "Count",
             formula: "((\"Count\"))",
             caption: "Count"
-          },
+          }, 
+          // {
+          //   uniqueName: "StateDuration",
+          //   formula: "((\"StateDuration\"))",
+          //   caption: "Dur"
+          // }
 
         ],
 
@@ -757,7 +794,7 @@ export class CycleReportComponent implements OnChanges {
 
       ],
       tableSizes: {
-        rows:[
+        rows: [
           {
             idx: 0,
             height: 63
@@ -850,7 +887,7 @@ export class CycleReportComponent implements OnChanges {
   Export_Excel(reportType, fileName, sheetName) {
     console.log(reportType, fileName, sheetName);
     if (reportType === 'Summary') {
-      this.child.webDataRocks.exportTo(
+      this.child3.webDataRocks.exportTo(
         "Excel", {
         filename: fileName,
         excelSheetName: sheetName,
@@ -864,7 +901,7 @@ export class CycleReportComponent implements OnChanges {
       );
     }
     else if (reportType === 'SKUwise') {
-      this.child2.webDataRocks.exportTo(
+      this.child.webDataRocks.exportTo(
         "Excel", {
         filename: fileName,
         excelSheetName: sheetName,
@@ -878,7 +915,7 @@ export class CycleReportComponent implements OnChanges {
       );
     }
     else if (reportType === 'Faultwise') {
-      this.child3.webDataRocks.exportTo(
+      this.child2.webDataRocks.exportTo(
         "Excel", {
         filename: fileName,
         excelSheetName: sheetName,
