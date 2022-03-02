@@ -1,7 +1,7 @@
 {
     "api": "http://103.205.66.170:8082",
-    "apithings": "https://capl91gn-lines.testing.smartfactoryworx.net/api/thing?datasource=",
-    "apifaultthings": "https://capl91gn-lines.testing.smartfactoryworx.net/api/thing",
+    "apithings": "https://plantline.smartfactoryworx.tech/api/thing?datasource=",
+    "apifaultthings": "https://plantline.smartfactoryworx.tech/api/thing",
     "infeedintermsof": [
         "Carton",
         "Cases",

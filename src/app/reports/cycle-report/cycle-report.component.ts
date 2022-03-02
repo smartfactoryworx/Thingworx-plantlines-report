@@ -33,6 +33,10 @@ interface cycledata {
   Count: number;
 
   StateDuration: number;//Duration of Fault/Manual Stop
+  MachineMode? : string
+  DryCycle ?: number
+  RejectCount ?: number
+
   // CheckFrom:string;
   // CheckTo:string;
 
@@ -123,7 +127,7 @@ export class CycleReportComponent implements OnChanges {
           nextData = (c.length === 1 || i === c.length-1 ?  c[i] : c[i + 1]);
 
           const allCycleData = {
-            CycleRun: currentData && currentData.CycleCount,
+            CycleRun: (currentData && (currentData.MachineMode !==4)) ? currentData.CycleCount : 0,
             Duration: currentData && currentData.Duration,
             FaultNumber: currentData && currentData.FirstFault,
             FirstFault: currentData && currentData.FirstFault > 0 ? 1 : 0,
@@ -131,6 +135,7 @@ export class CycleReportComponent implements OnChanges {
             From: currentData && moment(Number(currentData.StartTime)).format("HH:mm"),
             ManualStop: currentData && currentData.ManualStop === true ? 1 : 0,
             InfeedCount: currentData && currentData.InfeedCount,
+            RejectCount: currentData && currentData.RejectCount,
             Machine: currentData && currentData.Machine,
             MaxActualSpeed: currentData && currentData.MaxActualSpeed,
             OutFeedCount: currentData && currentData.OutFeedCount,
@@ -141,6 +146,9 @@ export class CycleReportComponent implements OnChanges {
             Cause: currentData && currentData.CauseSelected,
             Count: 1,
             StateDuration: i === c.length-1?0: moment(nextData.StartTime).diff(moment(currentData.StopTime), 'seconds'),
+            MachineMode: (currentData && (currentData.MachineMode === 4)) ? 'Dry' : 'Production',
+            DryCycle: (currentData && (currentData.MachineMode === 4)) ? currentData.CycleCount : 0
+
             // CheckFrom:moment(nextData.StartTime).format("HH:mm"),
             // CheckTo:moment(currentData.StopTime).format("HH:mm")
           }
@@ -240,6 +248,9 @@ export class CycleReportComponent implements OnChanges {
         InfeedCount: {
           type: "number"
         },
+        RejectCount: {
+          type: "number"
+        },
         Machine: {
           type: "string"
         },
@@ -276,6 +287,12 @@ export class CycleReportComponent implements OnChanges {
         StateDuration:{
           type:"time"
         },
+        DryCycle :{
+          type: "number"
+        },
+        MachineMode : {
+         type: "string"
+        }
         // CheckFrom:{
         //   type: "string"
         // },
@@ -342,6 +359,11 @@ export class CycleReportComponent implements OnChanges {
             caption: "Total Cycle Run (" + this.CycleMeaning + ")"
           },
           {
+            uniqueName: "DryCycle",
+            formula: "((\"DryCycle\"))",
+            caption: "Total Dry Run (" + this.CycleMeaning + ")"
+          },
+          {
             uniqueName: "FirstFault",
             formula: "((\"FirstFault\"))",
             caption: "First Fault Count"
@@ -368,7 +390,20 @@ export class CycleReportComponent implements OnChanges {
             formula: "((\"CycleRun\")/(\"FirstFault\" + \"ManualStop\"))",
             caption: "MCBF & S",
             format: "44mvcoma",
-          },],
+          },
+          {
+            uniqueName: "MeanDryCycleBetweenFault",
+            formula: "((\"DryCycle\")/(\"FirstFault\"))",
+            caption: "MDCBF",
+            format: "44mvcoma",
+          },
+          {
+            uniqueName: "MeanDryCycleBetweenFaultNManualStop",
+            formula: "((\"DryCycle\")/(\"FirstFault\" + \"ManualStop\"))",
+            caption: "MDCBF & S",
+            format: "44mvcoma",
+          },
+        ],
         expands: {
           expandAll: true,
         }
@@ -421,6 +456,18 @@ export class CycleReportComponent implements OnChanges {
           {
             idx: 7,
             width: 56
+          },
+          {
+            idx: 8,
+            width: 60
+          },
+          {
+            idx: 9,
+            width: 65
+          },
+          {
+            idx: 10,
+            width: 65
           }
         ]
       },
@@ -568,6 +615,11 @@ export class CycleReportComponent implements OnChanges {
             caption: "Total Cycle Run (" + this.CycleMeaning + ")"
           },
           {
+            uniqueName: "DryCycle",
+            formula: "((\"DryCycle\"))",
+            caption: "Total Dry Run (" + this.CycleMeaning + ")"
+          },
+          {
             uniqueName: "FirstFault",
             formula: "((\"FirstFault\"))",
             caption: "First Fault Count"
@@ -593,6 +645,18 @@ export class CycleReportComponent implements OnChanges {
             uniqueName: "MeanCycleBetweenFaultNManualStop",
             formula: "((\"CycleRun\")/(\"FirstFault\" + \"ManualStop\"))",
             caption: "MCBF & S",
+            format: "44mvcoma",
+          },
+          {
+            uniqueName: "MeanDryCycleBetweenFault",
+            formula: "((\"DryCycle\")/(\"FirstFault\"))",
+            caption: "MDCBF",
+            format: "44mvcoma",
+          },
+          {
+            uniqueName: "MeanDryCycleBetweenFaultNManualStop",
+            formula: "((\"DryCycle\")/(\"FirstFault\" + \"ManualStop\"))",
+            caption: "MDCBF & S",
             format: "44mvcoma",
           },
         ],
@@ -644,8 +708,34 @@ export class CycleReportComponent implements OnChanges {
           },
           {
             idx: 6,
+            width: 60
+          },
+          {
+            idx: 7,
             width: 56
+          },
+          {
+            idx: 8,
+            width: 65
+          },
+          {
+            idx: 9,
+            width: 65
+          },
+          {
+            idx: 10,
+            width: 65
+          },
+          {
+            idx: 11,
+            width: 30
+          },
+          {
+            idx: 12,
+            width: 30
           }
+
+
         ]
       },
       options: {
@@ -679,6 +769,10 @@ export class CycleReportComponent implements OnChanges {
         {
           uniqueName: "Cause",
           caption: "Cause"
+        },
+        {
+          uniqueName: "MachineMode",
+          caption: "Mode"
         },
         ],
         rows: [{
@@ -721,6 +815,11 @@ export class CycleReportComponent implements OnChanges {
             formula: "((\"CycleRun\"))",
             caption: "Total Cycle Run (" + this.CycleMeaning + ")"
           },
+          {
+            uniqueName: "DryCycle",
+            formula: "((\"DryCycle\"))",
+            caption: "Total Dry Run (" + this.CycleMeaning + ")"
+          },
           // {
           //   uniqueName: "FirstFault",
           //   formula: "((\"FirstFault\"))",
@@ -749,6 +848,11 @@ export class CycleReportComponent implements OnChanges {
             caption: "Infeed Count (" + this.InfeedInTermsOf + ")"
           },
           {
+            uniqueName: "RejectCount",
+            formula: "((\"RejectCount\"))",
+            caption: "Reject Count"
+          },
+          {
             uniqueName: "OutFeedCount",
             formula: "(max(\"OutFeedCount\"))",
             caption: "OutFeed Count (" + this.OutfeedCountInTermsOf + ")"
@@ -766,10 +870,27 @@ export class CycleReportComponent implements OnChanges {
             format: "44mvcoma",
           },
           {
-            uniqueName: "Count",
-            formula: "((\"Count\"))",
-            caption: "Count"
+            uniqueName: "MeanDryCycleBetweenFault",
+            formula: "((\"DryCycle\")/(\"FirstFault\"))",
+            caption: "MDCBF",
+            format: "44mvcoma",
           },
+          {
+            uniqueName: "MeanDryCycleBetweenFaultNManualStop",
+            formula: "((\"DryCycle\")/(\"FirstFault\" + \"ManualStop\"))",
+            caption: "MDCBF & S",
+            format: "44mvcoma",
+          },
+          // {
+          //   uniqueName: "MachineMode",
+          //   formula: "((\"MachineMode\"))",
+          //   caption: "Mode"
+          // },
+          // {
+          //   uniqueName: "Count",
+          //   formula: "((\"Count\"))",
+          //   caption: "Count"
+          // },
           // {
           //   uniqueName: "StateDuration",
           //   formula: "((\"StateDuration\"))",
