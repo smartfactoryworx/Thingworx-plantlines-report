@@ -248,7 +248,7 @@ export class AuthService {
 
   getOtp(email: any): Observable<any> {
     return this.httpClient
-      .get<any>('https://bisleri-socket.testing.smartfactoryworx.net/api/v1/auth/otp-generate/' + email)
+      .get<any>('https://plantline.smartfactoryworx.tech:3000/api/v1/auth/otp-generate/' + email)
       .pipe(
         map((response: any) => {
           // console.warn(response);
@@ -277,7 +277,7 @@ export class AuthService {
           sessionStorage.setItem('dCurrentUser', JSON.stringify(this.dCurrentUser));
           this.currentUserSubject.next(this.dCurrentUser);
          this.httpClient
-          .post<any>('https://bisleri-socket.testing.smartfactoryworx.net/api/v1/auth/otp-generate/', {email: email, otp: otp})
+          .post<any>('https://plantline.smartfactoryworx.tech:3000/api/v1/auth/otp-generate/', {email: email, otp: otp})
           .pipe(
             map((response: any) => {
 
