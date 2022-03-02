@@ -31,7 +31,7 @@ interface cycledata {
   FaultNumber: number;
   Cause: string;
   Count: number;
-  
+
   StateDuration: number;//Duration of Fault/Manual Stop
   // CheckFrom:string;
   // CheckTo:string;
@@ -109,13 +109,15 @@ export class CycleReportComponent implements OnChanges {
 
     this.dataentryservice.GetApiURL().subscribe(apipath => {
       console.log(apipath['api']);
-      this.dataentryservice.GetMachineData(apipath['apithings'], dataSource, JSON.stringify(body)).subscribe((machinecycledata: any) => {
+      this.dataentryservice.GetMachineRowData(this.machineName).subscribe((machinecycledata: any) => {
 
         console.log("machinecycledata", machinecycledata);
 
         var c = machinecycledata.rows;
         for (let i = 0; i < c.length; i++) {
+
           const currentData = c[i];
+          console.log(moment(currentData.StartTime))
           let nextData;
           //Only 1 records is present.
           nextData = (c.length === 1 || i === c.length-1 ?  c[i] : c[i + 1]);
@@ -126,7 +128,7 @@ export class CycleReportComponent implements OnChanges {
             FaultNumber: currentData && currentData.FirstFault,
             FirstFault: currentData && currentData.FirstFault > 0 ? 1 : 0,
             FirstFaultDesc: currentData && currentData.ManualStop === true ? "Manual Stop" : currentData && currentData.FaultDescription,
-            From: currentData && moment(currentData.StartTime).format("HH:mm"),
+            From: currentData && moment(Number(currentData.StartTime)).format("HH:mm"),
             ManualStop: currentData && currentData.ManualStop === true ? 1 : 0,
             InfeedCount: currentData && currentData.InfeedCount,
             Machine: currentData && currentData.Machine,
@@ -134,8 +136,8 @@ export class CycleReportComponent implements OnChanges {
             OutFeedCount: currentData && currentData.OutFeedCount,
             SKU: currentData && currentData.SKU,
             SKUDesc: currentData && currentData.SKU_Details,
-            To: currentData && moment(currentData.StopTime).format("HH:mm"),
-            Date: currentData && moment(currentData.StartTime).format("DD MMM YYYY"),
+            To: currentData && moment(Number(currentData.StopTime)).format("HH:mm"),
+            Date: currentData && moment(Number(currentData.StartTime)).format("DD MMM YYYY"),
             Cause: currentData && currentData.CauseSelected,
             Count: 1,
             StateDuration: i === c.length-1?0: moment(nextData.StartTime).diff(moment(currentData.StopTime), 'seconds'),
@@ -767,7 +769,7 @@ export class CycleReportComponent implements OnChanges {
             uniqueName: "Count",
             formula: "((\"Count\"))",
             caption: "Count"
-          }, 
+          },
           // {
           //   uniqueName: "StateDuration",
           //   formula: "((\"StateDuration\"))",

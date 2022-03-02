@@ -30,6 +30,11 @@ export class ManualEntryService {
         return this.httpClient.get(URL + dataSource + '&body=' + body);
     }
 
+    GetMachineRowData(MachineName): Observable<object> {
+
+      return this.httpClient.get('http://localhost:4000/?machine='+MachineName);
+  }
+
     PostFaultData(URL, data): Observable<object> {
         console.log(URL, data)
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
