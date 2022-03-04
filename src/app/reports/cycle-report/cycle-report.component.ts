@@ -117,7 +117,12 @@ export class CycleReportComponent implements OnChanges {
 
         console.log("machinecycledata", machinecycledata);
 
+        //var c = machinecycledata.rows;
         var c = machinecycledata.rows;
+        c.sort((a,b)=>{
+          console.log((new Date(a.StartTime)));
+          return moment(Number(b.StartTime)).valueOf()-moment(Number(a.StartTime)).valueOf();
+        });
         for (let i = 0; i < c.length; i++) {
 
           const currentData = c[i];
@@ -145,7 +150,7 @@ export class CycleReportComponent implements OnChanges {
             Date: currentData && moment(Number(currentData.StartTime)).format("DD MMM YYYY"),
             Cause: currentData && currentData.CauseSelected,
             Count: 1,
-            StateDuration: i === c.length-1?0: moment(nextData.StartTime).diff(moment(currentData.StopTime), 'seconds'),
+            StateDuration: i === c.length-1?0: moment(Number(nextData.StartTime)).diff(moment(Number(currentData.StopTime)), 'seconds'),
             MachineMode: (currentData && (currentData.MachineMode === 4)) ? 'Dry' : 'Production',
             DryCycle: (currentData && (currentData.MachineMode === 4)) ? currentData.CycleCount : 0
 
@@ -855,7 +860,8 @@ export class CycleReportComponent implements OnChanges {
           {
             uniqueName: "OutFeedCount",
             formula: "(max(\"OutFeedCount\"))",
-            caption: "OutFeed Count (" + this.OutfeedCountInTermsOf + ")"
+            caption: "OutFeed Count (" + this.OutfeedCountInTermsOf + ")",
+            format: "44mvcoma",
           },
           {
             uniqueName: "MeanCycleBetweenFault",

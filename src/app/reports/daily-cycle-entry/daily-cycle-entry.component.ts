@@ -182,27 +182,27 @@ export class DailyCycleEntryComponent implements OnChanges {
 
     console.log(JSON.stringify(body));
 
-    let dataSource = 'CycleSetDataInDataTable/Services/allDataJoint'
+   // let dataSource = 'CycleSetDataInDataTable/Services/allDataJoint'
 
     this.dataentryservice.GetApiURL().subscribe(apipath => {
       console.log(apipath['api']);
-      this.dataentryservice.GetMachineData(apipath['apithings'], dataSource, JSON.stringify(body)).subscribe((machinecycledata: any) => {
+      this.dataentryservice.GetMachineRowData(this.machineName).subscribe((machinecycledata: any) => {
 
         console.log("machinecycledata", machinecycledata);
 
         var c = machinecycledata.rows;
         c.sort((a,b)=>{
           console.log((new Date(a.StartTime)));
-          return moment(b.StartTime).valueOf()-moment(a.StartTime).valueOf();
+          return moment(Number(b.StartTime)).valueOf()-moment(Number(a.StartTime)).valueOf();
         });
         for (let i = 0; i < c.length; i++) {
           const data = c[i]
           const allCycleData = {
             ID: data && data.ID,
-            Date: data && moment(data.StartTime).format("DD MMM YYYY"),
+            Date: data && moment(Number(data.StartTime)).format("DD MMM YYYY"),
             SKU: data && data.SKU_Details,
-            From: data && moment(data.StartTime).format("HH:mm"),
-            To: data && moment(data.StopTime).format("HH:mm"),
+            From: data && moment(Number(data.StartTime)).format("HH:mm"),
+            To: data && moment(Number(data.StopTime)).format("HH:mm"),
             FaultNumber: data && data.ManualStop === true ? "Manual Stop" : data && data.FaultDescription ,
             TotalCycleRun: data && data.CycleCount,
             FaultCount: data && data.FirstFault > 0 ? 1 : 0,
@@ -256,7 +256,7 @@ export class DailyCycleEntryComponent implements OnChanges {
 
             this.lastValueofArray = this.vdisplayedColumns.slice(-1)[0];
             console.log(this.lastValueofArray);
-            this.dataentryservice.getDataLoaded(true);
+
             this.gotData = true;
             this.loading = true;
             this.dataSource = new MatTableDataSource(this.DailyCycle);
@@ -274,6 +274,7 @@ export class DailyCycleEntryComponent implements OnChanges {
             //this.errorText = "No Records Found";
           }
         }
+
         else {
           this.dataentryservice.getDataLoaded(true);
           this.gotData = true;
@@ -282,6 +283,7 @@ export class DailyCycleEntryComponent implements OnChanges {
           this.displayedColumns = this.vdisplayedColumns;
           this.noData = this.dataSource.filteredData.length;
         }
+        this.dataentryservice.getDataLoaded(true);
       });
     });
   }
