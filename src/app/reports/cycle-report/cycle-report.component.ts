@@ -118,15 +118,17 @@ export class CycleReportComponent implements OnChanges {
         console.log("machinecycledata", machinecycledata);
 
         //var c = machinecycledata.rows;
-        var c = machinecycledata.rows;
+        let c = machinecycledata.rows;
+        //Have to sort ascending to desceding.
         c.sort((a,b)=>{
-          console.log((new Date(a.StartTime)));
-          return moment(Number(b.StartTime)).valueOf()-moment(Number(a.StartTime)).valueOf();
+          //console.log((new Date(a.StartTime)));
+          return moment(Number(a.StartTime)).valueOf()-moment(Number(b.StartTime)).valueOf();
         });
+        console.log(c);
         for (let i = 0; i < c.length; i++) {
 
           const currentData = c[i];
-          console.log(moment(currentData.StartTime))
+          console.log(moment(Number(currentData.StartTime)))
           let nextData;
           //Only 1 records is present.
           nextData = (c.length === 1 || i === c.length-1 ?  c[i] : c[i + 1]);
@@ -157,6 +159,7 @@ export class CycleReportComponent implements OnChanges {
             // CheckFrom:moment(nextData.StartTime).format("HH:mm"),
             // CheckTo:moment(currentData.StopTime).format("HH:mm")
           }
+          console.log(i === c.length-1?0: moment(Number(nextData.StartTime)).diff(moment(Number(currentData.StopTime)), 'seconds'));
           this.cycleData.push(allCycleData);
         }
         console.log("cycleData", this.cycleData);
