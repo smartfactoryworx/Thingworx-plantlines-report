@@ -8,8 +8,8 @@ import { ManualEntryService } from '../../app-manualentry.service';
 import { UtilService } from 'src/app/util.service';
 import { DatePipe } from '@angular/common';
 import Highcharts, { seriesType } from 'highcharts';
-import HighchartsMore from "highcharts/highcharts-more";
-HighchartsMore(Highcharts)
+import HighchartsMore from 'highcharts/highcharts-more';
+HighchartsMore(Highcharts);
 import exporting from 'highcharts/modules/exporting';
 const moment = _rollupMoment || _moment;
 
@@ -32,11 +32,11 @@ interface cycledata {
   Cause: string;
   Count: number;
 
-  StateDuration: number;//Duration of Fault/Manual Stop
-  MachineMode? : string
-  DryCycle ?: number
-  RejectCount ?: number
-
+  StateDuration: number; // Duration of Fault/Manual Stop
+  MachineMode?: string;
+  DryCycle?: number;
+  RejectCount?: number;
+  DryCycleDuration?: number;
   // CheckFrom:string;
   // CheckTo:string;
 
@@ -53,17 +53,17 @@ interface Filter {
 })
 export class CycleReportComponent implements OnChanges {
 
-  @ViewChild("pivot1") child: WebDataRocksPivot;
-  @ViewChild("pivot2") child2: WebDataRocksPivot;
-  @ViewChild("pivot3") child3: WebDataRocksPivot;
-  @ViewChild("pivot4") child4: WebDataRocksPivot;
+  @ViewChild('pivot1') child: WebDataRocksPivot;
+  @ViewChild('pivot2') child2: WebDataRocksPivot;
+  @ViewChild('pivot3') child3: WebDataRocksPivot;
+  @ViewChild('pivot4') child4: WebDataRocksPivot;
 
 
   public cycleData: cycledata[];
-  errorText = "";
+  errorText = '';
   Highcharts: typeof Highcharts = Highcharts;
-  pivotTableReportComplete: boolean = false;
-  gotData: boolean = true;
+  pivotTableReportComplete = false;
+  gotData = true;
   public DataWithStructure = [];
   filters: Filter[] = [
     // { value: 'SKUDesc', viewValue: 'SKU Wise' },
@@ -83,8 +83,8 @@ export class CycleReportComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
-    //Add '${implements OnChanges}' to the class.
+    // Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
+    // Add '${implements OnChanges}' to the class.
     console.log(this.machineData);
     this.GetCycleData(this.machineData);
   }
@@ -92,54 +92,53 @@ export class CycleReportComponent implements OnChanges {
     this.dataentryservice.getDataLoaded(false);
     console.log(machineDetails);
 
-    console.log(machineDetails[0].machineId, machineDetails[0].CycleMeaning, machineDetails[0].InfeedInTermsOf, machineDetails[0].OutfeedCountInTermsOf, machineDetails[0].SpeedIntermsOf);
     this.machineData = machineDetails;
     this.machineName = machineDetails[0].machineId;
     this.CycleMeaning = machineDetails[0].CycleMeaning == undefined ? '' : machineDetails[0].CycleMeaning;
     this.InfeedInTermsOf = machineDetails[0].InfeedInTermsOf == undefined ? '' : machineDetails[0].InfeedInTermsOf;
     this.OutfeedCountInTermsOf = machineDetails[0].OutfeedCountInTermsOf == undefined ? '' : machineDetails[0].OutfeedCountInTermsOf;
     this.SpeedIntermsOf = machineDetails[0].SpeedIntermsOf == undefined ? '' : machineDetails[0].SpeedIntermsOf;
-    this.errorText = "";
+    this.errorText = '';
     this.cycleData = [];
     this.gotData = false;
 
-    let body = {
-      "Machine": this.machineName,
-    }
+    const body = {
+      Machine: this.machineName,
+    };
 
     console.log(JSON.stringify(body));
 
-    let dataSource = 'CycleSetDataInDataTable/Services/allDataJointWithTimeQuery'
+    const dataSource = 'CycleSetDataInDataTable/Services/allDataJointWithTimeQuery';
 
     this.dataentryservice.GetApiURL().subscribe(apipath => {
-      console.log(apipath['api']);
+      //console.log(apipath.api);
       this.dataentryservice.GetMachineRowData(this.machineName).subscribe((machinecycledata: any) => {
 
-        console.log("machinecycledata", machinecycledata);
+        console.log('machinecycledata', machinecycledata);
 
-        //var c = machinecycledata.rows;
-        let c = machinecycledata.rows;
-        //Have to sort ascending to desceding.
-        c.sort((a,b)=>{
-          //console.log((new Date(a.StartTime)));
-          return moment(Number(a.StartTime)).valueOf()-moment(Number(b.StartTime)).valueOf();
+        // var c = machinecycledata.rows;
+        const c = machinecycledata.rows;
+        // Have to sort ascending to desceding.
+        c.sort((a, b) => {
+          // console.log((new Date(a.StartTime)));
+          return moment(Number(a.StartTime)).valueOf() - moment(Number(b.StartTime)).valueOf();
         });
         console.log(c);
         for (let i = 0; i < c.length; i++) {
 
           const currentData = c[i];
-          console.log(moment(Number(currentData.StartTime)))
+          console.log(moment(Number(currentData.StartTime)));
           let nextData;
-          //Only 1 records is present.
-          nextData = (c.length === 1 || i === c.length-1 ?  c[i] : c[i + 1]);
+          // Only 1 records is present.
+          nextData = (c.length === 1 || i === c.length - 1 ? c[i] : c[i + 1]);
 
           const allCycleData = {
-            CycleRun: (currentData && (currentData.MachineMode !==4)) ? currentData.CycleCount : 0,
+            CycleRun: (currentData && (currentData.MachineMode !== 4)) ? currentData.CycleCount : 0,
             Duration: currentData && currentData.Duration,
             FaultNumber: currentData && currentData.FirstFault,
             FirstFault: currentData && currentData.FirstFault > 0 ? 1 : 0,
-            FirstFaultDesc: currentData && currentData.ManualStop === true ? "Manual Stop" : currentData && currentData.FaultDescription,
-            From: currentData && moment(Number(currentData.StartTime)).format("HH:mm"),
+            FirstFaultDesc: currentData && currentData.ManualStop === true ? 'Manual Stop' : currentData && currentData.FaultDescription,
+            From: currentData && moment(Number(currentData.StartTime)).format('HH:mm'),
             ManualStop: currentData && currentData.ManualStop === true ? 1 : 0,
             InfeedCount: currentData && currentData.InfeedCount,
             RejectCount: currentData && currentData.RejectCount,
@@ -148,29 +147,31 @@ export class CycleReportComponent implements OnChanges {
             OutFeedCount: currentData && currentData.OutFeedCount,
             SKU: currentData && currentData.SKU,
             SKUDesc: currentData && currentData.SKU_Details,
-            To: currentData && moment(Number(currentData.StopTime)).format("HH:mm"),
-            Date: currentData && moment(Number(currentData.StartTime)).format("DD MMM YYYY"),
+            To: currentData && moment(Number(currentData.StopTime)).format('HH:mm'),
+            Date: currentData && moment(Number(currentData.StartTime)).format('DD MMM YYYY'),
             Cause: currentData && currentData.CauseSelected,
             Count: 1,
-            StateDuration: i === c.length-1?0: moment(Number(nextData.StartTime)).diff(moment(Number(currentData.StopTime)), 'seconds'),
+            // tslint:disable-next-line: max-line-length
+            StateDuration: i === c.length - 1 ? 0 : moment(Number(nextData.StartTime)).diff(moment(Number(currentData.StopTime)), 'seconds'),
             MachineMode: (currentData && (currentData.MachineMode === 4)) ? 'Dry' : 'Production',
+            DryCycleDuration: (currentData && (currentData.MachineMode === 4)) ? currentData.Duration : 0,
             DryCycle: (currentData && (currentData.MachineMode === 4)) ? currentData.CycleCount : 0
 
             // CheckFrom:moment(nextData.StartTime).format("HH:mm"),
             // CheckTo:moment(currentData.StopTime).format("HH:mm")
-          }
-          console.log(i === c.length-1?0: moment(Number(nextData.StartTime)).diff(moment(Number(currentData.StopTime)), 'seconds'));
+          };
+          // console.log(i === c.length-1?0: moment(Number(nextData.StartTime)).diff(moment(Number(currentData.StopTime)), 'seconds'));
           this.cycleData.push(allCycleData);
         }
-        console.log("cycleData", this.cycleData);
+        console.log('cycleData', this.cycleData);
         if (this.cycleData.length === 0) {
           this.gotData = true;
-          this.dataentryservice.getDataLoaded( true);
-          this.errorText = " No Record Found";
+          this.dataentryservice.getDataLoaded(true);
+          this.errorText = ' No Record Found';
         } else {
-          this.dataentryservice.getDataLoaded( true);
+          this.dataentryservice.getDataLoaded(true);
           this.gotData = true;
-          this.errorText = "";
+          this.errorText = '';
         }
 
       });
@@ -178,7 +179,7 @@ export class CycleReportComponent implements OnChanges {
   }
 
   customizeToolbar(toolbar, reportType, fileName, sheetName) {
-    let tabs = toolbar.getTabs();
+    const tabs = toolbar.getTabs();
     console.log(tabs);
 
     toolbar.getTabs = function () {
@@ -190,39 +191,39 @@ export class CycleReportComponent implements OnChanges {
       delete tabs[5];
       delete tabs[6];
       tabs.unshift({
-        id: "fm-tab-newtab",
-        title: "Export",
+        id: 'fm-tab-newtab',
+        title: 'Export',
         rightGroup: true,
         handler: newtabHandler,
         icon: '<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="-17.5 774.5 36 36"><title>menu_export</title><g fill="#555"><path d="M15.446 795.615l-4.289-6.461c-.346-.515-.803-.654-1.428-.654H7.788c-.186 0-.346-.029-.363.156-.008.076.017.07.059.137l4.76 7.108c.042.06.034.337-.017.38-.025.025-.067.219-.102.219H6.699c-.194 0-.354-.063-.363.125-.305 3.23-3.174 5.495-6.407 5.192-2.81-.263-5.039-2.329-5.3-5.14-.009-.195-.168-.178-.363-.178h-5.401c-.076 0-.144-.281-.144-.357 0-.025.008-.157.017-.175l4.76-7.203c.102-.16.05-.245-.109-.347-.06-.035-.118.082-.187.082h-1.94c-.616 0-1.199.145-1.553.658l-4.664 6.547c-.203.304-.545.586-.545.95v9.216c1 .911 1.267 1.646 2.187 1.629h27.625c.903.009 1.188-.709 1.188-1.611v-9.233c1-.373.157-.735-.054-1.04z"></path><path d="M-3.674 783.5H-2.5v10.2c1 1.4 1.764 2.464 3.165 2.371 1.274-.083 1.835-1.097 2.835-2.371v-10.2h1.207c.346 0 .641-.04.65-.387.008-.151-.042-.193-.144-.311l-4.186-5.11c-.228-.287-.642-.302-.929-.073-.042.034-.076.081-.101.115l-4.135 5.172c-.22.271-.187.447.084.668.11.085.244-.074.38-.074z"></path></g></svg>'
       });
       return tabs;
 
-    }
+    };
 
-    var newtabHandler = () => {
+    const newtabHandler = () => {
       this.Export_Excel(reportType, fileName, sheetName);
-    }
+    };
   }
 
   onReportComplete(reportType): void {
-    console.log("*****************************onReportComplete****************************", reportType);
+    console.log('*****************************onReportComplete****************************', reportType);
     if (reportType === 'SKUwise') {
       this.BindReportData(this.cycleData, reportType);
-      this.child.webDataRocks.off("reportcomplete");
+      this.child.webDataRocks.off('reportcomplete');
     }
     else if (reportType === 'Faultwise') {
       this.BindReportData(this.cycleData, reportType);
-      this.child2.webDataRocks.off("reportcomplete");
-      this.createChart_kpi_linewise('highchartcontainer-control', this.selected, 'Fault-Wise', 'fault');
+      this.child2.webDataRocks.off('reportcomplete');
+      this.createChartKpiLinewise('highchartcontainer-control', this.selected, 'Fault-Wise', 'fault');
     }
     else if (reportType === 'Summary') {
       this.BindReportData(this.cycleData, reportType);
-      this.child3.webDataRocks.off("reportcomplete");
+      this.child3.webDataRocks.off('reportcomplete');
     }
     else if (reportType === 'DailyCycle') {
       this.BindReportData(this.cycleData, reportType);
-      this.child4.webDataRocks.off("reportcomplete");
+      this.child4.webDataRocks.off('reportcomplete');
     }
     this.pivotTableReportComplete = true;
 
@@ -239,67 +240,70 @@ export class CycleReportComponent implements OnChanges {
       {
 
         CycleRun: {
-          type: "number"
+          type: 'number'
         },
         Duration: {
-          type: "time"
+          type: 'time'
         },
         FirstFault: {
-          type: "number"
+          type: 'number'
         },
         FirstFaultDesc: {
-          type: "string"
+          type: 'string'
         },
         From: {
-          type: "string"
+          type: 'string'
         },
         InfeedCount: {
-          type: "number"
+          type: 'number'
         },
         RejectCount: {
-          type: "number"
+          type: 'number'
         },
         Machine: {
-          type: "string"
+          type: 'string'
         },
         ManualStop: {
-          type: "number"
+          type: 'number'
         },
         MaxActualSpeed: {
-          type: "number"
+          type: 'number'
         },
         OutFeedCount: {
-          type: "number"
+          type: 'number'
         },
         SKU: {
-          type: "number"
+          type: 'number'
         },
         SKUDesc: {
-          type: "string"
+          type: 'string'
         },
         To: {
-          type: "string"
+          type: 'string'
         },
         Date: {
-          type: "date string"
+          type: 'date string'
         },
         FaultNumber: {
-          type: "number"
+          type: 'number'
         },
         Cause: {
-          type: "string"
+          type: 'string'
         },
         Count: {
-          type: "number"
+          type: 'number'
         },
-        StateDuration:{
-          type:"time"
+        StateDuration: {
+          type: 'time'
         },
-        DryCycle :{
-          type: "number"
+        DryCycle: {
+          type: 'number'
         },
-        MachineMode : {
-         type: "string"
+        MachineMode: {
+          type: 'string'
+        },
+        DryCycleDuration: {
+          type: 'time'
         }
         // CheckFrom:{
         //   type: "string"
@@ -308,25 +312,26 @@ export class CycleReportComponent implements OnChanges {
         //   type: "string"
         // }
       }
-    ]
+    ];
 
 
     if (reportType === 'Faultwise') {
-      var FalutWiseData = reportData.filter(function (value) {
-        return value.FirstFault != 0
-      })
-      console.log(FalutWiseData, "FalutWiseData");
+      const FalutWiseData = reportData.filter(function (value) {
+        return value.FirstFault != 0;
+      });
+
+      console.log(FalutWiseData, 'FalutWiseData');
       this.DataWithStructure = this.DataWithStructure.concat(FalutWiseData);
-      console.log(this.DataWithStructure, "DataWithStructure");
+      console.log(this.DataWithStructure, 'DataWithStructure');
     } else {
       this.DataWithStructure = this.DataWithStructure.concat(reportData);
-      console.log(this.DataWithStructure, "DataWithStructure");
+      console.log(this.DataWithStructure, 'DataWithStructure');
     }
 
-    var setReportSKUwise;
-    var setReportFaultwise;
-    var setReportSummary;
-    var setReportDailyCycle;
+    let setReportSKUwise;
+    let setReportFaultwise;
+    let setReportSummary;
+    let setReportDailyCycle;
     setReportSKUwise = {
       dataSource: {
         data: this.DataWithStructure
@@ -334,83 +339,78 @@ export class CycleReportComponent implements OnChanges {
       slice: {
         reportFilters: [
           {
-            uniqueName: "From",
-            caption: "From"
+            uniqueName: 'From',
+            caption: 'From'
           },
           {
-            uniqueName: "SKUDesc",
-            caption: "SKU"
+            uniqueName: 'SKUDesc',
+            caption: 'SKU'
           },
           {
-            uniqueName: "To",
-            caption: "To"
+            uniqueName: 'To',
+            caption: 'To'
           },
 
         ],
         rows: [{
-          uniqueName: "Date",
-          caption: "Date"
+          uniqueName: 'Date',
+          caption: 'Date'
         },
         {
-          uniqueName: "SKUDesc",
-          caption: "SKU"
+          uniqueName: 'SKUDesc',
+          caption: 'SKU'
         }],
         columns: [
           {
-            uniqueName: "Measures"
+            uniqueName: 'Measures'
           }
         ],
         measures: [
           {
-            uniqueName: "CycleRun",
-            formula: "((\"CycleRun\"))",
-            caption: "Total Cycle Run (" + this.CycleMeaning + ")"
+            uniqueName: 'CycleRun',
+            formula: '(("CycleRun"))',
+            caption: 'Total Cycle Run (' + this.CycleMeaning + ')'
           },
           {
-            uniqueName: "DryCycle",
-            formula: "((\"DryCycle\"))",
-            caption: "Total Dry Run (" + this.CycleMeaning + ")"
+            uniqueName: 'DryCycle',
+            formula: '(("DryCycle"))',
+            caption: 'Total Dry Run (' + this.CycleMeaning + ')'
           },
           {
-            uniqueName: "FirstFault",
-            formula: "((\"FirstFault\"))",
-            caption: "First Fault Count"
+            uniqueName: 'FirstFault',
+            formula: '(("FirstFault"))',
+            caption: 'First Fault Count'
           },
           {
-            uniqueName: "ManualStop",
-            formula: "((\"ManualStop\"))",
-            caption: "Manual Stop Count"
+            uniqueName: 'ManualStop',
+            formula: '(("ManualStop"))',
+            caption: 'Manual Stop Count'
           },
           {
-            uniqueName: "MaxActualSpeed",
-            formula: "(max(\"MaxActualSpeed\"))",
-            caption: "Max Speed (" + this.SpeedIntermsOf + ")",
-            format: "decimal0",
+            uniqueName: 'MaxActualSpeed',
+            formula: '(max("MaxActualSpeed"))',
+            caption: 'Max Speed (' + this.SpeedIntermsOf + ')',
+            format: 'decimal0',
           },
           {
-            uniqueName: "MeanCycleBetweenFault",
-            formula: "((\"CycleRun\")/(\"FirstFault\"))",
-            caption: "MCBF",
-            format: "44mvcoma",
+            uniqueName: 'MeanCycleBetweenFault',
+            formula: '(("CycleRun")/("FirstFault"))',
+            caption: 'MCBF',
+            format: '44mvcoma',
           },
           {
-            uniqueName: "MeanCycleBetweenFaultNManualStop",
-            formula: "((\"CycleRun\")/(\"FirstFault\" + \"ManualStop\"))",
-            caption: "MCBF & S",
-            format: "44mvcoma",
+            uniqueName: 'MeanCycleBetweenFaultNManualStop',
+            formula: '(("CycleRun")/("FirstFault" + "ManualStop"))',
+            caption: 'MCBF & S',
+            format: '44mvcoma',
           },
           {
-            uniqueName: "MeanDryCycleBetweenFault",
-            formula: "((\"DryCycle\")/(\"FirstFault\"))",
-            caption: "MDCBF",
-            format: "44mvcoma",
+            uniqueName: 'MeanDryCycleBetweenFault',
+            formula: '(("DryCycle")/("FirstFault"))',
+            caption: 'MDCBF',
+            format: '44mvcoma',
           },
-          {
-            uniqueName: "MeanDryCycleBetweenFaultNManualStop",
-            formula: "((\"DryCycle\")/(\"FirstFault\" + \"ManualStop\"))",
-            caption: "MDCBF & S",
-            format: "44mvcoma",
-          },
+
         ],
         expands: {
           expandAll: true,
@@ -418,17 +418,17 @@ export class CycleReportComponent implements OnChanges {
       },
       formats: [
         {
-          name: "44mvcoma",
+          name: '44mvcoma',
           decimalPlaces: 0,
-          currencySymbol: "",
-          currencySymbolAlign: "",
-          nullValue: "0",
-          textAlign: "center",
-          infinityValue: "0",
-          divideByZeroValue: "0",
+          currencySymbol: '',
+          currencySymbolAlign: '',
+          nullValue: '0',
+          textAlign: 'center',
+          infinityValue: '0',
+          divideByZeroValue: '0',
         },
         {
-          name: "decimal0",
+          name: 'decimal0',
           decimalPlaces: 0,
         }
       ],
@@ -481,15 +481,15 @@ export class CycleReportComponent implements OnChanges {
       },
       options: {
         grid: {
-          type: "classic",
-          //showHierarchyCaptions: false,
+          type: 'classic',
+          // showHierarchyCaptions: false,
           showHeaders: false,
           showTotals: false,
-          //showGrandTotals: "rows"
+          // showGrandTotals: "rows"
         },
-        dateTimePattern: "yyyy-MM-dd HH:mm:ss",
-        datePattern: "dd-MMM-yyyy",
-        defaultHierarchySortName: "desc",
+        dateTimePattern: 'yyyy-MM-dd HH:mm:ss',
+        datePattern: 'dd-MMM-yyyy',
+        defaultHierarchySortName: 'desc',
         configuratorButton: false,
         showAggregationLabels: false
       }
@@ -501,42 +501,42 @@ export class CycleReportComponent implements OnChanges {
       slice: {
         reportFilters: [
           {
-            uniqueName: "FirstFaultDesc",
-            caption: "First Fault"
+            uniqueName: 'FirstFaultDesc',
+            caption: 'First Fault'
           },
 
         ],
         rows: [
           {
-            uniqueName: "Date",
-            caption: "Date"
+            uniqueName: 'Date',
+            caption: 'Date'
           },
           {
-            uniqueName: "FirstFaultDesc",
-            caption: "First Fault"
+            uniqueName: 'FirstFaultDesc',
+            caption: 'First Fault'
           },
           {
-            uniqueName: "FaultNumber",
-            caption: "Fault No."
+            uniqueName: 'FaultNumber',
+            caption: 'Fault No.'
           }
         ],
         columns: [
           {
-            uniqueName: "Measures"
+            uniqueName: 'Measures'
           }
         ],
         measures: [
 
           {
-            uniqueName: "FirstFault",
-            formula: "((\"FirstFault\"))",
-            caption: "First Fault Count"
+            uniqueName: 'FirstFault',
+            formula: '(("FirstFault"))',
+            caption: 'First Fault Count'
           },
           {
-            uniqueName: "StateDuration",
-            formula: "((\"StateDuration\"))",
-            caption: "Fault Duration",
-            format: "44mvcoma"
+            uniqueName: 'StateDuration',
+            formula: '(("StateDuration"))',
+            caption: 'Fault Duration',
+            format: '44mvcoma'
           }
         ],
 
@@ -546,14 +546,14 @@ export class CycleReportComponent implements OnChanges {
       },
       formats: [
         {
-          name: "44mvcoma",
+          name: '44mvcoma',
           decimalPlaces: 0,
-          currencySymbol: "",
-          currencySymbolAlign: "",
-          nullValue: "0",
-          textAlign: "center",
-          infinityValue: "0",
-          divideByZeroValue: "0",
+          currencySymbol: '',
+          currencySymbolAlign: '',
+          nullValue: '0',
+          textAlign: 'center',
+          infinityValue: '0',
+          divideByZeroValue: '0',
         },
       ],
       tableSizes: {
@@ -577,15 +577,15 @@ export class CycleReportComponent implements OnChanges {
       },
       options: {
         grid: {
-          type: "classic",
-          //showHierarchyCaptions: false,
+          type: 'classic',
+          // showHierarchyCaptions: false,
           showHeaders: false,
           showTotals: false,
-          //showGrandTotals: "rows"
+          // showGrandTotals: "rows"
         },
-        dateTimePattern: "yyyy-MM-dd HH:mm:ss",
-        datePattern: "dd-MMM-yyyy",
-        defaultHierarchySortName: "desc",
+        dateTimePattern: 'yyyy-MM-dd HH:mm:ss',
+        datePattern: 'dd-MMM-yyyy',
+        defaultHierarchySortName: 'desc',
         configuratorButton: false,
         showAggregationLabels: false
       }
@@ -597,8 +597,8 @@ export class CycleReportComponent implements OnChanges {
       slice: {
         reportFilters: [
           {
-            uniqueName: "Date",
-            caption: "Date"
+            uniqueName: 'Date',
+            caption: 'Date'
           }
         ],
         rows: [
@@ -607,65 +607,77 @@ export class CycleReportComponent implements OnChanges {
           //   caption: "First Fault"
           // },
           {
-            uniqueName: "Date",
-            caption: "Date"
+            uniqueName: 'Date',
+            caption: 'Date'
           },
         ],
         columns: [
           {
-            uniqueName: "Measures"
+            uniqueName: 'Measures'
           }
         ],
         measures: [
           {
-            uniqueName: "CycleRun",
-            formula: "((\"CycleRun\"))",
-            caption: "Total Cycle Run (" + this.CycleMeaning + ")"
+            uniqueName: 'CycleRun',
+            formula: '(("CycleRun"))',
+            caption: 'Total Cycle Run (' + this.CycleMeaning + ')'
           },
           {
-            uniqueName: "DryCycle",
-            formula: "((\"DryCycle\"))",
-            caption: "Total Dry Run (" + this.CycleMeaning + ")"
+            uniqueName: 'DryCycle',
+            formula: '(("DryCycle"))',
+            caption: 'Total Dry Run (' + this.CycleMeaning + ')'
           },
           {
-            uniqueName: "FirstFault",
-            formula: "((\"FirstFault\"))",
-            caption: "First Fault Count"
+            uniqueName: 'FirstFault',
+            formula: '(("FirstFault"))',
+            caption: 'First Fault Count'
           },
           {
-            uniqueName: "ManualStop",
-            formula: "((\"ManualStop\"))",
-            caption: "Manual Stop Count"
+            uniqueName: 'ManualStop',
+            formula: '(("ManualStop"))',
+            caption: 'Manual Stop Count'
           },
           {
-            uniqueName: "MaxActualSpeed",
-            formula: "(max(\"MaxActualSpeed\"))",
-            caption: "Max Speed (" + this.SpeedIntermsOf + ")",
-            format: "44mvcoma",
+            uniqueName: 'MaxActualSpeed',
+            formula: '(max("MaxActualSpeed"))',
+            caption: 'Max Speed (' + this.SpeedIntermsOf + ')',
+            format: '44mvcoma',
           },
           {
-            uniqueName: "MeanCycleBetweenFault",
-            formula: "((\"CycleRun\")/(\"FirstFault\"))",
-            caption: "MCBF",
-            format: "44mvcoma",
+            uniqueName: 'MeanCycleBetweenFault',
+            formula: '(("CycleRun")/("FirstFault"))',
+            caption: 'MCBF',
+            format: '44mvcoma',
           },
           {
-            uniqueName: "MeanCycleBetweenFaultNManualStop",
-            formula: "((\"CycleRun\")/(\"FirstFault\" + \"ManualStop\"))",
-            caption: "MCBF & S",
-            format: "44mvcoma",
+            uniqueName: 'MeanCycleBetweenFaultNManualStop',
+            formula: '(("CycleRun")/("FirstFault" + "ManualStop"))',
+            caption: 'MCBF & S',
+            format: '44mvcoma',
           },
           {
-            uniqueName: "MeanDryCycleBetweenFault",
-            formula: "((\"DryCycle\")/(\"FirstFault\"))",
-            caption: "MDCBF",
-            format: "44mvcoma",
+            uniqueName: 'MeanDryCycleBetweenFault',
+            formula: '(("DryCycle")/("FirstFault"))',
+            caption: 'MDCBF',
+            format: '44mvcoma',
           },
           {
-            uniqueName: "MeanDryCycleBetweenFaultNManualStop",
-            formula: "((\"DryCycle\")/(\"FirstFault\" + \"ManualStop\"))",
-            caption: "MDCBF & S",
-            format: "44mvcoma",
+            uniqueName: 'MeanDryCycleBetweenFaultNManualStop',
+            formula: '(("DryCycle")/("FirstFault" + "ManualStop"))',
+            caption: 'MDCBF & S',
+            format: '44mvcoma',
+          },
+          {
+            uniqueName: 'MeanDryCycleBetweenFaultNManualStop',
+            formula: '(("DryCycle")/("FirstFault" + "ManualStop"))',
+            caption: 'MDCBF & S',
+            format: '44mvcoma',
+          },
+          {
+            uniqueName: 'DryCycleDuration',
+            formula: '("DryCycleDuration")',
+            caption: 'Dry Run Dur.',
+            format: '44mvcoma',
           },
         ],
 
@@ -675,14 +687,14 @@ export class CycleReportComponent implements OnChanges {
       },
       formats: [
         {
-          name: "44mvcoma",
+          name: '44mvcoma',
           decimalPlaces: 0,
-          currencySymbol: "",
-          currencySymbolAlign: "",
-          nullValue: "0",
-          textAlign: "center",
-          infinityValue: "0",
-          divideByZeroValue: "0",
+          currencySymbol: '',
+          currencySymbolAlign: '',
+          nullValue: '0',
+          textAlign: 'center',
+          infinityValue: '0',
+          divideByZeroValue: '0',
         },
       ],
       tableSizes: {
@@ -741,6 +753,10 @@ export class CycleReportComponent implements OnChanges {
           {
             idx: 12,
             width: 30
+          },
+          {
+            idx: 13,
+            width: 40
           }
 
 
@@ -748,15 +764,15 @@ export class CycleReportComponent implements OnChanges {
       },
       options: {
         grid: {
-          type: "classic",
-          //showHierarchyCaptions: false,
+          type: 'classic',
+          // showHierarchyCaptions: false,
           showHeaders: false,
           showTotals: false,
-          //showGrandTotals: "rows"
+          // showGrandTotals: "rows"
         },
-        dateTimePattern: "yyyy-MM-dd HH:mm:ss",
-        datePattern: "dd-MMM-yyyy",
-        defaultHierarchySortName: "desc",
+        dateTimePattern: 'yyyy-MM-dd HH:mm:ss',
+        datePattern: 'dd-MMM-yyyy',
+        defaultHierarchySortName: 'desc',
         configuratorButton: false,
         showAggregationLabels: false
       }
@@ -767,66 +783,66 @@ export class CycleReportComponent implements OnChanges {
       },
       slice: {
         reportFilters: [{
-          uniqueName: "Date",
-          caption: "Date"
+          uniqueName: 'Date',
+          caption: 'Date'
         },
         {
-          uniqueName: "SKUDesc",
-          caption: "SKU"
+          uniqueName: 'SKUDesc',
+          caption: 'SKU'
         },
         {
-          uniqueName: "Cause",
-          caption: "Cause"
+          uniqueName: 'Cause',
+          caption: 'Cause'
         },
         {
-          uniqueName: "MachineMode",
-          caption: "Mode"
+          uniqueName: 'MachineMode',
+          caption: 'Mode'
         },
         ],
         rows: [{
-          uniqueName: "Date",
-          caption: "Date"
+          uniqueName: 'Date',
+          caption: 'Date'
         },
 
         {
-          uniqueName: "From",
-          caption: "From"
+          uniqueName: 'From',
+          caption: 'From'
         },
         {
-          uniqueName: "To",
-          caption: "To"
+          uniqueName: 'To',
+          caption: 'To'
         },
         {
-          uniqueName: "SKUDesc",
-          caption: "SKU"
+          uniqueName: 'SKUDesc',
+          caption: 'SKU'
         },
         {
-          uniqueName: "FirstFaultDesc",
-          caption: "Fault Desc"
+          uniqueName: 'FirstFaultDesc',
+          caption: 'Fault Desc'
         },
-        // {
-        //   uniqueName: "CheckFrom",
-        //   caption: "CheckFrom"
-        // },{
-        //   uniqueName: "CheckTo",
-        //   caption: "CheckTo"
-        // }
+          // {
+          //   uniqueName: "CheckFrom",
+          //   caption: "CheckFrom"
+          // },{
+          //   uniqueName: "CheckTo",
+          //   caption: "CheckTo"
+          // }
         ],
         columns: [
           {
-            uniqueName: "Measures"
+            uniqueName: 'Measures'
           }
         ],
         measures: [
           {
-            uniqueName: "CycleRun",
-            formula: "((\"CycleRun\"))",
-            caption: "Total Cycle Run (" + this.CycleMeaning + ")"
+            uniqueName: 'CycleRun',
+            formula: '(("CycleRun"))',
+            caption: 'Total Cycle Run (' + this.CycleMeaning + ')'
           },
           {
-            uniqueName: "DryCycle",
-            formula: "((\"DryCycle\"))",
-            caption: "Total Dry Run (" + this.CycleMeaning + ")"
+            uniqueName: 'DryCycle',
+            formula: '(("DryCycle"))',
+            caption: 'Total Dry Run (' + this.CycleMeaning + ')'
           },
           // {
           //   uniqueName: "FirstFault",
@@ -840,55 +856,55 @@ export class CycleReportComponent implements OnChanges {
           //   caption: "Manual Stop Count"
           // },
           {
-            uniqueName: "MaxActualSpeed",
-            formula: "(max(\"MaxActualSpeed\"))",
-            caption: "Max Speed (" + this.SpeedIntermsOf + ")",
-            format: "44mvcoma",
+            uniqueName: 'MaxActualSpeed',
+            formula: '(max("MaxActualSpeed"))',
+            caption: 'Max Speed (' + this.SpeedIntermsOf + ')',
+            format: '44mvcoma',
           },
           {
-            uniqueName: "Duration",
-            formula: "((\"Duration\"))",
-            caption: "Duration"
+            uniqueName: 'Duration',
+            formula: '(("Duration"))',
+            caption: 'Duration'
           },
           {
-            uniqueName: "InfeedCount",
-            formula: "((\"InfeedCount\"))",
-            caption: "Infeed Count (" + this.InfeedInTermsOf + ")"
+            uniqueName: 'InfeedCount',
+            formula: '(("InfeedCount"))',
+            caption: 'Infeed Count (' + this.InfeedInTermsOf + ')'
           },
           {
-            uniqueName: "RejectCount",
-            formula: "((\"RejectCount\"))",
-            caption: "Reject Count"
+            uniqueName: 'RejectCount',
+            formula: '(("RejectCount"))',
+            caption: 'Reject Count'
           },
           {
-            uniqueName: "OutFeedCount",
-            formula: "(max(\"OutFeedCount\"))",
-            caption: "OutFeed Count (" + this.OutfeedCountInTermsOf + ")",
-            format: "44mvcoma",
+            uniqueName: 'OutFeedCount',
+            formula: '(max("OutFeedCount"))',
+            caption: 'OutFeed Count (' + this.OutfeedCountInTermsOf + ')',
+            format: '44mvcoma',
           },
           {
-            uniqueName: "MeanCycleBetweenFault",
-            formula: "((\"CycleRun\")/(\"FirstFault\"))",
-            caption: "MCBF",
-            format: "44mvcoma",
+            uniqueName: 'MeanCycleBetweenFault',
+            formula: '(("CycleRun")/("FirstFault"))',
+            caption: 'MCBF',
+            format: '44mvcoma',
           },
           {
-            uniqueName: "MeanCycleBetweenFaultNManualStop",
-            formula: "((\"CycleRun\")/(\"FirstFault\" + \"ManualStop\"))",
-            caption: "MCBF & S",
-            format: "44mvcoma",
+            uniqueName: 'MeanCycleBetweenFaultNManualStop',
+            formula: '(("CycleRun")/("FirstFault" + "ManualStop"))',
+            caption: 'MCBF & S',
+            format: '44mvcoma',
           },
           {
-            uniqueName: "MeanDryCycleBetweenFault",
-            formula: "((\"DryCycle\")/(\"FirstFault\"))",
-            caption: "MDCBF",
-            format: "44mvcoma",
+            uniqueName: 'MeanDryCycleBetweenFault',
+            formula: '(("DryCycle")/("FirstFault"))',
+            caption: 'MDCBF',
+            format: '44mvcoma',
           },
           {
-            uniqueName: "MeanDryCycleBetweenFaultNManualStop",
-            formula: "((\"DryCycle\")/(\"FirstFault\" + \"ManualStop\"))",
-            caption: "MDCBF & S",
-            format: "44mvcoma",
+            uniqueName: 'MeanDryCycleBetweenFaultNManualStop',
+            formula: '(("DryCycle")/("FirstFault" + "ManualStop"))',
+            caption: 'MDCBF & S',
+            format: '44mvcoma',
           },
           // {
           //   uniqueName: "MachineMode",
@@ -914,14 +930,14 @@ export class CycleReportComponent implements OnChanges {
       },
       formats: [
         {
-          name: "44mvcoma",
+          name: '44mvcoma',
           decimalPlaces: 0,
-          currencySymbol: "",
-          currencySymbolAlign: "",
-          nullValue: "0",
-          textAlign: "center",
-          infinityValue: "0",
-          divideByZeroValue: "0",
+          currencySymbol: '',
+          currencySymbolAlign: '',
+          nullValue: '0',
+          textAlign: 'center',
+          infinityValue: '0',
+          divideByZeroValue: '0',
         },
 
       ],
@@ -990,15 +1006,15 @@ export class CycleReportComponent implements OnChanges {
       },
       options: {
         grid: {
-          type: "classic",
-          //showHierarchyCaptions: false,
+          type: 'classic',
+          // showHierarchyCaptions: false,
           showHeaders: false,
           showTotals: false,
-          //showGrandTotals: "rows"
+          // showGrandTotals: "rows"
         },
-        dateTimePattern: "yyyy-MM-dd HH:mm:ss",
-        datePattern: "dd-MMM-yyyy",
-        defaultHierarchySortName: "desc",
+        dateTimePattern: 'yyyy-MM-dd HH:mm:ss',
+        datePattern: 'dd-MMM-yyyy',
+        defaultHierarchySortName: 'desc',
         configuratorButton: false,
         showAggregationLabels: false
       }
@@ -1013,84 +1029,63 @@ export class CycleReportComponent implements OnChanges {
     } else if (reportType === 'DailyCycle') {
       this.child4.webDataRocks.setReport(setReportDailyCycle);
     }
-
   }
 
   Export_Excel(reportType, fileName, sheetName) {
     console.log(reportType, fileName, sheetName);
     if (reportType === 'Summary') {
       this.child3.webDataRocks.exportTo(
-        "Excel", {
+        'Excel', {
         filename: fileName,
         excelSheetName: sheetName,
-        destinationType: "file",
-        url: "URL to server script saving the file"
+        destinationType: 'file',
+        url: 'URL to server script saving the file'
 
-      },
-        function () {
-          //console.log("Export process is finished");
-        }
-      );
+      });
     }
     else if (reportType === 'SKUwise') {
       this.child.webDataRocks.exportTo(
-        "Excel", {
+        'Excel', {
         filename: fileName,
         excelSheetName: sheetName,
-        destinationType: "file",
-        url: "URL to server script saving the file"
+        destinationType: 'file',
+        url: 'URL to server script saving the file'
 
-      },
-        function () {
-          //console.log("Export process is finished");
-        }
-      );
+      });
     }
     else if (reportType === 'Faultwise') {
       this.child2.webDataRocks.exportTo(
-        "Excel", {
+        'Excel', {
         filename: fileName,
         excelSheetName: sheetName,
-        destinationType: "file",
-        url: "URL to server script saving the file"
+        destinationType: 'file',
+        url: 'URL to server script saving the file'
 
-      },
-        function () {
-          //console.log("Export process is finished");
-        }
-      );
+      });
     }
     else if (reportType === 'DailyCycle') {
       this.child4.webDataRocks.exportTo(
-        "Excel", {
+        'Excel', {
         filename: fileName,
         excelSheetName: sheetName,
-        destinationType: "file",
-        url: "URL to server script saving the file"
+        destinationType: 'file',
+        url: 'URL to server script saving the file'
 
-      },
-        function () {
-          //console.log("Export process is finished");
-        }
-      );
+      });
     }
   }
 
-  //Highcharts
+  // Highcharts
 
-  createChart_kpi_linewise(controlname, category, chartTitle, chartType) {
-    console.log(controlname, "controlname");
-    console.log(category, "category");
+  createChartKpiLinewise(controlname, category, chartTitle, chartType) {
+    console.log(controlname, 'controlname');
+    console.log(category, 'category');
     console.log(this.cycleData);
-    if (category === 'FirstFaultDesc') {
-      var FalutWiseData = this.cycleData.filter(function (value) {
-        return value.FirstFault != 0
-      })
-    }
-    // const GroupedData1 = this.util.groupAndSum(this.cycleData, ['Date'], ['CycleRun', 'InfeedCount', 'OutFeedCount', 'ManualStop', 'FirstFault', 'FaultNumber']);
+    let FalutWiseData;
+    FalutWiseData = category === 'FirstFaultDesc' ? this.cycleData.filter(value => value.FirstFault !== 0) : [];
     const GroupedDataFault = this.util.groupAndSum(FalutWiseData, [category], ['FirstFault']);
-    //console.log(GroupedData1, "GroupedData");
-    console.log(GroupedDataFault, "GroupedData");
+    // console.log(GroupedData1, "GroupedData");
+    console.log(GroupedDataFault, 'GroupedData');
 
     let xAxisData;
     let measureDataFaultCount;
@@ -1103,26 +1098,26 @@ export class CycleReportComponent implements OnChanges {
 
     if (chartType === 'fault') {
 
-      GroupedDataFault.sort(this.util.dynamicSort('FirstFault'))
+      GroupedDataFault.sort(this.util.dynamicSort('FirstFault'));
       xAxisData = this.util.filterMyArr(GroupedDataFault, category);
-      measureDataFaultCount = this.util.filterMyArr(GroupedDataFault, "FirstFault");
+      measureDataFaultCount = this.util.filterMyArr(GroupedDataFault, 'FirstFault');
       chartTitleName = chartTitle;
 
       seriesData = [
         {
-          name: "Fault Count",
+          name: 'Fault Count',
           data: measureDataFaultCount,
           color: '#ffe66d'
         },
-      ]
+      ];
     } else if (chartType === 'skuwise') {
 
     } else if (chartType === 'dailycycle') {
 
     }
 
-    if (category === "date") {
-      chartTypeName = "line";
+    if (category === 'date') {
+      chartTypeName = 'line';
       chartForm = {
         series: {
           stacking: undefined,
@@ -1133,15 +1128,15 @@ export class CycleReportComponent implements OnChanges {
               color: '#000000',
               fontSize: '15px'
             },
-            formatter: function () {
-              let value = (this.y);
+            formatter() {
+              const value = (this.y);
               return '' + value;
             }
           }
         }
-      }
+      };
     } else {
-      chartTypeName = "column";
+      chartTypeName = 'column';
       chartForm = {
         column: {
           stacking: undefined,
@@ -1152,16 +1147,16 @@ export class CycleReportComponent implements OnChanges {
               color: '#000000',
               fontSize: '15px'
             },
-            formatter: function () {
-              let value = (this.y);
+            formatter() {
+              const value = (this.y);
               return '' + value;
             }
           }
         }
-      }
+      };
     }
-    //console.log(chartTypeName, "chartTypeName");
-    var ChartData: any;
+    // console.log(chartTypeName, "chartTypeName");
+    let ChartData: any;
     ChartData = {
 
       chart: {
@@ -1184,21 +1179,21 @@ export class CycleReportComponent implements OnChanges {
       yAxis: [
         {
           title: {
-            text: "Fault Count"
+            text: 'Fault Count'
           },
           opposite: false,
           labels: {
             enabled: true,
-            formatter: function () {
-              let value = (this.value);
+            formatter() {
+              const value = (this.value);
               return value;
             },
           },
         },
       ],
       tooltip: {
-        formatter: function () {
-          let value = (this.y);
+        formatter() {
+          const value = (this.y);
           return this.key + '<br>' + '' + value;
         }
       },
@@ -1207,7 +1202,7 @@ export class CycleReportComponent implements OnChanges {
       credits: {
         enabled: false
       }
-    }
+    };
     console.log(JSON.stringify(ChartData));
     Highcharts.chart(controlname, ChartData);
   }
