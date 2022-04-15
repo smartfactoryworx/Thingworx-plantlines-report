@@ -1,0 +1,20 @@
+[
+	{
+	  "Machine": "PA21091A",
+      "Duration": 745,
+      "CycleCount": 26,
+      "ManualStop": true,
+      "FirstFault": 0,
+      "ID": "7792fe7f-67e8-42d9-8e32-cb8545f54e6a",
+      "MachineMode": 4,
+	  "MachineLocation": "Factory",
+	  "CustomerName": "Meghna Edible",
+	  "MachineName": "Case Erector",
+	  "CyclesCountSinceInstall": 1803,
+	  "DurationSinceInstall": 38,
+	  "TotalMCBF_SinceInstall": 33,
+	  "TotalMCBF&S_SinceInstall": 8,
+	  "TotalManualStopsSinceInstall": 1770,
+	  "TotalFirstFaultCountSinceInstall": 55
+	}
+]

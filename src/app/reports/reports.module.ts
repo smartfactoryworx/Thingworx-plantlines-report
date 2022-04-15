@@ -7,10 +7,11 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { CycleReportModule } from './cycle-report/cycle-report.module';
 import { DailyCycleEntryModule } from './daily-cycle-entry/daily-cycle-entry.module';
 import { HourlyReportComponent } from './hourly-report/hourly-report.component';
+import { DailySummaryReportComponent } from './daily-summary-report/daily-summary-report.component';
 
 
 @NgModule({
-  declarations: [ReportsComponent, HourlyReportComponent],
+  declarations: [ReportsComponent, HourlyReportComponent, DailySummaryReportComponent],
   imports: [
     CommonModule,
     ReportsRoutingModule,

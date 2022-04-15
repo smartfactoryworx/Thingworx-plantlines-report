@@ -1,0 +1,30 @@
+<div>
+    <div fxLayout="column" style="width: 100%;">
+    <form [formGroup]="dailysummaryform">
+    <div fxLayout="column" style="width:100%;">
+        <div fxLayout="row" style="width:70%;padding: 10px;" fxFlex=100>
+       
+            <mat-form-field appearance="outline" fxFlex="25">
+                <input matInput [matDatepicker]="picker"  formControlName="date" placeholder="Select Date">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+            
+         <!-- <div fxLayout="row" style="width: 100%;padding: 1%;" fxLayoutAlign="space-around start" fxFlex="25">
+                <button mat-raised-button color="primary" [disabled]="dailysummaryform.invalid"
+                    (click)="SubmitChanges()"> Submit </button>
+            </div> -->
+        </div>
+    </div>
+    </form>
+    </div>
+</div>
+
+<div fxLayout="column" style="width: 100%;" fxLayoutAlign="center">
+    <div  *ngIf="Machines?.length > 0" fxLayout="row" style="width: 100%;" fxLayout.xs="column" fxLayoutWrap fxLayoutGap="0.1%"
+        fxLayoutAlign="space-around center" fxFlex="100">
+        <wbr-pivot #pivot1 [toolbar]="true" [report]="pivotReport" [width]="'100%'" [height]="700" fxFlex="100"
+            (reportcomplete)="onReportComplete()">
+        </wbr-pivot>
+    </div>
+</div>

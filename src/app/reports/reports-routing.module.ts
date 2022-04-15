@@ -5,6 +5,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { CycleReportComponent } from './cycle-report/cycle-report.component';
 import { DailyCycleEntryComponent } from './daily-cycle-entry/daily-cycle-entry.component';
 import { ReportsComponent } from './reports.component';
+import { DailySummaryReportComponent } from './daily-summary-report/daily-summary-report.component';
 
 const routes: Routes = [
   {
@@ -30,8 +31,13 @@ const routes: Routes = [
         path: 'hourly',
         component: HourlyReportComponent,
         pathMatch: 'full'
+      },
+      
+      {
+        path: 'daily-summary',
+        component: DailySummaryReportComponent,
+        pathMatch: 'full'
       }
-
 
     ]
   }
