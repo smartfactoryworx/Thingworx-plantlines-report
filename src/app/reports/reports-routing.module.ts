@@ -32,13 +32,11 @@ const routes: Routes = [
         component: HourlyReportComponent,
         pathMatch: 'full'
       },
-      
       {
         path: 'daily-summary',
         component: DailySummaryReportComponent,
         pathMatch: 'full'
       }
-
     ]
   }
 ];

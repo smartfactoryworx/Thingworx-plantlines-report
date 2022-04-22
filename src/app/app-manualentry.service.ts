@@ -32,7 +32,7 @@ export class ManualEntryService {
 
   GetMachineRowData(MachineName): Observable<object> {
     //https://capl91gn-lines-postgres.testing.smartfactoryworx.net/api/?machine=PM21176a
-    return this.httpClient.get('https://capl91gn-lines-postgres.testing.smartfactoryworx.net/api/?machine=' + MachineName);
+    return this.httpClient.get('https://capl91gn-lines-postgres.testing.smartfactoryworx.net/api/machinedata?machine=' + MachineName);
   }
 
   PostFaultData(URL, data): Observable<object> {
