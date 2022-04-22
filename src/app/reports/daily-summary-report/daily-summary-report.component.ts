@@ -18,7 +18,7 @@ interface machine {
   MachineLocation?: string;
   CustomerName?: string;
   CyclesCountSinceInstall?: number;
-  DurationSinceInstall?: number;
+  DryRunDurationSinceInstall?: number;
   TotalManualStopsSinceInstall?: number;
   TotalFirstFaultCountSinceInstall?: number;
 }
@@ -73,10 +73,12 @@ export class DailySummaryReportComponent implements OnInit {
         const c = data.rows[i];
         const DailySummaryData =
         {
-          CycleRun: (c && (c.MachineMode !== 4)) ? c.CycleCount : 0, //Production Mode - non 4,  Dry cycle is 4
+          CycleRun: c.CycleCount, //Production Mode - non 4,  Dry cycle is 4
           Machine: c && c.Machine,
           Duration: c && c.Duration,
           CycleCount: c && c.CycleCount,
+          ProductCycleCount: (c && (c.MachineMode !== 4)) ? c.CycleCount : 0,
+          DryCycleCount: (c && (c.MachineMode == 4)) ? c.CycleCount : 0,
           ManualStop: c && c.ManualStop === true ? 1 : 0,
           FirstFault: c && c.FirstFault,
           ID: c && c.ID,
@@ -84,7 +86,7 @@ export class DailySummaryReportComponent implements OnInit {
           MachineLocation: c && c.MachineLocation,
           CustomerName: c && c.CustomerName,
           CyclesCountSinceInstall: c && c.CyclesCountSinceInstall,
-          DurationSinceInstall: c && c.DurationSinceInstall,
+          DryRunDurationSinceInstall: (c && (c.MachineMode == 4)) ? c.Duration : 0,
           TotalManualStopsSinceInstall: c && c.TotalManualStopsSinceInstall,
           TotalFirstFaultCountSinceInstall: c && c.TotalFirstFaultCountSinceInstall,
         };
@@ -117,6 +119,12 @@ export class DailySummaryReportComponent implements OnInit {
         CycleCount: {
           type: 'number'
         },
+        ProductCycleCount: {
+          type: 'number'
+        },
+        DryCycleCount: {
+          type: 'number'
+        },
         FirstFault: {
           type: 'number'
         },
@@ -126,7 +134,7 @@ export class DailySummaryReportComponent implements OnInit {
         CyclesCountSinceInstall: {
           type: 'number'
         },
-        DurationSinceInstall: {
+        DryRunDurationSinceInstall: {
           type: 'time'
         },
         TotalManualStopsSinceInstall: {
@@ -217,7 +225,16 @@ export class DailySummaryReportComponent implements OnInit {
               caption: 'MCBF & S',
               format: '44mvcoma',
             },
-            
+            {
+              uniqueName: 'ProductCycleCount',
+              formula: '(("ProductCycleCount"))',
+              caption: 'Product Cycle Count'
+            },
+            {
+              uniqueName: 'DryCycleCount',
+              formula: '(("DryCycleCount"))',
+              caption: 'Dry Cycle Count'
+            },
             {
               uniqueName: 'CyclesCountSinceInstall',
               formula: '(max("CyclesCountSinceInstall"))',
@@ -225,19 +242,19 @@ export class DailySummaryReportComponent implements OnInit {
               format: '44mvcoma',
             },
             {
-              uniqueName: 'DurationSinceInstall',
-              formula: '(max("DurationSinceInstall"))',
-              caption: 'Duration Count since install',
+              uniqueName: 'DryRunDurationSinceInstall',
+              formula: '(max("DryRunDurationSinceInstall"))',
+              caption: 'Dry Run Duration Count since install',
               format: '44mvcoma',
             },
             {
-              uniqueName: 'MeanCycleBetweenFault',
+              uniqueName: 'TotalMCBFsinceInstall',
               formula: '(max("CycleRun")/("TotalFirstFaultCountSinceInstall"))',
               caption: 'Total MCBF since install',
               format: '44mvcoma',
             },
             {
-              uniqueName: 'MeanCycleBetweenFaultNManualStop',
+              uniqueName: 'TotalMCBF&Ssinceinstall',
               formula: '(max("CycleRun")/("TotalFirstFaultCountSinceInstall" + "TotalManualStopsSinceInstall"))',
               caption: 'Total MCBF & S since install',
               format: '44mvcoma',
@@ -289,7 +306,62 @@ export class DailySummaryReportComponent implements OnInit {
               infinityValue: '0',
               divideByZeroValue: '0',
             },
-          ]
+          ],
+          tableSizes: {
+            rows: [
+              {
+                idx: 0,
+                height: 63
+              },
+    
+            ],
+            columns: [
+              {
+                idx: 0,
+                width: 120
+              },
+              {
+                idx: 1,
+                width: 100
+              },
+              {
+                idx: 2,
+                width: 100
+              },
+              {
+                idx: 3,
+                width: 100
+              },
+              {
+                idx: 4,
+                width: 90
+              },
+              {
+                idx: 5,
+                width: 90
+              },
+              {
+                idx: 6,
+                width: 80
+              },
+              {
+                idx: 7,
+                width: 56
+              },
+              {
+                idx: 8,
+                width: 60
+              },
+              {
+                idx: 9,
+                width: 65
+              },
+              {
+                idx: 10,
+                width: 65
+              }
+            ]
+          },
       }
     );
     this.gotData = true;
