@@ -37,6 +37,7 @@ export class DailySummaryReportComponent implements OnInit {
   public temp = [];
   pivotTableReportComplete = false;
   gotData;
+  today = new Date();
   constructor(private httpClient: HttpClient, protected datePipe: DatePipe, private utils: UtilService) { }
 
   // tslint:disable-next-line: typedef
@@ -54,23 +55,25 @@ export class DailySummaryReportComponent implements OnInit {
     this.createFormControlsDailySummary();
     this.createDailySummaryForm();
     this.BindDefaultData();
-    this.GetData();
+    this.GetData(this.date.value);
   }
   BindDefaultData() {
     this.date.setValue(this.datePipe.transform(this.utils.addDays(new Date(), -1), 'yyyy-MM-dd'));
   }
 
-  GetData() {
+  GetData(dateevent) {
+  let dateSelected = this.datePipe.transform(dateevent, 'yyyy-MM-dd')
+  console.log(dateSelected,'Date Selected');
     this.gotData = false;
     this.Machines = [];
-    this.httpClient.get('https://capl91gn-lines-postgres.testing.smartfactoryworx.net/api/getsummarydata?date=2022-04-19').subscribe((data: any) => {
+    this.httpClient.get('https://capl91gn-lines-postgres.testing.smartfactoryworx.net/api/getsummarydata?date='+dateSelected).subscribe((data: any) => {
       console.log(data.rows);
       for (let i = 0; i < data.rows.length; i++) {
         console.log(data[i]);
         const c = data.rows[i];
         const DailySummaryData =
         {
-          CycleRun: (c && (c.MachineMode !== 4)) ? c.CycleCount : 0,
+          CycleRun: (c && (c.MachineMode !== 4)) ? c.CycleCount : 0, //Production Mode - non 4,  Dry cycle is 4
           Machine: c && c.Machine,
           Duration: c && c.Duration,
           CycleCount: c && c.CycleCount,
@@ -106,9 +109,6 @@ export class DailySummaryReportComponent implements OnInit {
           type: 'string'
         },
         CustomerName: {
-          type: 'string'
-        },
-        MachineName: {
           type: 'string'
         },
         Duration: {
@@ -168,9 +168,6 @@ export class DailySummaryReportComponent implements OnInit {
             {
               uniqueName: 'CustomerName',
             },
-            {
-              uniqueName: 'MachineName',
-            },
           ],
           rows: [
             {
@@ -194,7 +191,7 @@ export class DailySummaryReportComponent implements OnInit {
             },
             {
               uniqueName: 'Duration',
-              formula: '(sum("Duration"))',
+              formula: '(("Duration"))',
               format: 'decimal2',
               caption: 'Duration',
             },
@@ -216,31 +213,44 @@ export class DailySummaryReportComponent implements OnInit {
             },
             {
               uniqueName: 'MeanCycleBetweenFaultNManualStop',
-              formula: '(("CycleRun")/("FirstFault" + "ManualStop"))',
+              formula: '(max(("CycleRun")/("FirstFault" + "ManualStop")))',
               caption: 'MCBF & S',
               format: '44mvcoma',
             },
+            
             {
               uniqueName: 'CyclesCountSinceInstall',
-              formula: '(("CyclesCountSinceInstall"))',
+              formula: '(max("CyclesCountSinceInstall"))',
               caption: 'Cycle Count since install',
               format: '44mvcoma',
             },
             {
               uniqueName: 'DurationSinceInstall',
-              formula: '(("DurationSinceInstall"))',
+              formula: '(max("DurationSinceInstall"))',
               caption: 'Duration Count since install',
               format: '44mvcoma',
             },
             {
+              uniqueName: 'MeanCycleBetweenFault',
+              formula: '(max("CycleRun")/("TotalFirstFaultCountSinceInstall"))',
+              caption: 'Total MCBF since install',
+              format: '44mvcoma',
+            },
+            {
+              uniqueName: 'MeanCycleBetweenFaultNManualStop',
+              formula: '(max("CycleRun")/("TotalFirstFaultCountSinceInstall" + "TotalManualStopsSinceInstall"))',
+              caption: 'Total MCBF & S since install',
+              format: '44mvcoma',
+            },
+            {
               uniqueName: 'TotalManualStopsSinceInstall',
-              formula: '(("TotalManualStopsSinceInstall"))',
+              formula: '(max("TotalManualStopsSinceInstall"))',
               caption: 'Total Manual Stops since install',
               format: '44mvcoma',
             },
             {
               uniqueName: 'TotalFirstFaultCountSinceInstall',
-              formula: '(("TotalFirstFaultCountSinceInstall"))',
+              formula: '(max("TotalFirstFaultCountSinceInstall"))',
               caption: 'Total First Fault Count since install',
               format: '44mvcoma',
             },

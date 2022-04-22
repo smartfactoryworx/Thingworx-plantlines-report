@@ -4,10 +4,12 @@
       <div fxLayout="column" style="width:100%;">
         <div fxLayout="row" style="width:70%" fxFlex=100>
           <mat-form-field appearance="outline" fxFlex="25">
-            <input matInput [matDatepicker]="picker" formControlName="date" placeholder="Select Date">
+            <input matInput [matDatepicker]="picker" [max]="today" formControlName="date" placeholder="Select Date"
+              (dateChange)="GetData($event.value)">
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
           </mat-form-field>
+
           <mat-spinner *ngIf="!gotData" diameter="30"></mat-spinner>
         </div>
       </div>
