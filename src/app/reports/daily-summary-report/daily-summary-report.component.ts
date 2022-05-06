@@ -208,11 +208,11 @@ export class DailySummaryReportComponent implements OnInit {
               formula: '(("FirstFault"))',
               caption: 'First Fault Count'
             },
-            {
-              uniqueName: 'MachineMode',
-              formula: '(("MachineMode"))',
-              caption: 'Machine Mode'
-            },
+            // {
+            //   uniqueName: 'MachineMode',
+            //   formula: '(("MachineMode"))',
+            //   caption: 'Machine Mode'
+            // },
             {
               uniqueName: 'MeanCycleBetweenFault',
               formula: '(("CycleRun")/("FirstFault"))',
