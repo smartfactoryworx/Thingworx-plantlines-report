@@ -10,9 +10,7 @@
 
 
 
-  <!-- <div *ngIf="!gotData" fxFlex="10" style="margin-left: 49%;">
-    <mat-spinner diameter="30"></mat-spinner>
-  </div> -->
+
 
   <div  fxLayout="column" style="width: 99%;" fxLayoutAlign="center">
     <div fxLayout="row" style="width: 50%;min-height: 10%;margin-top: 0.2%; margin-left: 35%; margin-bottom: 0px;">
@@ -26,10 +24,13 @@
         <mat-date-range-picker #picker></mat-date-range-picker>
       </mat-form-field>
       <!-- <p>Selected range: {{range.value | json}}</p> -->
-      <button [disabled]="range.controls.start.hasError('matStartDateInvalid')" mat-raised-button color="primary" style="margin-left:5% ; width: 15%; height: 40%; margin-top: 25px;" type="submit" (click)="GetCycleData(machineDetails)" >Submit</button>
+      <button [disabled]="range.controls.start.hasError('matStartDateInvalid') || submitDisabled" mat-raised-button color="primary" style="margin-left:5% ; width: 15%; height: 40%; margin-top: 25px;" type="submit" (click)="GetCycleData(machineDetails)" >Submit</button>
     </div>
     <h3 *ngIf="!hourlyData" style="height: 100vh;">Please Select the machine & Date range(not exceeding 7 days) </h3>
 
+    <div *ngIf="submitDisabled" fxFlex="10" style="margin-left: 49%;">
+      <mat-spinner diameter="50"></mat-spinner>
+    </div>
     <div *ngIf="hourlyData?.length > 0" fxLayout="row" style="width: 100%;margin: 0;" fxLayout.xs="column" fxLayoutWrap fxLayoutGap="0.1%"
       fxLayoutAlign="space-around center" fxFlex="100">
       <wbr-pivot #pivot1 [toolbar]="true" [width]="'100%'" [height]="700" fxFlex="99"
