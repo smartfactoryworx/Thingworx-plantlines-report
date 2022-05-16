@@ -51,6 +51,7 @@ export class HourlyReportComponent implements OnInit {
   Highcharts: typeof Highcharts = Highcharts;
   pivotTableReportComplete: boolean = false;
   gotData: boolean = true;
+  submitDisabled = false;
   public DataWithStructure = [];
   range = new FormGroup({
     start: new FormControl(),
@@ -88,6 +89,7 @@ export class HourlyReportComponent implements OnInit {
   noFunction(value) {}
 
   GetCycleData(machineDetails?, startDate?, endDate?) {
+    this.submitDisabled = true;
     console.log(
       machineDetails,
       this.range.value.start,
@@ -126,17 +128,29 @@ export class HourlyReportComponent implements OnInit {
       this.dataentryservice
         .GetMachineData(apipath['apithings'], dataSource, JSON.stringify(body))
         .subscribe((hourlyData: any) => {
+          this.submitDisabled = false;
           console.log('HourlyData', hourlyData);
           if (hourlyData.rows.length === 0)
             this.openSnackBar(
               'No data found for this machine ',
               'Pls, select another machine'
             );
+            // const options = { timeZone: 'Asia/Kolkata' ,hour : '2-digit', minute : '2-digit'}
           hourlyData.rows.forEach((el) => {
             this.hourlyData.push({
               Machine: el?.Machine.split('_')[0],
-              FromTime: moment(el?.FromTime).format('HH:mm'),
-              ToTime: moment(el?.ToTIme).format('HH:mm'),
+              FromTime: moment(el?.FromTime).utcOffset(330).format('HH:mm'),
+              // FromTime: moment(el?.FromTime).format('HH:mm'),
+
+              // FromTime: moment(new Date(el?.FromTime).toLocaleTimeString('en-US', { timeZone: 'Asia/Kolkata'})).format('HH:mm'),
+              // FromTime: new Date(el?.FromTime).toLocaleTimeString('en-US', { timeZone: 'Asia/Kolkata'}).split(' ')[0],
+              // FromTime: new Date(el?.FromTime).toLocaleTimeString('en-US', { timeZone: 'Asia/Kolkata' }),
+              ToTime: moment(el?.ToTIme).utcOffset(330).format('HH:mm'),
+              // ToTime: moment(el?.ToTIme).format('HH:mm'),
+              // ToTime: new Date(el?.ToTIme).toLocaleTimeString('en-US',{ timeZone: 'Asia/Kolkata' }).split(' ')[0],
+              // ToTime: new Date(el?.ToTIme).toLocaleTimeString('en-US',{ timeZone: 'Asia/Kolkata' ,hour : '2-digit', minute : '2-digit', hour12: false }),
+
+
               SKU: el?.SKU,
               SKUDesc: el?.SKUDesc,
               TotalCycleRun: el?.TotalCycleRun,
@@ -150,7 +164,7 @@ export class HourlyReportComponent implements OnInit {
               BlockTime: el?.BlockTIme,
               IdleTime: el?.IdleTime,
               PowerOffTime: el?.PowerOffTime,
-              Date: moment(el?.cDate).format('DD-MM-YYYY'),
+              Date: moment(el?.cDate).utcOffset(330).format('DD-MM-YYYY'),
             });
           });
 
@@ -164,6 +178,12 @@ export class HourlyReportComponent implements OnInit {
           }
           this.hourlyData !== undefined && this.BindReportData(this.hourlyData);
         });
+    }, err=> {
+      this.submitDisabled = true;
+      this.openSnackBar(
+        err.error,
+        'Error'
+      );
     });
   }
 
@@ -497,7 +517,7 @@ export class HourlyReportComponent implements OnInit {
         rows: [
           {
             idx: 0,
-            height: 50
+            height: 70
           },
         ],
         columns: [
@@ -507,11 +527,11 @@ export class HourlyReportComponent implements OnInit {
           },
           {
             idx: 2,
-            width: 65,
+            width: 90,
           },
           {
             idx: 3,
-            width: 65,
+            width: 90,
           },
           {
             idx: 4,
@@ -561,7 +581,7 @@ export class HourlyReportComponent implements OnInit {
     this.child.webDataRocks.exportTo(
       'Excel',
       {
-        filename: 'Machine_Hourly_Report',
+        filename: 'Machine_Hourly_Report' +'_' + this.hourlyData[0].Machine,
         excelSheetName: sheetName,
         destinationType: 'file',
         url: 'URL to server script saving the file',

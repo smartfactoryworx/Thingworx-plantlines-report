@@ -199,10 +199,10 @@ export class DailyCycleEntryComponent implements OnChanges {
           const data = c[i]
           const allCycleData = {
             ID: data && data.ID,
-            Date: data && moment(Number(data.StartTime)).format("DD MMM YYYY"),
+            Date: data && moment(Number(data.StartTime)).utcOffset(330).format("DD MMM YYYY"),
             SKU: data && data.SKU_Details,
-            From: data && moment(Number(data.StartTime)).format("HH:mm"),
-            To: data && moment(Number(data.StopTime)).format("HH:mm"),
+            From: data && moment(Number(data.StartTime)).utcOffset(330).format("HH:mm"),
+            To: data && moment(Number(data.StopTime)).utcOffset(330).format("HH:mm"),
             FaultNumber: data && data.ManualStop === true ? "Manual Stop" : data && data.FaultDescription ,
             TotalCycleRun: data && data.CycleCount,
             FaultCount: data && data.FirstFault > 0 ? 1 : 0,
