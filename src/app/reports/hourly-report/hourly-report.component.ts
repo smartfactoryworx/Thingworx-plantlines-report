@@ -139,11 +139,17 @@ export class HourlyReportComponent implements OnInit {
           hourlyData.rows.forEach((el) => {
             this.hourlyData.push({
               Machine: el?.Machine.split('_')[0],
+              FromTime: moment(el?.FromTime).utcOffset(330).format('HH:mm'),
               // FromTime: moment(el?.FromTime).format('HH:mm'),
-              FromTime: new Date(el?.FromTime).toLocaleTimeString('en-US', { timeZone: 'Asia/Kolkata' ,hour : '2-digit', minute : '2-digit'}),
 
+              // FromTime: moment(new Date(el?.FromTime).toLocaleTimeString('en-US', { timeZone: 'Asia/Kolkata'})).format('HH:mm'),
+              // FromTime: new Date(el?.FromTime).toLocaleTimeString('en-US', { timeZone: 'Asia/Kolkata'}).split(' ')[0],
+              // FromTime: new Date(el?.FromTime).toLocaleTimeString('en-US', { timeZone: 'Asia/Kolkata' }),
+              ToTime: moment(el?.ToTIme).utcOffset(330).format('HH:mm'),
               // ToTime: moment(el?.ToTIme).format('HH:mm'),
-              ToTime: new Date(el?.ToTIme).toLocaleTimeString('en-US',{ timeZone: 'Asia/Kolkata' ,hour : '2-digit', minute : '2-digit'}),
+              // ToTime: new Date(el?.ToTIme).toLocaleTimeString('en-US',{ timeZone: 'Asia/Kolkata' }).split(' ')[0],
+              // ToTime: new Date(el?.ToTIme).toLocaleTimeString('en-US',{ timeZone: 'Asia/Kolkata' ,hour : '2-digit', minute : '2-digit', hour12: false }),
+
 
               SKU: el?.SKU,
               SKUDesc: el?.SKUDesc,
@@ -158,7 +164,7 @@ export class HourlyReportComponent implements OnInit {
               BlockTime: el?.BlockTIme,
               IdleTime: el?.IdleTime,
               PowerOffTime: el?.PowerOffTime,
-              Date: moment(el?.cDate).format('DD-MM-YYYY'),
+              Date: moment(el?.cDate).utcOffset(330).format('DD-MM-YYYY'),
             });
           });
 
@@ -575,7 +581,7 @@ export class HourlyReportComponent implements OnInit {
     this.child.webDataRocks.exportTo(
       'Excel',
       {
-        filename: 'Machine_Hourly_Report',
+        filename: 'Machine_Hourly_Report' +'_' + this.hourlyData[0].Machine,
         excelSheetName: sheetName,
         destinationType: 'file',
         url: 'URL to server script saving the file',
