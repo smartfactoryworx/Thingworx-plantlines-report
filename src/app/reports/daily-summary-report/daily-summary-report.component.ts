@@ -62,23 +62,23 @@ export class DailySummaryReportComponent implements OnInit {
   }
 
   GetData(dateevent) {
-  let dateSelected = this.datePipe.transform(dateevent, 'yyyy-MM-dd')
-  console.log(dateSelected,'Date Selected');
-    this.gotData = false;
-    this.Machines = [];
-    this.httpClient.get('https://plantline.smartfactoryworx.tech/api/getsummarydata?date='+dateSelected).subscribe((data: any) => {
+  const dateSelected = this.datePipe.transform(dateevent, 'yyyy-MM-dd');
+  console.log(dateSelected, 'Date Selected');
+  this.gotData = false;
+  this.Machines = [];
+  this.httpClient.get('https://plantline.smartfactoryworx.tech/api/getsummarydata?date=' + dateSelected).subscribe((data: any) => {
       console.log(data.rows);
       for (let i = 0; i < data.rows.length; i++) {
         console.log(data[i]);
         const c = data.rows[i];
         const DailySummaryData =
         {
-          CycleRun: c.CycleCount, //Production Mode - non 4,  Dry cycle is 4
+          CycleRun: c.CycleCount, // Production Mode - non 4,  Dry cycle is 4
           Machine: c && c.Machine,
           Duration: c && c.Duration,
           CycleCount: c && c.CycleCount,
           ProductCycleCount: (c && (c.MachineMode !== 4)) ? c.CycleCount : 0,
-          DryCycleCount: (c && (c.MachineMode == 4)) ? c.CycleCount : 0,
+          DryCycleCount: (c && (c.MachineMode === 4)) ? c.CycleCount : 0,
           ManualStop: c && c.ManualStop === true ? 1 : 0,
           FirstFault: c && c.FirstFault,
           ID: c && c.ID,
@@ -86,7 +86,7 @@ export class DailySummaryReportComponent implements OnInit {
           MachineLocation: c && c.MachineLocation,
           CustomerName: c && c.CustomerName,
           CyclesCountSinceInstall: c && c.CyclesCountSinceInstall,
-          DryRunDurationSinceInstall: (c && (c.MachineMode == 4)) ? c.Duration : 0,
+          DryRunDurationSinceInstall: (c && (c.MachineMode === 4)) ? c.Duration : 0,
           TotalManualStopsSinceInstall: c && c.TotalManualStopsSinceInstall,
           TotalFirstFaultCountSinceInstall: c && c.TotalFirstFaultCountSinceInstall,
         };
@@ -377,7 +377,7 @@ export class DailySummaryReportComponent implements OnInit {
   customizeToolbar(toolbar) {
     // console.log(toolbar);
     const tabs = toolbar.getTabs();
-    toolbar.getTabs = function () {
+    toolbar.getTabs = function() {
 
       delete tabs[0];
       delete tabs[1];
