@@ -66,7 +66,7 @@ export class DailySummaryReportComponent implements OnInit {
   console.log(dateSelected,'Date Selected');
     this.gotData = false;
     this.Machines = [];
-    this.httpClient.get('https://capl91gn-lines-postgres.testing.smartfactoryworx.net/api/getsummarydata?date='+dateSelected).subscribe((data: any) => {
+    this.httpClient.get('https://plantline.smartfactoryworx.tech/api/getsummarydata?date='+dateSelected).subscribe((data: any) => {
       console.log(data.rows);
       for (let i = 0; i < data.rows.length; i++) {
         console.log(data[i]);
@@ -313,7 +313,7 @@ export class DailySummaryReportComponent implements OnInit {
                 idx: 0,
                 height: 63
               },
-    
+
             ],
             columns: [
               {
