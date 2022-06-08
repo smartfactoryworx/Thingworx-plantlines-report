@@ -1,3 +1,7 @@
+<div style=" color: red">
+
+  {{'Hey'}}
+</div>
 <div fxLayout="column" style="width: 100%;min-height: 92.47vh;margin-top: 1%;">
   <div style="margin-left: 94%;position: absolute;top: 2;">
       <button [disabled]="!dataentryservice.dataLoaded" mat-icon-button (click)="GetCycleData(machineData)"
@@ -6,18 +10,18 @@
       </button>
   </div>
   <app-parent-master (machineDetail)='GetCycleData($event)'>
-   
+
   </app-parent-master>
-  
+
 
   <div *ngIf="!gotData" fxFlex="10" style="margin-left: 49%;">
       <mat-spinner diameter="30"></mat-spinner>
-     
+
   </div>
 
   <mat-card *ngIf="cycleData && cycleData.length>0" fxFlex.sm="0 1 calc(50%-10px)" fxFlex.md="0 1 calc(33%-10px)"  fxFlex.gt-md="0 1 calc(100%-5px)" class="card">
     <div fxLayout="column" style="width: 99%;" fxLayoutAlign="center">
-  
+
 
       <mat-tab-group (selectedTabChange)="GetReport($event.tab.textLabel)" [selectedIndex]="0"
           mat-align-tabs="center">

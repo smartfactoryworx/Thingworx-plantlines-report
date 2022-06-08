@@ -15,7 +15,7 @@ import { MatSidenav } from '@angular/material/sidenav';
   styleUrls: ['./sidenav.component.scss'],
 })
 export class SidenavComponent {
-  hide = true;
+  // hide = false;
   constructor(private authService: AuthService, private router:Router) {
     // this.authService.componentHide.subscribe((res)=>{
     //   console.log(res);
@@ -23,21 +23,21 @@ export class SidenavComponent {
     //     this.hide = false;
     //   }
     // })
-    const d = this.authService.currentUserValue;
-    if(d && !this.router.url.includes('auth') ){
-      console.log('here');
-      this.hide = false;
+    // const d = this.authService.currentUserValue;
+    // if(d && !this.router.url.includes('auth') ){
+    //   console.log('here');
+    //   this.hide = false;
 
-    }
+    // }
 
-    this.authService.getComponentHide().subscribe((res: any)=>{
-      console.log(res);
+    // this.authService.getComponentHide().subscribe((res: any)=>{
+    //   console.log(res);
 
-      if(res){
-      this.hide = false;
+    //   if(res){
+    //   this.hide = false;
 
-      }
-    })
+    //   }
+    // })
     // if(d && !this.router.url.includes('auth') ){
     //   console.log('here');
     //   this.hide = false;
