@@ -878,7 +878,7 @@ export class CycleReportComponent implements OnChanges {
           },
           {
             uniqueName: 'OutFeedCount',
-            formula: '(max("OutFeedCount"))',
+            formula: '(("OutFeedCount"))',
             caption: 'OutFeed Count (' + this.OutfeedCountInTermsOf + ')',
             format: '44mvcoma',
           },

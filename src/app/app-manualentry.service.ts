@@ -16,7 +16,7 @@ export class ManualEntryService {
   }
 
   getDataLoaded(data) {
-    console.log(data);
+    // console.log(data);
     this.dataLoaded = data;
     // this.checkDataLoaded.next(this.dataLoaded);
   }

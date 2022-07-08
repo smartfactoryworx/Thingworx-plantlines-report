@@ -10,7 +10,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HeaderComponent implements OnInit {
   lastUpdated: any;
-  logOutHide = false;
+  logOutHide = true;
   constructor(private datePipe: DatePipe, private authService :AuthService, private router :Router) {
     // console.log(this.authService.componentHide);
 
@@ -30,22 +30,22 @@ export class HeaderComponent implements OnInit {
     //     this.logOutHide = false;
     //   }
     // })
-    // const d = this.authService.currentUserValue;
-    // if(d && !this.router.url.includes('auth') ){
-    //   this.logOutHide = false;
+    const checkCurrentUser = this.authService.currentUserValue;
+    if(checkCurrentUser && !this.router.url.includes('auth') ){
+      this.logOutHide = false;
 
-    // }
+    }
 
     // if(this.authService.otpResponse === 'Entered OTP is wrong, try again! '){
     //   this.logOutHide = false;
     // }
 
-    // this.authService.getLogOutHide().subscribe((res: any)=>{
-    //   if(res){
-    //   this.logOutHide = false;
+    this.authService.getLogOutHide().subscribe((res: any)=>{
+      if(res){
+      this.logOutHide = false;
 
-    //   }
-    // })
+      }
+    })
     // this.router.events.subscribe((r: Event)=>{
     //   if(r instanceof NavigationEnd){
     //     if(!this.router.url.includes('auth')){
