@@ -8,10 +8,11 @@ import { CycleReportModule } from './cycle-report/cycle-report.module';
 import { DailyCycleEntryModule } from './daily-cycle-entry/daily-cycle-entry.module';
 import { HourlyReportComponent } from './hourly-report/hourly-report.component';
 import { DailySummaryReportComponent } from './daily-summary-report/daily-summary-report.component';
+import { CycleReportOldComponent } from './cycle-report-old/cycle-report-old.component';
 
 
 @NgModule({
-  declarations: [ReportsComponent, HourlyReportComponent, DailySummaryReportComponent],
+  declarations: [ReportsComponent, HourlyReportComponent, DailySummaryReportComponent, CycleReportOldComponent],
   imports: [
     CommonModule,
     ReportsRoutingModule,

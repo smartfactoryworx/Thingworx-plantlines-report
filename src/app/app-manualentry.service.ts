@@ -35,6 +35,11 @@ export class ManualEntryService {
     return this.httpClient.get('https://plantline.smartfactoryworx.tech/api/machinedata?machine=' + MachineName);
   }
 
+  GetMachineDetails(URL, dataSource, body): Observable<object> {
+    console.log(URL + dataSource + '&body=' + body);
+    return this.httpClient.get(URL + dataSource + '&body=' + body);
+  }
+
   PostFaultData(URL, data): Observable<object> {
     console.log(URL, data)
     let headers = new HttpHeaders({ 'Content-Type': 'application/json' });

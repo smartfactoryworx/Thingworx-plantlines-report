@@ -6,6 +6,7 @@ import { CycleReportComponent } from './cycle-report/cycle-report.component';
 import { DailyCycleEntryComponent } from './daily-cycle-entry/daily-cycle-entry.component';
 import { ReportsComponent } from './reports.component';
 import { DailySummaryReportComponent } from './daily-summary-report/daily-summary-report.component';
+import { CycleReportOldComponent } from './cycle-report-old/cycle-report-old.component';
 
 const routes: Routes = [
   {
@@ -35,6 +36,11 @@ const routes: Routes = [
       {
         path: 'daily-summary',
         component: DailySummaryReportComponent,
+        pathMatch: 'full'
+      },
+      {
+        path: 'cycle-old-report',
+        component: CycleReportOldComponent,
         pathMatch: 'full'
       }
     ]
